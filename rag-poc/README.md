@@ -91,9 +91,20 @@ query ─┬─► 稠密向量检索 (pgvector / Chroma, bge-small-zh) ─┐
 
 ## 公开部署（Fly.io，self-contained）
 
-`Dockerfile` 以自包含方式打包：构建时预置本地 BGE 向量模型并用 **Chroma 后端**
-（`VECTOR_BACKEND=chroma`）构建/烘焙向量索引，单容器即可运行，无需外部数据库。
-LLM key 以运行时环境变量 / Fly secret 注入（`SENSENOVA_API_KEY` 或 `LLM_API_KEY`），
+`Dockerfile` 以自包含方式打包：用 **Chroma 后端**（`VECTOR_BACKEND=chroma`）运行，
+构建时预下载本地 BGE 向量模型并烤入预构建的 Chroma 索引（`.chroma/`），单容器即可运行、
+无需外部数据库。部署前先在本目录构建一次索引：
+
+```bash
+pip install -r requirements.txt
+VECTOR_BACKEND=chroma python ingest.py      # 解析 docs/ → 切块 → 本地向量化 → 写入 .chroma/
+
+# 本地容器自测
+docker build -t justlaws-rag .
+docker run -p 8000:8000 -e LLM_API_KEY=sk-... justlaws-rag   # 打开 http://localhost:8000
+```
+
+LLM key 以运行时环境变量 / Fly secret 注入（`LLM_API_KEY`，亦可回退到 `SENSENOVA_API_KEY`），
 **不写入镜像、不入库**。生产形态请改用 pgvector（`DATABASE_URL` 指向托管 Postgres）。
 
 ## 文件说明
