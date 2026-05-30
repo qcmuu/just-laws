@@ -1,44 +1,28 @@
-"""Retrieval + grounded generation with forced citations and guardrails."""
+"""Retrieval + grounded generation with forced citations and guardrails.
 
-import chromadb
+Retrieval queries PostgreSQL + pgvector (see db.py). The embedding backend
+stays swappable via config (local BGE by default, or any OpenAI-compatible API).
+"""
+
 from openai import OpenAI
 
 import config
+import db
 import embeddings
 
-_client = None
-_col = None
+_conn = None
 
 
-def _collection():
-    global _client, _col
-    if _col is None:
-        _client = chromadb.PersistentClient(path=config.CHROMA_DIR)
-        _col = _client.get_collection(config.COLLECTION_NAME)
-    return _col
+def _connection():
+    global _conn
+    if _conn is None or _conn.closed:
+        _conn = db.connect()
+    return _conn
 
 
 def retrieve(question, top_k=None, category=None):
-    top_k = top_k or config.TOP_K
     qvec = embeddings.embed(question, is_query=True)[0]
-    where = {"category": category} if category else None
-    res = _collection().query(
-        query_embeddings=[qvec], n_results=top_k, where=where,
-        include=["documents", "metadatas", "distances"],
-    )
-    hits = []
-    for doc, meta, dist in zip(
-        res["documents"][0], res["metadatas"][0], res["distances"][0]
-    ):
-        hits.append({
-            "text": doc,
-            "law_name": meta["law_name"],
-            "article_no": meta["article_no"],
-            "context": meta.get("context", ""),
-            "source_url": meta["source_url"],
-            "score": round(1 - dist, 4),
-        })
-    return hits
+    return db.search(_connection(), qvec, top_k=top_k, category=category)
 
 
 SYSTEM_PROMPT = """你是「Just Laws」法律信息助手，基于中华人民共和国现行法律文库回答问题。请严格遵守：

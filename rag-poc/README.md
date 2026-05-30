@@ -18,37 +18,71 @@
 cd rag-poc
 pip install -r requirements.txt
 
-# 1) 配置（至少填 LLM_API_KEY）
+# 1) 启动 pgvector 向量库（Docker，本地开发用）
+docker compose up -d
+export DATABASE_URL=postgresql://justlaws:justlaws@localhost:5433/justlaws
+
+# 2) 配置（至少填 LLM_API_KEY）
 cp .env.example .env && $EDITOR .env
 # 或直接用环境变量：
 export LLM_BASE_URL=https://token.sensenova.cn/v1
 export LLM_MODEL=sensenova-6.7-flash-lite
 export LLM_API_KEY=sk-...
 
-# 2) 构建向量索引（首次会下载本地向量模型，约几分钟）
-python ingest.py
+# 3) 构建向量索引（首次会下载本地向量模型，约几分钟）
+python ingest.py                 # 全量 ~13k 条
+python ingest.py --limit 600     # 仅前 600 条，快速冒烟
 
-# 3a) 命令行问答
+# 4a) 命令行问答
 python rag.py "欠钱不还的诉讼时效是多久？"
 
-# 3b) 网页问答 UI
+# 4b) 后端 API（供 VuePress 站点调用）
 uvicorn app:app --host 0.0.0.0 --port 8000
-# 浏览器打开 http://localhost:8000
+# GET /health 健康检查；POST /api/chat SSE 流式问答；已开启 CORS
 ```
+
+## 站点集成（VuePress 浮窗）
+
+站点通过 `docs/.vuepress/client.js` 注册了一个浮动的「AI 法律问答」组件
+（`docs/.vuepress/components/LawChatWidget.vue`），调用上面的后端 `/api/chat`、
+流式渲染答案并把引用渲染成可点击的深链。
+
+后端地址通过构建期环境变量 `JUSTLAWS_RAG_API_BASE` 配置（见 `config.js` 的
+`define`）。为空时按**同源** `/api/chat` 请求（生产建议用 nginx 把 `/api` 反代到后端）。
+本地联调：
+
+```bash
+# 后端跑在 8000；让站点指向它
+export JUSTLAWS_RAG_API_BASE=http://localhost:8000
+npm run docs:dev        # 仓库根目录
+```
+
+> 静态构建（`npm run docs:build`）不依赖后端；后端缺失时浮窗会友好降级提示，站点本身不受影响。
+
+## pgvector 说明
+
+- `docker-compose.yml` 跑 `pgvector/pgvector:pg16`，库/用户/密码均为 `justlaws`，
+  映射到宿主机 **5433** 端口（避开本地已有的 5432）。**compose 里的密码仅用于本地开发**，
+  生产请用 `DATABASE_URL` 指向托管 Postgres。
+- 表 `law_chunks`：条目元数据列 + `vector(512)` 向量列（维度由 `EMBEDDING_DIM` 决定，
+  须与向量模型一致）+ 余弦相似度索引（默认 `ivfflat`，可设 `PG_INDEX_TYPE=hnsw`）。
+- 检索用 pgvector 的 `<=>`（余弦距离）算子，相似度 = `1 - 距离`。
 
 ## 文件说明
 
 | 文件 | 作用 |
 |---|---|
-| `config.py` | 所有配置（env 驱动，自定义 base_url + model） |
+| `config.py` | 所有配置（env 驱动，自定义 base_url + model + `DATABASE_URL`） |
 | `chunker.py` | Markdown → 按"条"切块 + 元数据 + 深链 URL |
 | `embeddings.py` | 向量化后端（本地 BGE / OpenAI 兼容 API） |
-| `ingest.py` | 切块 → 向量化 → 写入 Chroma（`python ingest.py`） |
+| `db.py` | PostgreSQL + pgvector 层（建表/建索引/余弦检索） |
+| `docker-compose.yml` | 本地 pgvector Postgres（端口 5433） |
+| `ingest.py` | 切块 → 向量化 → 写入 pgvector（同时落 `data/chunks.jsonl`） |
 | `rag.py` | 检索 + 受约束生成（CLI 入口） |
-| `app.py` | FastAPI 流式聊天 UI |
+| `app.py` | FastAPI 后端：`/health` + `/api/chat`（SSE，已开 CORS） |
 
 ## 已知限制（PoC 范围）
 
 - 检索为单一向量检索，未做混合检索 / rerank / query rewrite——个别长尾问题召回不全（届时会按方案 Phase 2 增强）。
 - 深链到**页面级**（条号在正文为加粗文本、无锚点）；条级锚点需在站点侧给法条加 `id`，属后续工作。
-- 向量库用本地 Chroma；上线建议换 pgvector（见方案文档）。
+- 向量库已迁移到 pgvector（本 Phase 1）；后续混合检索 / rerank 见方案文档 Phase 2。

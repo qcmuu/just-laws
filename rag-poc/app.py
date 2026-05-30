@@ -1,15 +1,33 @@
-"""Minimal FastAPI chat UI for the Just Laws RAG PoC."""
+"""FastAPI chat backend for the Just Laws RAG assistant.
+
+Endpoints:
+    GET  /health    -> liveness + config introspection
+    POST /api/chat  -> SSE stream of {sources, token..., done}
+
+CORS is permissive so the static VuePress site (any origin) can call it.
+A minimal demo page is served at / for standalone testing.
+"""
 
 import json
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 
 import config
 import rag
 
-app = FastAPI(title="Just Laws RAG PoC")
+app = FastAPI(title="Just Laws RAG")
+
+_origins = [o.strip() for o in config.CORS_ALLOW_ORIGINS.split(",") if o.strip()]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_origins or ["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class Query(BaseModel):
