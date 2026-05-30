@@ -1,0 +1,6 @@
+openai>=1.40
+chromadb>=0.5
+sentence-transformers>=3.0
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-frontmatter>=1.1
