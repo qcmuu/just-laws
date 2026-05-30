@@ -9,6 +9,9 @@ ENV PIP_NO_CACHE_DIR=1 \
 
 WORKDIR /app
 
+# Install CPU-only torch first to keep the image small (avoids ~2GB of CUDA wheels).
+RUN pip install torch --index-url https://download.pytorch.org/whl/cpu
+
 # Copy the app code + pyproject + the pre-built Chroma index (.chroma/) baked at build time.
 COPY . .
 
@@ -23,5 +26,5 @@ RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTr
 # when a .chroma index is missing AND a docs/ dir happens to be available.
 RUN test -d /app/.chroma || (test -d /app/docs && python ingest.py) || true
 
-EXPOSE 8000
-CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}"]
+EXPOSE 8080
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
