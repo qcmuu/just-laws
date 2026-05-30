@@ -1,0 +1,20 @@
+[project]
+name = "just-laws-rag-poc"
+version = "0.1.0"
+description = "Just Laws — RAG legal Q&A PoC (FastAPI + Chroma + local BGE-zh embeddings + SenseNova LLM)"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=1.40",
+    "chromadb>=0.5",
+    "sentence-transformers>=3.0",
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "python-frontmatter>=1.1",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["app", "rag", "config", "embeddings", "chunker", "ingest"]

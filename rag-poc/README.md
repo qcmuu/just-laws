@@ -36,6 +36,32 @@ uvicorn app:app --host 0.0.0.0 --port 8000
 # 浏览器打开 http://localhost:8000
 ```
 
+## 部署（Fly.io）
+
+本目录可作为独立后端部署。镜像在**构建时**就把向量索引和本地向量模型烤进去，冷启动即查即用：
+
+- `pyproject.toml`：声明 FastAPI 应用与依赖（镜像 `requirements.txt`）。
+- `Dockerfile`：安装依赖 → 构建时预下载本地向量模型 `BAAI/bge-small-zh-v1.5` → 拷入预构建的 Chroma 索引（`.chroma/`）→ `uvicorn app:app` 监听 `${PORT:-8000}`。
+- `.dockerignore`：排除 `.venv/`、缓存等，保留 `.chroma/`。
+
+部署前需先在本目录构建一次索引（生成 `.chroma/`，会被烤进镜像）：
+
+```bash
+pip install -r requirements.txt
+python ingest.py            # 解析 docs/ → 切块 → 本地向量化 → 写入 .chroma/
+```
+
+LLM 密钥**不**写入镜像，部署时作为环境变量/Secret 注入（`LLM_API_KEY`，亦可回退到 `SENSENOVA_API_KEY`）：
+
+```bash
+# 本地容器自测
+docker build -t justlaws-rag .
+docker run -p 8000:8000 -e LLM_API_KEY=sk-... justlaws-rag
+# 打开 http://localhost:8000
+```
+
+部署到 Fly.io 后，将 `LLM_API_KEY` 设为 Fly secret 即可。端点：`GET /`（聊天 UI）、`POST /api/chat`（SSE 流式）、`GET /health`。
+
 ## 文件说明
 
 | 文件 | 作用 |
