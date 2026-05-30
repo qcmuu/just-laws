@@ -58,7 +58,12 @@
             </button>
           </div>
 
-          <div v-if="answer" class="jl-chat__answer">{{ answer }}</div>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div
+            v-if="answer"
+            class="jl-chat__answer"
+            v-html="renderedAnswer"
+          ></div>
 
           <div v-if="error" class="jl-chat__error">{{ error }}</div>
 
@@ -99,6 +104,17 @@
 </template>
 
 <script>
+import MarkdownIt from "markdown-it";
+
+// html:false escapes any raw HTML in the model output, and markdown-it's
+// default link validator strips javascript:/data: URLs, so rendering the
+// answer with v-html is safe against injection from the LLM response.
+const md = new MarkdownIt({
+  html: false,
+  linkify: true,
+  breaks: true,
+});
+
 function resolveApiBase() {
   // Runtime override (set window.__JUSTLAWS_RAG_API_BASE__ before load).
   if (typeof window !== "undefined" && window.__JUSTLAWS_RAG_API_BASE__) {
@@ -128,6 +144,11 @@ export default {
         "离婚时夫妻共同财产怎么分割？",
       ],
     };
+  },
+  computed: {
+    renderedAnswer() {
+      return this.answer ? md.render(this.answer) : "";
+    },
   },
   methods: {
     scrollDown() {
@@ -296,10 +317,72 @@ export default {
   color: var(--jl-brand);
 }
 .jl-chat__answer {
-  white-space: pre-wrap;
   line-height: 1.7;
   font-size: 14px;
   color: #1a1a1a;
+  word-break: break-word;
+}
+/* v-html content is not affected by scoped styles, so target it via :deep(). */
+.jl-chat__answer :deep(p) {
+  margin: 0 0 10px;
+}
+.jl-chat__answer :deep(p:last-child) {
+  margin-bottom: 0;
+}
+.jl-chat__answer :deep(ul),
+.jl-chat__answer :deep(ol) {
+  margin: 0 0 10px;
+  padding-left: 22px;
+}
+.jl-chat__answer :deep(li) {
+  margin: 2px 0;
+}
+.jl-chat__answer :deep(li > p) {
+  margin: 0;
+}
+.jl-chat__answer :deep(strong) {
+  font-weight: 600;
+  color: #000;
+}
+.jl-chat__answer :deep(a) {
+  color: var(--jl-brand);
+  text-decoration: underline;
+}
+.jl-chat__answer :deep(h1),
+.jl-chat__answer :deep(h2),
+.jl-chat__answer :deep(h3),
+.jl-chat__answer :deep(h4) {
+  margin: 12px 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.jl-chat__answer :deep(code) {
+  background: #f3f3f3;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 12.5px;
+}
+.jl-chat__answer :deep(pre) {
+  background: #f3f3f3;
+  border-radius: 6px;
+  padding: 10px 12px;
+  overflow-x: auto;
+}
+.jl-chat__answer :deep(pre code) {
+  background: transparent;
+  padding: 0;
+}
+.jl-chat__answer :deep(blockquote) {
+  margin: 0 0 10px;
+  padding: 4px 12px;
+  border-left: 3px solid #eee;
+  color: #555;
+}
+.jl-chat__answer :deep(hr) {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 12px 0;
 }
 .jl-chat__error {
   background: #fff6f5;
