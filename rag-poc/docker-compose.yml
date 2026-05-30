@@ -1,0 +1,30 @@
+# Local pgvector-enabled Postgres for the Just Laws RAG backend.
+#
+# Usage:
+#   docker compose up -d
+#   export DATABASE_URL=postgresql://justlaws:justlaws@localhost:5433/justlaws
+#   python ingest.py
+#
+# The password below is a hardcoded LOCAL DEV credential only — do NOT use it
+# in production. In production set DATABASE_URL to your managed Postgres.
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: just-laws-pgvector
+    environment:
+      POSTGRES_USER: justlaws
+      POSTGRES_PASSWORD: justlaws
+      POSTGRES_DB: justlaws
+    ports:
+      # Host 5433 -> container 5432 to avoid clashing with a local Postgres.
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U justlaws -d justlaws"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

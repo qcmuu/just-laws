@@ -1,5 +1,8 @@
 .chroma/
 data/chunks.jsonl
+.bm25_cache.pkl
 __pycache__/
 *.pyc
 .env
+.venv/
+*.png

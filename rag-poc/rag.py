@@ -1,44 +1,33 @@
-"""Retrieval + grounded generation with forced citations and guardrails."""
+"""Retrieval + grounded generation with forced citations and guardrails.
 
-import chromadb
+Retrieval is hybrid by default: dense vector search (Chroma) fused with BM25
+lexical search, then reranked by a cross-encoder. All stages are env-driven
+(see config.py); set RETRIEVAL_MODE=vector / RERANK_ENABLED=false to fall back
+to the original single-vector PoC behaviour.
+"""
+
 from openai import OpenAI
 
 import config
-import embeddings
-
-_client = None
-_col = None
-
-
-def _collection():
-    global _client, _col
-    if _col is None:
-        _client = chromadb.PersistentClient(path=config.CHROMA_DIR)
-        _col = _client.get_collection(config.COLLECTION_NAME)
-    return _col
+import retrieval
+import reranker
 
 
 def retrieve(question, top_k=None, category=None):
     top_k = top_k or config.TOP_K
-    qvec = embeddings.embed(question, is_query=True)[0]
-    where = {"category": category} if category else None
-    res = _collection().query(
-        query_embeddings=[qvec], n_results=top_k, where=where,
-        include=["documents", "metadatas", "distances"],
-    )
-    hits = []
-    for doc, meta, dist in zip(
-        res["documents"][0], res["metadatas"][0], res["distances"][0]
-    ):
-        hits.append({
-            "text": doc,
-            "law_name": meta["law_name"],
-            "article_no": meta["article_no"],
-            "context": meta.get("context", ""),
-            "source_url": meta["source_url"],
-            "score": round(1 - dist, 4),
-        })
-    return hits
+    if config.RETRIEVAL_MODE == "vector":
+        # Legacy behaviour: dense-only, no fusion/rerank.
+        hits = retrieval.dense_search(question, top_k, category=category)
+        return hits
+    # Hybrid: dense + BM25 fused, then cross-encoder rerank.
+    candidates = retrieval.hybrid_search(question, category=category)
+    if config.RERANK_ENABLED and candidates:
+        candidates = reranker.rerank(
+            question, candidates[: config.RERANK_CANDIDATES], top_k=top_k
+        )
+    else:
+        candidates = candidates[:top_k]
+    return candidates
 
 
 SYSTEM_PROMPT = """你是「Just Laws」法律信息助手，基于中华人民共和国现行法律文库回答问题。请严格遵守：
