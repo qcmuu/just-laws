@@ -1,28 +1,33 @@
 """Retrieval + grounded generation with forced citations and guardrails.
 
-Retrieval queries PostgreSQL + pgvector (see db.py). The embedding backend
-stays swappable via config (local BGE by default, or any OpenAI-compatible API).
+Retrieval is hybrid by default: dense vector search (Chroma) fused with BM25
+lexical search, then reranked by a cross-encoder. All stages are env-driven
+(see config.py); set RETRIEVAL_MODE=vector / RERANK_ENABLED=false to fall back
+to the original single-vector PoC behaviour.
 """
 
 from openai import OpenAI
 
 import config
-import db
-import embeddings
-
-_conn = None
-
-
-def _connection():
-    global _conn
-    if _conn is None or _conn.closed:
-        _conn = db.connect()
-    return _conn
+import retrieval
+import reranker
 
 
 def retrieve(question, top_k=None, category=None):
-    qvec = embeddings.embed(question, is_query=True)[0]
-    return db.search(_connection(), qvec, top_k=top_k, category=category)
+    top_k = top_k or config.TOP_K
+    if config.RETRIEVAL_MODE == "vector":
+        # Legacy behaviour: dense-only, no fusion/rerank.
+        hits = retrieval.dense_search(question, top_k, category=category)
+        return hits
+    # Hybrid: dense + BM25 fused, then cross-encoder rerank.
+    candidates = retrieval.hybrid_search(question, category=category)
+    if config.RERANK_ENABLED and candidates:
+        candidates = reranker.rerank(
+            question, candidates[: config.RERANK_CANDIDATES], top_k=top_k
+        )
+    else:
+        candidates = candidates[:top_k]
+    return candidates
 
 
 SYSTEM_PROMPT = """你是「Just Laws」法律信息助手，基于中华人民共和国现行法律文库回答问题。请严格遵守：

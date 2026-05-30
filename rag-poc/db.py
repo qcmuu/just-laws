@@ -138,7 +138,7 @@ def search(conn, query_vector, top_k=None, category=None):
     # `<=>` is pgvector's cosine distance; similarity = 1 - distance.
     where = "WHERE category = %s" if category else ""
     sql = (
-        f"SELECT law_name, article_no, context, source_url, text, "
+        f"SELECT chunk_id, law_name, article_no, context, source_url, text, "
         f"1 - (embedding <=> %s::vector) AS score "
         f"FROM {table} {where} "
         f"ORDER BY embedding <=> %s::vector LIMIT %s"
@@ -149,9 +149,10 @@ def search(conn, query_vector, top_k=None, category=None):
     bind = [query_vector] + ([category] if category else []) + [query_vector, top_k]
     rows = conn.execute(sql, bind).fetchall()
     hits = []
-    for law_name, article_no, context, source_url, text, score in rows:
+    for chunk_id, law_name, article_no, context, source_url, text, score in rows:
         hits.append(
             {
+                "chunk_id": chunk_id,
                 "text": text,
                 "law_name": law_name,
                 "article_no": article_no,
