@@ -10,7 +10,7 @@
 -->
 <template>
   <ClientOnly>
-    <div class="jl-chat">
+    <div v-if="enabled" class="jl-chat">
       <!-- Launcher -->
       <button
         v-if="!open"
@@ -115,6 +115,9 @@ const md = new MarkdownIt({
   breaks: true,
 });
 
+// Abort a streaming request that never responds, so the UI can't hang forever.
+const REQUEST_TIMEOUT_MS = 60000;
+
 function resolveApiBase() {
   // Runtime override (set window.__JUSTLAWS_RAG_API_BASE__ before load).
   if (typeof window !== "undefined" && window.__JUSTLAWS_RAG_API_BASE__) {
@@ -127,10 +130,24 @@ function resolveApiBase() {
   return ""; // same-origin (production behind an nginx /api reverse proxy)
 }
 
+function resolveEnabled() {
+  // Runtime override wins (set window.__JUSTLAWS_RAG_ENABLED__ = false to hide).
+  if (typeof window !== "undefined" && typeof window.__JUSTLAWS_RAG_ENABLED__ !== "undefined") {
+    return window.__JUSTLAWS_RAG_ENABLED__ !== false &&
+      !["false", "0", "off", "no"].includes(String(window.__JUSTLAWS_RAG_ENABLED__).toLowerCase());
+  }
+  // Build-time define injected via docs/.vuepress/config.js (default: enabled).
+  if (typeof __JUSTLAWS_RAG_ENABLED__ !== "undefined") {
+    return __JUSTLAWS_RAG_ENABLED__ !== false;
+  }
+  return true;
+}
+
 export default {
   name: "LawChatWidget",
   data() {
     return {
+      enabled: resolveEnabled(),
       open: false,
       question: "",
       answer: "",
@@ -166,11 +183,14 @@ export default {
       this.sources = [];
       this.error = "";
 
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
       try {
         const resp = await fetch(resolveApiBase() + "/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question: q }),
+          signal: controller.signal,
         });
         if (!resp.ok || !resp.body) {
           throw new Error("HTTP " + resp.status);
@@ -203,9 +223,14 @@ export default {
           }
         }
       } catch (e) {
-        this.error =
-          "暂时无法连接问答服务，请稍后再试。（AI 法律问答需要后端服务，静态站点本身不受影响）";
+        if (e && e.name === "AbortError") {
+          this.error = "回答超时，请稍后重试或换个问法。";
+        } else {
+          this.error =
+            "暂时无法连接问答服务，请稍后再试。（AI 法律问答需要后端服务，静态站点本身不受影响）";
+        }
       } finally {
+        clearTimeout(timer);
         this.loading = false;
         this.scrollDown();
       }

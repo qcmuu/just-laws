@@ -9,10 +9,12 @@ A minimal demo page is served at / for standalone testing.
 """
 
 import json
+import threading
+import time
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
 
 import config
@@ -28,6 +30,45 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# --- simple in-process fixed-window rate limiter (per client IP) ---
+# Guards the public /api/chat endpoint against abuse / runaway LLM cost. It is
+# per-process; pair it with an edge limiter (nginx limit_req) for multi-instance
+# deployments. See config.RATE_LIMIT_* for tunables.
+_rl_lock = threading.Lock()
+_rl_hits: dict[str, tuple[int, int]] = {}  # ip -> (window_start_epoch, count)
+
+
+def _client_ip(request: Request) -> str:
+    header = config.RATE_LIMIT_CLIENT_IP_HEADER
+    if header:
+        raw = request.headers.get(header)
+        if raw:
+            # X-Forwarded-For may be a comma-separated list; the client is first.
+            return raw.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def _rate_limited(request: Request) -> bool:
+    """Return True if this client has exceeded its request budget."""
+    if not config.RATE_LIMIT_ENABLED:
+        return False
+    now = int(time.time())
+    window = config.RATE_LIMIT_WINDOW
+    ip = _client_ip(request)
+    with _rl_lock:
+        start, count = _rl_hits.get(ip, (now, 0))
+        if now - start >= window:
+            start, count = now, 0
+        count += 1
+        _rl_hits[ip] = (start, count)
+        # Opportunistically drop stale entries so the dict can't grow unbounded.
+        if len(_rl_hits) > 10000:
+            for k, (s, _) in list(_rl_hits.items()):
+                if now - s >= window:
+                    _rl_hits.pop(k, None)
+    return count > config.RATE_LIMIT_REQUESTS
 
 
 class Query(BaseModel):
@@ -46,8 +87,17 @@ def health():
 
 
 @app.post("/api/chat")
-def chat(q: Query):
-    hits, gen = rag.answer(q.question, category=q.category, stream=True)
+def chat(q: Query, request: Request):
+    if _rate_limited(request):
+        return JSONResponse(
+            status_code=429,
+            content={"error": "请求过于频繁，请稍后再试。"},
+        )
+    question = (q.question or "").strip()
+    if not question:
+        return JSONResponse(status_code=400, content={"error": "问题不能为空。"})
+
+    hits, gen = rag.answer(question, category=q.category, stream=True)
 
     def event_stream():
         yield "data: " + json.dumps({"type": "sources", "sources": hits}, ensure_ascii=False) + "\n\n"

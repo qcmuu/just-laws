@@ -1,4 +1,4 @@
-name: Bulid and Deploy
+name: Build and Deploy
 on:
   push:
     branches:
@@ -7,10 +7,10 @@ on:
     branches:
       - master
 jobs:
-  Bulid-and-Deploy:
+  Build-and-Deploy:
     runs-on: ubuntu-latest
     env:
-      NODE_VERSION: '16'
+      NODE_VERSION: '20'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - name: Install dependencies
         run: npm install
@@ -28,7 +28,9 @@ jobs:
       - name: Build documentation site
         run: npm run docs:build
         
+      # Only publish on push to master — never deploy from pull_request builds.
       - name: Deploy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN }}

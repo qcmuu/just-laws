@@ -105,5 +105,22 @@ RERANK_API_KEY = os.environ.get("RERANK_API_KEY", "")
 
 # --- backend / CORS ---
 # Comma-separated list of allowed origins for the chat API. "*" allows all
-# (handy for local dev + the static site calling from any host).
+# (handy for local dev + the static site calling from any host). In production
+# set this to the site origin(s), e.g. https://www.justlaws.cn,https://justlaws.cn
 CORS_ALLOW_ORIGINS = os.environ.get("CORS_ALLOW_ORIGINS", "*")
+
+# --- rate limiting (abuse / cost guardrail for the public /api/chat endpoint) ---
+# A simple in-process fixed-window limiter keyed by client IP. It is per-process
+# (fine for the single-container deploy); put a shared limiter at the edge
+# (nginx limit_req) too when running multiple instances.
+RATE_LIMIT_ENABLED = os.environ.get("RATE_LIMIT_ENABLED", "true").lower() in (
+    "1", "true", "yes",
+)
+# Max number of /api/chat requests allowed per IP within RATE_LIMIT_WINDOW seconds.
+RATE_LIMIT_REQUESTS = int(os.environ.get("RATE_LIMIT_REQUESTS", "20"))
+RATE_LIMIT_WINDOW = int(os.environ.get("RATE_LIMIT_WINDOW", "60"))
+# Header to read the real client IP from when behind a reverse proxy (nginx).
+# Falls back to the socket peer address when the header is absent.
+RATE_LIMIT_CLIENT_IP_HEADER = os.environ.get(
+    "RATE_LIMIT_CLIENT_IP_HEADER", "x-forwarded-for"
+)

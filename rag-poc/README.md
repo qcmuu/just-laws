@@ -92,20 +92,41 @@ query ─┬─► 稠密向量检索 (pgvector / Chroma, bge-small-zh) ─┐
 ## 公开部署（Fly.io，self-contained）
 
 `Dockerfile` 以自包含方式打包：用 **Chroma 后端**（`VECTOR_BACKEND=chroma`）运行，
-构建时预下载本地 BGE 向量模型并烤入预构建的 Chroma 索引（`.chroma/`），单容器即可运行、
-无需外部数据库。部署前先在本目录构建一次索引：
+构建时预下载本地 BGE 向量模型并烤入预构建的 Chroma 索引（`.chroma/`）与 BM25 语料
+（`data/chunks.jsonl`），单容器即可运行、无需外部数据库。
+
+> 索引（`.chroma/`）和语料（`data/chunks.jsonl`）**必须在 `docker build` 之前构建好**——
+> 这个构建上下文里没有 `docs/`，镜像内无法自己生成。`Dockerfile` 会在缺失时直接构建失败，
+> 不会留到运行期才报错。
 
 ```bash
 pip install -r requirements.txt
-VECTOR_BACKEND=chroma python ingest.py      # 解析 docs/ → 切块 → 本地向量化 → 写入 .chroma/
 
-# 本地容器自测
+# 1) 构建索引 + 语料（写入 .chroma/ 和 data/chunks.jsonl）
+./scripts/build_index.sh           # 等价于 VECTOR_BACKEND=chroma python ingest.py
+
+# 2) 本地容器自测
 docker build -t justlaws-rag .
 docker run -p 8000:8000 -e LLM_API_KEY=sk-... justlaws-rag   # 打开 http://localhost:8000
+
+# 3) 部署到 Fly.io（见 fly.toml）
+fly apps create just-laws-rag
+fly secrets set LLM_API_KEY=sk-...                                   # 必需
+fly secrets set CORS_ALLOW_ORIGINS=https://www.justlaws.cn,https://justlaws.cn
+./scripts/deploy.sh                # 重建索引后 fly deploy；之后 curl https://<app>.fly.dev/health
 ```
 
 LLM key 以运行时环境变量 / Fly secret 注入（`LLM_API_KEY`，亦可回退到 `SENSENOVA_API_KEY`），
-**不写入镜像、不入库**。生产形态请改用 pgvector（`DATABASE_URL` 指向托管 Postgres）。
+**不写入镜像、不入库**。生产形态也可改用 pgvector（`DATABASE_URL` 指向托管 Postgres）。
+
+**前端接入**：站点 `LawChatWidget` 默认按**同源** `POST /api/chat` 请求，所以生产建议用
+nginx 把 `/api/` 反代到后端（示例见 `../deploy/nginx.conf.example`，已含 SSE 友好配置 +
+边缘限流）。也可在前端构建时用 `JUSTLAWS_RAG_API_BASE` 指定后端地址（需把 `CORS_ALLOW_ORIGINS`
+设为站点域名）。后端没就绪时，前端可用 `JUSTLAWS_RAG_ENABLED=false` 构建一键隐藏浮窗。
+
+**安全 / 防滥用**：生产务必把 `CORS_ALLOW_ORIGINS` 收紧到站点域名（默认 `*` 仅适合本地开发）；
+`/api/chat` 自带按 IP 的进程内限流（`RATE_LIMIT_*`，默认 20 次/60s），nginx 层 `limit_req`
+作为第二道防线。
 
 ## 文件说明
 
@@ -121,8 +142,12 @@ LLM key 以运行时环境变量 / Fly secret 注入（`LLM_API_KEY`，亦可回
 | `ingest.py` | 切块 → 向量化 → 写入向量库（pgvector 或 Chroma，同时落 `data/chunks.jsonl`） |
 | `rag.py` | 检索（hybrid+rerank）+ 受约束生成（CLI 入口） |
 | `eval_retrieval.py` | 检索质量对比脚本（baseline vs hybrid+rerank） |
-| `app.py` | FastAPI 后端：`/health` + `/api/chat`（SSE，已开 CORS） |
-| `Dockerfile` | 自包含部署镜像（Chroma 后端 + 预置模型/索引） |
+| `app.py` | FastAPI 后端：`/health` + `/api/chat`（SSE，CORS + 按 IP 限流 + 入参校验） |
+| `Dockerfile` | 自包含部署镜像（Chroma 后端 + 预置模型/索引，缺索引时构建即失败） |
+| `fly.toml` | Fly.io 部署配置（health check、并发/限流、2GB 内存） |
+| `scripts/build_index.sh` | 构建烤入镜像的 Chroma 索引 + 语料（`docker build` 前必跑） |
+| `scripts/deploy.sh` | 重建索引并 `fly deploy` |
+| `../deploy/nginx.conf.example` | 站点 + `/api` 反代示例（SSE 友好 + 边缘限流） |
 
 ## 已知限制
 
