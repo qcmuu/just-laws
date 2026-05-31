@@ -136,7 +136,7 @@ function resolveEnabled() {
     return window.__JUSTLAWS_RAG_ENABLED__ !== false &&
       !["false", "0", "off", "no"].includes(String(window.__JUSTLAWS_RAG_ENABLED__).toLowerCase());
   }
-  // Build-time define injected via docs/.vuepress/config.js (default: enabled).
+  // Build-time define injected via docs/.vuepress/config.js (default: disabled).
   if (typeof __JUSTLAWS_RAG_ENABLED__ !== "undefined") {
     return __JUSTLAWS_RAG_ENABLED__ !== false;
   }

@@ -9,13 +9,15 @@ module.exports = {
   // Build-time config for the AI 法律问答 chat widget.
   // - JUSTLAWS_RAG_API_BASE: backend base URL. Empty string = same-origin
   //   (production behind an nginx /api reverse proxy; see deploy/nginx.conf.example).
-  // - JUSTLAWS_RAG_ENABLED: feature flag. Set to "false"/"0" to hide the widget
-  //   entirely (e.g. ship the static site before the backend is ready).
+  // - JUSTLAWS_RAG_ENABLED: feature flag. Defaults to disabled so the static
+  //   site can ship without a "visible but unusable" widget while the backend
+  //   is not deployed. Set JUSTLAWS_RAG_ENABLED=true (e.g. in CI) to show it
+  //   once the backend + nginx /api reverse proxy are live.
   // VuePress JSON-stringifies define values itself, so pass the raw value.
   define: {
     __JUSTLAWS_RAG_API_BASE__: process.env.JUSTLAWS_RAG_API_BASE || "",
-    __JUSTLAWS_RAG_ENABLED__: !["false", "0", "off", "no"].includes(
-      String(process.env.JUSTLAWS_RAG_ENABLED || "true").toLowerCase()
+    __JUSTLAWS_RAG_ENABLED__: ["true", "1", "on", "yes"].includes(
+      String(process.env.JUSTLAWS_RAG_ENABLED || "false").toLowerCase()
     ),
   },
   head: [
