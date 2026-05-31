@@ -7,3 +7,5 @@
 [预防未成年人犯罪法](../social/prevention-of-juvenile-delinquency)
 
 [安全生产法](../social/work-safety-law)
+
+[危险化学品安全法](../social/dangerous-chemicals-safety-law)

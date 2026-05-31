@@ -80,7 +80,7 @@ module.exports = {
           { text: "个人所得税法", link: "/economic/individual-income-tax-law/" },
           { text: "中国人民银行法", link: "/economic/peoples-bank-of-china-law/" },
           { text: "个人信息保护法", link: "/economic/personal-information-protection-law/" },
-          { text: "查看全部 14 部经济法", link: "/category/economic" },
+          { text: "查看全部 16 部经济法", link: "/category/economic" },
         ],
       },
       {

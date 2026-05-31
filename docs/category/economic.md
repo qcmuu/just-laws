@@ -27,3 +27,7 @@
 [数据安全法](../economic/data-security-law)
 
 [个人信息保护法](../economic/personal-information-protection-law)
+
+[对外贸易法](../economic/foreign-trade-law)
+
+[渔业法](../economic/fishery-law)
