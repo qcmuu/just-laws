@@ -6,12 +6,17 @@ module.exports = {
   title: "Just Laws",
   description: "法律和法律都是相互依存的",
 
-  // Build-time config for the AI 法律问答 chat widget. Set the backend base URL
-  // via the JUSTLAWS_RAG_API_BASE env var at build/dev time. Empty string =
-  // same-origin (production behind an nginx /api reverse proxy).
-  // VuePress JSON-stringifies define values itself, so pass the raw string.
+  // Build-time config for the AI 法律问答 chat widget.
+  // - JUSTLAWS_RAG_API_BASE: backend base URL. Empty string = same-origin
+  //   (production behind an nginx /api reverse proxy; see deploy/nginx.conf.example).
+  // - JUSTLAWS_RAG_ENABLED: feature flag. Set to "false"/"0" to hide the widget
+  //   entirely (e.g. ship the static site before the backend is ready).
+  // VuePress JSON-stringifies define values itself, so pass the raw value.
   define: {
     __JUSTLAWS_RAG_API_BASE__: process.env.JUSTLAWS_RAG_API_BASE || "",
+    __JUSTLAWS_RAG_ENABLED__: !["false", "0", "off", "no"].includes(
+      String(process.env.JUSTLAWS_RAG_ENABLED || "true").toLowerCase()
+    ),
   },
   head: [
     ["link", { rel: "icon", href: "/images/logo.png" }],

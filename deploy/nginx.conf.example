@@ -1,0 +1,53 @@
+# Example nginx config for justlaws.cn.
+#
+# Serves the static VuePress site (deployed by .github/workflows/main.yml to
+# /usr/share/nginx/html/justlaws) and reverse-proxies /api/* to the RAG backend
+# so the chat widget can call the SSE endpoint **same-origin** (no CORS, no
+# build-time JUSTLAWS_RAG_API_BASE needed).
+#
+# Point `proxy_pass` at wherever the backend runs:
+#   - same host (systemd/docker):  http://127.0.0.1:8000
+#   - Fly.io / remote:             https://just-laws-rag.fly.dev
+# Copy to your server, adjust paths/host, then `nginx -t && systemctl reload nginx`.
+
+# Edge rate limit (defense in depth on top of the app-level limiter).
+limit_req_zone $binary_remote_addr zone=justlaws_api:10m rate=30r/m;
+
+upstream justlaws_rag {
+    server 127.0.0.1:8000;   # <-- change to your backend address
+    keepalive 16;
+}
+
+server {
+    listen 80;
+    server_name www.justlaws.cn justlaws.cn;
+    # In production terminate TLS here (certbot/Let's Encrypt) and redirect 80->443.
+
+    root /usr/share/nginx/html/justlaws;
+    index index.html;
+
+    # --- RAG chat backend (SSE streaming) ---
+    location /api/ {
+        limit_req zone=justlaws_api burst=10 nodelay;
+        limit_req_status 429;
+
+        proxy_pass http://justlaws_rag;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Server-Sent Events: stream tokens immediately, never buffer/time out.
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_set_header Connection "";
+        proxy_read_timeout 300s;
+        chunked_transfer_encoding on;
+    }
+
+    # --- static law library (VuePress) ---
+    location / {
+        try_files $uri $uri/ $uri.html /404.html;
+    }
+}

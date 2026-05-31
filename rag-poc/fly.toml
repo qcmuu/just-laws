@@ -1,0 +1,53 @@
+# Fly.io deployment for the Just Laws RAG backend (self-contained Chroma image).
+#
+# One-time:
+#   fly apps create just-laws-rag           # or change `app` below
+#   fly secrets set LLM_API_KEY=sk-...       # required (SenseNova / OpenAI-compatible)
+#   fly secrets set CORS_ALLOW_ORIGINS=https://www.justlaws.cn,https://justlaws.cn
+# Deploy:
+#   ./scripts/deploy.sh                      # builds the index, then `fly deploy`
+#
+# Secrets (LLM_API_KEY, CORS_ALLOW_ORIGINS, …) are injected at runtime by Fly,
+# never baked into the image.
+
+app = "just-laws-rag"
+primary_region = "hkg"  # close to CN users; change as needed
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8000"
+  VECTOR_BACKEND = "chroma"
+  EMBEDDING_BACKEND = "local"
+  RERANK_BACKEND = "local"
+  # Rate-limit the public endpoint (per-IP, per-process). Tune as needed.
+  RATE_LIMIT_ENABLED = "true"
+  RATE_LIMIT_REQUESTS = "20"
+  RATE_LIMIT_WINDOW = "60"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 8
+    hard_limit = 16
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/health"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "40s"
+
+[[vm]]
+  # The local BGE embedder + cross-encoder reranker run in-process (CPU/torch);
+  # 2 GB gives headroom for model load + reranking. Drop to 1 GB only if you
+  # disable rerank (RERANK_ENABLED=false).
+  size = "shared-cpu-2x"
+  memory = "2gb"
