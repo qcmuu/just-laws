@@ -7,17 +7,15 @@ module.exports = {
   description: "法律和法律都是相互依存的",
 
   // Build-time config for the AI 法律问答 chat widget.
-  // - JUSTLAWS_RAG_API_BASE: backend base URL. Empty string = same-origin
-  //   (production behind an nginx /api reverse proxy; see deploy/nginx.conf.example).
-  // - JUSTLAWS_RAG_ENABLED: feature flag. Defaults to disabled so the static
-  //   site can ship without a "visible but unusable" widget while the backend
-  //   is not deployed. Set JUSTLAWS_RAG_ENABLED=true (e.g. in CI) to show it
-  //   once the backend + nginx /api reverse proxy are live.
+  // The widget is now fully client-side (BYOK): it loads /law-corpus.json,
+  // retrieves 法条 in the browser, and calls a user-supplied OpenAI-compatible
+  // endpoint — no backend required — so it is enabled by default.
+  // - JUSTLAWS_RAG_ENABLED: feature flag. Set JUSTLAWS_RAG_ENABLED=false to hide
+  //   the floating launcher (runtime override: window.__JUSTLAWS_RAG_ENABLED__).
   // VuePress JSON-stringifies define values itself, so pass the raw value.
   define: {
-    __JUSTLAWS_RAG_API_BASE__: process.env.JUSTLAWS_RAG_API_BASE || "",
-    __JUSTLAWS_RAG_ENABLED__: ["true", "1", "on", "yes"].includes(
-      String(process.env.JUSTLAWS_RAG_ENABLED || "false").toLowerCase()
+    __JUSTLAWS_RAG_ENABLED__: !["false", "0", "off", "no"].includes(
+      String(process.env.JUSTLAWS_RAG_ENABLED || "true").toLowerCase()
     ),
   },
   head: [
