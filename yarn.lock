@@ -1263,6 +1263,11 @@ mimic-fn@^2.1.0:
   resolved "https://registry.npmmirror.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
+minisearch@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/minisearch/-/minisearch-7.2.0.tgz#3dc30e41e9464b3836553b6d969b656614f8f359"
+  integrity sha512-dqT2XBYUOZOiC5t2HRnwADjhNS2cecp9u+TJRiJ1Qp/f5qjkeT5APcGPjHw+bz89Ms8Jp+cG4AlE+QZ/QnDglg==
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.npmmirror.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"

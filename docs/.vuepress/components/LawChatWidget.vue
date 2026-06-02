@@ -2,11 +2,15 @@
 <!--
   Floating "AI 法律问答" chat widget for the Just Laws VuePress site.
 
-  - Calls the RAG backend POST /api/chat and streams the answer (SSE).
+  Fully client-side, no backend (BYOK = bring your own key):
+  - Lazy-loads /law-corpus.json (article-level law chunks) on first open.
+  - Builds a lexical index in the browser (MiniSearch + a CJK bi-gram tokenizer)
+    and retrieves the top-k 法条 for the question.
+  - Sends the retrieved 法条 + question to a user-supplied OpenAI-compatible
+    chat endpoint and streams the answer. The API key is stored only in the
+    user's browser (localStorage) and sent directly to their chosen provider —
+    it never touches our servers.
   - Renders citations as clickable deep-links back into the law text.
-  - Backend base URL is configurable (build-time define __JUSTLAWS_RAG_API_BASE__
-    or runtime window.__JUSTLAWS_RAG_API_BASE__); empty string = same-origin.
-  - Fails gracefully when the backend is absent (the static build never breaks).
 -->
 <template>
   <ClientOnly>
@@ -17,7 +21,7 @@
         class="jl-chat__fab"
         type="button"
         aria-label="打开 AI 法律问答"
-        @click="open = true"
+        @click="openPanel"
       >
         <span class="jl-chat__fab-icon">⚖️</span>
         <span class="jl-chat__fab-text">AI 法律问答</span>
@@ -28,76 +32,145 @@
         <header class="jl-chat__header">
           <div>
             <strong>AI 法律问答</strong>
-            <span class="jl-chat__sub">基于现行法律文库的 RAG 检索</span>
+            <span class="jl-chat__sub">本地检索法条 · 自带模型 Key</span>
           </div>
-          <button
-            class="jl-chat__close"
-            type="button"
-            aria-label="关闭"
-            @click="open = false"
-          >
-            ×
-          </button>
-        </header>
-
-        <div class="jl-chat__disclaimer">
-          ⚠️ 本工具基于已收录法条自动整理，仅供参考、不构成法律意见。重大事项请咨询执业律师。
-        </div>
-
-        <div ref="bodyEl" class="jl-chat__body">
-          <div v-if="!answer && !sources.length && !error" class="jl-chat__examples">
-            <p class="jl-chat__hint">试着问我：</p>
+          <div class="jl-chat__actions">
             <button
-              v-for="ex in examples"
-              :key="ex"
+              class="jl-chat__icon"
               type="button"
-              class="jl-chat__chip"
-              @click="ask(ex)"
+              :aria-label="showSettings ? '返回问答' : '设置模型'"
+              :title="showSettings ? '返回问答' : '设置模型'"
+              @click="showSettings = !showSettings"
             >
-              {{ ex }}
+              {{ showSettings ? "←" : "⚙" }}
+            </button>
+            <button
+              class="jl-chat__icon"
+              type="button"
+              aria-label="关闭"
+              @click="open = false"
+            >
+              ×
             </button>
           </div>
+        </header>
 
-          <!-- eslint-disable-next-line vue/no-v-html -->
-          <div
-            v-if="answer"
-            class="jl-chat__answer"
-            v-html="renderedAnswer"
-          ></div>
-
-          <div v-if="error" class="jl-chat__error">{{ error }}</div>
-
-          <div v-if="sources.length" class="jl-chat__sources">
-            <h4>参考来源（{{ sources.length }} 条法条，点击核对原文）</h4>
-            <a
-              v-for="(s, i) in sources"
-              :key="i"
-              class="jl-chat__src"
-              :href="s.source_url"
-              target="_blank"
-              rel="noopener"
-            >
-              <span class="jl-chat__src-title"
-                >《{{ s.law_name }}》{{ s.article_no }}</span
+        <!-- Settings (BYOK) -->
+        <div v-if="showSettings" class="jl-chat__settings">
+          <p class="jl-chat__settings-intro">
+            填入任意 <strong>OpenAI 兼容</strong> 接口（如 DeepSeek、通义千问、智谱 GLM
+            等）。Key 仅保存在你本机浏览器、直接发往你选择的服务商，<strong>不会经过本站</strong>。
+          </p>
+          <label class="jl-chat__field">
+            <span>接口地址 Base URL</span>
+            <input
+              v-model.trim="cfg.baseUrl"
+              type="text"
+              placeholder="https://api.deepseek.com/v1"
+            />
+          </label>
+          <label class="jl-chat__field">
+            <span>API Key</span>
+            <input
+              v-model.trim="cfg.apiKey"
+              type="password"
+              autocomplete="off"
+              placeholder="sk-..."
+            />
+          </label>
+          <label class="jl-chat__field">
+            <span>模型 Model</span>
+            <input v-model.trim="cfg.model" type="text" placeholder="deepseek-chat" />
+          </label>
+          <div class="jl-chat__settings-row">
+            <details class="jl-chat__presets">
+              <summary>常用预设</summary>
+              <button
+                v-for="p in presets"
+                :key="p.name"
+                type="button"
+                class="jl-chat__chip"
+                @click="applyPreset(p)"
               >
-              <span class="jl-chat__badge">相关度 {{ s.score }}</span>
-              <span v-if="s.context" class="jl-chat__src-ctx">{{ s.context }}</span>
-            </a>
+                {{ p.name }}
+              </button>
+            </details>
+            <button class="jl-chat__send" type="button" @click="saveSettings">
+              保存
+            </button>
           </div>
+          <p class="jl-chat__note">
+            注：OpenAI 官方端点（api.openai.com）不允许浏览器直连，会被 CORS 拦截；
+            请使用国产兼容服务、自建网关或 Azure OpenAI。
+          </p>
         </div>
 
-        <form class="jl-chat__inputbar" @submit.prevent="ask()">
-          <input
-            v-model="question"
-            class="jl-chat__input"
-            type="text"
-            :disabled="loading"
-            placeholder="用一句话描述你的法律问题…"
-          />
-          <button class="jl-chat__send" type="submit" :disabled="loading">
-            {{ loading ? "…" : "提问" }}
-          </button>
-        </form>
+        <!-- Chat -->
+        <template v-else>
+          <div class="jl-chat__disclaimer">
+            ⚠️ 本工具基于已收录法条 + 你选择的大模型自动整理，仅供参考、不构成法律意见。重大事项请咨询执业律师。
+          </div>
+
+          <div ref="bodyEl" class="jl-chat__body">
+            <div v-if="!answer && !sources.length && !error" class="jl-chat__examples">
+              <p v-if="!configured" class="jl-chat__hint">
+                先到右上角 ⚙ 设置里填入你的模型 API，即可开始提问。
+              </p>
+              <template v-else>
+                <p class="jl-chat__hint">试着问我：</p>
+                <button
+                  v-for="ex in examples"
+                  :key="ex"
+                  type="button"
+                  class="jl-chat__chip"
+                  @click="ask(ex)"
+                >
+                  {{ ex }}
+                </button>
+              </template>
+            </div>
+
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <div v-if="answer" class="jl-chat__answer" v-html="renderedAnswer"></div>
+
+            <div v-if="error" class="jl-chat__error">{{ error }}</div>
+
+            <div v-if="sources.length" class="jl-chat__sources">
+              <h4>参考来源（{{ sources.length }} 条法条，点击核对原文）</h4>
+              <a
+                v-for="(s, i) in sources"
+                :key="i"
+                class="jl-chat__src"
+                :href="s.url"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="jl-chat__src-title"
+                  >《{{ s.law_name }}》{{ s.article_no }}</span
+                >
+                <span v-if="s.chapter" class="jl-chat__badge">{{ s.chapter }}</span>
+                <span class="jl-chat__src-ctx">{{ snippet(s.text) }}</span>
+              </a>
+            </div>
+          </div>
+
+          <form class="jl-chat__inputbar" @submit.prevent="ask()">
+            <input
+              v-model="question"
+              class="jl-chat__input"
+              type="text"
+              :disabled="loading"
+              :placeholder="configured ? '用一句话描述你的法律问题…' : '请先在 ⚙ 设置里填入模型 API'"
+            />
+            <button
+              class="jl-chat__send"
+              type="submit"
+              :disabled="loading || !configured"
+            >
+              {{ loading ? "…" : "提问" }}
+            </button>
+          </form>
+        </template>
       </section>
     </div>
   </ClientOnly>
@@ -105,38 +178,67 @@
 
 <script>
 import MarkdownIt from "markdown-it";
+import MiniSearch from "minisearch";
 
 // html:false escapes any raw HTML in the model output, and markdown-it's
 // default link validator strips javascript:/data: URLs, so rendering the
 // answer with v-html is safe against injection from the LLM response.
-const md = new MarkdownIt({
-  html: false,
-  linkify: true,
-  breaks: true,
-});
+const md = new MarkdownIt({ html: false, linkify: true, breaks: true });
 
-// Abort a streaming request that never responds, so the UI can't hang forever.
-const REQUEST_TIMEOUT_MS = 60000;
+const REQUEST_TIMEOUT_MS = 90000; // streamed completions can run a while
+const TOP_K = 6; // number of 法条 fed to the model
+const MAX_CHUNK_CHARS = 600; // cap each 法条's length in the prompt
 
-function resolveApiBase() {
-  // Runtime override (set window.__JUSTLAWS_RAG_API_BASE__ before load).
-  if (typeof window !== "undefined" && window.__JUSTLAWS_RAG_API_BASE__) {
-    return String(window.__JUSTLAWS_RAG_API_BASE__).replace(/\/$/, "");
+const LS = {
+  base: "jl_chat_base_url",
+  key: "jl_chat_api_key",
+  model: "jl_chat_model",
+};
+
+const PRESETS = [
+  { name: "DeepSeek", baseUrl: "https://api.deepseek.com/v1", model: "deepseek-chat" },
+  {
+    name: "通义千问",
+    baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    model: "qwen-plus",
+  },
+  { name: "智谱 GLM", baseUrl: "https://open.bigmodel.cn/api/paas/v4", model: "glm-4-flash" },
+];
+
+// Tokenizer for Chinese legal text: emit lowercased ASCII word runs as-is, and
+// for CJK runs emit unigrams + bigrams. Used for BOTH indexing and querying so
+// lexical recall works without word segmentation or any model download.
+function cjkTokenize(str) {
+  if (!str) return [];
+  const tokens = [];
+  const re = /[\u4e00-\u9fff]+|[a-zA-Z0-9]+/g;
+  let m;
+  while ((m = re.exec(str)) !== null) {
+    const run = m[0];
+    if (/[a-zA-Z0-9]/.test(run[0])) {
+      tokens.push(run.toLowerCase());
+    } else {
+      for (let i = 0; i < run.length; i++) {
+        tokens.push(run[i]);
+        if (i + 1 < run.length) tokens.push(run[i] + run[i + 1]);
+      }
+    }
   }
-  // Build-time define injected via docs/.vuepress/config.js.
-  if (typeof __JUSTLAWS_RAG_API_BASE__ !== "undefined" && __JUSTLAWS_RAG_API_BASE__) {
-    return String(__JUSTLAWS_RAG_API_BASE__).replace(/\/$/, "");
-  }
-  return ""; // same-origin (production behind an nginx /api reverse proxy)
+  return tokens;
 }
 
 function resolveEnabled() {
-  // Runtime override wins (set window.__JUSTLAWS_RAG_ENABLED__ = false to hide).
-  if (typeof window !== "undefined" && typeof window.__JUSTLAWS_RAG_ENABLED__ !== "undefined") {
-    return window.__JUSTLAWS_RAG_ENABLED__ !== false &&
-      !["false", "0", "off", "no"].includes(String(window.__JUSTLAWS_RAG_ENABLED__).toLowerCase());
+  if (
+    typeof window !== "undefined" &&
+    typeof window.__JUSTLAWS_RAG_ENABLED__ !== "undefined"
+  ) {
+    return (
+      window.__JUSTLAWS_RAG_ENABLED__ !== false &&
+      !["false", "0", "off", "no"].includes(
+        String(window.__JUSTLAWS_RAG_ENABLED__).toLowerCase()
+      )
+    );
   }
-  // Build-time define injected via docs/.vuepress/config.js (default: disabled).
   if (typeof __JUSTLAWS_RAG_ENABLED__ !== "undefined") {
     return __JUSTLAWS_RAG_ENABLED__ !== false;
   }
@@ -149,11 +251,15 @@ export default {
     return {
       enabled: resolveEnabled(),
       open: false,
+      showSettings: false,
       question: "",
       answer: "",
       sources: [],
       error: "",
       loading: false,
+      indexState: "idle", // idle | loading | ready | error
+      cfg: { baseUrl: "", apiKey: "", model: "" },
+      presets: PRESETS,
       examples: [
         "租房到期房东不退押金怎么办？",
         "公司拖欠工资可以怎么维权？",
@@ -166,35 +272,147 @@ export default {
     renderedAnswer() {
       return this.answer ? md.render(this.answer) : "";
     },
+    configured() {
+      return !!(this.cfg.baseUrl && this.cfg.apiKey && this.cfg.model);
+    },
+  },
+  created() {
+    if (typeof window === "undefined") return;
+    try {
+      this.cfg.baseUrl = localStorage.getItem(LS.base) || "";
+      this.cfg.apiKey = localStorage.getItem(LS.key) || "";
+      this.cfg.model = localStorage.getItem(LS.model) || "";
+    } catch (e) {
+      /* localStorage may be unavailable (private mode); ignore */
+    }
   },
   methods: {
+    openPanel() {
+      this.open = true;
+      if (!this.configured) this.showSettings = true;
+      this.ensureIndex();
+    },
+    saveSettings() {
+      try {
+        localStorage.setItem(LS.base, this.cfg.baseUrl);
+        localStorage.setItem(LS.key, this.cfg.apiKey);
+        localStorage.setItem(LS.model, this.cfg.model);
+      } catch (e) {
+        /* ignore */
+      }
+      if (this.configured) this.showSettings = false;
+    },
+    applyPreset(p) {
+      this.cfg.baseUrl = p.baseUrl;
+      if (!this.cfg.model) this.cfg.model = p.model;
+    },
+    snippet(t) {
+      const s = String(t || "").replace(/\s+/g, " ");
+      return s.length > 80 ? s.slice(0, 80) + "…" : s;
+    },
     scrollDown() {
       this.$nextTick(() => {
         const el = this.$refs.bodyEl;
         if (el) el.scrollTop = el.scrollHeight;
       });
     },
+    async ensureIndex() {
+      if (this.indexState === "ready" || this.indexState === "loading") return;
+      this.indexState = "loading";
+      try {
+        const base =
+          (typeof window !== "undefined" && window.__JUSTLAWS_SITE_BASE__) || "/";
+        const resp = await fetch(base.replace(/\/$/, "") + "/law-corpus.json");
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
+        const data = await resp.json();
+        const mini = new MiniSearch({
+          fields: ["text", "law_name", "chapter"],
+          storeFields: ["law_name", "category", "chapter", "article_no", "url", "text"],
+          tokenize: cjkTokenize,
+          searchOptions: {
+            tokenize: cjkTokenize,
+            boost: { law_name: 3, chapter: 1.5 },
+            combineWith: "OR",
+          },
+        });
+        mini.addAll(data.docs);
+        this._mini = mini;
+        this.indexState = "ready";
+      } catch (e) {
+        this.indexState = "error";
+        this.error = "法条索引加载失败，请刷新页面重试。";
+      }
+    },
+    retrieve(q) {
+      if (!this._mini) return [];
+      const hits = this._mini.search(q, { combineWith: "OR" });
+      return hits.slice(0, TOP_K);
+    },
+    buildMessages(q, ctx) {
+      const blocks = ctx
+        .map((c) => {
+          const t = c.text.length > MAX_CHUNK_CHARS ? c.text.slice(0, MAX_CHUNK_CHARS) + "…" : c.text;
+          return `《${c.law_name}》${c.chapter ? "（" + c.chapter + "）" : ""}\n${t}`;
+        })
+        .join("\n\n");
+      const system =
+        "你是严谨的中国法律检索助手。只依据【可参考法条】中的内容回答用户问题，" +
+        "并在回答中明确引用法律名称与条号（如《中华人民共和国民法典》第X条）。" +
+        "如果提供的法条不足以回答，请直接说明「现有法条不足以回答」，不要编造法条或条号。" +
+        "回答用简体中文，条理清晰，必要时分点。最后提示重大事项应咨询执业律师。";
+      const user =
+        `用户问题：${q}\n\n【可参考法条】\n${blocks || "（未检索到相关法条）"}`;
+      return [
+        { role: "system", content: system },
+        { role: "user", content: user },
+      ];
+    },
     async ask(preset) {
       const q = (preset || this.question).trim();
       if (!q || this.loading) return;
+      if (!this.configured) {
+        this.showSettings = true;
+        return;
+      }
       this.question = q;
       this.loading = true;
       this.answer = "";
       this.sources = [];
       this.error = "";
 
+      await this.ensureIndex();
+      const ctx = this.retrieve(q);
+      this.sources = ctx;
+      this.scrollDown();
+
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
       try {
-        const resp = await fetch(resolveApiBase() + "/api/chat", {
+        const url = this.cfg.baseUrl.replace(/\/$/, "") + "/chat/completions";
+        const resp = await fetch(url, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question: q }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + this.cfg.apiKey,
+          },
+          body: JSON.stringify({
+            model: this.cfg.model,
+            messages: this.buildMessages(q, ctx),
+            temperature: 0.2,
+            stream: true,
+          }),
           signal: controller.signal,
         });
-        if (!resp.ok || !resp.body) {
-          throw new Error("HTTP " + resp.status);
+        if (!resp.ok) {
+          let detail = "";
+          try {
+            detail = (await resp.text()).slice(0, 300);
+          } catch (e) {
+            /* ignore */
+          }
+          throw new Error("HTTP " + resp.status + (detail ? "：" + detail : ""));
         }
+        if (!resp.body) throw new Error("无响应流");
         const reader = resp.body.getReader();
         const dec = new TextDecoder();
         let buf = "";
@@ -204,30 +422,44 @@ export default {
           if (done) break;
           buf += dec.decode(value, { stream: true });
           let idx;
-          while ((idx = buf.indexOf("\n\n")) >= 0) {
+          while ((idx = buf.indexOf("\n")) >= 0) {
             const line = buf.slice(0, idx).trim();
-            buf = buf.slice(idx + 2);
+            buf = buf.slice(idx + 1);
             if (!line.startsWith("data:")) continue;
+            const payload = line.slice(5).trim();
+            if (payload === "[DONE]") {
+              buf = "";
+              break;
+            }
             let evt;
             try {
-              evt = JSON.parse(line.slice(5).trim());
+              evt = JSON.parse(payload);
             } catch (e) {
               continue;
             }
-            if (evt.type === "sources") {
-              this.sources = evt.sources || [];
-            } else if (evt.type === "token") {
-              this.answer += evt.text;
+            const delta =
+              evt.choices && evt.choices[0] && evt.choices[0].delta
+                ? evt.choices[0].delta.content
+                : "";
+            if (delta) {
+              this.answer += delta;
               this.scrollDown();
             }
           }
         }
+        if (!this.answer) {
+          this.error = "模型未返回内容，请检查模型名称或额度。";
+        }
       } catch (e) {
         if (e && e.name === "AbortError") {
           this.error = "回答超时，请稍后重试或换个问法。";
-        } else {
+        } else if (e && e.name === "TypeError") {
+          // fetch threw before any HTTP response -> almost always CORS/network.
           this.error =
-            "暂时无法连接问答服务，请稍后再试。（AI 法律问答需要后端服务，静态站点本身不受影响）";
+            "无法连接该接口（可能被 CORS 拦截或网络不可达）。OpenAI 官方端点不支持浏览器直连，" +
+            "请改用国产兼容服务、自建网关或 Azure OpenAI；并确认 Base URL 正确。";
+        } else {
+          this.error = "调用失败：" + (e && e.message ? e.message : String(e));
         }
       } finally {
         clearTimeout(timer);
@@ -292,26 +524,83 @@ export default {
   background: var(--jl-brand);
   color: #fff;
 }
+.jl-chat__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 .jl-chat__sub {
   display: block;
   font-size: 11px;
   opacity: 0.85;
   font-weight: 400;
 }
-.jl-chat__close {
+.jl-chat__icon {
   background: transparent;
   border: 0;
   color: #fff;
-  font-size: 22px;
+  font-size: 18px;
   line-height: 1;
   cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.jl-chat__icon:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+.jl-chat__settings {
+  padding: 14px 16px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: #333;
+}
+.jl-chat__settings-intro {
+  margin: 0 0 12px;
+  color: #555;
+  line-height: 1.5;
+}
+.jl-chat__field {
+  display: block;
+  margin-bottom: 10px;
+}
+.jl-chat__field > span {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+.jl-chat__field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 13px;
+}
+.jl-chat__settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+}
+.jl-chat__presets summary {
+  cursor: pointer;
+  color: var(--jl-brand);
+  font-size: 12px;
+}
+.jl-chat__note {
+  margin-top: 12px;
+  font-size: 11px;
+  color: #999;
+  line-height: 1.5;
 }
 .jl-chat__disclaimer {
   background: #fff6f5;
   border-bottom: 1px solid #ffd9d4;
-  color: #a8261b;
   padding: 8px 14px;
   font-size: 12px;
+  color: #a8331f;
   line-height: 1.5;
 }
 .jl-chat__body {
@@ -320,21 +609,19 @@ export default {
   padding: 14px 16px;
 }
 .jl-chat__hint {
-  margin: 0 0 8px;
   font-size: 13px;
   color: #666;
+  margin: 0 0 8px;
 }
 .jl-chat__chip {
-  display: block;
-  width: 100%;
-  text-align: left;
-  margin-bottom: 8px;
-  padding: 8px 12px;
-  background: #fafafa;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  font-size: 13px;
-  color: #333;
+  display: inline-block;
+  margin: 0 6px 6px 0;
+  padding: 6px 10px;
+  border: 1px solid #eadbd9;
+  border-radius: 999px;
+  background: #fff;
+  color: #444;
+  font-size: 12px;
   cursor: pointer;
 }
 .jl-chat__chip:hover {
@@ -342,118 +629,65 @@ export default {
   color: var(--jl-brand);
 }
 .jl-chat__answer {
-  line-height: 1.7;
   font-size: 14px;
-  color: #1a1a1a;
+  line-height: 1.7;
+  color: #222;
   word-break: break-word;
 }
-/* v-html content is not affected by scoped styles, so target it via :deep(). */
 .jl-chat__answer :deep(p) {
   margin: 0 0 10px;
 }
-.jl-chat__answer :deep(p:last-child) {
-  margin-bottom: 0;
-}
-.jl-chat__answer :deep(ul),
-.jl-chat__answer :deep(ol) {
-  margin: 0 0 10px;
-  padding-left: 22px;
-}
-.jl-chat__answer :deep(li) {
-  margin: 2px 0;
-}
-.jl-chat__answer :deep(li > p) {
-  margin: 0;
-}
-.jl-chat__answer :deep(strong) {
-  font-weight: 600;
-  color: #000;
-}
-.jl-chat__answer :deep(a) {
-  color: var(--jl-brand);
-  text-decoration: underline;
-}
-.jl-chat__answer :deep(h1),
-.jl-chat__answer :deep(h2),
-.jl-chat__answer :deep(h3),
-.jl-chat__answer :deep(h4) {
-  margin: 12px 0 6px;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.4;
-}
-.jl-chat__answer :deep(code) {
-  background: #f3f3f3;
-  border-radius: 4px;
-  padding: 1px 5px;
-  font-size: 12.5px;
-}
-.jl-chat__answer :deep(pre) {
-  background: #f3f3f3;
-  border-radius: 6px;
-  padding: 10px 12px;
-  overflow-x: auto;
-}
-.jl-chat__answer :deep(pre code) {
-  background: transparent;
-  padding: 0;
-}
-.jl-chat__answer :deep(blockquote) {
-  margin: 0 0 10px;
-  padding: 4px 12px;
-  border-left: 3px solid #eee;
-  color: #555;
-}
-.jl-chat__answer :deep(hr) {
-  border: 0;
-  border-top: 1px solid #eee;
-  margin: 12px 0;
-}
 .jl-chat__error {
+  font-size: 13px;
+  color: #a8331f;
   background: #fff6f5;
   border: 1px solid #ffd9d4;
-  color: #a8261b;
-  padding: 10px 12px;
   border-radius: 8px;
-  font-size: 13px;
+  padding: 10px 12px;
+  line-height: 1.5;
 }
 .jl-chat__sources {
   margin-top: 14px;
+  border-top: 1px dashed #eee;
+  padding-top: 10px;
 }
 .jl-chat__sources h4 {
-  margin: 0 0 8px;
   font-size: 12px;
-  color: #666;
+  color: #888;
+  margin: 0 0 8px;
+  font-weight: 600;
 }
 .jl-chat__src {
   display: block;
-  background: #fff;
-  border: 1px solid #eee;
-  border-left: 3px solid var(--jl-brand);
-  border-radius: 6px;
-  padding: 8px 12px;
+  padding: 8px 10px;
   margin-bottom: 8px;
-  font-size: 13px;
+  border: 1px solid #eee;
+  border-radius: 8px;
   text-decoration: none;
+  color: #333;
+}
+.jl-chat__src:hover {
+  border-color: var(--jl-brand);
+  background: #fffafa;
 }
 .jl-chat__src-title {
-  color: var(--jl-brand);
+  display: inline;
   font-weight: 600;
+  color: var(--jl-brand);
+  font-size: 13px;
 }
 .jl-chat__badge {
   display: inline-block;
-  margin-left: 6px;
-  background: #eee;
-  border-radius: 10px;
-  padding: 1px 8px;
+  margin-left: 8px;
   font-size: 11px;
-  color: #666;
+  color: #999;
 }
 .jl-chat__src-ctx {
   display: block;
-  margin-top: 2px;
-  color: #999;
+  margin-top: 4px;
   font-size: 12px;
+  color: #666;
+  line-height: 1.5;
 }
 .jl-chat__inputbar {
   display: flex;
@@ -463,18 +697,23 @@ export default {
 }
 .jl-chat__input {
   flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 9px 12px;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  font-size: 13px;
+  outline: none;
+}
+.jl-chat__input:focus {
+  border-color: var(--jl-brand);
 }
 .jl-chat__send {
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 999px;
   background: var(--jl-brand);
   color: #fff;
-  border: 0;
-  border-radius: 8px;
-  padding: 0 18px;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
 }
 .jl-chat__send:disabled {
