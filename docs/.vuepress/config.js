@@ -6,6 +6,11 @@ module.exports = {
   title: "Just Laws",
   description: "法律和法律都是相互依存的",
 
+  // Site base path. Defaults to "/" (custom domain / nginx root). For a GitHub
+  // Pages project site (https://<user>.github.io/just-laws/) set
+  // JUSTLAWS_BASE=/just-laws/ at build time. Must start and end with "/".
+  base: process.env.JUSTLAWS_BASE || "/",
+
   // Build-time config for the AI 法律问答 chat widget.
   // The widget is now fully client-side (BYOK): it loads /law-corpus.json,
   // retrieves 法条 in the browser, and calls a user-supplied OpenAI-compatible
