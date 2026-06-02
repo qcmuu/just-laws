@@ -141,15 +141,15 @@
                 v-for="(s, i) in sources"
                 :key="i"
                 class="jl-chat__src"
-                :href="srcUrl(s.url)"
+                :href="srcUrl(s.u)"
                 target="_blank"
                 rel="noopener"
               >
                 <span class="jl-chat__src-title"
-                  >《{{ s.law_name }}》{{ s.article_no }}</span
+                  >《{{ s.n }}》{{ s.a }}</span
                 >
-                <span v-if="s.chapter" class="jl-chat__badge">{{ s.chapter }}</span>
-                <span class="jl-chat__src-ctx">{{ snippet(s.text) }}</span>
+                <span v-if="s.c" class="jl-chat__badge">{{ s.c }}</span>
+                <span class="jl-chat__src-ctx">{{ snippet(s.t) }}</span>
               </a>
             </div>
           </div>
@@ -177,14 +177,21 @@
 </template>
 
 <script>
-import MarkdownIt from "markdown-it";
-import MiniSearch from "minisearch";
 import { withBase } from "@vuepress/client";
 
-// html:false escapes any raw HTML in the model output, and markdown-it's
-// default link validator strips javascript:/data: URLs, so rendering the
-// answer with v-html is safe against injection from the LLM response.
-const md = new MarkdownIt({ html: false, linkify: true, breaks: true });
+// markdown-it and minisearch are heavy and only needed once the user actually
+// opens the chat. They are dynamically imported on demand (see loadMarkdown /
+// ensureIndex) so they are split into separate chunks and never block the
+// initial page load — important on slow networks (e.g. GitHub Pages in China).
+let md = null; // markdown-it instance, lazily created
+let MiniSearch = null; // minisearch class, lazily imported
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
 
 const REQUEST_TIMEOUT_MS = 90000; // streamed completions can run a while
 const TOP_K = 6; // number of 法条 fed to the model
@@ -259,6 +266,7 @@ export default {
       error: "",
       loading: false,
       indexState: "idle", // idle | loading | ready | error
+      mdReady: false, // markdown-it loaded (lazy)
       cfg: { baseUrl: "", apiKey: "", model: "" },
       presets: PRESETS,
       examples: [
@@ -271,7 +279,10 @@ export default {
   },
   computed: {
     renderedAnswer() {
-      return this.answer ? md.render(this.answer) : "";
+      if (!this.answer) return "";
+      // mdReady is referenced so the computed re-runs once markdown-it loads.
+      if (this.mdReady && md) return md.render(this.answer);
+      return escapeHtml(this.answer).replace(/\n/g, "<br>");
     },
     configured() {
       return !!(this.cfg.baseUrl && this.cfg.apiKey && this.cfg.model);
@@ -291,7 +302,26 @@ export default {
     openPanel() {
       this.open = true;
       if (!this.configured) this.showSettings = true;
+      // Warm up the heavy chunks (corpus index + markdown renderer) as soon as
+      // the panel opens, in parallel, so the first question feels responsive.
       this.ensureIndex();
+      this.loadMarkdown();
+    },
+    async loadMarkdown() {
+      if (md) {
+        this.mdReady = true;
+        return;
+      }
+      try {
+        const { default: MarkdownIt } = await import("markdown-it");
+        // html:false escapes any raw HTML in the model output, and markdown-it's
+        // default link validator strips javascript:/data: URLs, so rendering the
+        // answer with v-html is safe against injection from the LLM response.
+        md = new MarkdownIt({ html: false, linkify: true, breaks: true });
+        this.mdReady = true;
+      } catch (e) {
+        /* fall back to escaped plain text in renderedAnswer */
+      }
     },
     saveSettings() {
       try {
@@ -328,16 +358,23 @@ export default {
       try {
         // withBase prepends the site base (e.g. /just-laws/ on a GitHub Pages
         // project site), so the corpus resolves both at root and under a subpath.
-        const resp = await fetch(withBase("law-corpus.json"));
+        // Load minisearch and the corpus in parallel; both are only needed
+        // here, on the first question / panel open.
+        const [{ default: MiniSearchCls }, resp] = await Promise.all([
+          MiniSearch ? Promise.resolve({ default: MiniSearch }) : import("minisearch"),
+          fetch(withBase("law-corpus.json")),
+        ]);
+        MiniSearch = MiniSearchCls;
         if (!resp.ok) throw new Error("HTTP " + resp.status);
         const data = await resp.json();
+        // Corpus uses short keys: n=law_name a=article_no c=chapter u=url t=text.
         const mini = new MiniSearch({
-          fields: ["text", "law_name", "chapter"],
-          storeFields: ["law_name", "category", "chapter", "article_no", "url", "text"],
+          fields: ["t", "n", "c"],
+          storeFields: ["n", "a", "c", "u", "t"],
           tokenize: cjkTokenize,
           searchOptions: {
             tokenize: cjkTokenize,
-            boost: { law_name: 3, chapter: 1.5 },
+            boost: { n: 3, c: 1.5 },
             combineWith: "OR",
           },
         });
@@ -357,8 +394,8 @@ export default {
     buildMessages(q, ctx) {
       const blocks = ctx
         .map((c) => {
-          const t = c.text.length > MAX_CHUNK_CHARS ? c.text.slice(0, MAX_CHUNK_CHARS) + "…" : c.text;
-          return `《${c.law_name}》${c.chapter ? "（" + c.chapter + "）" : ""}\n${t}`;
+          const t = c.t.length > MAX_CHUNK_CHARS ? c.t.slice(0, MAX_CHUNK_CHARS) + "…" : c.t;
+          return `《${c.n}》${c.c ? "（" + c.c + "）" : ""}\n${t}`;
         })
         .join("\n\n");
       const system =
@@ -386,6 +423,7 @@ export default {
       this.sources = [];
       this.error = "";
 
+      this.loadMarkdown();
       await this.ensureIndex();
       const ctx = this.retrieve(q);
       this.sources = ctx;
