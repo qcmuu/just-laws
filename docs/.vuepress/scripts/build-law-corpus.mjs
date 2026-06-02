@@ -25,17 +25,6 @@ const HEADING_RE = /^(#{1,6})\s+(.*?)\s*#*$/;
 const ARTICLE_RE =
   /^\*\*(第[\d一二三四五六七八九十百千零〇两]+条(?:之[\d一二三四五六七八九十]+)?)\*\*[\s　]*(.*)$/;
 
-const CAT_MAP = {
-  constitution: "宪法",
-  "constitutional-relevance": "宪法相关法",
-  "civil-and-commercial": "民商法",
-  administrative: "行政法",
-  economic: "经济法",
-  social: "社会法",
-  "criminal-law": "刑法",
-  procedural: "程序法",
-};
-
 function classifyHeading(title) {
   const t = title.trim();
   if (/^第[\d一二三四五六七八九十百]+编/.test(t) || t.includes("分编")) return "book";
@@ -85,18 +74,6 @@ function pageUrl(rel) {
   return "/" + r.slice(0, -3) + ".html";
 }
 
-function slugOf(rel) {
-  const parts = rel.split(path.sep).join("/").split("/");
-  return parts[parts.length - 1] === "README.md"
-    ? parts.slice(0, -1).join("/")
-    : rel.slice(0, -3).split(path.sep).join("/");
-}
-
-function categoryOf(rel) {
-  const top = rel.split(path.sep).join("/").split("/")[0];
-  return CAT_MAP[top] || top;
-}
-
 function* walk(dir) {
   for (const name of fs.readdirSync(dir).sort()) {
     if (name === "node_modules" || name === ".vuepress") continue;
@@ -123,9 +100,7 @@ function* parseFile(file) {
   }
 
   const lawName = resolveLawName(file, fileH1);
-  const category = categoryOf(rel);
   const url = pageUrl(rel);
-  const slug = slugOf(rel);
 
   let book = "";
   let chapter = "";
@@ -136,16 +111,18 @@ function* parseFile(file) {
     if (!cur) return null;
     const [articleNo, bodyLines] = cur;
     const text = bodyLines.join("\n").trim();
-    const ctx = [lawName, book, chapter, section].filter(Boolean).join(" / ");
-    return {
-      law_name: lawName,
-      category,
-      chapter,
-      article_no: articleNo,
-      url,
-      context: ctx,
-      text: text ? `${articleNo}　${text}` : articleNo,
+    // Short keys to shrink the JSON payload (repeated 13k+ times). Only the
+    // fields the client actually uses are emitted: n=law_name, a=article_no,
+    // c=chapter, u=url, t=text. The unused `category`/`context` fields are
+    // dropped. The corpus version is bumped so a stale schema is never mixed.
+    const chunk = {
+      n: lawName,
+      a: articleNo,
+      u: url,
+      t: text ? `${articleNo}　${text}` : articleNo,
     };
+    if (chapter) chunk.c = chapter;
+    return chunk;
   };
 
   for (const raw of lines) {
@@ -191,8 +168,8 @@ function main() {
     }
   }
   fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });
-  fs.writeFileSync(OUT_FILE, JSON.stringify({ version: 1, docs }));
-  const laws = new Set(docs.map((d) => d.law_name));
+  fs.writeFileSync(OUT_FILE, JSON.stringify({ version: 2, docs }));
+  const laws = new Set(docs.map((d) => d.n));
   const bytes = fs.statSync(OUT_FILE).size;
   console.log(
     `[build-law-corpus] ${docs.length} 法条 / ${laws.size} 部法律 -> ` +
