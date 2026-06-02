@@ -11,6 +11,17 @@ module.exports = {
   // JUSTLAWS_BASE=/just-laws/ at build time. Must start and end with "/".
   base: process.env.JUSTLAWS_BASE || "/",
 
+  // Disable route-chunk prefetching. With 160+ laws the entry chunk
+  // dynamic-imports hundreds of page chunks, so VuePress would otherwise emit
+  // 400+ `<link rel="prefetch">` tags that fire on first paint. On a slow /
+  // unstable connection (e.g. GitHub Pages from mainland China) this request
+  // flood saturates the link and starves the critical hydration JS — the page
+  // renders (prerendered HTML) but stays non-interactive ("假死"), so the
+  // floating widget launcher looks clickable but does nothing until much later.
+  // Without prefetch each page's chunk is fetched on navigation instead, which
+  // makes the initial page interactive far sooner.
+  shouldPrefetch: false,
+
   // Build-time config for the AI 法律问答 chat widget.
   // The widget is now fully client-side (BYOK): it loads /law-corpus.json,
   // retrieves 法条 in the browser, and calls a user-supplied OpenAI-compatible
