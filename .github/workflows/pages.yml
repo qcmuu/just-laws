@@ -1,13 +1,15 @@
 name: Deploy to GitHub Pages
 
 # Builds the VuePress static site (including the client-side law corpus) and
-# publishes it to GitHub Pages. Runs alongside the existing nginx deploy
-# (main.yml) so the site keeps working until DNS is cut over to Pages.
+# publishes it to GitHub Pages as a project site at
+# https://<user>.github.io/just-laws/ (served under the /just-laws/ base path).
 #
-# Manual steps required once (cannot be done from the repo):
-#   1. Repo Settings → Pages → Source = "GitHub Actions".
-#   2. Point the custom domain's DNS at GitHub Pages (CNAME www -> <user>.github.io
-#      or the 4 apex A records) and keep docs/.vuepress/public/CNAME in sync.
+# Manual step required once (cannot be done from the repo):
+#   Repo Settings → Pages → Source = "GitHub Actions".
+#
+# If you later attach a custom domain you own, set Settings → Pages → Custom
+# domain, add a CNAME file under docs/.vuepress/public/, and build with
+# JUSTLAWS_BASE=/ instead of /just-laws/.
 on:
   push:
     branches:
@@ -43,6 +45,10 @@ jobs:
 
       - name: Build documentation site
         run: npm run docs:build
+        env:
+          # Project site lives under /just-laws/; build all asset/link URLs
+          # against that base. Override to / if using a root custom domain.
+          JUSTLAWS_BASE: /just-laws/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

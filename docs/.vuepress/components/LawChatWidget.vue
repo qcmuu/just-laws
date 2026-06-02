@@ -141,7 +141,7 @@
                 v-for="(s, i) in sources"
                 :key="i"
                 class="jl-chat__src"
-                :href="s.url"
+                :href="srcUrl(s.url)"
                 target="_blank"
                 rel="noopener"
               >
@@ -179,6 +179,7 @@
 <script>
 import MarkdownIt from "markdown-it";
 import MiniSearch from "minisearch";
+import { withBase } from "@vuepress/client";
 
 // html:false escapes any raw HTML in the model output, and markdown-it's
 // default link validator strips javascript:/data: URLs, so rendering the
@@ -310,6 +311,11 @@ export default {
       const s = String(t || "").replace(/\s+/g, " ");
       return s.length > 80 ? s.slice(0, 80) + "…" : s;
     },
+    srcUrl(u) {
+      // Corpus stores site-relative URLs (e.g. /economic/foo/). withBase makes
+      // citation deep links resolve under the site base (e.g. /just-laws/).
+      return withBase(u || "/");
+    },
     scrollDown() {
       this.$nextTick(() => {
         const el = this.$refs.bodyEl;
@@ -320,9 +326,9 @@ export default {
       if (this.indexState === "ready" || this.indexState === "loading") return;
       this.indexState = "loading";
       try {
-        const base =
-          (typeof window !== "undefined" && window.__JUSTLAWS_SITE_BASE__) || "/";
-        const resp = await fetch(base.replace(/\/$/, "") + "/law-corpus.json");
+        // withBase prepends the site base (e.g. /just-laws/ on a GitHub Pages
+        // project site), so the corpus resolves both at root and under a subpath.
+        const resp = await fetch(withBase("law-corpus.json"));
         if (!resp.ok) throw new Error("HTTP " + resp.status);
         const data = await resp.json();
         const mini = new MiniSearch({
