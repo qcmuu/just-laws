@@ -67,6 +67,10 @@
           </div>
 
           <div ref="bodyEl" class="jl-chat__body">
+            <div v-if="indexState === 'loading'" class="jl-chat__status">
+              <span class="jl-chat__status-dot"></span>
+              正在构建法条索引 {{ indexProgress }}%…（一次约十几秒，仅本页首次，期间页面可正常浏览）
+            </div>
             <div v-if="!answer && !sources.length && !error" class="jl-chat__examples">
               <p v-if="!configured" class="jl-chat__hint">
                 先在 ⚙ 设置里填入你的模型 API（也可前往
@@ -97,8 +101,13 @@
             <div v-if="error" class="jl-chat__error">{{ error }}</div>
 
             <!-- Reasoning models stream long "thinking" deltas before any
-                 answer content; without this line the panel looks frozen. -->
-            <div v-if="loading && !answer && !error" class="jl-chat__status">
+                 answer content; without this line the panel looks frozen.
+                 Hidden while the corpus index is still building — that step
+                 shows its own progress line above. -->
+            <div
+              v-if="loading && !answer && !error && indexState !== 'loading'"
+              class="jl-chat__status"
+            >
               <span class="jl-chat__status-dot"></span>
               <template v-if="reasoning"
                 >模型思考中…（已输出 {{ reasoning.length }} 字推理，正式回答随后显示）</template
@@ -174,6 +183,24 @@ const MAX_CHUNK_CHARS = 600; // cap each 法条's length in the prompt
 
 const MAX_QUESTION_CHARS = 4000;
 
+// Indexing 24k+ 法条 with the bigram tokenizer takes ~15s of CPU on a fast
+// machine — long enough for browsers to pop the "page unresponsive" dialog if
+// done in one synchronous addAll() burst. Build in small chunks and hand the
+// main thread back to the browser between chunks (MessageChannel yields
+// without setTimeout's 4ms clamp, falling back to setTimeout elsewhere).
+const INDEX_CHUNK_DOCS = 300;
+function yieldToUI() {
+  return new Promise((resolve) => {
+    if (typeof MessageChannel !== "undefined") {
+      const ch = new MessageChannel();
+      ch.port1.onmessage = () => resolve();
+      ch.port2.postMessage(0);
+    } else {
+      setTimeout(resolve, 0);
+    }
+  });
+}
+
 // Tokenizer for Chinese legal text: emit lowercased ASCII word runs as-is, and
 // for CJK runs emit unigrams + bigrams. Used for BOTH indexing and querying so
 // lexical recall works without word segmentation or any model download.
@@ -229,6 +256,7 @@ export default {
       error: "",
       loading: false,
       indexState: "idle", // idle | loading | ready | error
+      indexProgress: 0, // % while indexState === "loading"
       mdReady: false, // markdown-it loaded (lazy)
       cfg: { baseUrl: "", apiKey: "", model: "" },
       examples: [
@@ -330,6 +358,7 @@ export default {
     async ensureIndex() {
       if (this._indexPromise) return this._indexPromise;
       this.indexState = "loading";
+      this.indexProgress = 0;
       this._indexPromise = (async () => {
         try {
           // withBase prepends the site base (e.g. /just-laws/ on a GitHub Pages
@@ -351,7 +380,17 @@ export default {
               combineWith: "OR",
             },
           });
-          mini.addAll(data.docs);
+          // Chunked build with yields: the page stays interactive (no
+          // "unresponsive" dialog) and indexProgress ticks up as feedback.
+          const total = data.docs.length;
+          for (let i = 0; i < total; i += INDEX_CHUNK_DOCS) {
+            mini.addAll(data.docs.slice(i, i + INDEX_CHUNK_DOCS));
+            this.indexProgress = Math.min(
+              100,
+              Math.round(((i + INDEX_CHUNK_DOCS) / total) * 100)
+            );
+            await yieldToUI();
+          }
           this._mini = mini;
           this.indexState = "ready";
         } catch (e) {
