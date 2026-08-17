@@ -19,6 +19,14 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DOCS_DIR = path.resolve(__dirname, "..", "..");
 const OUT_FILE = path.resolve(__dirname, "..", "public", "law-corpus.json");
+const SITEMAP_FILE = path.resolve(__dirname, "..", "public", "sitemap.xml");
+
+// Absolute site origin (env override) + base, matching config.js's siteUrl.
+const SITE_URL =
+  (process.env.JUSTLAWS_SITE_URL || "https://qcmuu.github.io").replace(
+    /\/+$/,
+    ""
+  ) + ((process.env.JUSTLAWS_BASE || "/") !== "/" ? process.env.JUSTLAWS_BASE : "/");
 
 const HEADING_RE = /^(#{1,6})\s+(.*?)\s*#*$/;
 // **第X条**　... (full-width or ascii space follows). Mirrors chunker.py.
@@ -167,6 +175,39 @@ function* parseFile(file) {
 
 export { ARTICLE_RE, HEADING_RE, classifyHeading, isLawName, pageUrl };
 
+function encodeLocPath(pagePath) {
+  // Percent-encode each path segment (spaces / CJK) for valid sitemap <loc>.
+  return pagePath
+    .split("/")
+    .map((seg) => encodeURIComponent(seg))
+    .join("/");
+}
+
+function buildSitemap() {
+  const urls = [];
+  for (const file of walk(DOCS_DIR)) {
+    const rel = path.relative(DOCS_DIR, file);
+    urls.push(encodeLocPath(pageUrl(rel)));
+  }
+  const xml =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    urls
+      .map(
+        (u) =>
+          `  <url><loc>${u === "/" ? SITE_URL : SITE_URL + u.slice(1)}</loc></url>`
+      )
+      .join("\n") +
+    "\n</urlset>\n";
+  fs.writeFileSync(SITEMAP_FILE, xml);
+  console.log(
+    `[build-law-corpus] sitemap: ${urls.length} URLs -> ${path.relative(
+      process.cwd(),
+      SITEMAP_FILE
+    )}`
+  );
+}
+
 function main() {
   const docs = [];
   for (const file of walk(DOCS_DIR)) {
@@ -183,6 +224,7 @@ function main() {
     `[build-law-corpus] ${docs.length} 法条 / ${laws.size} 部法律 -> ` +
       `${path.relative(process.cwd(), OUT_FILE)} (${(bytes / 1048576).toFixed(2)} MB)`
   );
+  buildSitemap();
 }
 
 function isDirectRun() {

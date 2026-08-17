@@ -1,7 +1,14 @@
 const { defaultTheme } = require("@vuepress/theme-default");
-const { docsearchPlugin } = require("@vuepress/plugin-docsearch");
+const { searchPlugin } = require("@vuepress/plugin-search");
 
 const siteBase = process.env.JUSTLAWS_BASE || "/";
+
+// Absolute site origin (+base) for SEO tags and the generated sitemap URLs.
+const siteUrl =
+  (process.env.JUSTLAWS_SITE_URL || "https://qcmuu.github.io").replace(
+    /\/+$/,
+    ""
+  ) + (siteBase !== "/" ? siteBase : "/");
 
 module.exports = {
   lang: "zh-CN",
@@ -38,6 +45,37 @@ module.exports = {
   },
   head: [
     ["link", { rel: "icon", href: `${siteBase}images/logo.png` }],
+    // --- SEO: social cards & misc (the <meta name="description"> comes from
+    // `description` above; og/twitter apply site-wide) ---
+    ["meta", { name: "theme-color", content: "#de2910" }],
+    [
+      "meta",
+      {
+        name: "keywords",
+        content:
+          "中国法律法规,法律文库,民法典,刑法,行政法,劳动法,AI法律问答,法条检索,法条原文",
+      },
+    ],
+    ["meta", { property: "og:site_name", content: "Just Laws AI" }],
+    ["meta", { property: "og:type", content: "website" }],
+    [
+      "meta",
+      {
+        property: "og:title",
+        content: "Just Laws AI — 中国现行法律文库与 AI 智能法律问答",
+      },
+    ],
+    [
+      "meta",
+      {
+        property: "og:description",
+        content:
+          "收录 300+ 部现行法律法规原文，浏览器内 AI 智能问答、法条精准溯源，支持商汤、DeepSeek 等模型直连。",
+      },
+    ],
+    ["meta", { property: "og:url", content: siteUrl }],
+    ["meta", { property: "og:image", content: `${siteUrl}images/logo.png` }],
+    ["meta", { name: "twitter:card", content: "summary" }],
     [
       "script",
       {},
@@ -266,54 +304,18 @@ module.exports = {
   }),
 
   plugins: [
-    docsearchPlugin({
-      apiKey: "c1b57ecf806bfe5c370d3de23b858065",
-      appId: "M6984MENBN",
-      indexName: "just_laws",
-      searchParameters: {
-        attributesToSnippet: ["lvl1:30", "content:25"],
-      },
+    // Local, build-time search index — zero third-party runtime requests.
+    // This replaces DocSearch: its Algolia index (owned by the upstream repo)
+    // returned results linking to www.justlaws.cn, leaking users to another
+    // site, and Algolia endpoints are slow/unreliable from mainland China.
+    searchPlugin({
+      // Skip historical law versions (/versions/) to keep the index lean.
+      isSearchable: (page) => !page.path.includes("/versions/"),
+      hotKeys: [{ key: "k", ctrl: true }],
+      maxSuggestions: 10,
       locales: {
         "/": {
-          placeholder: "搜索文档",
-          translations: {
-            button: {
-              buttonText: "搜索文档",
-              buttonAriaLabel: "搜索文档",
-            },
-            modal: {
-              searchBox: {
-                resetButtonTitle: "清除查询条件",
-                resetButtonAriaLabel: "清除查询条件",
-                cancelButtonText: "取消",
-                cancelButtonAriaLabel: "取消",
-              },
-              startScreen: {
-                recentSearchesTitle: "搜索历史",
-                noRecentSearchesText: "没有搜索历史",
-                saveRecentSearchButtonTitle: "保存至搜索历史",
-                removeRecentSearchButtonTitle: "从搜索历史中移除",
-                favoriteSearchesTitle: "收藏",
-                removeFavoriteSearchButtonTitle: "从收藏中移除",
-              },
-              errorScreen: {
-                titleText: "无法获取结果",
-                helpText: "你可能需要检查你的网络连接",
-              },
-              footer: {
-                selectText: "选择",
-                navigateText: "切换",
-                closeText: "关闭",
-                searchByText: "搜索提供者",
-              },
-              noResultsScreen: {
-                noResultsText: "无法找到相关结果",
-                suggestedQueryText: "你可以尝试查询",
-                reportMissingResultsText: "你认为该查询应该有结果？",
-                reportMissingResultsLinkText: "点击反馈",
-              },
-            },
-          },
+          placeholder: "搜索法律、条文…",
         },
       },
     }),

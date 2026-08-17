@@ -11,7 +11,6 @@
     "test": "node --test docs/.vuepress/scripts/build-law-corpus.test.mjs && python -m unittest discover -s rag-poc/tests -p test_*.py"
   },
   "devDependencies": {
-    "@vuepress/plugin-docsearch": "^2.0.0-beta.48",
     "@vuepress/plugin-search": "^2.0.0-beta.48",
     "markdown-it": "^13.0.1",
     "vuepress": "^2.0.0-beta.48"

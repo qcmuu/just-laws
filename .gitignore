@@ -3,8 +3,9 @@ node_modules
 .cache
 dist
 
-# 客户端问答语料（构建时由 build:corpus 生成）
+# 客户端问答语料与 sitemap（构建时由 build:corpus 生成）
 docs/.vuepress/public/law-corpus.json
+docs/.vuepress/public/sitemap.xml
 
 # Python 临时文件
 __pycache__/
