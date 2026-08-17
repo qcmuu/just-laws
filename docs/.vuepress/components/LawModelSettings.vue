@@ -14,7 +14,7 @@
       <strong>你本机浏览器</strong>（AES-GCM 加密存储）、提问时直连你选择的服务商，<strong>不会经过本站</strong>。
     </p>
     <p v-else class="jl-chat__settings-intro">
-      填入任意 <strong>OpenAI 兼容</strong> 接口（如商汤 SenseNova、DeepSeek、通义千问、智谱
+      填入任意 <strong>OpenAI 兼容</strong> 接口（如 DeepSeek、通义千问、智谱
       GLM 等）。Key 仅保存在你本机浏览器、直接发往你选择的服务商，<strong>不会经过本站</strong>。
     </p>
 
@@ -22,12 +22,19 @@
       ✓ 已配置：{{ cfg.model }} @ {{ cfg.baseUrl.replace(/^https?:\/\//, "") }}
     </p>
     <p v-else-if="variant === 'page'" class="jl-model-settings__status">
-      尚未完成配置（默认已预填商汤 SenseNova，粘贴 Key 即可用）。
+      尚未完成配置（默认已预填 DeepSeek，粘贴 Key 即可用）。
+    </p>
+
+    <!-- SenseNova's API host fails the browser CORS preflight — surface that
+         BEFORE the user burns time getting a key and wondering why chat hangs. -->
+    <p v-if="blockedPreset" class="jl-model-settings__error" role="alert">
+      ⚠️ {{ blockedPreset.name }} 的接口（{{ blockedPreset.baseUrl.replace(/^https?:\/\//, "") }}）不允许浏览器跨域直连（CORS），在本站网页端提问会失败。请改用
+      DeepSeek / 通义千问 / 智谱 GLM；确需使用商汤模型，请通过自建网关（one-api 等）转发后再填入网关地址。
     </p>
 
     <label class="jl-chat__field">
       <span>接口地址 Base URL</span>
-      <input v-model.trim="form.baseUrl" type="text" placeholder="https://token.sensenova.cn/v1" />
+      <input v-model.trim="form.baseUrl" type="text" placeholder="https://api.deepseek.com/v1" />
     </label>
     <label class="jl-chat__field">
       <span>API Key</span>
@@ -40,7 +47,7 @@
     </label>
     <label class="jl-chat__field">
       <span>模型 Model</span>
-      <input v-model.trim="form.model" type="text" placeholder="sensenova-6.7-flash-lite" />
+      <input v-model.trim="form.model" type="text" placeholder="deepseek-chat" />
     </label>
 
     <div v-if="variant === 'page'" class="jl-chat__settings-row">
@@ -53,7 +60,7 @@
           :class="{ 'jl-chat__chip--active': form.baseUrl === p.baseUrl }"
           @click="applyPreset(p)"
         >
-          {{ p.name }}
+          {{ p.name }}{{ p.corsBlocked ? " ⚠️" : "" }}
         </button>
       </div>
       <button class="jl-chat__send" type="button" :disabled="saving" @click="save">
@@ -80,7 +87,7 @@
 
     <p v-if="saveError" class="jl-model-settings__error">{{ saveError }}</p>
     <p class="jl-chat__note">
-      注：OpenAI 官方端点（api.openai.com）不允许浏览器直连，会被 CORS 拦截；请使用上表预设、其他兼容服务或自建网关。
+      注：OpenAI 官方端点（api.openai.com）和商汤 SenseNova 官方接口不允许浏览器直连，会被 CORS 拦截；请使用其他预设、兼容服务或自建网关。
       使用本地 Ollama 需先以 <code>OLLAMA_ORIGINS=*</code> 启动服务。
     </p>
   </div>
@@ -114,12 +121,21 @@ export default {
     configured() {
       return !!(this.cfg.baseUrl && this.cfg.apiKey && this.cfg.model);
     },
+    // The preset matching the Base URL currently in the form, when that
+    // preset is known not to work from a browser (CORS). null otherwise.
+    blockedPreset() {
+      return (
+        PRESETS.find(
+          (p) => p.corsBlocked && this.form.baseUrl === p.baseUrl
+        ) || null
+      );
+    },
   },
   async mounted() {
     this.cfg = await loadCfg();
     this.form = { ...this.form, ...this.cfg };
     // First-run pre-fill: ?provider=deepseek URL param, else the default
-    // preset (商汤 SenseNova). Never overwrites an existing configuration.
+    // preset (DeepSeek). Never overwrites an existing configuration.
     const pre = initialPreset();
     if (pre && !this.form.baseUrl) {
       this.form.baseUrl = pre.baseUrl;

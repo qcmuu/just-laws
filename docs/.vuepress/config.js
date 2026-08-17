@@ -70,7 +70,7 @@ module.exports = {
       {
         property: "og:description",
         content:
-          "收录 300+ 部现行法律法规原文，浏览器内 AI 智能问答、法条精准溯源，支持商汤、DeepSeek 等模型直连。",
+          "收录 300+ 部现行法律法规原文，浏览器内 AI 智能问答、法条精准溯源，支持 DeepSeek、通义千问等模型直连。",
       },
     ],
     ["meta", { property: "og:url", content: siteUrl }],

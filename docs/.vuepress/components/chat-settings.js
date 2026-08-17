@@ -14,14 +14,10 @@ export const LS = {
 export const SETTINGS_EVENT = "jl-chat-settings-saved";
 
 // `id` is the ?provider= URL-param value (e.g. /settings/?provider=deepseek).
-// The first entry is what unconfigured users see pre-filled by default.
+// The first entry is what unconfigured users see pre-filled by default — it
+// MUST be a provider whose API allows cross-origin browser calls (verified
+// 2026-08-17: DeepSeek / 通义 / 智谱 preflight OK; SenseNova does not).
 export const PRESETS = [
-  {
-    id: "sensenova",
-    name: "商汤 SenseNova",
-    baseUrl: "https://token.sensenova.cn/v1",
-    model: "sensenova-6.7-flash-lite",
-  },
   {
     id: "deepseek",
     name: "DeepSeek",
@@ -39,6 +35,17 @@ export const PRESETS = [
     name: "智谱 GLM",
     baseUrl: "https://open.bigmodel.cn/api/paas/v4",
     model: "glm-4-flash",
+  },
+  {
+    id: "sensenova",
+    name: "商汤 SenseNova",
+    baseUrl: "https://token.sensenova.cn/v1",
+    model: "sensenova-6.7-flash-lite",
+    // token.sensenova.cn answers the CORS preflight (OPTIONS) with 404, so
+    // browsers refuse to call it. Server-side tools work fine; a static
+    // BYOK site with no backend cannot. Keep it listed (it still works
+    // through a self-hosted gateway) but flag it so the UI can warn.
+    corsBlocked: true,
   },
   {
     id: "ollama",
@@ -148,7 +155,7 @@ export function notifySettingsSaved() {
 
 // Pre-fill shown to users who have not configured anything yet: honor a
 // ?provider=<id> URL param (e.g. shared deep links), otherwise the default
-// preset (商汤 SenseNova). Never overwrites an existing configuration.
+// preset (DeepSeek). Never overwrites an existing configuration.
 export function initialPreset() {
   try {
     if (localStorage.getItem(LS.base) || localStorage.getItem(LS.model)) {

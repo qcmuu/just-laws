@@ -15,12 +15,13 @@ description: 配置浏览器端大模型接口（BYOK），启用全站 AI 法�
 
 | 服务商 | 控制台 | 接口地址（点击预设自动填入） | 模型示例 |
 | :--- | :--- | :--- | :--- |
-| 商汤 SenseNova | [console.sensecore.cn](https://console.sensecore.cn/) | `https://token.sensenova.cn/v1` | `sensenova-6.7-flash-lite` |
 | DeepSeek | [platform.deepseek.com](https://platform.deepseek.com/) | `https://api.deepseek.com/v1` | `deepseek-chat` |
 | 通义千问 | [bailian.console.aliyun.com](https://bailian.console.aliyun.com/) | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen-plus` |
-| 智谱 GLM | [open.bigmodel.cn](https://open.bigmodel.cn/) | `https://open.bigmodel.cn/api/paas/v4` | `glm-4-flash` |
+| 智谱 GLM | [open.bigmodel.cn](https://open.bigmodel.cn/) | `https://open.bigmodel.cn/api/paas/v4` | `glm-4-flash`（免费） |
+| 商汤 SenseNova ⚠️ | [console.sensecore.cn](https://console.sensecore.cn/) | `https://token.sensenova.cn/v1` | `sensenova-6.7-flash-lite` |
 
-- 商汤 SenseNova 提供免费额度套餐（Token Plan），适合个人用户试用。
+- 智谱 GLM 的 `glm-4-flash` 免费，适合个人用户试用；DeepSeek 注册即送额度。
+- ⚠️ **商汤 SenseNova 的官方接口不允许浏览器跨域直连（CORS），在本站网页端无法使用**；如需使用商汤模型，请通过自建网关（one-api、vLLM 等）转发，再填入网关地址。
 - 也可填写任意 **OpenAI 兼容**的自建网关地址（vLLM、one-api 等）。
 
 ## 一键预填
@@ -29,10 +30,10 @@ description: 配置浏览器端大模型接口（BYOK），启用全站 AI 法�
 
 | 预填 | 链接写法（相对参数，任意页面通用） |
 | :--- | :--- |
-| [商汤 SenseNova](?provider=sensenova) | `?provider=sensenova` |
 | [DeepSeek](?provider=deepseek) | `?provider=deepseek` |
 | [通义千问](?provider=qwen) | `?provider=qwen` |
 | [智谱 GLM](?provider=zhipu) | `?provider=zhipu` |
+| [商汤 SenseNova](?provider=sensenova)（网页端不可用，见上） | `?provider=sensenova` |
 | [本地 Ollama](?provider=ollama) | `?provider=ollama` |
 
 ::: tip
@@ -48,7 +49,10 @@ description: 配置浏览器端大模型接口（BYOK），启用全站 AI 法�
 ## 常见问题
 
 **Q：提示「无法连接该接口（可能被 CORS 拦截）」？**
-OpenAI 官方端点（api.openai.com）等不允许浏览器直连。请改用上表预设、其他支持浏览器跨域调用的兼容服务，或自建网关。
+OpenAI 官方端点（api.openai.com）、商汤 SenseNova（token.sensenova.cn）等不允许浏览器直连。请改用上表预设（DeepSeek / 通义 / 智谱均支持浏览器跨域调用）、其他兼容服务，或自建网关。
+
+**Q：为什么商汤 SenseNova 不能用？我 Key 明明是有效的？**
+商汤接口服务器对浏览器跨域预检请求（OPTIONS）返回 404，浏览器会直接拦截后续请求——这与你的 Key 无关（在服务器端、curl 或本地工具里同一 Key 可以正常调用）。本站是无后端的纯静态站，无法替你转发，因此网页端用不了商汤官方接口；需要的话请自建网关转发。
 
 **Q：本地 Ollama 怎么用？**
 安装 [Ollama](https://ollama.com/) 后，以允许跨域的方式启动：`OLLAMA_ORIGINS=* ollama serve`，拉取一个模型如 `ollama pull qwen2.5:7b`，然后点击「本地 Ollama」预设并保存即可。

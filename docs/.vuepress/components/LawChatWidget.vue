@@ -96,6 +96,16 @@
 
             <div v-if="error" class="jl-chat__error">{{ error }}</div>
 
+            <!-- Reasoning models stream long "thinking" deltas before any
+                 answer content; without this line the panel looks frozen. -->
+            <div v-if="loading && !answer && !error" class="jl-chat__status">
+              <span class="jl-chat__status-dot"></span>
+              <template v-if="reasoning"
+                >模型思考中…（已输出 {{ reasoning.length }} 字推理，正式回答随后显示）</template
+              >
+              <template v-else>正在检索法条并等待模型响应…</template>
+            </div>
+
             <div v-if="sources.length" class="jl-chat__sources">
               <h4>参考来源（{{ sources.length }} 条法条，点击核对原文）</h4>
               <a
@@ -493,8 +503,8 @@ export default {
         } else if (e && e.name === "TypeError") {
           // fetch threw before any HTTP response -> almost always CORS/network.
           this.error =
-            "无法连接该接口（可能被 CORS 拦截或网络不可达）。OpenAI 官方端点不支持浏览器直连，" +
-            "请改用国产兼容服务、自建网关或 Azure OpenAI；并确认 Base URL 正确。";
+            "无法连接该接口（可能被 CORS 拦截或网络不可达）。注意：OpenAI 官方端点和商汤 SenseNova（token.sensenova.cn）都不允许浏览器直连，" +
+            "请改用 DeepSeek、通义千问、智谱等支持跨域的兼容服务或自建网关；并确认 Base URL 正确。";
         } else {
           this.error = "调用失败：" + (e && e.message ? e.message : String(e));
         }
@@ -646,6 +656,31 @@ export default {
   padding: 10px 12px;
   line-height: 1.5;
 }
+.jl-chat__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+.jl-chat__status-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--jl-brand);
+  animation: jl-chat-pulse 1.2s ease-in-out infinite;
+}
+@keyframes jl-chat-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
 .jl-chat__sources {
   margin-top: 14px;
   border-top: 1px dashed #eee;
@@ -760,6 +795,7 @@ html.dark .jl-chat__input {
 }
 html.dark .jl-chat__body,
 html.dark .jl-chat__hint,
+html.dark .jl-chat__status,
 html.dark .jl-chat__src-ctx,
 html.dark .jl-chat__badge,
 html.dark .jl-chat__sources h4,
