@@ -22,52 +22,51 @@
 
 | 序号 | 文献/案例名称 | 类型 | 正文长度 | 原始来源 |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | (2021年)最高人民法院关于审理买卖合同纠纷案件适用法律问题的解释 - 合同纠纷法规 - 律法网 `[source.html]` | ⚖️ 司法案例 | 5,266 字符 | [原始网页](https://www.055110.com/jj/6/6.html) |
-| 2 | Blank Template `[source.pdf]` | ⚖️ 司法案例 | 35,503 字符 | [原始网页](https://static.cninfo.com.cn/finalpage/2025-11-14/1224805031.PDF) |
-| 3 | TianTong Law Firm `[source.html]` | ⚖️ 司法案例 | 27,828 字符 | [原始网页](https://www.tiantonglaw.com/Content/2022/09-15/1944081004.html) |
-| 4 | 《中华人民共和国民法典》合同编通则若干问题的解释2023.12.5__北京著名律师 /吴坤乾律师 `[source.html]` | ⚖️ 司法案例 | 17,150 字符 | [原始网页](http://www.bj148.net/ShowArticle.shtml?ID=2024481055555122.htm) |
-| 5 | 《学法典读案例答问题》——人工智能软件擅自使用自然人形象创设虚拟人物构成侵权吗？ - 中华人民共和国最高人民法院 `[source.html]` | ⚖️ 司法案例 | 1,541 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/370321.html) |
-| 6 | 《民法典》侵权责任编释论之损害赔偿：第1183条【精神损害赔偿】 ｜ 交通事故律师网 `[source.html]` | 📚 法学文献 | 11,730 字符 | [原始网页](https://www.jtsg.org/2022-05-22/8733.html) |
-| 7 | 中华人民共和国侵权责任法（2022年民法典侵权赔偿标准）-律百科 | 📚 法学文献 | 9,322 字符 | [原始网页](https://www.lawbaike.com/zhishi/235367196.html) |
-| 8 | 为何要抗？何以成功？公司董事未履行催缴股东出资义务，该不该承担连带赔偿责任？解读最高检抗诉办案始末_广东政法网 `[source.html]` | ⚖️ 司法案例 | 6,119 字符 | [原始网页](https://www.gdzf.org.cn/index/zfyw/content/post_181880.html) |
-| 9 | 任明艳 须海波 ｜ 夫妻一方侵权之债的司法认定 `[source.html]` | 📚 法学文献 | 8,523 字符 | [原始网页](https://m.thepaper.cn/newsDetail_forward_30314156) |
-| 10 | 侵害知识产权民事案件适用惩罚性赔偿典型案例 - 中华人民共和国最高人民法院 `[source.html]` | 📚 法学文献 | 4,673 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/290651.html) |
-| 11 | 侵权和解后再次销售相同产品被判令惩罚性赔偿 - 最高人民法院知识产权法庭 `[source.html]` | ⚖️ 司法案例 | 1,971 字符 | [原始网页](https://ipc.court.gov.cn/zh-cn/news/view-2175.html) |
-| 12 | 全国首例“AI声音侵权案”宣判，原告获赔25万元 `[source.html]` | ⚖️ 司法案例 | 118 字符 | [原始网页](https://web.bbc.edu.cn/pfzt/2025/0307/c3253a113569/page.htm) |
-| 13 | 公司法研究 ｜ 一波三折！从“连带赔偿近500万美元”到“承担10%赔偿责任”，最高检抗诉逆转董事赔偿案 - WATSON & BAND `[source.html]` | ⚖️ 司法案例 | 3,106 字符 | [原始网页](http://www.watson-band.com.cn/cmsDetail.htm?item.id=4d2c350d556644c1ab03be9aa7e3284d) |
-| 14 | 前研e案｜虚拟偶像“人肉开盒”的侵权责任认定 `[source.html]` | ⚖️ 司法案例 | 8,703 字符 | [原始网页](https://m.thepaper.cn/newsDetail_forward_32554945) |
-| 15 | 南京海事法院_【江苏省民诉法学年会三等奖】胡润泽、钱菲：共同财产制下夫妻侵权债务的清偿路径 ——论实体法的判断与程序的实现 `[source.html]` | 📚 法学文献 | 9,696 字符 | [原始网页](https://njhsfy.gov.cn/zh/sfdy/detail/id/6678.html) |
-| 16 | 夫妻共同债务的法律认定与风险防范 - 德恒探索 - 德恒律师事务所 `[source.html]` | 📚 法学文献 | 15,612 字符 | [原始网页](https://www.dehenglaw.com/cn/newscontent/0008/035918/2.aspx?MID=0902) |
-| 17 | 如何理解股东、董监高在新《公司法》下的赔偿责任变化·上篇 – 中夏释法 – 中夏律师事务所 `[source.html]` | ⚖️ 司法案例 | 7,173 字符 | [原始网页](https://www.zhongxialawyers.cn/cn/details/1194/e99b7507b39f81ef) |
-| 18 | 广州仲裁委员会 `[source.html]` | ⚖️ 司法案例 | 6,236 字符 | [原始网页](https://www.gziac.cn/hyjl/2113) |
-| 19 | 当事人提供股权担保后又声明“保证该股权无质押，否则自愿赔偿损失”的，是否构成保证担保 - 债务担保纠纷 - 专业领域 - 飞跃-北京债务纠纷律师网 `[source.html]` | ⚖️ 司法案例 | 9,226 字符 | [原始网页](http://yingke.govgw.com/article/2484.html) |
-| 20 | 指导性案例192号：李开祥侵犯公民个人信息刑事附带民事公益诉讼案 - 中华人民共和国最高人民法院 `[source.html]` | ⚖️ 司法案例 | 3,034 字符 | [原始网页](https://www.court.gov.cn/shenpan/xiangqing/384411.html) |
-| 21 | 最高人民法院关于审理侵害知识产权民事纠纷案件适用惩罚性赔偿的解释（法释〔2026〕7号） - 综合法律 - 中国知识产权法务网 `[source.html]` | 📚 法学文献 | 4,369 字符 | [原始网页](https://www.iplawcn.com/intellectual_property_laws/2026/0508/1067.html) |
-| 22 | 最高人民法院关于确定民事侵权精神损害赔偿责任若干问题的解释-北大法宝V6官网 `[source.html]` | ⚖️ 司法案例 | 2,996 字符 | [原始网页](https://www.pkulaw.com/chl/0322a21ba74de353bdfb.html) |
-| 23 | 最高人民法院关于适用《中华人民共和国民法典》合同编通则若干问题的解释（2023年12月5日）-「昆山金牌律师」 `[source.html]` | ⚖️ 司法案例 | 17,625 字符 | [原始网页](http://www.goldenlawyer.cn/showyw.asp?id=4086) |
-| 24 | 最高人民法院关于适用《中华人民共和国民法典》有关担保制度的解释 - 维基文库，自由的图书馆 `[source.html]` | ⚖️ 司法案例 | 16,165 字符 | [原始网页](https://zh.wikisource.org/wiki/%E6%9C%80%E9%AB%98%E4%BA%BA%E6%B0%91%E6%B3%95%E9%99%A2%E5%85%B3%E4%BA%8E%E9%80%82%E7%94%A8%E3%80%8A%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E6%B0%91%E6%B3%95%E5%85%B8%E3%80%8B%E6%9C%89%E5%85%B3%E6%8B%85%E4%BF%9D%E5%88%B6%E5%BA%A6%E7%9A%84%E8%A7%A3%E9%87%8A) |
-| 25 | 最高人民法院出台知识产权惩罚性赔偿司法解释依法惩处严重侵害知识产权行为 - 中华人民共和国最高人民法院 `[source.html]` | ⚖️ 司法案例 | 4,736 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/288861.html) |
-| 26 | 最高人民法院发布民法典合同编通则司法解释相关典型案例 | ⚖️ 司法案例 | 25,398 字符 | [原始网页](https://www.sdcourt.gov.cn/lylsfy/393876/tszs5176/16901751/index.html) |
-| 27 | 最高人民法院指导性案例168号——中信银行股份有限公司东莞分行诉陈志华等金融借款合同纠纷案 | ⚖️ 司法案例 | 5,402 字符 | [原始网页](http://ytzy.sdcourt.gov.cn/ytlkfy/401634/401608/7957425/index.html) |
-| 28 | 最高人民法院民二庭、研究室负责人就民法典合同编通则司法解释答记者问 - 中华人民共和国最高人民法院 `[source.html]` | ⚖️ 司法案例 | 11,746 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/419402.html) |
-| 29 | 最高法导案例95号-金融借款合同纠纷案_襄阳民商事律师 `[source.html]` | ⚖️ 司法案例 | 4,356 字符 | [原始网页](https://www.lawpeter.com/htjf/202311281087.shtm) |
-| 30 | 有关“债权人有权自行决定实现担保的顺序”的约定能否得出已就担保物权的实现顺序与方式作出了明确约定？ 房地产法律专家网 `[source.html]` | ⚖️ 司法案例 | 2,587 字符 | [原始网页](http://www.iestatetoplaw.com/html/rzdb/1108.html) |
-| 31 | 有限责任公司股东出资连带或补充责任评析 - 专业文章 - 上海 - 上海市锦天城律师事务所 `[source.html]` | ⚖️ 司法案例 | 5,018 字符 | [原始网页](https://www.allbrightlaw.com/SH/CN/10475/ee8a120c16ea550f.aspx) |
-| 32 | 权威发布 - 中华人民共和国最高人民法院 `[source.html]` | ⚖️ 司法案例 | 17,376 字符 | [原始网页](https://www.court.gov.cn/fabu/xiangqing/419382.html) |
-| 33 | 民法典颁布后人格权司法保护典型民事案例 - 中华人民共和国最高人民法院 `[source.html]` | ⚖️ 司法案例 | 7,876 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/354261.html) |
-| 34 | 民间借贷中夫妻共同债务的认定-法律常识_在线法律知识查询 - 律霸网 `[source.html]` | 📚 法学文献 | 4,637 字符 | [原始网页](https://www.lawpa.cn/changshi/819320.html) |
-| 35 | 汉马科技集团股份有限公司 重整计划（草案） `[source.pdf]` | ⚖️ 司法案例 | 33,634 字符 | [原始网页](https://pdf.dfcfw.com/pdf/H2_AN202411221641031112_1.pdf) |
-| 36 | 深圳广田集团股份有限公司 重整计划（草案） `[source.pdf]` | ⚖️ 司法案例 | 28,080 字符 | [原始网页](https://disc.static.szse.cn/disc/disk03/finalpage/2023-11-11/c5e8c7d7-fff3-4cb0-8d28-519afd1246da.PDF) |
-| 37 | 王轶、包丁裕睿：夫妻共同债务的认定与清偿规则实证研究- 学术前沿 - 民商法律网 `[source.html]` | 📚 法学文献 | 9,660 字符 | [原始网页](https://www.civillaw.com.cn/t/?id=37709) |
-| 38 | 甘肃金刚羿德新能源发展有限公司 重整计划 `[source.pdf]` | ⚖️ 司法案例 | 19,560 字符 | [原始网页](https://disc.static.szse.cn/disc/disk03/finalpage/2025-10-27/3f78067c-99fb-489c-b365-2fd09a235463.PDF) |
-| 39 | 研究丨再谈股东出资与董事的催缴义务——从斯曼特(2022)最高法民再2X2号最高检抗诉改判案件来看 - 北京市道可特律师事务所丨律师丨律师事务所-道可特DOCVIT | ⚖️ 司法案例 | 8,298 字符 | [原始网页](https://www.dtlawyers.com.cn/article/list/6420.html) |
-| 40 | 聆达集团股份有限公司 重整计划（草案） `[source.pdf]` | ⚖️ 司法案例 | 30,277 字符 | [原始网页](http://static.cninfo.com.cn/finalpage/2025-12-03/1224849380.PDF) |
-| 41 | 许春明：顶格适用惩罚性赔偿 彰显知识产权严保护 - 最高人民法院知识产权法庭 `[source.html]` | ⚖️ 司法案例 | 1,842 字符 | [原始网页](https://ipc.court.gov.cn/zh-cn/news/view-1083.html) |
-| 42 | 论夫妻债务制度的双重统一原则 `[source.pdf]` | 📚 法学文献 | 27,939 字符 | [原始网页](https://qks.swupl.edu.cn/docs/2023-02/b06788289e1f469a9ad43660a6d0581d.pdf) |
-| 43 | 资料_389973 `[source.pdf]` | ⚖️ 司法案例 | 33,708 字符 | [原始网页](https://disc.static.szse.cn/disc/disk03/finalpage/2025-11-29/efe6f62c-9c3e-4f07-909d-6ef8c885d6ac.PDF) |
-| 44 | 适用法定赔偿或者酌定赔偿确定专利损害赔偿数额时对相关因素的考量 - 最高人民法院知识产权法庭 `[source.html]` | ⚖️ 司法案例 | 3,264 字符 | [原始网页](https://ipc.court.gov.cn/zh-cn/news/view-1373.html) |
-| 45 | （2021）最高法知民终2380号 - 最高人民法院知识产权法庭 `[source.html]` | ⚖️ 司法案例 | 7,199 字符 | [原始网页](https://ipc.court.gov.cn/zh-cn/news/view-1993.html) |
-
+| 1 | 最高人民法院关于审理买卖合同纠纷案件适用法律问题的解释（法释〔2020〕17号） `[source.html]` | 📜 司法解释 | 4,931 字符 | [原始网页](https://www.055110.com/jj/6/6.html) |
+| 2 | 宁夏中科生物科技股份有限公司重整计划 `[source.pdf]` | ⚖️ 司法案例 | 34,214 字符 | [原始网页](https://static.cninfo.com.cn/finalpage/2025-11-14/1224805031.PDF) |
+| 3 | 邹学庚：论董事对股东出资的监督义务——兼评“斯曼特”损害公司利益责任纠纷案 `[source.html]` | 📚 法学文献 | 27,334 字符 | [原始网页](https://www.tiantonglaw.com/Content/2022/09-15/1944081004.html) |
+| 4 | 最高人民法院关于适用《中华人民共和国民法典》合同编通则若干问题的解释（法释〔2023〕13号） `[source.html]` | 📜 司法解释 | 16,858 字符 | [原始网页](http://www.bj148.net/ShowArticle.shtml?ID=2024481055555122.htm) |
+| 5 | “AI陪伴”软件侵害人格权案 `[source.html]` | ⚖️ 司法案例 | 805 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/370321.html) |
+| 6 | 《民法典》第1183条【精神损害赔偿】释论 `[source.html]` | 📚 法学文献 | 11,495 字符 | [原始网页](https://www.jtsg.org/2022-05-22/8733.html) |
+| 7 | （2017）最高法民辖终224号民事裁定书 | ⚖️ 司法案例 | 8,455 字符 | [原始网页](https://www.lawbaike.com/zhishi/235367196.html) |
+| 8 | 公司董事未履行催缴股东出资义务的赔偿责任——最高检抗诉斯曼特案始末 `[source.html]` | ⚖️ 司法案例 | 6,017 字符 | [原始网页](https://www.gdzf.org.cn/index/zfyw/content/post_181880.html) |
+| 9 | 任明艳、须海波：夫妻一方侵权之债的司法认定 `[source.html]` | 📚 法学文献 | 8,326 字符 | [原始网页](https://m.thepaper.cn/newsDetail_forward_30314156) |
+| 10 | 侵害知识产权民事案件适用惩罚性赔偿典型案例 `[source.html]` | ⚖️ 司法案例 | 4,320 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/290651.html) |
+| 11 | 侵权和解后再次销售相同产品被判令惩罚性赔偿 `[source.html]` | ⚖️ 司法案例 | 1,382 字符 | [原始网页](https://ipc.court.gov.cn/zh-cn/news/view-2175.html) |
+| 12 | 全国首例“AI声音侵权案” `[source.html]` | ⚖️ 司法案例 | 50 字符 | [原始网页](https://web.bbc.edu.cn/pfzt/2025/0307/c3253a113569/page.htm) |
+| 13 | 最高检抗诉逆转董事赔偿案：从连带赔偿近500万美元到承担10%赔偿责任 `[source.html]` | 📚 法学文献 | 3,035 字符 | [原始网页](http://www.watson-band.com.cn/cmsDetail.htm?item.id=4d2c350d556644c1ab03be9aa7e3284d) |
+| 14 | 虚拟偶像“人肉开盒”的侵权责任认定 `[source.html]` | ⚖️ 司法案例 | 8,665 字符 | [原始网页](https://m.thepaper.cn/newsDetail_forward_32554945) |
+| 15 | 胡润泽、钱菲：共同财产制下夫妻侵权债务的清偿路径 `[source.html]` | 📚 法学文献 | 9,606 字符 | [原始网页](https://njhsfy.gov.cn/zh/sfdy/detail/id/6678.html) |
+| 16 | 夫妻共同债务的法律认定与风险防范 `[source.html]` | 📚 法学文献 | 15,571 字符 | [原始网页](https://www.dehenglaw.com/cn/newscontent/0008/035918/2.aspx?MID=0902) |
+| 17 | 如何理解股东、董监高在新《公司法》下的赔偿责任变化（上） `[source.html]` | 📚 法学文献 | 7,119 字符 | [原始网页](https://www.zhongxialawyers.cn/cn/details/1194/e99b7507b39f81ef) |
+| 18 | 民法典担保制度解释背景下开发商阶段性连带保证实务分析 `[source.html]` | 📚 法学文献 | 5,804 字符 | [原始网页](https://www.gziac.cn/hyjl/2113) |
+| 19 | 提供股权担保后又声明“保证该股权无质押”是否构成保证担保 `[source.html]` | ⚖️ 司法案例 | 9,151 字符 | [原始网页](http://yingke.govgw.com/article/2484.html) |
+| 20 | 指导性案例192号：李开祥侵犯公民个人信息刑事附带民事公益诉讼案 `[source.html]` | ⚖️ 司法案例 | 2,635 字符 | [原始网页](https://www.court.gov.cn/shenpan/xiangqing/384411.html) |
+| 21 | 最高人民法院关于审理侵害知识产权民事纠纷案件适用惩罚性赔偿的解释（法释〔2026〕7号） `[source.html]` | 📜 司法解释 | 4,237 字符 | [原始网页](https://www.iplawcn.com/intellectual_property_laws/2026/0508/1067.html) |
+| 22 | 最高人民法院关于确定民事侵权精神损害赔偿责任若干问题的解释（法释〔2001〕7号） `[source.html]` | 📜 司法解释 | 2,216 字符 | [原始网页](https://www.pkulaw.com/chl/0322a21ba74de353bdfb.html) |
+| 23 | 最高人民法院关于适用《中华人民共和国民法典》合同编通则若干问题的解释（法释〔2023〕13号） `[source.html]` | 📜 司法解释 | 16,858 字符 | [原始网页](http://www.goldenlawyer.cn/showyw.asp?id=4086) |
+| 24 | 最高人民法院关于适用《中华人民共和国民法典》有关担保制度的解释 `[source.html]` | 📜 司法解释 | 16,118 字符 | [原始网页](https://zh.wikisource.org/wiki/%E6%9C%80%E9%AB%98%E4%BA%BA%E6%B0%91%E6%B3%95%E9%99%A2%E5%85%B3%E4%BA%8E%E9%80%82%E7%94%A8%E3%80%8A%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E6%B0%91%E6%B3%95%E5%85%B8%E3%80%8B%E6%9C%89%E5%85%B3%E6%8B%85%E4%BF%9D%E5%88%B6%E5%BA%A6%E7%9A%84%E8%A7%A3%E9%87%8A) |
+| 25 | 最高人民法院出台知识产权惩罚性赔偿司法解释 `[source.html]` | ⚖️ 司法案例 | 4,471 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/288861.html) |
+| 26 | 最高人民法院发布民法典合同编通则司法解释相关典型案例 | ⚖️ 司法案例 | 25,370 字符 | [原始网页](https://www.sdcourt.gov.cn/lylsfy/393876/tszs5176/16901751/index.html) |
+| 27 | 指导性案例168号：中信银行股份有限公司东莞分行诉陈志华等金融借款合同纠纷案 | ⚖️ 司法案例 | 5,351 字符 | [原始网页](http://ytzy.sdcourt.gov.cn/ytlkfy/401634/401608/7957425/index.html) |
+| 28 | 最高人民法院民二庭、研究室负责人就民法典合同编通则司法解释答记者问 `[source.html]` | 📚 法学文献 | 11,406 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/419402.html) |
+| 29 | 指导案例95号：工行宣城龙首支行诉宣城柏冠贸易有限公司等金融借款合同纠纷案 `[source.html]` | ⚖️ 司法案例 | 3,315 字符 | [原始网页](https://www.lawpeter.com/htjf/202311281087.shtm) |
+| 30 | “债权人有权自行决定实现担保的顺序”的约定能否构成明确约定 `[source.html]` | ⚖️ 司法案例 | 2,477 字符 | [原始网页](http://www.iestatetoplaw.com/html/rzdb/1108.html) |
+| 31 | 有限责任公司股东出资连带或补充责任评析 `[source.html]` | 📚 法学文献 | 4,971 字符 | [原始网页](https://www.allbrightlaw.com/SH/CN/10475/ee8a120c16ea550f.aspx) |
+| 32 | 最高人民法院关于适用《中华人民共和国民法典》合同编通则若干问题的解释（法释〔2023〕13号） `[source.html]` | 📜 司法解释 | 16,971 字符 | [原始网页](https://www.court.gov.cn/fabu/xiangqing/419382.html) |
+| 33 | 民法典颁布后人格权司法保护典型民事案例 `[source.html]` | ⚖️ 司法案例 | 7,523 字符 | [原始网页](https://www.court.gov.cn/zixun/xiangqing/354261.html) |
+| 34 | 民间借贷中夫妻共同债务的认定 `[source.html]` | 📚 法学文献 | 2,169 字符 | [原始网页](https://www.lawpa.cn/changshi/819320.html) |
+| 35 | 汉马科技集团股份有限公司重整计划（草案） `[source.pdf]` | ⚖️ 司法案例 | 33,472 字符 | [原始网页](https://pdf.dfcfw.com/pdf/H2_AN202411221641031112_1.pdf) |
+| 36 | 深圳广田集团股份有限公司重整计划（草案） `[source.pdf]` | ⚖️ 司法案例 | 28,348 字符 | [原始网页](https://disc.static.szse.cn/disc/disk03/finalpage/2023-11-11/c5e8c7d7-fff3-4cb0-8d28-519afd1246da.PDF) |
+| 37 | 王轶、包丁裕睿：夫妻共同债务的认定与清偿规则实证研究 `[source.html]` | 📚 法学文献 | 9,577 字符 | [原始网页](https://www.civillaw.com.cn/t/?id=37709) |
+| 38 | 甘肃金刚羿德新能源发展有限公司重整计划 `[source.pdf]` | ⚖️ 司法案例 | 19,497 字符 | [原始网页](https://disc.static.szse.cn/disc/disk03/finalpage/2025-10-27/3f78067c-99fb-489c-b365-2fd09a235463.PDF) |
+| 39 | 再谈股东出资与董事的催缴义务——从斯曼特案最高检抗诉改判看起 | 📚 法学文献 | 8,298 字符 | [原始网页](https://www.dtlawyers.com.cn/article/list/6420.html) |
+| 40 | 聆达集团股份有限公司重整计划（草案） `[source.pdf]` | ⚖️ 司法案例 | 32,533 字符 | [原始网页](http://static.cninfo.com.cn/finalpage/2025-12-03/1224849380.PDF) |
+| 41 | 许春明：顶格适用惩罚性赔偿 彰显知识产权严保护 `[source.html]` | 📚 法学文献 | 1,589 字符 | [原始网页](https://ipc.court.gov.cn/zh-cn/news/view-1083.html) |
+| 42 | 论夫妻债务制度的双重统一原则 `[source.pdf]` | 📚 法学文献 | 27,507 字符 | [原始网页](https://qks.swupl.edu.cn/docs/2023-02/b06788289e1f469a9ad43660a6d0581d.pdf) |
+| 43 | 奥园美谷科技股份有限公司重整计划（草案） `[source.pdf]` | ⚖️ 司法案例 | 33,708 字符 | [原始网页](https://disc.static.szse.cn/disc/disk03/finalpage/2025-11-29/efe6f62c-9c3e-4f07-909d-6ef8c885d6ac.PDF) |
+| 44 | 适用法定赔偿或者酌定赔偿确定专利损害赔偿数额时对相关因素的考量 `[source.html]` | ⚖️ 司法案例 | 2,991 字符 | [原始网页](https://ipc.court.gov.cn/zh-cn/news/view-1373.html) |
+| 45 | （2021）最高法知民终2380号 `[source.html]` | ⚖️ 司法案例 | 6,959 字符 | [原始网页](https://ipc.court.gov.cn/zh-cn/news/view-1993.html) |
 ## 2. 刑法与刑事诉讼专题（共 40 篇）
 
 | 序号 | 文献/案例名称 | 类型 | 正文长度 | 原始来源 |

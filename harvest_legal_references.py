@@ -244,7 +244,12 @@ def process_query_task(cat_id, cat_name, q_item, manifest, manifest_lock, pool):
 
         # 1. Save content.md
         content_md_path = os.path.join(item_dir, "content.md")
-        header = f"# {title}\n\n- **来源 URL**：[{url}]({url})\n- **收录专题**：{cat_name}\n- **文献类型**：{'司法案例/裁判文书' if kind == 'case' else '法学文献/学术论文'}\n- **抓取时间**：{time.strftime('%Y-%m-%d %H:%M:%S')}\n\n---\n\n"
+        kind_cn = {
+            "case": "司法案例",
+            "interpretation": "司法解释",
+            "paper": "法学文献",
+        }.get(kind, "法学文献")
+        header = f"# {title}\n\n- **来源 URL**：[{url}]({url})\n- **收录专题**：{cat_name}\n- **文献类型**：{kind_cn}\n- **抓取时间**：{time.strftime('%Y-%m-%d %H:%M:%S')}\n\n---\n\n"
         with open(content_md_path, "w", encoding="utf-8") as f:
             f.write(header + r.text.strip())
 
@@ -298,6 +303,14 @@ def build_master_index():
     with open(MANIFEST_FILE, "w", encoding="utf-8") as f:
         json.dump(all_items, f, ensure_ascii=False, indent=2)
 
+    # 对外 README 已按文献本名与三分类型手工统一；默认不覆盖，以免按目录名重排。
+    if os.environ.get("FORCE_REBUILD_INDEX") != "1":
+        print(
+            f"[MasterIndex] Updated manifest.json ({len(all_items)} docs). "
+            "Skipped README overwrite; set FORCE_REBUILD_INDEX=1 to rebuild indexes."
+        )
+        return
+
     # Generate references/README.md
     md_lines = [
         "# 现行法律文献与典型司法案例资源库",
@@ -324,7 +337,13 @@ def build_master_index():
         md_lines.append("| :--- | :--- | :--- | :--- | :--- | :--- |")
         for idx, it in enumerate(items, 1):
             title = it.get("title", "未命名").replace("|", r"\|")
-            kind_str = "司法案例" if it.get("kind") == "case" else "法学文献"
+            kind = it.get("kind")
+            if kind == "case":
+                kind_str = "⚖️ 司法案例"
+            elif kind == "interpretation":
+                kind_str = "📜 司法解释"
+            else:
+                kind_str = "📚 法学文献"
             tlen = it.get("text_length", 0)
             rel_dir = it.get("rel_dir")
             url = it.get("url", "")

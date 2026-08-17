@@ -1,9 +1,9 @@
-# 资料_389973
+# 奥园美谷科技股份有限公司重整计划（草案）
 
 - **来源 URL**：[https://disc.static.szse.cn/disc/disk03/finalpage/2025-11-29/efe6f62c-9c3e-4f07-909d-6ef8c885d6ac.PDF](https://disc.static.szse.cn/disc/disk03/finalpage/2025-11-29/efe6f62c-9c3e-4f07-909d-6ef8c885d6ac.PDF)
 - **收录专题**：民商法与民法典专题
-- **文献类型**：司法案例/裁判文书
-- **抓取时间**：2026-08-17 17:28:41
+- **文献类型**：司法案例
+- **抓取时间**：2026-08-17 17:28:43
 
 ---
 
