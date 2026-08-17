@@ -15,7 +15,6 @@ keep working unchanged.
 
 import json
 import os
-import pickle
 import re
 
 import config
@@ -91,8 +90,8 @@ def _get_bm25():
     tokenized = None
     if os.path.exists(config.BM25_CACHE):
         try:
-            with open(config.BM25_CACHE, "rb") as f:
-                cached = pickle.load(f)
+            with open(config.BM25_CACHE, encoding="utf-8") as f:
+                cached = json.load(f)
             if cached.get("mtime") == mtime and len(cached.get("tokenized", [])) == len(corpus):
                 tokenized = cached["tokenized"]
         except Exception:
@@ -101,8 +100,8 @@ def _get_bm25():
         print(f"[retrieval] tokenizing {len(corpus)} chunks for BM25 (jieba)…")
         tokenized = [_tokenize(c["text"]) for c in corpus]
         try:
-            with open(config.BM25_CACHE, "wb") as f:
-                pickle.dump({"mtime": mtime, "tokenized": tokenized}, f)
+            with open(config.BM25_CACHE, "w", encoding="utf-8") as f:
+                json.dump({"mtime": mtime, "tokenized": tokenized}, f)
         except Exception:
             pass
     _bm25 = BM25Okapi(tokenized)

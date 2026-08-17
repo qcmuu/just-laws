@@ -18,6 +18,9 @@ format_*.py
 process_*.py
 batch_*.py
 
+# 单测临时目录
+docs/.chunker-test-tmp/
+
 # IDE 配置文件（个人配置）
 .vscode/
 .idea/
@@ -28,3 +31,7 @@ batch_*.py
 
 # API Keys
 *exa_keys*.txt
+
+# BM25 JSON cache (legacy pickle name kept too)
+rag-poc/.bm25_cache.json
+rag-poc/.bm25_cache.pkl

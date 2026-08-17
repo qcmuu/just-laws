@@ -112,6 +112,7 @@ docker run -p 8000:8000 -e LLM_API_KEY=sk-... justlaws-rag   # 打开 http://loc
 # 3) 部署到 Fly.io（见 fly.toml）
 fly apps create just-laws-rag
 fly secrets set LLM_API_KEY=sk-...                                   # 必需
+fly secrets set CHAT_API_KEY=...                                      # 生产必需（fly.toml 已关闭匿名访问）
 fly secrets set CORS_ALLOW_ORIGINS=https://www.justlaws.cn,https://justlaws.cn
 ./scripts/deploy.sh                # 重建索引后 fly deploy；之后 curl https://<app>.fly.dev/health
 ```
@@ -124,9 +125,7 @@ nginx 把 `/api/` 反代到后端（示例见 `../deploy/nginx.conf.example`，�
 边缘限流）。也可在前端构建时用 `JUSTLAWS_RAG_API_BASE` 指定后端地址（需把 `CORS_ALLOW_ORIGINS`
 设为站点域名）。后端没就绪时，前端可用 `JUSTLAWS_RAG_ENABLED=false` 构建一键隐藏浮窗。
 
-**安全 / 防滥用**：生产务必把 `CORS_ALLOW_ORIGINS` 收紧到站点域名（默认 `*` 仅适合本地开发）；
-`/api/chat` 自带按 IP 的进程内限流（`RATE_LIMIT_*`，默认 20 次/60s），nginx 层 `limit_req`
-作为第二道防线。
+**安全 / 防滥用**：生产务必设置 `CHAT_API_KEY`（请求带 `X-API-Key` 或 `Authorization: Bearer`），并把 `CORS_ALLOW_ORIGINS` 收紧到站点域名。Fly 部署默认 `CHAT_ALLOW_ANONYMOUS=false`，未配置密钥时 `/api/chat` 返回 503。限流默认读取 `X-Real-IP`（若用 `X-Forwarded-For` 则取最右侧 hop）。nginx 层 `limit_req` 作为第二道防线。
 
 ## 文件说明
 

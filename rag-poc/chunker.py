@@ -119,6 +119,7 @@ def category_of(rel_path):
         "economic": "经济法",
         "social": "社会法",
         "criminal-law": "刑法",
+        "ecological-environment": "生态环境",
         "procedural": "程序法",
     }
     top = rel_path.replace(os.sep, "/").split("/")[0]
@@ -128,8 +129,13 @@ def category_of(rel_path):
 def parse_file(path):
     """Yield chunk dicts for one markdown file."""
     rel = os.path.relpath(path, config.DOCS_DIR)
+    rel_slash = rel.replace("\\", "/")
     # Skip non-law pages.
-    if rel.startswith("category" + os.sep) or rel == "README.md":
+    if (
+        rel_slash.startswith("category/")
+        or rel_slash.startswith("references/")
+        or rel_slash == "README.md"
+    ):
         return
     with open(path, encoding="utf-8") as f:
         lines = f.read().splitlines()
@@ -165,7 +171,7 @@ def parse_file(path):
             "section": section,
             "article_no": article_no,
             "article_num": num,
-            "source_url": url,
+            "source_url": f"{url}#{article_no}",
             "context": ctx,
             "text": f"{article_no}　{text}" if text else article_no,
         }

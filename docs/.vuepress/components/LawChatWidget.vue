@@ -133,6 +133,11 @@
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-if="answer" class="jl-chat__answer" v-html="renderedAnswer"></div>
 
+            <details v-if="reasoning" class="jl-chat__think">
+              <summary>模型思考过程</summary>
+              <pre>{{ reasoning }}</pre>
+            </details>
+
             <div v-if="error" class="jl-chat__error">{{ error }}</div>
 
             <div v-if="sources.length" class="jl-chat__sources">
@@ -159,6 +164,7 @@
               v-model="question"
               class="jl-chat__input"
               type="text"
+              maxlength="4000"
               :disabled="loading"
               :placeholder="configured ? '用一句话描述你的法律问题…' : '请先在 ⚙ 设置里填入模型 API'"
             />
@@ -201,7 +207,76 @@ const LS = {
   base: "jl_chat_base_url",
   key: "jl_chat_api_key",
   model: "jl_chat_model",
+  wrap: "jl_chat_wrap_jwk",
 };
+
+const MAX_QUESTION_CHARS = 4000;
+
+function bytesToB64(bytes) {
+  const u8 = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  let s = "";
+  for (let i = 0; i < u8.length; i++) s += String.fromCharCode(u8[i]);
+  return btoa(s);
+}
+
+function b64ToBytes(b64) {
+  const s = atob(b64);
+  const u8 = new Uint8Array(s.length);
+  for (let i = 0; i < s.length; i++) u8[i] = s.charCodeAt(i);
+  return u8;
+}
+
+async function getWrapKey() {
+  const raw = localStorage.getItem(LS.wrap);
+  if (raw) {
+    try {
+      const jwk = JSON.parse(raw);
+      return await crypto.subtle.importKey(
+        "jwk",
+        jwk,
+        { name: "AES-GCM" },
+        true,
+        ["encrypt", "decrypt"]
+      );
+    } catch (e) {
+      /* regenerate below */
+    }
+  }
+  const key = await crypto.subtle.generateKey(
+    { name: "AES-GCM", length: 256 },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  const jwk = await crypto.subtle.exportKey("jwk", key);
+  localStorage.setItem(LS.wrap, JSON.stringify(jwk));
+  return key;
+}
+
+async function encryptSecret(plain) {
+  if (!plain) return "";
+  if (!globalThis.crypto || !crypto.subtle) return plain;
+  const key = await getWrapKey();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const buf = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    key,
+    new TextEncoder().encode(plain)
+  );
+  return "enc:v1:" + bytesToB64(iv) + "." + bytesToB64(new Uint8Array(buf));
+}
+
+async function decryptSecret(stored) {
+  if (!stored) return "";
+  if (!stored.startsWith("enc:v1:")) return stored;
+  const payload = stored.slice("enc:v1:".length);
+  const dot = payload.indexOf(".");
+  if (dot < 0) return "";
+  const key = await getWrapKey();
+  const iv = b64ToBytes(payload.slice(0, dot));
+  const data = b64ToBytes(payload.slice(dot + 1));
+  const buf = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data);
+  return new TextDecoder().decode(buf);
+}
 
 const PRESETS = [
   { name: "DeepSeek", baseUrl: "https://api.deepseek.com/v1", model: "deepseek-chat" },
@@ -262,6 +337,7 @@ export default {
       showSettings: false,
       question: "",
       answer: "",
+      reasoning: "",
       sources: [],
       error: "",
       loading: false,
@@ -288,14 +364,18 @@ export default {
       return !!(this.cfg.baseUrl && this.cfg.apiKey && this.cfg.model);
     },
   },
-  created() {
+  async created() {
     if (typeof window === "undefined") return;
     try {
       this.cfg.baseUrl = localStorage.getItem(LS.base) || "";
-      this.cfg.apiKey = localStorage.getItem(LS.key) || "";
       this.cfg.model = localStorage.getItem(LS.model) || "";
+      const stored = localStorage.getItem(LS.key) || "";
+      this.cfg.apiKey = stored ? await decryptSecret(stored) : "";
+      if (stored && !stored.startsWith("enc:v1:") && this.cfg.apiKey) {
+        await this.persistSettings();
+      }
     } catch (e) {
-      /* localStorage may be unavailable (private mode); ignore */
+      this.cfg.apiKey = "";
     }
   },
   methods: {
@@ -324,14 +404,19 @@ export default {
         /* fall back to escaped plain text in renderedAnswer */
       }
     },
-    saveSettings() {
+    async persistSettings() {
       try {
         localStorage.setItem(LS.base, this.cfg.baseUrl);
-        localStorage.setItem(LS.key, this.cfg.apiKey);
         localStorage.setItem(LS.model, this.cfg.model);
+        const enc = await encryptSecret(this.cfg.apiKey);
+        if (enc) localStorage.setItem(LS.key, enc);
+        else localStorage.removeItem(LS.key);
       } catch (e) {
         /* ignore */
       }
+    },
+    async saveSettings() {
+      await this.persistSettings();
       if (this.configured) this.showSettings = false;
     },
     applyPreset(p) {
@@ -343,9 +428,22 @@ export default {
       return s.length > 80 ? s.slice(0, 80) + "…" : s;
     },
     srcUrl(u) {
-      // Corpus stores site-relative URLs (e.g. /economic/foo/). withBase makes
-      // citation deep links resolve under the site base (e.g. /just-laws/).
-      return withBase(u || "/");
+      // Corpus stores site-relative URLs, optionally with a 第X条 fragment.
+      // Split the hash so withBase does not mangle it; VuePress base lives on the path.
+      const raw = u || "/";
+      const hashAt = raw.indexOf("#");
+      const path = hashAt >= 0 ? raw.slice(0, hashAt) : raw;
+      let hash = hashAt >= 0 ? raw.slice(hashAt + 1) : "";
+      if (hash) {
+        try {
+          hash = decodeURIComponent(hash);
+        } catch (e) {
+          /* keep raw */
+        }
+        hash = encodeURIComponent(hash);
+      }
+      const resolved = withBase(path);
+      return hash ? resolved + "#" + hash : resolved;
     },
     scrollDown() {
       this.$nextTick(() => {
@@ -354,38 +452,40 @@ export default {
       });
     },
     async ensureIndex() {
-      if (this.indexState === "ready" || this.indexState === "loading") return;
+      if (this._indexPromise) return this._indexPromise;
       this.indexState = "loading";
-      try {
-        // withBase prepends the site base (e.g. /just-laws/ on a GitHub Pages
-        // project site), so the corpus resolves both at root and under a subpath.
-        // Load minisearch and the corpus in parallel; both are only needed
-        // here, on the first question / panel open.
-        const [{ default: MiniSearchCls }, resp] = await Promise.all([
-          MiniSearch ? Promise.resolve({ default: MiniSearch }) : import("minisearch"),
-          fetch(withBase("/law-corpus.json")),
-        ]);
-        MiniSearch = MiniSearchCls;
-        if (!resp.ok) throw new Error("HTTP " + resp.status);
-        const data = await resp.json();
-        // Corpus uses short keys: n=law_name a=article_no c=chapter u=url t=text.
-        const mini = new MiniSearch({
-          fields: ["t", "n", "c"],
-          storeFields: ["n", "a", "c", "u", "t"],
-          tokenize: cjkTokenize,
-          searchOptions: {
+      this._indexPromise = (async () => {
+        try {
+          // withBase prepends the site base (e.g. /just-laws/ on a GitHub Pages
+          // project site), so the corpus resolves both at root and under a subpath.
+          const [{ default: MiniSearchCls }, resp] = await Promise.all([
+            MiniSearch ? Promise.resolve({ default: MiniSearch }) : import("minisearch"),
+            fetch(withBase("/law-corpus.json")),
+          ]);
+          MiniSearch = MiniSearchCls;
+          if (!resp.ok) throw new Error("HTTP " + resp.status);
+          const data = await resp.json();
+          const mini = new MiniSearch({
+            fields: ["t", "n", "c"],
+            storeFields: ["n", "a", "c", "u", "t"],
             tokenize: cjkTokenize,
-            boost: { n: 3, c: 1.5 },
-            combineWith: "OR",
-          },
-        });
-        mini.addAll(data.docs);
-        this._mini = mini;
-        this.indexState = "ready";
-      } catch (e) {
-        this.indexState = "error";
-        this.error = "法条索引加载失败，请刷新页面重试。";
-      }
+            searchOptions: {
+              tokenize: cjkTokenize,
+              boost: { n: 3, c: 1.5 },
+              combineWith: "OR",
+            },
+          });
+          mini.addAll(data.docs);
+          this._mini = mini;
+          this.indexState = "ready";
+        } catch (e) {
+          this.indexState = "error";
+          this._indexPromise = null;
+          this.error = "法条索引加载失败，请刷新页面重试。";
+          throw e;
+        }
+      })();
+      return this._indexPromise;
     },
     retrieve(q) {
       if (!this._mini) return [];
@@ -412,7 +512,7 @@ export default {
       ];
     },
     async ask(preset) {
-      const q = (preset || this.question).trim();
+      const q = (preset || this.question).trim().slice(0, MAX_QUESTION_CHARS);
       if (!q || this.loading) return;
       if (!this.configured) {
         this.showSettings = true;
@@ -421,11 +521,17 @@ export default {
       this.question = q;
       this.loading = true;
       this.answer = "";
+      this.reasoning = "";
       this.sources = [];
       this.error = "";
 
       this.loadMarkdown();
-      await this.ensureIndex();
+      try {
+        await this.ensureIndex();
+      } catch (e) {
+        this.loading = false;
+        return;
+      }
       const ctx = this.retrieve(q);
       this.sources = ctx;
       this.scrollDown();
@@ -490,12 +596,17 @@ export default {
               }
               const deltaObj =
                 evt.choices && evt.choices[0] ? evt.choices[0].delta : null;
-              const delta = deltaObj
-                ? deltaObj.content || deltaObj.text || ""
-                : "";
-              if (delta) {
-                this.answer += delta;
-                this.scrollDown();
+              if (deltaObj) {
+                const thinking =
+                  deltaObj.reasoning_content || deltaObj.reasoning || "";
+                const delta = deltaObj.content || deltaObj.text || "";
+                if (thinking) this.reasoning += thinking;
+                if (delta) {
+                  this.answer += delta;
+                  this.scrollDown();
+                } else if (thinking) {
+                  this.scrollDown();
+                }
               }
             }
           }
@@ -503,7 +614,12 @@ export default {
           reader.releaseLock();
         }
         if (!this.answer) {
-          this.error = "模型未返回内容，请检查模型名称或额度。";
+          if (this.reasoning) {
+            this.answer = this.reasoning;
+            this.reasoning = "";
+          } else {
+            this.error = "模型未返回内容，请检查模型名称或额度。";
+          }
         }
       } catch (e) {
         if (e && e.name === "AbortError") {
@@ -778,5 +894,75 @@ export default {
 .jl-chat__send:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.jl-chat__think {
+  margin: 10px 0 12px;
+  font-size: 12px;
+  color: #666;
+}
+.jl-chat__think summary {
+  cursor: pointer;
+  color: #888;
+}
+.jl-chat__think pre {
+  margin: 8px 0 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #555;
+}
+</style>
+
+<style>
+html.dark .jl-chat__panel {
+  background: #161616;
+  border-color: #333;
+}
+html.dark .jl-chat__settings,
+html.dark .jl-chat__settings-intro,
+html.dark .jl-chat__answer,
+html.dark .jl-chat__src {
+  color: #e8e8e8;
+}
+html.dark .jl-chat__field input,
+html.dark .jl-chat__input {
+  background: #1f1f1f;
+  border-color: #444;
+  color: #f2f2f2;
+}
+html.dark .jl-chat__body,
+html.dark .jl-chat__hint,
+html.dark .jl-chat__src-ctx,
+html.dark .jl-chat__badge,
+html.dark .jl-chat__sources h4,
+html.dark .jl-chat__note {
+  color: #b5b5b5;
+}
+html.dark .jl-chat__disclaimer,
+html.dark .jl-chat__error {
+  background: #2a1614;
+  border-color: #5a2a24;
+  color: #f0b4aa;
+}
+html.dark .jl-chat__chip {
+  background: #1f1f1f;
+  border-color: #444;
+  color: #ddd;
+}
+html.dark .jl-chat__src {
+  border-color: #333;
+  background: #1a1a1a;
+}
+html.dark .jl-chat__src:hover {
+  background: #241818;
+}
+html.dark .jl-chat__inputbar,
+html.dark .jl-chat__sources {
+  border-color: #333;
+}
+html.dark .jl-chat__think,
+html.dark .jl-chat__think pre {
+  color: #aaa;
 }
 </style>

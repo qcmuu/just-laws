@@ -88,7 +88,7 @@ DENSE_WEIGHT = float(os.environ.get("DENSE_WEIGHT", "1.0"))
 SPARSE_WEIGHT = float(os.environ.get("SPARSE_WEIGHT", "1.0"))
 
 # Optional on-disk cache of the tokenized BM25 corpus (pickle) for faster startup.
-BM25_CACHE = os.path.join(HERE, ".bm25_cache.pkl")
+BM25_CACHE = os.path.join(HERE, ".bm25_cache.json")
 
 # --- rerank (cross-encoder over fused candidates) ---
 # RERANK_ENABLED = "true" (default) | "false" to disable the rerank stage.
@@ -105,9 +105,18 @@ RERANK_API_KEY = os.environ.get("RERANK_API_KEY", "")
 
 # --- backend / CORS ---
 # Comma-separated list of allowed origins for the chat API. "*" allows all
-# (handy for local dev + the static site calling from any host). In production
-# set this to the site origin(s), e.g. https://www.justlaws.cn,https://justlaws.cn
+# (handy for local dev). In production set this to the site origin(s),
+# e.g. https://www.justlaws.cn,https://justlaws.cn
 CORS_ALLOW_ORIGINS = os.environ.get("CORS_ALLOW_ORIGINS", "*")
+
+# Shared secret for POST /api/chat. When set, the client must send
+# ``X-API-Key`` or ``Authorization: Bearer``. When unset, anonymous chat is
+# allowed only if CHAT_ALLOW_ANONYMOUS is true (local PoC default).
+CHAT_API_KEY = os.environ.get("CHAT_API_KEY", "")
+CHAT_ALLOW_ANONYMOUS = os.environ.get("CHAT_ALLOW_ANONYMOUS", "true").lower() in (
+    "1", "true", "yes",
+)
+MAX_QUESTION_CHARS = int(os.environ.get("MAX_QUESTION_CHARS", "4000"))
 
 # --- rate limiting (abuse / cost guardrail for the public /api/chat endpoint) ---
 # A simple in-process fixed-window limiter keyed by client IP. It is per-process
@@ -119,8 +128,9 @@ RATE_LIMIT_ENABLED = os.environ.get("RATE_LIMIT_ENABLED", "true").lower() in (
 # Max number of /api/chat requests allowed per IP within RATE_LIMIT_WINDOW seconds.
 RATE_LIMIT_REQUESTS = int(os.environ.get("RATE_LIMIT_REQUESTS", "20"))
 RATE_LIMIT_WINDOW = int(os.environ.get("RATE_LIMIT_WINDOW", "60"))
-# Header to read the real client IP from when behind a reverse proxy (nginx).
-# Falls back to the socket peer address when the header is absent.
+# Header to read the real client IP from when behind a reverse proxy.
+# Default is X-Real-IP (nginx writes the socket peer). If you must use
+# X-Forwarded-For, the app takes the *rightmost* hop (see security.py).
 RATE_LIMIT_CLIENT_IP_HEADER = os.environ.get(
-    "RATE_LIMIT_CLIENT_IP_HEADER", "x-forwarded-for"
+    "RATE_LIMIT_CLIENT_IP_HEADER", "x-real-ip"
 )

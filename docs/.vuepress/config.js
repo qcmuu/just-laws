@@ -1,6 +1,8 @@
 const { defaultTheme } = require("@vuepress/theme-default");
 const { docsearchPlugin } = require("@vuepress/plugin-docsearch");
 
+const siteBase = process.env.JUSTLAWS_BASE || "/";
+
 module.exports = {
   lang: "zh-CN",
   title: "Just Laws AI",
@@ -9,7 +11,7 @@ module.exports = {
   // Site base path. Defaults to "/" (custom domain / nginx root). For a GitHub
   // Pages project site (https://<user>.github.io/just-laws/) set
   // JUSTLAWS_BASE=/just-laws/ at build time. Must start and end with "/".
-  base: process.env.JUSTLAWS_BASE || "/",
+  base: siteBase,
 
   // Disable route-chunk prefetching. With 300+ laws the entry chunk
   // dynamic-imports hundreds of page chunks, so VuePress would otherwise emit
@@ -35,7 +37,7 @@ module.exports = {
     ),
   },
   head: [
-    ["link", { rel: "icon", href: "/images/logo.png" }],
+    ["link", { rel: "icon", href: `${siteBase}images/logo.png` }],
     [
       "script",
       {},
@@ -59,7 +61,7 @@ module.exports = {
       {
         text: "宪法",
         children: [
-          { text: "宪法", link: "/constitution/", activeMatch: "/constitution/[^(amendment)]" },
+          { text: "宪法", link: "/constitution/", activeMatch: "^/constitution/(?!amendment)" },
           { text: "宪法修正案", link: "/constitution/amendment/" },
         ],
       },
@@ -69,7 +71,7 @@ module.exports = {
           { text: "全国人民代表大会组织法", link: "/constitutional-relevance/npc-organization-law/" },
           { text: "民族区域自治法", link: "/constitutional-relevance/law-on-regional-national-autonomy/" },
           { text: "香港特别行政区基本法", link: "/constitutional-relevance/hong-kong-special-administrative-region-basic-law/" },
-          { text: "查看全部 54 部宪法相关法", link: "/category/constitutional-relevance" },
+          { text: "查看全部 55 部宪法相关法", link: "/category/constitutional-relevance" },
         ],
       },
       {
@@ -87,7 +89,7 @@ module.exports = {
           { text: "行政处罚法", link: "/administrative/administrative-penalty/" },
           { text: "治安管理处罚法", link: "/administrative/penalties-for-administration-of-public-security/" },
           { text: "义务教育法", link: "/administrative/compulsory-education-law/" },
-          { text: "查看全部 52 部行政法", link: "/category/administrative" },
+          { text: "查看全部 96 部行政法", link: "/category/administrative" },
         ],
       },
       {
@@ -96,7 +98,7 @@ module.exports = {
           { text: "个人所得税法", link: "/economic/individual-income-tax-law/" },
           { text: "中国人民银行法", link: "/economic/peoples-bank-of-china-law/" },
           { text: "个人信息保护法", link: "/economic/personal-information-protection-law/" },
-          { text: "查看全部 16 部经济法", link: "/category/economic" },
+          { text: "查看全部 90 部经济法", link: "/category/economic" },
         ],
       },
       {
@@ -126,6 +128,12 @@ module.exports = {
         ],
       },
       {
+        text: "生态环境",
+        children: [
+          { text: "生态环境法典", link: "/ecological-environment/ecological-environment-code/" },
+        ],
+      },
+      {
         text: "案例与文献",
         link: "/references/",
       },
@@ -142,6 +150,7 @@ module.exports = {
             "/category/social",
             "/category/criminal-law",
             "/category/procedural",
+            "/category/ecological-environment",
           ]
         }
       ],
@@ -221,6 +230,18 @@ module.exports = {
             "/civil-and-commercial/civil-code/06-inheritance.md",
             "/civil-and-commercial/civil-code/07-tort-liability.md",
             "/civil-and-commercial/civil-code/00-supplementary.md",
+          ],
+        },
+      ],
+      "/ecological-environment/ecological-environment-code/": [
+        {
+          text: "中华人民共和国生态环境法典",
+          children: [
+            "/ecological-environment/ecological-environment-code/01-general-principles.md",
+            "/ecological-environment/ecological-environment-code/02-pollution-prevention-and-control.md",
+            "/ecological-environment/ecological-environment-code/03-ecological-protection.md",
+            "/ecological-environment/ecological-environment-code/04-green-and-low-carbon-development.md",
+            "/ecological-environment/ecological-environment-code/05-legal-liability-and-supplementary.md",
           ],
         },
       ],

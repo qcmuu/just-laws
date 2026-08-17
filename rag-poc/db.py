@@ -11,6 +11,11 @@ import psycopg
 from pgvector.psycopg import register_vector
 
 import config
+from security import validate_pg_table
+
+
+def _table():
+    return validate_pg_table(config.PG_TABLE)
 
 # Metadata columns mirror the chunk dicts produced by chunker.py.
 _METADATA_COLUMNS = (
@@ -41,7 +46,7 @@ def connect():
 
 def _create_index(conn):
     """Create the cosine-distance ANN index for the vector column."""
-    table = config.PG_TABLE
+    table = _table()
     if config.PG_INDEX_TYPE == "hnsw":
         conn.execute(
             f"CREATE INDEX IF NOT EXISTS {table}_embedding_hnsw "
@@ -57,7 +62,7 @@ def _create_index(conn):
 
 def init_schema(conn, recreate=False):
     """Create the chunk table (+ vector index). Optionally drop it first."""
-    table = config.PG_TABLE
+    table = _table()
     if recreate:
         conn.execute(f"DROP TABLE IF EXISTS {table}")
     conn.execute(
@@ -92,7 +97,7 @@ def upsert_chunks(conn, chunks, vectors):
     ``chunks`` is a list of dicts (from chunker.iter_chunks); ``vectors`` is a
     parallel list of embedding lists.
     """
-    table = config.PG_TABLE
+    table = _table()
     cols = ", ".join(_METADATA_COLUMNS) + ", embedding"
     placeholders = ", ".join(["%s"] * (len(_METADATA_COLUMNS) + 1))
     updates = ", ".join(
@@ -128,13 +133,13 @@ def upsert_chunks(conn, chunks, vectors):
 
 
 def count(conn):
-    return conn.execute(f"SELECT COUNT(*) FROM {config.PG_TABLE}").fetchone()[0]
+    return conn.execute(f"SELECT COUNT(*) FROM {_table()}").fetchone()[0]
 
 
 def search(conn, query_vector, top_k=None, category=None):
     """Cosine-similarity search. Returns a list of hit dicts (best first)."""
     top_k = top_k or config.TOP_K
-    table = config.PG_TABLE
+    table = _table()
     # `<=>` is pgvector's cosine distance; similarity = 1 - distance.
     where = "WHERE category = %s" if category else ""
     sql = (

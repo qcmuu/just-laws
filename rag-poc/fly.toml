@@ -3,12 +3,17 @@
 # One-time:
 #   fly apps create just-laws-rag           # or change `app` below
 #   fly secrets set LLM_API_KEY=sk-...       # required (SenseNova / OpenAI-compatible)
+#   fly secrets set CHAT_API_KEY=...         # required in production (anonymous chat off)
 #   fly secrets set CORS_ALLOW_ORIGINS=https://www.justlaws.cn,https://justlaws.cn
 # Deploy:
 #   ./scripts/deploy.sh                      # builds the index, then `fly deploy`
 #
-# Secrets (LLM_API_KEY, CORS_ALLOW_ORIGINS, …) are injected at runtime by Fly,
-# never baked into the image.
+# Secrets (LLM_API_KEY, CHAT_API_KEY, CORS_ALLOW_ORIGINS, …) are injected at
+# runtime by Fly, never baked into the image.
+#
+#   fly secrets set LLM_API_KEY=sk-...
+#   fly secrets set CHAT_API_KEY=...          # required: anonymous chat is off
+#   fly secrets set CORS_ALLOW_ORIGINS=https://www.justlaws.cn,https://justlaws.cn
 
 app = "just-laws-rag"
 primary_region = "hkg"  # close to CN users; change as needed
@@ -25,6 +30,10 @@ primary_region = "hkg"  # close to CN users; change as needed
   RATE_LIMIT_ENABLED = "true"
   RATE_LIMIT_REQUESTS = "20"
   RATE_LIMIT_WINDOW = "60"
+  CHAT_ALLOW_ANONYMOUS = "false"
+  # Fly's edge proxy writes Fly-Client-IP (it does NOT set X-Real-IP, which
+  # clients could otherwise spoof). Nginx deployments should use x-real-ip.
+  RATE_LIMIT_CLIENT_IP_HEADER = "fly-client-ip"
 
 [http_service]
   internal_port = 8000

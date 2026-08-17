@@ -119,7 +119,7 @@ function* parseFile(file) {
     const chunk = {
       n: lawName,
       a: articleNo,
-      u: url,
+      u: `${url}#${articleNo}`,
       t: text ? `${articleNo}　${text}` : articleNo,
     };
     if (chapter) chunk.c = chapter;
@@ -160,6 +160,8 @@ function* parseFile(file) {
   if (out) yield out;
 }
 
+export { ARTICLE_RE, HEADING_RE, classifyHeading, isLawName, pageUrl };
+
 function main() {
   const docs = [];
   for (const file of walk(DOCS_DIR)) {
@@ -178,4 +180,19 @@ function main() {
   );
 }
 
-main();
+function isDirectRun() {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    const self = fs.realpathSync(fileURLToPath(import.meta.url));
+    const arg = fs.realpathSync(entry);
+    return self.toLowerCase() === arg.toLowerCase();
+  } catch {
+    // Exact match only: a fuzzy match would also fire for this file's tests
+    // (build-law-corpus.test.mjs) and run main() during them.
+    return path.basename(entry).toLowerCase() === "build-law-corpus.mjs";
+  }
+}
+
+if (isDirectRun()) main();
+

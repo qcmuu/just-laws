@@ -78,7 +78,7 @@ flowchart TD
 
 | 核心维度 | JustLaws AI 实现方案 | 技术与业务价值 |
 | :--- | :--- | :--- |
-| **🤖 端侧智能问答** | 浏览器内 MiniSearch + BYOK 大模型直连 | **零后端运维成本、零用户隐私泄露风险**；API Key 本地加密存储；支持 DeepSeek-R1、通义千问、智谱 GLM 及本地 Ollama。 |
+| **🤖 端侧智能问答** | 浏览器内 MiniSearch + BYOK 大模型直连 | **零后端运维成本、零用户隐私泄露风险**；API Key 以 AES-GCM 混淆存储于本机浏览器（防止被直接读取，不能抵御本机恶意脚本）；支持 DeepSeek-R1、通义千问、智谱 GLM 及本地 Ollama。 |
 | **🔗 严格法条溯源** | 结构化法条注入 + 原文深链锚点生成 | 彻底抑制大模型法律“幻觉”；答案下方附带**精确法条链接**，一键直达对应法规条文进行真实性比照。 |
 | **⚖️ 权威案例与文献** | 279 篇最高法指导案例与 CSSCI 法学论文 | 基于 Exa.ai 语义检索落地保存；每个案例配备元数据 (`meta.yml`)、正文 (`content.md`) 及离线归档 (`source.html`/`.pdf`)。 |
 | **🔄 智能上游同步** | 独创非侵入式法规同步机制 (`sync_upstream.py`) | 保持与上游 [ImCa0/just-laws](https://github.com/ImCa0/just-laws) 最新法律条文同步，同时完整保留本 Fork 的 AI 问答架构与定制成果。 |

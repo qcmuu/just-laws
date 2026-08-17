@@ -5,27 +5,19 @@ across 8 legal categories, saves full text, metadata, and generates master index
 """
 
 import os
-import re
 import json
 import time
-import queue
-import urllib.parse
 import threading
 import concurrent.futures
-import requests
 import yaml
 from exa_py import Exa
 
-ROOT_DIR = r"i:\AI_empower\just-laws"
+from harvest_util import download_raw, sanitize_filename
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 REF_DIR = os.path.join(ROOT_DIR, "references")
 MANIFEST_FILE = os.path.join(REF_DIR, "manifest.json")
 KEYS_FILE = os.path.join(ROOT_DIR, "valid_exa_keys.txt")
-
-# Read valid keys
-with open(KEYS_FILE, "r", encoding="utf-8") as f:
-    API_KEYS = [line.strip() for line in f if line.strip()]
-
-print(f"Loaded {len(API_KEYS)} active Exa API keys.")
 
 # Key Pool Manager
 class KeyPool:
@@ -51,7 +43,21 @@ class KeyPool:
             self.exhausted.add(key)
             print(f"[KeyPool] Marked key as exhausted: {key[:8]}... (Remaining: {len(self.keys) - len(self.exhausted)})")
 
-key_pool = KeyPool(API_KEYS)
+key_pool = None
+
+
+def load_api_keys(path=None):
+    path = path or KEYS_FILE
+    if not os.path.isfile(path):
+        raise FileNotFoundError(
+            f"Exa API key file not found: {path}. Put one key per line."
+        )
+    with open(path, "r", encoding="utf-8") as f:
+        keys = [line.strip() for line in f if line.strip()]
+    if not keys:
+        raise RuntimeError(f"No Exa API keys in {path}")
+    print(f"Loaded {len(keys)} active Exa API keys.")
+    return keys
 
 # Topic and Query Definitions
 TOPICS = [
@@ -161,35 +167,7 @@ TOPICS = [
     },
 ]
 
-def sanitize_filename(name):
-    # Remove chars not allowed in Windows paths: < > : " / \ | ? *
-    clean = re.sub(r'[<>:"/\\|?*\n\r\t]', '_', name).strip()
-    clean = re.sub(r'\s+', ' ', clean)
-    return clean[:80].strip(' ._')
-
-def download_raw(url, out_path_base):
-    """Attempt downloading raw source file (PDF or HTML) with timeout."""
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
-    try:
-        r = requests.get(url, headers=headers, timeout=12, stream=True)
-        if r.status_code == 200:
-            ct = r.headers.get("Content-Type", "").lower()
-            if "application/pdf" in ct or url.lower().endswith(".pdf"):
-                out_path = out_path_base + ".pdf"
-            else:
-                out_path = out_path_base + ".html"
-            with open(out_path, "wb") as f:
-                for chunk in r.iter_content(chunk_size=65536):
-                    if chunk:
-                        f.write(chunk)
-            return os.path.basename(out_path)
-    except Exception:
-        pass
-    return None
-
-def process_query_task(cat_id, cat_name, q_item, manifest, manifest_lock):
+def process_query_task(cat_id, cat_name, q_item, manifest, manifest_lock, pool):
     query_str = q_item["query"]
     kind = q_item.get("kind", "case")
     num = q_item.get("num", 6)
@@ -199,11 +177,19 @@ def process_query_task(cat_id, cat_name, q_item, manifest, manifest_lock):
 
     max_attempts = 5
     results = []
-    
+    last_key = None
+
     for attempt in range(max_attempts):
+        last_key = None
         try:
-            key = key_pool.get_key()
-            exa = Exa(api_key=key)
+            last_key = pool.get_key()
+        except RuntimeError:
+            # KeyPool.get_key only raises RuntimeError on exhaustion; retrying
+            # other queries cannot help, so abort this one immediately.
+            print(f"[KeyPool] All Exa API keys exhausted; aborting query='{query_str}'.")
+            break
+        try:
+            exa = Exa(api_key=last_key)
             resp = exa.search(
                 query=query_str,
                 type="neural",
@@ -214,8 +200,13 @@ def process_query_task(cat_id, cat_name, q_item, manifest, manifest_lock):
             break
         except Exception as e:
             err_str = str(e)
-            if "401" in err_str or "402" in err_str or "403" in err_str or "CREDITS" in err_str:
-                key_pool.mark_failed(key)
+            if last_key and (
+                "401" in err_str
+                or "402" in err_str
+                or "403" in err_str
+                or "CREDITS" in err_str
+            ):
+                pool.mark_failed(last_key)
             else:
                 print(f"[Query Error] query='{query_str}' attempt={attempt}: {e}")
                 time.sleep(1)
@@ -332,7 +323,7 @@ def build_master_index():
         md_lines.append("| 序号 | 标题 | 类型 | 字数 | 本地正文 | 原始来源 |")
         md_lines.append("| :--- | :--- | :--- | :--- | :--- | :--- |")
         for idx, it in enumerate(items, 1):
-            title = it.get("title", "未命名").replace("|", "\|")
+            title = it.get("title", "未命名").replace("|", r"\|")
             kind_str = "司法案例" if it.get("kind") == "case" else "法学文献"
             tlen = it.get("text_length", 0)
             rel_dir = it.get("rel_dir")
@@ -353,7 +344,10 @@ def build_master_index():
     print(f"[MasterIndex] Generated index for {len(all_items)} documents across {len(by_cat)} categories.")
 
 def main():
+    global key_pool
     os.makedirs(REF_DIR, exist_ok=True)
+    api_keys = load_api_keys()
+    key_pool = KeyPool(api_keys)
     manifest = {}
     if os.path.exists(MANIFEST_FILE):
         try:
@@ -371,12 +365,12 @@ def main():
         for q_item in topic["queries"]:
             tasks.append((topic["category_id"], topic["category_name"], q_item))
 
-    print(f"Starting execution of {len(tasks)} search tasks with {len(API_KEYS)} Exa keys in parallel...")
+    print(f"Starting execution of {len(tasks)} search tasks with {len(api_keys)} Exa keys in parallel...")
 
     total_new = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         futures = [
-            executor.submit(process_query_task, cid, cname, q, manifest, manifest_lock)
+            executor.submit(process_query_task, cid, cname, q, manifest, manifest_lock, key_pool)
             for cid, cname, q in tasks
         ]
         for f in concurrent.futures.as_completed(futures):

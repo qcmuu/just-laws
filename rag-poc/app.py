@@ -8,17 +8,20 @@ CORS is permissive so the static VuePress site (any origin) can call it.
 A minimal demo page is served at / for standalone testing.
 """
 
+import asyncio
 import json
 import threading
 import time
+from functools import partial
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 import config
 import rag
+import security
 
 app = FastAPI(title="Just Laws AI RAG", description="JustLaws AI - Advanced Hybrid Retrieval and Legal RAG PoC")
 
@@ -42,12 +45,9 @@ _rl_hits: dict[str, tuple[int, int]] = {}  # ip -> (window_start_epoch, count)
 
 def _client_ip(request: Request) -> str:
     header = config.RATE_LIMIT_CLIENT_IP_HEADER
-    if header:
-        raw = request.headers.get(header)
-        if raw:
-            # X-Forwarded-For may be a comma-separated list; the client is first.
-            return raw.split(",")[0].strip()
-    return request.client.host if request.client else "unknown"
+    raw = request.headers.get(header) if header else None
+    peer = request.client.host if request.client else None
+    return security.pick_client_ip(header, raw, peer)
 
 
 def _rate_limited(request: Request) -> bool:
@@ -71,23 +71,40 @@ def _rate_limited(request: Request) -> bool:
     return count > config.RATE_LIMIT_REQUESTS
 
 
+def _chat_authorized(request: Request) -> tuple[bool, int, str]:
+    """Return (ok, status, error). Anonymous chat is local-dev only."""
+    if config.CHAT_API_KEY:
+        if security.api_key_ok(
+            config.CHAT_API_KEY,
+            request.headers.get("x-api-key", ""),
+            request.headers.get("authorization", ""),
+        ):
+            return True, 200, ""
+        return False, 401, "未授权。"
+    if config.CHAT_ALLOW_ANONYMOUS:
+        return True, 200, ""
+    return False, 503, "服务未配置 CHAT_API_KEY，已拒绝匿名访问。"
+
+
 class Query(BaseModel):
-    question: str
-    category: str | None = None
+    question: str = Field(..., min_length=1, max_length=config.MAX_QUESTION_CHARS)
+    category: str | None = Field(default=None, max_length=64)
 
 
 @app.get("/health")
 def health():
     return {
         "ok": True,
-        "llm_model": config.LLM_MODEL,
-        "llm_base_url": config.LLM_BASE_URL,
+        "auth_required": bool(config.CHAT_API_KEY) or not config.CHAT_ALLOW_ANONYMOUS,
         "embedding_backend": config.EMBEDDING_BACKEND,
     }
 
 
 @app.post("/api/chat")
-def chat(q: Query, request: Request):
+async def chat(q: Query, request: Request):
+    ok, status, err = _chat_authorized(request)
+    if not ok:
+        return JSONResponse(status_code=status, content={"error": err})
     if _rate_limited(request):
         return JSONResponse(
             status_code=429,
@@ -97,7 +114,10 @@ def chat(q: Query, request: Request):
     if not question:
         return JSONResponse(status_code=400, content={"error": "问题不能为空。"})
 
-    hits, gen = rag.answer(question, category=q.category, stream=True)
+    category = q.category
+    hits, gen = await asyncio.to_thread(
+        partial(rag.answer, question, category=category, stream=True)
+    )
 
     def event_stream():
         yield "data: " + json.dumps({"type": "sources", "sources": hits}, ensure_ascii=False) + "\n\n"
@@ -161,13 +181,19 @@ EXAMPLES.forEach(t=>{const b=document.createElement('button');b.textContent=t;b.
 const ansEl=document.getElementById('answer'),srcEl=document.getElementById('sources'),sendBtn=document.getElementById('send'),qEl=document.getElementById('q');
 async function ask(){
   const question=qEl.value.trim();if(!question)return;
-  sendBtn.disabled=true;ansEl.textContent='';srcEl.innerHTML='';
+  sendBtn.disabled=true;ansEl.textContent='';srcEl.replaceChildren();
   try{
     const resp=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question})});
+    if(!resp.ok){
+      let msg='HTTP '+resp.status;
+      try{const j=await resp.json();if(j&&j.error)msg=j.error;}catch(e){}
+      ansEl.textContent='出错了：'+msg;sendBtn.disabled=false;return;
+    }
     const reader=resp.body.getReader();const dec=new TextDecoder();let buf='';
     while(true){const{value,done}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});
       let idx;while((idx=buf.indexOf('\\n\\n'))>=0){const line=buf.slice(0,idx).trim();buf=buf.slice(idx+2);
-        if(!line.startsWith('data:'))continue;const evt=JSON.parse(line.slice(5).trim());
+        if(!line.startsWith('data:'))continue;
+        let evt;try{evt=JSON.parse(line.slice(5).trim());}catch(e){continue;}
         if(evt.type==='sources'){renderSources(evt.sources);}
         else if(evt.type==='token'){ansEl.textContent+=evt.text;}
       }
@@ -175,11 +201,28 @@ async function ask(){
   }catch(e){ansEl.textContent='出错了：'+e;}
   sendBtn.disabled=false;
 }
+function safeHttpUrl(u){
+  try{const x=new URL(u, location.origin);return (x.protocol==='http:'||x.protocol==='https:')?x.href:null;}
+  catch(e){return null;}
+}
 function renderSources(sources){
-  srcEl.innerHTML='<h4>参考来源（'+sources.length+' 条法条，点击核对原文）</h4>';
-  sources.forEach((s,i)=>{const d=document.createElement('div');d.className='src';
-    d.innerHTML='<a href="'+s.source_url+'" target="_blank">《'+s.law_name+'》'+s.article_no+'</a><span class="badge">相关度 '+s.score+'</span><div class="ctx">'+s.context+'</div>';
-    srcEl.appendChild(d);});
+  srcEl.replaceChildren();
+  const h=document.createElement('h4');
+  h.textContent='参考来源（'+(sources||[]).length+' 条法条，点击核对原文）';
+  srcEl.appendChild(h);
+  (sources||[]).forEach(s=>{
+    const d=document.createElement('div');d.className='src';
+    const a=document.createElement('a');
+    const href=safeHttpUrl(s.source_url);
+    if(href){a.href=href;a.target='_blank';a.rel='noopener noreferrer';}
+    a.textContent='《'+(s.law_name||'')+'》'+(s.article_no||'');
+    const badge=document.createElement('span');badge.className='badge';
+    badge.textContent='相关度 '+(s.score==null?'':s.score);
+    const ctx=document.createElement('div');ctx.className='ctx';
+    ctx.textContent=s.context||'';
+    d.appendChild(a);d.appendChild(badge);d.appendChild(ctx);
+    srcEl.appendChild(d);
+  });
 }
 sendBtn.onclick=ask;qEl.addEventListener('keydown',e=>{if(e.key==='Enter')ask();});
 </script>
