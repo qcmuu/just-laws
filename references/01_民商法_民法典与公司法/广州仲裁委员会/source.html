@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>广州仲裁委员会</title>
+    <link rel="stylesheet" href="/1/static/css/common.css">
+    <link rel="icon" href="/1/static/GZACImg/headerLogo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/1/static/GZACImg/headerLogo.png" type="image/x-icon">
+    <link href="/1/static/css/quill.snow.css" rel="stylesheet">
+    <link href="/1/static/css/quill.bubble.css" rel="stylesheet">
+    <link href="/1/static/css/quill.core.css" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <script src="/1/static/js/quill.js"></script>
+    <script src="/1/static/js/jquery.min.js"></script>
+    <script src="/1/static/js/jquery-migrate.min.js"></script>
+</head>
+
+<style>
+    .container {
+        min-height: 600px;
+        position: relative;
+    }
+    
+    .container:after {
+        content: '';
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: url('/1/static/GZACImg/zc-logo.png');
+        background-position: 18% 100px;
+        background-repeat: no-repeat;
+        background-size: 50%;
+        opacity: .06;
+        z-index: -1;
+    }
+
+    .container-top {
+        width: 100%;
+        text-align: center;    }
+
+    .container-top p {
+        font-size: 24px;
+        font-weight: normal;
+        text-align: center;
+        color: #282828;
+        padding: 20px 0;
+    }
+
+    .container-top .info {
+        width: 700px;
+        margin: 0 auto 30px auto;
+        height: 19px;
+        border-bottom: dashed 1px #d5d5d5;
+        font-size: 14px;
+        color: #666;
+        text-align: left;
+        position: relative;
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+    .container-p {
+        color: #333;
+        line-height: 27px;
+        font-size: 16px;
+        text-indent: 30px;
+        padding-bottom: 20px;
+    }
+
+    .container-content {
+        min-height: 100px;
+    }
+
+    .container-left {
+        width: 790px;
+        float: left;
+        padding: 0 0 20px 0;
+        border: solid 1px #f0f0f0;
+        box-sizing: border-box;
+        margin-top: 30px;
+        overflow: hidden;
+    }
+
+    .content {
+        padding: 0 25px;
+        width: 100%;
+    }
+    .content img {
+        max-width: 735px;
+    }
+    .content a {
+        color: #3066aa;
+    }
+
+    ul.call {
+        border: 1px solid #eee;
+    }
+
+    ul.call li {
+        list-style: none;
+        padding: 20px 0 20px 18px;
+        color: #4A87CA;
+        font-size: 18px;
+    }
+
+    ul.call li .img-div {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    ul.call li p {
+        display: inline-block;
+        position: relative;
+        top: -13px;
+    }
+
+    .online {
+        margin-bottom: 40px;
+    }
+
+    .container-right .header {
+        color: #2662A1;
+        border-bottom: 1px solid #D0D9E8;
+        font-size: 22px;
+        padding: 10px 0;
+    }
+
+    .container-right {
+        width: 370px;
+        float: left;
+        padding-left: 40px;
+        box-sizing: border-box;
+    }
+
+    .container-right ul.online li {
+        list-style: none;
+        font-size: 18px;
+        color: #3f3f3f;
+        border-bottom: 1px solid #D0D9E8;
+        position: relative;
+    }
+
+    .container-right ul.online li a {
+        padding: 20px 0 20px 40px;
+        display: inline-block;
+        width: 100%;
+        color: #3f3f3f;
+        background-color: #F2F9FF;
+    }
+
+    .container-right ul.online li.active a, .container-right ul.online li:hover a {
+        background-color: #2e60a5;
+        color: #fff;
+    }
+
+    .container-right ul.online li img {
+        position: absolute;
+        right: 30px;
+        top: 23px;
+    }
+
+    .middle {
+        padding: 20px 25px 0 25px;
+    }
+
+    .middle-right {
+        float: right;
+    }
+    .ql-editor .ql-indent-1:not(.ql-direction-rtl) {
+       text-indent: 2em !important;
+       padding-left: 0 !important;
+    }
+</style><body>
+<link rel="stylesheet" href="/1/static/css/reset.css" />
+<link rel="stylesheet" href="/1/static/css/header.css" />
+<link rel="stylesheet" href="/1/static/icon/iconfont.css" />
+<link rel="stylesheet" href="/1/static/fonts/iconfont.css">
+<link rel="stylesheet" href="/1/static/css/jquery.my-message.1.1.css" />
+<link href="/1/static/css/quill.snow.css" rel="stylesheet">
+<link href="/1/static/css/quill.bubble.css" rel="stylesheet">
+<link href="/1/static/css/quill.core.css" rel="stylesheet">
+<script src="/1/static/js/jquery.min.js"></script>
+<script src="/1/static/js/jquery-migrate.min.js"></script>
+<script src="/1/static/js/crypto-js.js"></script>
+<script src="/1/static/js/jquery.my-message.1.1.js"></script>
+<script src="/1/static/js/jquery.validate.js"></script>
+<script src="/1/static/js/jquery.page.js"></script>
+<script src="/1/static/js/chinese.js"></script>
+
+<!-- 顶部 -->
+
+<style type="text/css">
+	.navigation-bar {
+		max-width: 1920px;
+	}
+
+	.navigation-bar ul li:hover {
+		transition: .5s;
+		background-image: linear-gradient(45deg, #00296b, #00296b);
+	}
+
+	.navigation-bar .drop-down-ist {
+		background-color: #01317f !important;
+	}
+
+	.logo-div {
+		float: left;
+		padding: 5px 40px;
+	}
+
+    .top-switch{
+		display: inline-block;
+		margin-right: 10px;
+		color: #f6f6f6;
+	}
+
+	.top-switch>img{
+		width: 30px;
+		height: 30px;
+		vertical-align: middle;
+    }
+	.top-switch .switch-en {
+		vertical-align: middle;
+		cursor: pointer;
+		font-size: 16px;
+	}
+
+	.top-switch .switch-ch {
+		vertical-align: middle;
+		cursor: pointer;
+		font-size: 16px;
+	}
+
+    .input-div-top {
+		position: absolute;
+		width: 160px;
+		right: 2%;
+		top: 25px;
+	}
+
+	.input-div-top .input-div-img {
+		position: absolute;
+		right: 15px;
+		cursor: pointer;
+	}
+
+	.navigation-bar ul li a {
+		padding: 17px 25px !important;
+	}
+</style>
+
+<div style="width: 100%;height: 100px"></div>
+
+<div class="navigation-bar" style="background-color: #053D99;">
+	<div class="logo-div">
+		<img src="/1/static/GZACImg/bt-stbz.png">
+	</div>
+<!-- 一级栏目 -->
+<ul class="clearfix">
+	<li class="sy">
+		<a href="/">
+			<img src="/1/static/GZACImg/sy.png">
+		</a>
+	</li>
+    <li>	
+		<a class="onchannel"	style="position: relative;top: -1px;" href="/gzjj111/2153" >
+		广仲简介
+		<span>Introduction</span>
+		</a>
+		<!-- 二级栏目 -->
+		<div class="drop-down-ist">
+			<ul>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<!-- 二级栏目结束 -->
+	</li>
+    <li>	
+		<a class="onchannel"	style="position: relative;top: -1px;" href="/xxgk" >
+		信息公开
+		<span>Public</span>
+		</a>
+		<!-- 二级栏目 -->
+		<div class="drop-down-ist">
+			<ul>
+				<li>
+					<a href="/yjsgk">预决算公开</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/zwgk">其他</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<!-- 二级栏目结束 -->
+	</li>
+    <li>	
+		<a class="onchannel"	style="position: relative;top: -1px;" href="/zczn" >
+		仲裁指南
+		<span>Guide</span>
+		</a>
+		<!-- 二级栏目 -->
+		<div class="drop-down-ist">
+			<ul>
+				<li>
+					<a href="/zcxz">仲裁指南</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/zclc1/2154">仲裁流程</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/zcfy">仲裁费用</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/SZKnowledgeb">仲裁常识</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/sftkj">示范性条款</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<!-- 二级栏目结束 -->
+	</li>
+    <li>	
+		<a class="onchannel"	style="position: relative;top: -1px;" href="/gzzc1111" >
+		规则章程
+		<span>Rules</span>
+		</a>
+		<!-- 二级栏目 -->
+		<div class="drop-down-ist">
+			<ul>
+				<li>
+					<a href="/zcgz">仲裁规则</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/qt">南沙仲裁通则</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/zcysz">仲裁员管理规范</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/tj">调解</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<li>
+								<a href="/tjgz">调解规则</a>
+							</li>
+							<li>
+								<a href="/tjymc">调解员名册</a>
+							</li>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/zypsgz">争议评审规则</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<!-- 二级栏目结束 -->
+	</li>
+    <li>	
+		<a class="onchannel"	style="position: relative;top: -1px;" href="/zhzc" >
+		智慧仲裁
+		<span>Wisdom</span>
+		</a>
+		<!-- 二级栏目 -->
+		<div class="drop-down-ist">
+			<ul>
+				<li>
+					<a href="https://new.gzac.org/secretary/login?type=litigant">在线立案</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="https://new.gzac.org/login">视频庭审</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="https://newodr.gziac.cn/">ODR服务</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<!-- 二级栏目结束 -->
+	</li>
+    <li>	
+		<a class="onchannel"	style="position: relative;top: -1px;" href="/tsyw" >
+		特色业务
+		<span>Business</span>
+		</a>
+		<!-- 二级栏目 -->
+		<div class="drop-down-ist">
+			<ul>
+				<li>
+					<a href="/gzbz">广州标准</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<li>
+								<a href="/nr">内容</a>
+							</li>
+							<li>
+								<a href="/gzpyq">广仲朋友圈</a>
+							</li>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/ycts">远程庭审</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<li>
+								<a href="/jj/2021">简介</a>
+							</li>
+							<li>
+								<a href="/jtal">具体案例</a>
+							</li>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/gjzc">国际仲裁</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<li>
+								<a href="/jj11">简介</a>
+							</li>
+							<li>
+								<a href="/jtal11">具体案例</a>
+							</li>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="https://cicc.court.gov.cn/pc/">"一站式"平台</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<li>
+								<a href="https://cicc.court.gov.cn/pc/user/mediationService?type=entrance">调解服务</a>
+							</li>
+							<li>
+								<a href="https://cicc.court.gov.cn/pc/user/checkService">仲裁服务</a>
+							</li>
+							<li>
+								<a href="https://cicc.court.gov.cn/pc/user/litigationService">诉讼服务</a>
+							</li>
+							<li>
+								<a href="https://cicc.court.gov.cn/pc/user/auxiliaryService">辅助服务</a>
+							</li>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<li>
+					<a href="/sfgz">示范规则</a>
+					<!-- 三级栏目 -->
+					<div class="drop-right-list">
+						<ul>
+							<div class="clear"></div>
+						</ul>
+					</div>
+					<!-- 三级栏目结束 -->
+				</li>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<!-- 二级栏目结束 -->
+	</li>
+</ul>
+<!-- 一级栏目结束 -->	<div class="input-div-top">
+        <div class="top-switch">
+			<img src="/1/static/GZACImg/zh(b).png">
+			<span class="switch-en" onclick="goSwitchEh()">English</span>
+			<!-- <span>|</span> -->
+			<!-- <span class="switch-ch">中文</span> -->
+		</div>
+		<img class="input-div-img" src="/1/static/GZACImg/ss.png" alt="" onclick="goSearch()">
+	</div>
+</div>
+
+</body>
+
+<script>
+	//右侧二维码
+		function closeQrcode() {
+			$('.qrcode-div.wx').css('display', 'none');
+		}
+
+		function closeQrcodeXcx() {
+			$('.qrcode-div.xcx').css('display', 'none');
+		}
+
+
+		/**
+		 * Created by Administrator on 2017/8/29.
+		 */
+		//返回顶部
+		$("#toTop").on('click', function () {
+			console.log(123)
+			var speed = 500;//滑动的速度
+			$('body,html').animate({ scrollTop: 0 }, speed);
+			return false;
+		});
+
+		//悬浮菜单hover效果
+		$('.servicemenu-listitem').hover(function () {
+			var src = $(this).find('img').attr('src');
+			src = src.replace(/(\.png)/, 'ac.png');
+			$(this).find('img').attr('src', src);
+			$(this).css('background', '#4e82f0');
+			$(this).find('a').css('color', '#fff');
+			// $(this).animate({ backgroundColor: '#000'}, 500);
+			// $(this).find('a').animate({ color: '#fff'}, 500);
+		}, function () {
+			var src = $(this).find('img').attr('src');
+			src = src.replace(/(ac\.png)/, '.png');
+			$(this).find('img').attr('src', src);
+			$(this).css('background', '#fff');
+			$(this).find('a').css('color', '#666');
+			// $(this).animate({ 'background': '#fff' }, 500);
+			// $(this).find('a').animate({ 'color': '#666'}, 500);
+
+		})
+		$('.searchForm').click(function () {
+			var key = $('input[name=keyword]').val();
+			//window.location.href = '/index.php/Search/index/keyword/'+key;
+			$('#searchForm').submit();
+		})
+		$('.nav-input').keydown(function (event) {
+			var e = event || window.event || arguments.callee.caller.arguments[0];
+			if (e && e.keyCode == 13) { // enter 键
+				//要做的事情
+				var key = $('input[name=keyword]').val();
+				//window.location.href = '/index.php/Search/index/keyword/'+key;
+				$('#searchForm').submit();
+			}
+		})
+
+		//悬浮菜单打开关闭
+		$('.menu-on').click(function () {
+			$('.fixmenu').animate({ right: "-162px" }, 500)
+			$('.fixmenu-off').animate({ right: "0" }, 500)
+		})
+		$('.fixmenu-off').click(function () {
+			$('.fixmenu').animate({ right: "18px" }, 500)
+			$('.fixmenu-off').animate({ right: "-104px" }, 500)
+		})
+
+		$('.news-tab a').hover(function () {
+			var url = $(this).attr('href');
+			$('#more').attr('href', url);
+		})
+
+		function upSearch() {
+			var headerKeyword = $('#headerKeyword').val()
+			window.open('https://www.gziac.cn/search.htm?keyword=' + headerKeyword);
+		}
+
+		function goSearch() {
+			window.location.href = '/search';
+		}
+
+        // 中英文切换
+        function goSwitchEh(){
+			let url = window.location.href;
+			// let urlContent = url.substring(25)
+			// let urlContent = url.slice(20, url.length-1)
+            // window.open("https://www.gzac.org/"+urlContent,"_self")
+            window.open("https://en.gzac.org/","_self")
+        }
+
+		$("#headerKeyword").keypress(function (e) {
+			if (e.which == 13) {
+				var headerKeyword = $('#headerKeyword').val()
+				window.open('https://www.gziac.cn/search.htm?keyword=' + headerKeyword);
+			}
+		});
+
+
+		//简体繁体切换
+		$('.typeface').on('mouseenter', function () {
+			$('.typeface .iconfanhui-copy-copy-copy-copy').addClass('none');
+			$('.typeface .iconfanhui-copy-copy-copy-copy1').removeClass('none');
+		});
+		$('.typeface').on('mouseleave', function () {
+			$('.typeface .iconfanhui-copy-copy-copy-copy1').addClass('none');
+			$('.typeface .iconfanhui-copy-copy-copy-copy').removeClass('none');
+		});
+		$(function () {
+			/*固定*/
+			var sTop = 0;
+			$(window).scroll(function () {
+				sTop = $(this).scrollTop();
+				if (sTop > 600) {
+					$('#goTop').show()
+				} else {
+					$('#goTop').hide()
+
+				}
+			});
+
+			$('#goTop').click(function () {
+				$body = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $(
+					'html,body');
+				$body.animate({
+					scrollTop: 0
+				}, 1000);
+			});
+
+		})
+</script>    <div class="crumbs"><img src="/1/static/GZACImg/fhdz.png" alt="">
+        <a href="/">首页</a> 
+            <a href="/zyzcy1">/专业仲裁院</a>
+            <a href="/jsgczcyzx">/建设工程仲裁院资讯</a>
+            <a href="/hyjl">/行业交流</a>
+    </div>
+    <div class="container">
+        <div class="container-left">
+            <div class="container-top">
+                <p>民法典担保制度解释背景下开发商阶段性连带保证实务分析</p>
+                <div class="info">
+                    <span>时间  : 2022-03-22 16:04:48&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>作者  : 本站原创 </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>浏览次数：6341</span>
+                </div>
+            </div>
+    
+           <div class="container-content">
+               <div class="content ql-snow ql-editor">
+                <section> <section>  <section>   <section>    <section>     <p style="text-indent: 37px"><strong><span style="font-family: 宋体;font-size: 19px"></span></strong></p>     <p style="text-indent: 37px"><strong><span style="font-family: 宋体;font-size: 19px"></span></strong></p>     <p style="text-indent: 37px"><strong><span style="font-family: 宋体;font-size: 19px">一、问题的提出</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">《最高人民法院关于适用</span>&lt;中华人民共和国民法典&gt;有关担保制度的解释》（以下简称“民法典担保制度解释”）出台施行之前，在金融借款合同纠纷案件中，对于预售房仅有办理抵押权预告登记的情况，司法裁判主流观点认为抵押权预告登记只是一种物权排他权，根据物权法定原则，抵押权采用登记设立主义，抵押权预告登记不具有正式抵押的效果，对抵押物的拍卖变卖所得价款不具有优先受偿权。</span><sup><span style="font-family: 宋体;font-size: 19px;vertical-align: super"><span style="font-family:宋体">1</span></span></sup><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">依据合同约定，开发商需承担阶段性连带保证责任。</span>2021年1月1日，民法典担保制度解释开始施行，该司法解释第五十二条</span><sup><span style="font-family: 宋体;font-size: 19px;vertical-align: super"><span style="font-family:宋体">2</span></span></sup><span style="font-family: 宋体;font-size: 19px">规定在满足法定条件下，已办理抵押权预告登记的权利人对抵押房产享有优先受偿权，那此时开发商是否仍需要承担阶段性保证责任？</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">笔者通过检索</span>2021年以来的二审判决，发现当前司法观点主要有四种：</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><strong><span style="font-family: 宋体;font-size: 19px">一是</span></strong><span style="font-family: 宋体;font-size: 19px">认为抵押权预告登记不具有优先受偿权，开发商需承担阶段性连带保证责任；</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><strong><span style="font-family: 宋体;font-size: 19px">另一种是</span></strong><span style="font-family: 宋体;font-size: 19px">抵押权预告登记具有优先受偿权，开发商阶段性连带保证责任免除；</span><sup><span style="font-family: 宋体;font-size: 19px;vertical-align: super"><span style="font-family:宋体">3</span></span></sup></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><strong><span style="font-family: 宋体;font-size: 19px">第三种观点是</span></strong><span style="font-family: 宋体;font-size: 19px">抵押权预告登记具有优先受偿权，开发商也需承担阶段性连带保证责任；</span><sup><span style="font-family: 宋体;font-size: 19px;vertical-align: super"><span style="font-family:宋体">4</span></span></sup></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><strong><span style="font-family: 宋体;font-size: 19px">最后一种是</span></strong><span style="font-family: 宋体;font-size: 19px">抵押权预告登记具有优先受偿权，开发商也需承担保证责任，但该保证责任为补充责任。</span><sup><span style="font-family: 宋体;font-size: 19px;vertical-align: super"><span style="font-family:宋体">5</span></span></sup></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><strong><span style="font-family: 宋体;font-size: 19px">私认为</span></strong><span style="font-family: 宋体;font-size: 19px">，第一种观点的产生大多是民法典担保制度解释刚施行不久</span><sup><span style="font-family: 宋体;font-size: 19px;vertical-align: super"><span style="font-family:宋体">6</span></span></sup><span style="font-family: 宋体;font-size: 19px">，法官还未主动适用民法典担保制度第五十二条的规定，因为实司法实践普遍接受一个新规定是需要过渡期。随着时间的推进，民法典担保制度解释第五十二条的适用逐渐频繁，抵押权预告登记享有优先受偿权观点也逐渐为实务接受。而争议的核心逐渐转移至开发商是否承担保证责任上，因此也就出现第二种、第三种观点及第四种观点的区分。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px">本文主要讨论的是</span><strong><span style="font-family: 宋体;font-size: 19px">在抵押权预告登记享有优先受偿效力的情况下，开发商是否承担阶段性保证责任？</span></strong></p>     <p style="text-indent: 37px"><strong><span style="font-family: 宋体;font-size: 19px">二、阶段性连带保证责任概述</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px">在商品房预售买卖交易中，为解决贷款银行存在放款日至取得房屋抵押权证风险敞口期问题，行业交易形成开发商为贷款银行放款之后、取得他项权证之前这段时期提供连带保证的合作方式，该保证方式极大提高了银行放贷资金的安全性，促进商品房预售买卖交易。贷款银行在贷款合同或者合作协议上约定开发商的阶段性连带保证责任，尽管不同银行约定方式略有不同，但对于开发商免除保证责任的约定基本是一致的，均为银行办理正式抵押、取得他项权证之日起免除。如</span><strong><span style="font-family: 宋体;font-size: 19px">中国银行约定</span></strong><span style="font-family: 宋体;font-size: 19px">“若保证人提供阶段性连带责任保证的，则自借款人办妥本合同项下贷款所购房屋抵押登记手续并且贷款人收到他项权证之日起，保证人在本合同项下不再承担新的保证义务和责任”，</span><strong><span style="font-family: 宋体;font-size: 19px">中国工商银行约定</span></strong><span style="font-family: 宋体;font-size: 19px">“贷款人对收到记载有正式抵押登记信息的不动产登记证明之日后到期的借款人债务免除保证责任”，</span><strong><span style="font-family: 宋体;font-size: 19px">中国邮政银行约定</span></strong><span style="font-family: 宋体;font-size: 19px">“保证人对贷款本金、利息、罚息、复利和实现债权的费用承担连带保证责任，在正式抵押登记手续办理完毕后，免除保证人的保证责任”等等。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px">阶段性连带保证是预售商品房领域常见的根据连带保证时限划分的保证方式，与之对应的是全程性连带保证。</span><strong><span style="font-family: 宋体;font-size: 19px">有学者总结到，在购房人预购商品房抵押贷款中，涉及两个不同阶段的两种不同担保方式。以房屋竣工办理产权登记及他项权证为界，抵押贷款合同中，作为债权人的银行，前一阶段的债权担保方式为期房按揭保证，期房预抵押且开发商作为保证人；后一阶段的债权担保方式为现房抵押担保，购房人为抵押人，取得产权的房屋作为抵押物，银行作为抵押权人。</span></strong><sup><span style="font-family: 宋体;font-size: 19px;vertical-align: super"><span style="font-family:宋体">7</span></span></sup><strong><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">开发商阶段性担保的特点在于阶段性，在购房人办理产权登记及银行取得他项权证后，前一阶段的担保期间结束，换言之，开发商阶段性担保限于购房人抵押贷款合同生效</span>/贷款发放之日至银行取得他项权证时止这一阶段，在债权人银行取得他项权证后，开发商的连带责任保证即免除。此时进入后一阶段，担保方式由期房按揭保证转为现房抵押权。这一阶段里开发商对于借款人的违约还贷行为不承担也不应承担保证责任</span></strong><span style="font-family: 宋体;font-size: 19px">。</span></p>     <p style="text-indent: 37px"><strong><span style="font-family: 宋体;font-size: 19px">三、司法实务争议观点梳理</span></strong></p>     <p style="text-indent: 37px"><strong><span style="font-family: 宋体;font-size: 19px">01、认定开发商需承担阶段性连带保证责任的理由与依据</span></strong><span style=";font-family:宋体;font-size:19px"><br></span><strong><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">案例一：（</span>2021）豫01民终6482号</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">法院认为：</span>“.....但</span><strong><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">对于该日之前已到期的本合同项下债务，以及该日之前发生保证人或</span>/及借款人违约而引起的本合同项下的债务，保证人仍应承担相应的违约责任或/及保证责任</span></strong><span style="font-family: 宋体;font-size: 19px">"，系元发公司在元发公司违约、借款人违约或元发公司与借款人均违约的情形下，元发公司不得以阶段性连带保证责任解除条件成就对抗中国银行花园支行已到期的和因违约产生的债权，主张免除保证责任。......故元发公司应依约就涉案债务承担连带保证责任。”</span></p>     <p style="text-indent: 37px"><strong><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">案例二：（</span>2021）豫01民终8226号</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px">法院认为：《兴业银行个人购房抵押（保证）借款合同》第十八条第六款之（五）的约定，中电公司的保证为阶段性保证，即如果债务人已办妥房屋所有权证和以债权人为抵押权人的房屋抵押登记手续，则自债务人将该房屋的抵押权利凭证正本等交由债权人收执之日起，保证人的保证责任解除。</span><strong><span style="font-family: 宋体;font-size: 19px">截止本案二审开庭时，涉案房屋并未办妥抵押登记且兴业银行也未取得抵押权利凭证，阶段性连带保证责任所附的解除条件并未成就。</span></strong><span style="font-family: 宋体;font-size: 19px">原审法院进行目的性解释，认定中电公司的阶段性担保责任在其办理了不动产权首次登记后已经消灭不妥。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:39px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:28px;background:rgb(255,255,255)"><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px"><span style="font-family:宋体">上述案例法院认定开发商承担阶段性保证的理由是，该阶段性保证为附解除条件的保证合同，根据民法典第一百五十八条规定，民事法律行为可以附条件</span>......附解除条件的民事法律行为，自条件成就时失效。如前所述，开发商免除阶段性保证的标志是银行已办妥办理正式抵押、取得他项权证。若银行未办理正式抵押登记，取得他项权证，则解除开发商阶段性保证的条件未成就，开发商需承担保证责任。当然，满足附解除条件成就还有一种情形，根据民法典第一百五十九条规定，附条件的民事法律行为，当事人为自己的利益不正当地阻止条件成就的，视为条件已经成就。即因银行的不当行为阻碍解除条件的成就。常见未能办理正式抵押登记原因是购房人怠于办理产权登记，这种情形开发商很难举证证明银行不正当阻碍条件成就。因此法院审判基本认为银行不存在不当行为阻碍解除条件的成就。</span></p>     <p style="text-indent: 37px"><span style="font-family: 宋体;font-size: 19px">0</span><span style="font-family: 宋体;font-size: 19px">2</span><strong><span style="font-family: 宋体;font-size: 19px">认为开发商无需承担阶段性连带保证责任的理由与根据</span></strong></p>     <p style="margin-top:3px;margin-right:0;margin-bottom:3px;margin-left:0;text-indent:37px"><strong><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">案例一：（</span>2021）辽06民终1038号</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">法院认为：本担保函自签署之日起生效，在下列条件满足时失效：购房人取得所购房屋的《房地产权证》并以其所购房屋为贵行贷款设定抵押担保、贵行取得现房抵押登记证明文件正本。</span>”</span><strong><span style="font-family: 宋体;font-size: 19px">该条款约定的本意在于上诉人取得对案涉房屋的抵押权后，被上诉人华萌公司就不再承担保证责任。现本院已确认上诉人取得案涉房屋的抵押权。</span></strong></p>     <p style="text-indent: 37px"><span style="font-family: 宋体;font-size: 19px">&nbsp;</span><strong><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">案例二：（</span>2021）豫03民再69号</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px">法院认为：因此，在案涉抵押物有效设定抵押的情况下，</span><strong><span style="font-family: 宋体;font-size: 19px">合同约定的条件已成就（合同目的已实现），广厦公司阶段性连带责任保证已完成</span></strong><span style="font-family: 宋体;font-size: 19px">，其保证责任应免除。</span></p>     <p style="text-indent: 37px"><span style="font-family: 宋体;font-size: 19px">&nbsp;</span><strong><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">案例三：（</span>2021）辽02民终2654号</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px">法院认为：</span><strong><span style="font-family: 宋体;font-size: 19px">因开发商的阶段性保证与银行取得不动产优先受偿权不是并存而是承接关系，即银行取得优先受偿权后，开发商的阶段性保证责任即可免除</span></strong><span style="font-family: 宋体;font-size: 19px">。</span></p>     <p style="margin-top:3px;margin-right:0;margin-bottom:3px;margin-left:0;text-indent:39px"><span style=";font-family:宋体;letter-spacing:0;font-size:19px;background:rgb(255,255,255)"><span style="font-family:宋体">上述案例法院认定开发商无需承担阶段性保证责任的理由是不能一味按照合同字面意思机械地去理解合同条文，应该从合同目的的实现上去分析。开发商提供阶段性保证目的在于在购房人未取得不动产权证的情况下，为银行在获得安全的不动产抵押担保的等待过程中提供保证，分散银行贷款风险。银行取得他项权证只是免除阶段性保证的形式要件，实质要件是在于银行已取得抵押权，对抵押物的拍卖享有优先受偿权。而此时抵押权预告登记具有优先受偿权，这实际上已经产生了银行取得抵押权的实质效果，合同目的已经实现。开发商即可退出保证关系。</span></span></p>     <p style="text-indent: 37px"><strong><span style="font-family: 宋体;font-size: 19px">03、认定开发商需承担保证责任，但限于承担补充责任的理由与根据</span></strong><span style=";font-family:宋体;font-size:19px"><br></span><strong><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">案例：（</span>2021）豫08民终1932号</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style="font-family: 宋体;font-size: 19px"><span style="font-family:宋体">法院认为：本案房屋现未取得他项权证书，无法确认他项权证书注明的登记日期，且焦作碧御置业有限公司上诉请求亦是要求仅对中信银行焦作分行在先处置购房者宿钲昇所购涉案房产不足以清偿剩余债务承担连带保证责任，故其仍应当按照协议约定承担连带保证责任；</span>......</span><strong><span style="font-family: 宋体;font-size: 19px">故在中信银行焦作分行对涉案房屋享有优先受偿权的情形下，焦作碧御置业有限公司按照该协议约定请求仅对中信银行焦作分行在先处置购房者宿钲昇所购涉案房产不足以清偿剩余债务承担连带保证责任的主张成立，应予支持</span></strong><span style="font-family: 宋体;font-size: 19px">。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:39px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:28px;background:rgb(255,255,255)"><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">上述案例法院认定附解除条件未成就，开发商需要承担连带保证责任，但基于银行对抵押物享有优先受偿权，依据</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px"><span style="font-family:宋体">《民法典》第三百九十二条规定，</span>“被担保的债权既有物的担保又有人的担保的，债务人不履行到期债务或者发生当事人约定的实现担保物权的情形，债权人应当按照约定实现债权；没有约定或者约定不明确，债务人自己提供物的担保的，债权人应当先就该物的担保实现债权；第三人提供物的担保的，债权人可以就物的担保实现债权，也可以要求保证人承担保证责任。提供担保的第三人承担担保责任后，有权向债务人追偿。”</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">即在有物保的情况下，开发商需要在抵押物实现债权之后不足部分承担补充责任。值得注意的是，《民法典》第三百九十二条的规定有适用前提，</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">一是</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">物的担保需成立，满足物保与人保并存情形，</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">二是</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px"><span style="font-family:宋体">在物的担保成立情况下，合同是否存在实现担保物权的约定，有约定从约定，无约定应先就物的担保实现债权。故，在抵押权预告登记不被法院认定享有优先受偿权的情况下，法院不予采纳开发商适用《民法典》第</span>392条的意见，此时开发商必然承担连带保证责任。</span><sup><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px;vertical-align: super"><span style="font-family:宋体">8</span></span></sup></p>     <p style="text-indent: 37px"><span style="font-family: 宋体;font-size: 19px">0</span><span style="font-family: 宋体;font-size: 19px">4、</span><strong><span style="font-family: 宋体;font-size: 19px">观点评析</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:39px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:28px;background:rgb(255,255,255)"><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">随着交易实践的发展，银行贷款合同关于阶段性保证期间的约定内容大多都增加修改为：</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">合同借款期限届满之日起两年内</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">。这使得保证期间的约定得到明确约定。因此，司法实务的审查角度从讨论阶段性保证期间逐渐转为讨论附解除条件是否成就问题。</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">否认附解除条件成就的观点</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">认为理应依据合同约定，尊重当事人的意思自治，但这一观点加重开发商的责任，有失公平。</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">肯定附解除条件成就观点</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">的核心在于从合同目的上解释，认为合同目的已实现，开发商保证责任免除，这一观点虽体现了公平，但明显一刀切，忽视当事人之间的合同约定，有司法公权力强行干涉意思自治之嫌。而</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">折中观点</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">则认为附解除条件未成就，但开发商仅对抵押房产不足以清偿债务的剩余部分承担连带保证责任。这一观点具有可取之处，既保证银行的合法利益，也能减轻开发商负担，更加平衡双方的利益。不过，该观点仅适用于合同未约定实现担保物权方式的情形。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:39px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:28px;background:rgb(255,255,255)"><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">前述三种裁判观点各有利弊，但这三种裁判观点并无对错之分，出现区别只是受</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">裁判者思维、司法环境、社会效果</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">等多种因素综合影响。</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">否认附解除条件成就的观点</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">虽加重开发商的责任，但实际上开发商是可向借款人追偿，这个责任其实最终是由有过错的借款人承担。</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">肯定附解除条件成就的观点</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">更能符合市场实际，维持房产市场的交易秩序。</span><strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">折中的观点</span></strong><span style="font-family: 宋体;letter-spacing: 0;font-size: 19px">则是不能突破合同的约定，在无约定的情况下才能适用。</span></p>     <p style="text-indent: 37px"><strong><span style=";font-family:宋体;font-size:19px">四、倾向性结论</span></strong></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style=";font-family:宋体;font-size:19px">综上，本文认为，在认定银行取得优先受偿权的情况下，首先需要看双方当事人对担保物权的实现方式是否存在约定，</span><strong><span style=";font-family:宋体;font-size:19px">若保证合同已约定即便存在债务人提供物保的情形</span></strong><span style=";font-family:宋体;font-size:19px">，债权人可以选择保证人承担连带保证，且开发商已在该保证合同上盖章同意，应当视为其接受合同约定，愿意自担风险，那么法院应尊重双方意思自治，银行有权依照合同约定选择实现债权的方式。</span><strong><span style=";font-family:宋体;font-size:19px">若约定不明或没有约定</span></strong><span style=";font-family:宋体;font-size:19px">，则法院可根据公平原则及法律规定，依法判决银行先行就抵押物实现债权，开发商在不足的部分承担补充责任。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style=";font-family:宋体;font-size:19px"><br></span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:37px;padding:0 0 0 0 ;line-height:28px"><span style=";font-family:宋体;font-size:19px"><br></span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:33px;padding:0 0 0 0 ;text-align:center;line-height:28px;background:rgb(255,255,255)"><span style="font-family: 仿宋;letter-spacing: 0;font-size: 16px">注释</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:32px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:25px"><span style="font-family: 仿宋;font-size: 16px">1 在民法典担保制度出台前，存在个别法院认为抵押权预告登记有优先受偿权，参见（2020）浙01民终10007号。但主流的观点还是抵押权预告登记不具有正式抵押效力。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:32px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:25px"><span style="font-family: 仿宋;font-size: 16px">2 第五十二条第一款规定；当事人办理抵押预告登记后，预告登记权利人请求就抵押财产优先受偿，经审查存在尚未办理建筑物所有权首次登记、预告登记的财产与办理建筑物所有权首次登记时的财产不一致、抵押预告登记已经失效等情形，导致不具备办理抵押登记条件的，人民法院不予支持；经审查已经办理建筑物所有权首次登记，且不存在预告登记失效等情形的，人民法院应予支持，并应当认定抵押权自预告登记之日起设立。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:32px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:25px"><span style="font-family: 仿宋;font-size: 16px">3 参见案例（2021）辽06民终1038号、（2021）豫03民再69号。但注意（2021）豫03民再69号案件径直认为抵押权预告登记有优先受偿权，并未直接依据民法典担保制度解释第52条。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:32px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:25px"><span style="font-family: 仿宋;font-size: 16px">4&nbsp;参见案例（2021）豫01民终6482号、（2021）豫01民终7547号</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:32px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:25px"><span style="font-family: 仿宋;font-size: 16px">5&nbsp;参见案例（2021）豫08民终1932号</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:32px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:25px"><span style="font-family: 仿宋;font-size: 16px">6 采用这一观点的案例裁判时间大多是在2021年1月-5月，法官没有主动适用民法典担保制度解释第52条。</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:32px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:25px"><span style="font-family: 仿宋;font-size: 16px">7&nbsp;参见沈爱玲，《开发商阶段性担保法律适用分析》，学术论坛，2011年第2期</span></p>     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:32px;padding:0 0 0 0 ;text-align:justify;text-justify:inter-ideograph;line-height:25px"><span style="font-family: 仿宋;font-size: 16px">8&nbsp;参见四川省达州市中级人民法院（2021）川13民终251号判决：“.....即是说工商银行南充分行尚未取得物的担保，故不能适用《中华人民共和国物权法》第一百七十六条“被担保的债权既有物的担保又有人的担保的，......没有约定或者约定不明确，债务人自己提供物的担保的，债权人应当先就该物的担保实现债权；......提供担保的第三人承担担保责任后，有权向债务人追偿。”的规定，按照《个人购房借款/担保合同》的约定，汇邦房产公司应当承担连带担保责任。”</span></p>     <p style="text-indent: 37px"><strong><span style="font-family: 宋体;font-size: 19px"></span></strong><br></p>    </section>   </section>  </section> </section></section>
+               </div>
+           </div>
+           <div class="middle overflow">
+               <div class="middle-left fl">
+                   <a href="/hyjl/2105">
+                       <div class="left-content overflow">
+                        <i class="iconfont iconarrow-left-circle-line block fl"></i>
+                        <span class="block fl Semilight" style="margin-left: 10px;position: relative;top: -2px;">上一篇文章</span>
+                        </div>
+                   </a>
+                </div>
+    
+                <div class="middle-right">
+                   <a href="/hyjl/2112">
+                       <div class="right-content overflow">
+                        <span class="block fl Semilight" style="margin-right: 10px;position: relative;top: -2px;">下一篇文章</span>
+                        <i class="iconfont iconarrow-right-circle-line block fl"></i></div>
+                   </a>
+                </div>
+           </div>
+        </div>
+        <div class="container-right">
+            <div class="header">
+                建设工程仲裁院资讯
+            </div>
+            <ul class="online">
+                <li>
+                    <a href="/xgsd">法规速递<img src="/1/static/GZACImg/zxdcdj.png" alt=""></a>
+                </li>
+                <li>
+                    <a href="/pljd">判例解读<img src="/1/static/GZACImg/zxdcdj.png" alt=""></a>
+                </li>
+                <li class="active">
+                    <a href="/hyjl">行业交流<img src="/1/static/GZACImg/zxdcdj.png" alt=""></a>
+                </li>
+            </ul>
+            <div class="header" style="border-bottom: none;">联系我们</div>
+            <ul class="call">
+                <li>
+                    <div class="img-div"><img src="/1/static/GZACImg/lxwmdh.png" alt=""></div>
+                    <p>(020)83287919</p>
+                    <div class="clear"></div>
+                </li>
+                <li>
+                    <div class="img-div"><img src="/1/static/GZACImg/lxwmcz.png" alt=""></div>
+                    <p>(020)83283771</p>
+                    <div class="clear"></div>
+                </li>
+                <li>
+                    <div class="img-div"><img src="/1/static/GZACImg/lxwmyx.png" alt=""></div>
+                    <p>website_gzac.org ( _=@ )</p>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+        </div>
+  <div class="clear"></div>
+    </div>
+<link rel="stylesheet" type="text/css" href="/1/static/css/footer.css" />
+<style>
+    .left {
+        float: left;
+    }
+
+    .right {
+        float: right;
+    }
+
+    .footer-wrap {
+        width: 980px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .img-w {
+        width: auto;
+        height: 100%;
+    }
+
+
+    .footer-wrap a,
+    .footer-wrap .img-w img {
+        width: auto;
+        height: 100px;
+        margin-top: 10px;
+    }
+
+    .safety {
+        opacity: 0;
+        position: absolute !important;
+        right: 0;
+        bottom: 0;
+        width: 10px !important;
+        height: 10px !important;
+        margin-top: 0 !important;
+    }
+
+    .safety img {
+        width: 10px !important;
+        height: 10px !important;
+    }
+</style>
+
+<div class="footer" style="background-image: url('/1/static/GZACImg/z79.png');">
+    <div class="footer-wrap clearfix">
+        <div class="left img-w">
+            <a href="http://bszs.conac.cn/sitename?method=show&id=38991E124F6738FDE053022819ACC2C1" target="_blank">
+                <img src="/1/static/GZACImg/sydwblue.png" alt="">
+            </a>
+        </div>
+        <div class="left">
+            <p>版权所有 广州仲裁委员会 &nbsp;&nbsp;&nbsp;&nbsp;<a href="https://beian.miit.gov.cn/"
+                    alt="域名信息备案管理系统">粤ICP备05048290号-1</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;网站标识码：4401000039 &nbsp;&nbsp;&nbsp;&nbsp;<img
+                    src="/1/static/GZACImg/ygaw.png">粤公网安备：44010402000389号 </p>
+            <p>广州总会：<span id="lblTEL">（020）83287919</span>
+                &nbsp;东莞分会：（0769）22857262&nbsp;中山分会：（0760）88162168&nbsp;南沙国际仲裁中心：（020）34681908
+                &nbsp;<br>知识产权仲裁院：（020）32382015 &nbsp; 粤港澳大湾区国际商务与数字经济仲裁中心：（020）32037143 <br>
+                联系传真：<span id="lblFax">（020）83283771</span> &nbsp;联系邮箱：<span id="lblMAIL">gzzcw@gzac.org</span> <br>
+                <!-- 投诉监督电话：（020）83283501  -->
+            </p>
+            <p>广州仲裁网：www.gziac.cn&nbsp;&nbsp;&nbsp;地址:<span
+                    id="lblAddress">广州市越秀区沿江中路298号江湾新城C座14楼（案件受理部）、江湾商业中心裙楼2楼（开庭、办公）</span>
+            </p>
+        </div>
+        <!-- <a class="safety"
+            href="https://xyt.xcc.cn/getpcInfo?sn=1494610797244932096&language=CN&certType=8&url=*.gzac.org"
+            target="_blank" style="position: relative;display: inline-block;height: 38px;">
+            <div style="width:100%;height:100%;position: absolute;top: 0;left: 0;"></div><embed
+                src="https://program.xinchacha.com/web/1494610797244932096=*.gzac.org.svg" width="103" height="38"
+                type="image/svg+xml" pluginspage="//www.adobe.com/svg/viewer/install/" />
+        </a> -->
+        <a class="safety" target="_blank"
+            href="https://xyt.xcc.cn/getpcInfo?sn=1494610797244932096&language=CN&certType=8&url=*.gzac.org">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA1IAAAEECAYAAAAibgXEAAAAAXNSR0IArs4c6QAAQABJREFUeAHsnQeYE1XXx//J9l22sAvLUhaW3lGpAqKIgIgUfRUVUF+VD7vYwO5rxYYFG4LYFbuiWBBBkSJFQHrvS1vYXtmafOfMEtiSTCbJJJtyzvMMSWbu3Lnzm5CdM/ec/zHAXTbLHImsE+fBZOgBs7k9DGgPmJPocNEw0wKEuuvQ0q8QEAJCQAgIASEgBISAEBACAUOglHyNfDpbWgxp5GvshMGwE0bzOsQnLscthiJ3kDDo2um0/ESUFI6jgf+HnKc+1Lc4S7oCls6EgBAQAkJACAgBISAEhIAQcIAAOVmG1eSbfI+wqM8xJfqEA/uqNtXHkXrhxPkoN00hD3AYzToFqx5RNgoBISAEhIAQEAJCQAgIASEgBDxOwFBOvspvCDZOw0OJS109vGuO1NT0C2E2PU0DOs/Vgcj+QkAICAEhIASEgBAQAkJACAgBzxAwLEeQ8XE83PAvZ4/nnCM1Nb0xOVCvkAM11tkDy35CQAgIASEgBISAEBACQkAICIG6JWD4Agbj/Xi04TFHx+G4IzX1xCXkQH1BcYaxjh5M2gsBISAEhIAQEAJCQAgIASEgBLyKgMGQSylKY/Fo4nxHxuWYIzX1+P2kgvESOVJGLQeJCDFgSMswXNgiBB0aBKNN/SDUDzciOsyAUE09aDmKtBECQkAICAEhIASEgBAQAkIgUAmUmkiur8SM7GIT9mRXYEdGORYfLMPC/SU4WWbWiMVgIuW/B/BoI4q602baHKk3zGHIOzGLHKj/2uu2foQRo9uFKcvQVmGIFOkJe8hkuxAQAkJACAgBISAEhIAQEAI6EygiaYnf95Xgx12VS/ZJ8rjsmuFjxCTegkmGEntN7TtSz+U3hLnoRwrl66vWWSTNPt3XJwoP9I1EdKj9btX6km1CQAgIASEgBISAEBACQkAICAG9COSXUljdyiK8uroQRfZmqQyGlTBEjsYj0elqx1f3eHgmKv/EYjUnKshowISzI/DkgCg0rifxemqwZZsQEAJCQAgIASEgBISAEBACdUfgWIEJTy4rxPsbTqLCpBL2x85UdOKFajNT6p4Ph/OpzEQ1jQnCqhviMeuSaHGi6u774NNHnrXYjOkLVL7EPn12MnghIASEgBAQAkJACAgBbyLAEz/su7APw76MTWMfSEltstkCtvdmYQmYH7C1a5+mIfhjfH20T7Ddha19Zb0QYAIfLjXj7UUmbEw10xMBA3q3Up8gFWpCQAgIASEgBISAEBACQkAPAk2ijRjbORzLD5fhSL7N3KmzcdGUAvz58kprx7R+58oS52bzz7bU+a7tGoHZl8YgXHwoa0xlnQYCH5AT9ebv1b+0/zfQiDsGW/9KauhSmggBISAEhIAQEAJCQAgIAYcIFFcAE3/Jw2ebT9rYj9X8DCOsSaPXvmvlYrswbSdHymqdKHaiPh0VY+NAsloI2Cfw9iIz3vuruhNl2Wt8PyMmD6/9tbRsl1chIASEgBAQAkJACAgBIaA3gevmqThTSp0pY8eaRXtr50iZTa/YcqI4nI9nosSEgLMEpv1i24niPuesMOHpH8xQy/1z9tiynxAQAkJACAgBISAEhIAQsEaAfRz2dawaTzCxj1TDqj/6fz59ICoqFtdoo3zkZKw1N8aLqIQ1OLLOLoEymjZ9/DszFmyyPhNVs4MLOhjwwtVGhNv4PtdsL5+FgBAQAkJACAgBISAEhIArBFjRr9eHWTiSRzeu1iwo6EI83PAvy6bqM1IVpmcsG6q+ssT5D1fGiRNVFYq810yggMqZ3f6xSbMTxR0v2WHGLR+YkFOk+TDSUAgIASEgBISAEBACQkAIOE2AFf3Y52Hfx6rV8JXOOFLPpV9A4hLnWduJ60T1bBxsbZOsEwKqBI7lADe+a8LafY5LnG86ZMYNtG9qpuohZKMQEAJCQAgIASEgBISAENCFAPs87PtYN/KVFJ+pcusZR8pUMdnaDpEhBqXYrrVtsk4IqBFYfxC49h0T9hx33Imy9Hsww4xrZ5qweq9ljbwKASEgBISAEBACQkAICAH3EXhyQBTYB7JqVXymSkdqWn4iYBhmrfF9faIkpM8aGFmnSuDHfyk070MTsgqdd6IsB8g/acYdFBr41WrX+7L0Ka9CQAgIASEgBISAEBACQsAaAQ7xYx/IupHPpPhOQKUjVVI4jsL6asXu1Y8w4oG+kdb7kLVCwAqBctKSePlXM5783oSycv0cnwqS8XvhJxOe+dEMFq4QEwJCQAgIASEgBISAEBAC7iIwhXwg9oVqG/lMiu9kcaQMhv/UbgSMbheG6FAb01rWdpB1AU0gPZ8Kmr1vUiTM3QXi+zUmJW/qaLa7jiD9CgEhIASEgBAQAkJACAQ6gRjygdgXsmqnfCcjZpkjqW5UH2uNbO5srbGsC2gCnMN0zVsmbDio3yyULaDbjpgxdoYJy3baaiHrhYAQEAJCQAgIASEgBISAawRs+kLsO5EPZUTWCVbqC615mAhKsBrayoYXVrOxfA5YAmbym2b/ZVbkzfXIh9IKMo/ypu7+zIQ3F0rxXq3MpJ0QEAJCQAgIASEgBISAdgLsC7FPZMVC2YcywmToYWUjhrQMQ2StrClrLWVdoBJIywVuplpPMxaZYKIcJk+bmby4D5aYFHn1w1meProcTwgIASEgBISAEBACQsCfCbAvxD6RVSMfykhhfe2tbbywRYi11bJOCCgE5m8046o3qT7Ufs87UDUvAdebuvptE35YV/djqTk2+SwEhIAQEAJCQAgIASHguwRs+kTkQwXDgPawcv/ZoYFMR/nuJXffyAuKganzzPhtE8nzeZEVlZjx1Fwzlu404H+XGREnYpNedHVkKEJACAgBISAEhIAQ8E0CNn0i8qFI08+cZO202tQPsrZa1gUwgVV7gDEkKOFtTlTVS7J4mxljaKZsyY6qa+W9EBACQkAICAEhIASEgBBwnIBtn8icxNNO0da6rB9uTTfdWktZ5+8EcoqAV+ab8fN675qFssU9I9+Mez6rwJAuBjw4woiEerZaynohIASEgBAQAkJACAgBIWCbgIpPFB1MYX1WHanoMKsKFbaPIlv8kgDnQk2jArvZhVbiP738jBduMWP1XhPuHWbAZT3k++zll0uGJwSEgBAQAkJACAgBryNg0yciH4pnpGpJn/MZhMqElNddSE8O6FgO8OyPJqzY7V4HqkdLA0IpinTlHvcch2XSOXfql40GPD7aiOYJnqQoxxICQkAICAEhIASEgBDwZQIqPpHKJl8+Yxm70wRKy4H3l5hxxRvud6LObmHAG9cZ8ep4I3q1cu+M0dp9pDJI+V3v/GFGcZnTeGRHISAEhIAQEAJCQAgIASGgEJB5J/kinCbAoXCXv27CWwtNOFnqnhkiy8HOSTHg7f8aEUnzoeGktM8OVZ/W7nWmSsrMeHexCaNfM+GXDe49P8t5yqsQEAJCQAgIASEgBISAfxIQR8o/r6tDZ7X9KHDTeyY88KUJR7Pd72D0bWPAjFNOlGWg7Ey9eb0RF3RwrzPFxzuRZ8Zj35pw3UwTNh2yjEBehYAQEAJCQAgIASEgBISAdgLiSGln5XctMwqAJyl/aPw7Jqw/4H4HigEO7WrE6zT7xI5TTQuhXKlXxhkx8hzPfC23HDbjv7Mq8Og3ZhzPrTka+SwEhIAQEAJCQAgIASEgBGwTkKq7ttn47ZZskjP/eJkZX682uz2EryrE8f2MmDxcfcYpiHyop68woFGsEe/95Rm59V83mrBoqwFX9jLgxgsMaCBy6VUvm7wXAkJACAgBISAEhIAQsEJAHCkrUPx1FdeD+ni5GV+t8qwDZTQacP8lBozrq+5EVeV+x2ADksiZeuFnM8or3D9bVlpuxucrzfhu7SmH6nyD1J+qekHkvRAQAkJACAgBISAEhEA1AuJIVcPhnx9yTwKfkgP1BTlQRSXud0qqUowON+D5q43o37bqWm3vr6AZouYJBkyh3K3cIs+MmwUp5qwgh2qNAVf1MeCGAQbUj9I2XmklBISAEBACQkAICAEhEDgEDHg2zeodqvnRRoFDwU/PNJNyoL4k5+kLmmkp9LADxUjZCZp+rREtG7oG+HAWcPdnJuw7YfWr6lrndvaOCK10qHg2LTHGTmPZLASEgBAQAkJACAgBIeB3BAxTj1s9J3GkrGLx7ZU7jkGZVVmw2YwyClmrC2P1vWevNKJeuD5HLyolYYzvTWCJ9rqw4CADBnem8MR+BnRtVhcjkGMKASEgBISAEBACQkAI1AUBcaTqgroHj2ki/2LxdnagPKfAZ+30gigf6s4hlSFx1ra7uo7zmKb/Rg6iB/KmbI21a7IB48mhYseKxTHEhIAQEAJCQAgIASEgBPyXgC1HSnKkfPyaFxQDc9eZlRA+T9SAUsPVMNqAFygfqnuKWivXtnGIHTsyXPMqLaduZqc2HzLjoa/MFOpnwNXnGsC5XLERrp2X7C0EhIAQEAJCQAgIASHgWwQktM+3rpcyWp59WrUH+HmDGYu3mVFMAgl1bRd2MuB/lxkRF+mZkeSTAzl1nhkLNnlGIl3trEKDDVRIGBhB9a9YVENmqdRoyTYhIASEgBAQAkJACPgWAVszUuJI+dB13JVW6TzN32hGRn7dO0+MLjKMVPWoNtRlPbRLm+uJnFk8/5MZ+cXewSM+yoBh3QzkVBnQsYmeZyp9CQEhIASEgBAQAkJACNQFAXGk6oK6DsfMIOU9dhZ+Xm/GLusCizocxbkuzmpeKSjRLN65/fXaKy0XePxbE9bu9w5nynJerRMrHarhZ4nin4WJvAoBISAEhIAQEAJCwNcIiCPlQ1dsXzqwbIcZS3easTEVqOBYPi8ynoXigrljKT/IUDcTUVZpfLvGjNcXmFHgJbNTlkFyQeJuycCA9gZlaSuVBSxo5FUICAEhIASEgBAQAl5PQBwpL75EZRWg2RRg6Snnqa5FI9RQsTPwyCgjkmLVWtXdtvR84IWfTPiTcse81ZLiDDj/lFPVqxUQJpIv3nqpZFxCQAgIASEgBISAEIA4Ul72JTiSDfyzz6zMPK3aC5ws9d4bf0YXX4+U8i414OKuXjQFpXJNWQqeHaoTed7NNTzEgN6tK2er+rQ2ILmOwyRVkMomISAEhIAQEAJCQAgEJAFbjpQ8C/fA16GkHNh2BNiUSqF6JJ29icL1Mgu8+wbfgiWECtFeQ5LjN19oQL0wy1rvf72wI9CntRHvLzHjs7/NKK2jwsT2SLHi4tIdlbOR3JbFKrpSGGA3yj/jHLTOTYHwEHu9yHYhIASEgBAQAkJACAgBTxMQ1T43ED+WQ04TOUyc38TOE6vt1WUBWWdPcWBHA+4dZkTzBGd78I79jtLs3/QFJizc4hvOa1VqweTIck6V4lidcrCa1q/aQt4LASEgBISAEBACQkAIuJOArRkpcaScpM6FcA9m0pJhpgU4QAu/T6V13h6mZ++U2yYZMHm4Eb0pf8ef7N8DwMu/mrD9qO85VFWvQ0SoQXFu2cFt0cBAC5By6jU6vGpLeS8EhIA/EsjIK0eDGAkoceTa5p804bO/0jH2/AaIiwpyZFdpKwSEgBCQHCmt34HCEiC3CMg5eeq1yKx85nUss30wkxwnUtXLKvTtm3FrPJonVIbwXUJy3SQ055dmpsv2O81MvbvYjH0n/O8a1qfQQHas2MFiQZBYKpAcF8Gvhsr39JnX+VKYpl9+EX3wpHYeKcZfm/NwzfkJ9B1y/43omBd3Y+O+QlVSj1/TDNddSF94P7ddxH7NngKs2V2ItbsLkJpegq8eaIe+Her5+Znrd3p3zjqAeauzEBFmxDUDGmDixYlolhCq3wGkJyFABJ764jCO55SpshhzXgIu7Bqj2kY2eh8BWzNSAf9Ia+IHJmRTraYccpRyyXkqr/C/m2t7X8dkcqAmDjTg0rP914GyMGC5dhbMGNrFgN82VzpUB9L955pnk4OfTfeeGw6qnxOHDMaQgxXHjhYts24yIthooSSvQgAoLDbh7+35+HNTLhaTA3Usq1TBkpZdiifGNnM7otJyE4rLTKrH8cff6xLKm9y4vxD/nHKa1u0ppId5lGhbw176/ijmPtKuxlr5aI3AN8szFSeKt50sMeHDRSfw6eJ0jOhVH7dd0ggdk+nH0Mftz0152HboJO68lGLBxeqMAP9W7kujkCUV69GmHjlSKg00btqaehIZeWW4oIs4ZRqRuaVZwDtSa0k5L1CtWfwZByoowG6i2aG6pFulCuFvmyodKg7NDBTjG9AseoDAC1s5SfCLI1XJItD/XbghFx8sPKHMfrAzU9M+/jMd4wc2QJvGEkdak40en5duzcOEN0jK1Y6toxmqPzbm4aKz5CZKDdX+4yV4fM7hWk34N/CHVVnKwjeitw1PQj8fneGbvy4Hd87ajzISVdp15CSm3dSCymr4aVhJrSsZmCuOZZfhxtf3gh9sDT47Fv+j2fmURB9SBPOjyxZgt89+dOVcOJWuyQa8cLURP9xjxKjuBgSaE1UVHYcwDqdQxu/vNmLa2CCckyJ/fKrykfeBRyAsxKjMRFlzopgG34DybIiYewgMoZui9s20zZBMmyvXQe0qlJBjcefM/SgqoSdFKrZkSx4e+STVa9VdVYaOuSuzcPs7lU4Ut2Pn8KoXdyGd8ujE/JNAAUUL/Pe1PYoTxWe4iB5+DX5sO5775gh912s//PJPCt5zVgE/I+U9l8K9I+FQrsGdDRjfz4Au7o/Kce/JuKF3dqgGd+bFiB3HgDkrzFhAoX/8hE/M+wiwnP2oZ3d638A8NKI+7erhqXHu+Y98fudoCnWKxPZDFO9swxb8mwvOmWrfVGalbCByafWdlybhLpphsGfbUovA1+Li7l5aId3eCbhxO+fDTqK8qM0HbX+PLYc30h+AVye0QKiPzeJ8sTQTD5MDaDJV/zu1fm8hRtPv48f3tEbbJtr/j7LjufMw5Tj4gDWKCwEvgWYV5CfdNmMfdtS4Tvzga+b84/hxdbbyt2FY97hAQ1Nn5yuOVJ2h98yBWXzgil4GXNXHgIbRnjmmrx+lQ2PgmSsMuOdiA775x4xvafGVul++zl7r+Pm2gW8iA9Ua13fvDcQtwxJxz+wDNvGa6S71jZ+O4e1bW9psIxucJzCyd328+N1RHM4g9SM79vavaeJIWWH01JeHMX8d1b7QYFwvMf+k+qyVhm482uTDRel4koQN+P+iNePvzn+e24X37mqFPu21iZIczSzFiKepsKEP2KSRjTH5cvpjHWD22Gep4BlUW8a5rDe/tY9CfmPxzLXJIqhiC5SO6yW0T0eY3tJVCD1VG9TJgNfGB+H3B4y4Y7A4Uc5cmwT623PrIAMWEMM3rgvCEBKoCAuR0D9nWMo+vkVgVO94NIlXVzT7ZW0OjtCNl5j+BHiGfMKQRE0dbyBlw5U7TiU7atrD/xvNXnBCyfPTeqYlJGoy4Y195HhREUgfMA7ne+LzQzadKMspsEjJ+Ff24Kd/tDmUlv3k1TsJ8IzTnL+o1o4G+2NjLi56bBvepf8LNSYsNewtTRwhII6UI7S8vG03yn16ZJQRix404pVxRgzsSAIC7lcp9nIqrg+Pc8gGtAdeuobYPmTE/y4zKrlUBlasEBMCfkiAfzcmDFW/kedwok8Xa/uj7oeI3H5K1wxIQIxGmfkZNCslVklgHoU2Pfv1EYdxcGgU5xp9T06Kt9uwHnGaldr4vFj6Xf6vevtVVR9fHs2YfqbRibL0xAqVz351GJc/txN70+zPblv2k1fHCEhon2O8vKo138h3agKc38GAYaRAxwVaxdxLgOsvXd7ToCxH6SHffFL8W7LDjK30d7tmnLp7RyK9CwH3EriabuSnUXiZmgT5F0szcN9ljX0ut8RVcpdTyFRxqfuTurU+SeZQn0ue9ExIVm835ue5el14pua+9w/anamxdZwKAn7vewcV6X9vrk8WEWrEh3e3UcJv5/1j3/Hj8L9HP01FQXGFIvdu6/xlvfcSiIkIwsJnOuKVucfwPqmq8ndVq3HO3LAntuN++q2+eVgjv60TqpWH3u3EkdKbqJv7iwwz4NzWlc7Tee0M4PAzsboh0KQ+PbW/wKAsXLtp+S4zlu00Y+Ue0B8s7T9ydTN6OaoQUCfAf7j5yTergNmy7IJypc5UoCU2byMhDn7a60221UM5g0luzs9zlunnSzLwyKeHXH6gZXE6WP2McwW91XjW+M1bUhAbFaTUxNIyzudJ1Y3rwwVibpEWPt7ehh3ox65uitHn1sdDH6VqElKxnBOHr7KqH5e3eItyW92dZ2s5biC8iiPl5VeZ1YTa0G95r1YGnNfegJ4pEq7njZesfhQw8hyDsnDpnfUHgGXkWP2z14w9x+HQ0yNvPD8ZU2ASuOq8BFVHiqn8sCobgeZIBea3wXvP+r3fT+BpEpfQ06Z+fRiFJJt+32jvFTTg6PKp1yUjIsyId3+jPzQajEViWFzj7lFJGlpLE28k0LVFJOY93gFv/ZyGN34+5pC68JrdBcrs1Gv/l4JB3aQGnR7XVxwpPSjq2EdspAHdkkELvTavlCqPVM/51vHonumKp6Qz80qUJSO3BHlFZYirF4oGsWFoGBuO+vTel9OPuLBtr1aVzi9goNAoYAv9jd+YasamQ2ZsPgRkF8qMlWe+bXIUVwj06xiN+OhgZOWX1+omnOpNXdA1BqNIYU5MCNQVgenz0vDqD9rrafVoUw8s0KElNGr6j8dQQLkpj1/dzKv/Jj12VVPw/0d2krTYK8SL/197c/iilvMI5Dacu83OMBfjvee9Aw7J1nMkARfznU2KjkNpfzHXCIgj5Ro/p/fmuk5NSOa/RQNeDGhHD4fYeeLP/mb8B2vDniws23ICyzYdx95jBaox7EE0C9epRRzO65qI87s2ove+/R89nJSqe7bkhcUpKgUqUjOhOFW7KEf8YIaZFuAI5VxxsVMxfQjw9+i8Tr6n+c9/5DYdKNIHgou9EEIMJhndr5fTF5bM4jyN6FVfWR8VTn/NxYRAHRAoKTPj/g8OYt5q26GnNYc1+tx4TKcn8axixzefWvJaebZrF9VMe/3mFCSQ8+GtxuF6rCo7TWOx7MfnHELfDvXQprH2OlPeeu7Ojmv30WJsO6Rv3Sx2vO0Z1zbjek962c0kDPT2r8exL61Yc5e92kZhUFffvrfSfLJubui9vwpuPnF3d8+F/eIigVhaOOyrWbwBKaecphYkCtE0nkL0/PweJC3rJGb/uhu/rz2qzDppZc6O1+b92cryzrydSIgJw+h+ybjh4jYUD05eiR8YC4M0T6h0qizOFRfaY2eKnSrFuaJ710OZZpq9AnLovjqXfu/55qGmmSrKUFKUBYMxiJZgSiQ1Kq/82WioXHfKf6u5q19/DqMntJ/e18bnzpGFA657lRLt3GBp2WWYpFIfytoheR82Frfh4p65RRWYQ/kovDhiXByUY/z1tJMk+JBbaP/GRfWY9N8wVqM6nmo/stFjBPg7OeGNvQ7liHCY6rQbWygzS5dRjgn/nWFHTIsztXRrpZjHW5STxGIb3mp3jUii8wF4xsmePXRFk1pOVLMGoVj0TCd7u2re/h2Jf7xjR1GyU/NIvDExRXOfloY8o+aqLSKJcM4b87R9vyITvLjD+AGivdnWxlTaYubtrUTVWacL4Po3UaeB+Go3Q7sacRH97nBInsVx4leehQhUO5FTjPfm78H3yw5S7K7rCdkcBvjBb3vw1V8HMP6iVrh+aGtER/jfV5en6isdLJZbr+5kWb5LHCaYe8qpUpyrIjM+XlyEpevV5Y8N7FyxUxXEjha/0sKvtBhpHeC9eQCWc5dX1wmw47FqR75THXESPj9JddbKXfR3rB33hW+PgBdXLDIsCDveOcuVLmRfDxJYRwpkXHA0PbfSwddy6GsHNsRz11PMfBW7ol+8csM55cNU1QgJyy5p2aW4+qXdmPyfJrhjeCPLaq975XAv/n+uJon/yJimuPWS2ufAuVPtmuo3Q5UYa/9GiB+u6HlMr7sgHh4QF+FlQYnFm3KtHpkfMM6+sxUaxPjfPZTVE/bASiHpImQO2Rra1XLT62JnfrD7nD/24/Xvt9PMif53TYXF5Xj3l134cvF+PHH9WRjcPfBu/tlBD6fZ+EanZ+QN+GODfWfVbDbRzQK1M5XB+pUJPJZ+8N9NTkEIBAwBmkBSBBVeJvlnro2k1biw8RNjm1ltzrNUHE798Cf2i9tyB/yk/0Vy3FfvLMDrE1Mon5ek87zQHrqyieJMfbjoRK3R2XKiajWUFT5JgB0knv3nQrwvfneklhDFc9c3R7cUetovphsBcaR0QxnYHZ0kdaMnPt6ABRTG525jcYr7Z67F9UNa454rOoKnssWEgF4EZlNOxOvzjqFRXChY6rlRXAiSeKkfqrzv0CwcLRKpoJgDdjeF0x3OKCUxlRDwU9qGscFKX/yZFw6ZC6NwYDH/IXD9oIb01Nf+E3lvOuPZC44jX0OOh6fHvItyWe6n+lAb91OcswN2+/AksFOhZuMuaIBwmhWZ8iFHUNQOnba271+bczHsye14m2Ske7ah2H0vtKfGNcPxnDL8upbixU+ZOFEWEv7/evPFicp38//e3IeMvMrZ2xsuSsSY/pRXIqYrAXGkdMUZmJ2lnijE3W+vwb5jzoUMOUvtk4V7seVADl69raei9OdsP7IfTVRpu38ICFSp6awkWUHLSew+WjsRedLIxg7XYfl7Wz5OqIQiLXm+M1o2csw5C4iL4cMnee3ABujQLMKnzuBLKrDsTY4U541yiNrrpMznyCwUQ7+XZMt50WL/6RuvCEnc8vZ+FNFDQS12LKsUV724SzkGh8lxWJy3GQtr8O/ZFgrJFSfK266O+8fTvXUUfnysPW6YvldRabQ1M+v+kfj3EcSR8u/r6/azY/nym19bhWOZzudOuDLIf3dn4o43VuP9yf0okd07wyxcOT9P7VuZnOp9NwKeOv+qxzmUXlr1Y633jqpc5Z80qTpRrODZvKE4UbVAB+iKUpoVuYmkiVPIse5C9WJ4aU95K954o+7OS7Sd1NRYDIKdAEftwSubOpzHdEGXGHz9YFv8l246M089wbd3XA4LZJW870lU4enxyRjgZSqh4aEGvD+pNRauz8X1g/xQEtjeBZLtSCYBkbmPtkM5/a5wHraY/gTEkdKfacD0yOF8d765us6cKAvorTQr9eC76zD9jt4kpGBZK6+OEJAZqTO0DlEInpq1oTA8R2zvMXVJWnai5A+cI0T9uy1Lc7NK3NKtZ84zhMI+2zeNUJwqLsbJzlVHmu3iG2V/MxYleZOKjL71S5rmULuqDP53TTP8H8lBO2OcOzL3kXa49pU9ykyO1j74//j4l3fjUioL8AQdn0OCvcUa01jEifKWq1E344iJkIfM7iQvjpQ76fpx33zjPXnWWmxPta4MY+/Uo8KDFVnzkCoa8AUny5UiveUcz+GgLaH6VC98sRmPjOvq4J7SXAhUJ3CIQmFsGUuAt05ybPZotx1HqnWSY46ZrbHJev8gYE0ggHN3eGaGly9PnWZEmBGrX+6KuCj/uUnakkqzUJQLtf2Q47NQsZHBeGVCCww957QSj1NfiBTKf5xH4VCc18ilCByxX9Zkk1panlIodeLQRiIv7Qg8aSsEfJSAOFI+euHqetjfLjmA5VRgV6txLaiLezahIruN0L1NPCJIctiWHaP6Uyu2puOvjWnKMbTU+eC+WB79wrOT0LdTQ1tdy3pbBAIgR2onFdWcTiISb9ycYjNM6kRuOYrLbDvyTeJDatVCWrunEE2oLgdvs2b2ZqRaOeiYWTuG1nXx9YIxheSb68K4WKiYOgGW9tZajHlU73i/caK4FtiM+cfBYhfOFCU/q2UUZtzWUgljUiesbSvXKOIadG/9chyvzD1qty5P1V45x4prE31DRaxZirp/x+iqm+W9FxG4+Jw4tNA5rPqJzw8pIh9qpzmmfwIuokLnjtpr9Pdr5+HaebuO9iPt9SUgjpS+PAOit3xSzXubCuVqsZioUEwY1gbXXJhCYSi2naeqfTWOj8AVA5ory95jBZjx4w4s+vdY1SY230/7eiu++d8FouRnk5D1DVQiyK/tIOU9ceiNRfBhBqlt0eRSLTt4wvZsFDeumR/1O+Ue3DlzP5Lpj/H3D7ejgtG1v+P2HSnPzUjx+Lhop7/YkLPj0Kuta6ppnKPmLfbBQm0Pp3hm1FodIG85D63jyMovB6tkfvxnOgqcVAu8cXAiHru6qc2HI1rHYq3dnZc2Ugrw8v9xriPliO2hmeix03ZjeM/6iiAF57mJeRcBfoil94OslyhnDlCvccZFiIf3jHMYxqeL06HtzsvhrmUHFwiII+UCvEDddQY5UTkF9v+odGoRh1du7YkmCc4rV7VuXE/p46eVh/HsnE0oLlVXVNp7NB9fLzmIsRemBOrlcei8g4JC0blVIhU49p6bSYdOQENjlgAeRzc0FieKw28ejQquVaCTu9plRaWv6iGqOlKfL8nAo58eUp5Ws7rfjSQQ8MWUtqg582I/tM+xUMGq46nr94s25qJ5gzC0pBuSuhBDOI+S+28c7B8z0MeyyzB/XY6mSzr07FiHQ0w1deyhRhl55Zj523F8tjhDs0pezaFFU97Hyze1wCU9HL8hrdmX2ufe5KgveKoj7nnvgM0ip2r7s/w4X1cOOeSHGM7W8Jn07gEcVAk7VhuDZVun5Ag8T3WExISAENCPgDhS+rEMiJ447I4dFXvWv3MiXr+jF6rmQNnbR237yL7N0JKcqomvrkQRFeZVM3b0eEYrtEr+lVr7QNxmDA5Dz3aJeGpsQ3Ru6r8EsgsqMO7lPTiUUX2m6bO/0hU52MmXN6528qwUpmYWoQmWY37lh+o109buKVBmp2ZR1XiL6AknzrP8sJq1rOMcKZ6N5Bu0HRQysuNwsfI6kWqQ9CDpXHt2y9v7FEEAntXh2lrtmkQoNbHakSAH18ZiXnXhYNkbtzduZ5lvrWFttw1v5I2nYHdM/FDjHQrh44cQxaW2Q2jtdcSCGzNub0VhWaH2muqynQvvcpFTHjur9Gm9TpaDm+k/2YJ/c5RlYNdYTBqZ5HD9Kf5t2nlE/ffJcjxbr8GWHyZbDWS9EBACDhMQR8phZIG9w+9UcNeeGESH5Fi8TDNRejlRFuJdUuIw7eYemPTWP6ox63mFpfib8rc4X0qsOoGg4FD0aJ+E58Y3QDs/x8O5dde/tsdqLSim8sZPxxR1La73YzF2JtSsZaNwZRaKQyys2YL1OXj8s0OYel2ysvnAiWLVmy5+qt6QKtHXhX2xNFO5oeVZuJMl1W9q2Ymy50jxrIKlgCnfWHIIIy/z1505m28faqeERp1Z4x/vNr95lt0TCXWgwDI7GF/S9dBivdvVA9eHcYctfaGz3W6N1mJi7ex1NKtMqQf11bJMlKjkINrpRtnMhY5Zmc8Rvlr61dLmNqoX1attPeWByVGqI+WMcTFfXvp2iFYcKm/OofqSrtcPq7JUT/PWYY0wsGuMahvZKAT8mUDd/AX3Z6J+fm4L16nnKgWTjvMLE7sjUkVMwhVE53VJxLiLWuFTKsarZr/TOMWROkPIGBSMs9ok4cXrE9Gh+iTMmUZ+9o5FIzbuL1Q9K3Z6WKp48KnEX3szUpzT8dlfGap9spPVKC5EuUnae0x9NqqVldkozn/xhHG1e1t8ttmZmePxpdHNvz3rQKFE/mh638TPpJkOrQ6GO3Oj9D4vvvYLN+Tithn7HS6oW/N7U48eOrx4Q3OMJInxurSebaLwG4X63Uuhfn9QaKuztnJHPnjp0aYePry7tVcKh6RSzuiK7fmqp8jFjMWEQCATEEcqkK++g+eeRmF9m/dnq+519cAUypeop9rG1Y23jmiHX1YdRla+7ZvUJaT4V1Zu0n1WzNWx18X+DeIT8OZEUo9qH1jV+FgeelC3WHBOlC3jQsR3UCL5Nw+2U0L98lUS3tk5GtErjkL1muCFb4/Y6lJZ/zIpfbGDxiqAasY5C3VlVfO9ao5hu52ZOW5vL/m+aUIopH5JTbK1P6fTzN4cCnXTYu2olpTF6dfS3hva8HiHUR7TvNXqMxv2xsrfpfdJmIIXbzDW5wmiULnKYubOj2gw5bv5k4S98yRkTyHgmwTEkfLN61Yno/6bJMnt2fjBrew1cXl7vYhgjO6fjA9/22Ozr0LKo1q/Nxu92yfYbOPvGww0CzWkZ3O8dVMcwq0rc/s1AgMMmD4xhW74y7CO8pdsGYe13TB9L+64VD3WsXvrygcEt1N+CudczbEzM/XQx6ngUEA146fbNY3zKTxhao7UnqMckgjVOjjMVc061qGTqDYub9s2i2ajtOYL3UJhVL5mPMH6Ov0/5P9nCzdoE9Owdo4cSudsOJ21/rxhHYtP3OGj+W7ewE/GIAS8gYA4Ut5wFXxkDEcz1YskskpfUxcU+hzBMKR7Y1VHivs6pow3MB2p8PAoTJvQGqN7BPZ/8TDKU3n/rlYYPXUn1KTNOczt6S8Pq34Fqzo9z17bnG7qylRVvDhviNX81IzDeurKUhqFkaNksJrDVUqzuXvTiqEm2WzXkWpWd7Nt7mK6eHMe3iW1OT2Na0dpta+WZeD7FdpyqbT26Ww7fkjBs7RajCK+SRyiJW6gnMW/7YSKaenPH9qwbHtd1XTzB35yDkLAWwgE9l2Wt1wFHxnHiexi1ZH28uDsT2cSnogIC6annLZDp07kqI9X9WR8eGNCXDy+frAF2jbyTK6Nt6Pi4pof39MGl5EzlVNo+/tibyaoR5XZI74xfIcKgF75wi5sOaj+gMEWn/pUHFfvGia2jmVtPavpNaf6V/vIYbJmLLyh7kipJ9v7Y34Ui0LUpSPwzy7bM6vWrqE712mdRbOMgR9qvHdXa4x8Zge4xpIt60cFbM/rFIOXvlMPn7W1f12vv3ZgQ3xJDq+ash+HOj41rlldD9Urjr/pQCF63LvZobH88WwnCYd0iJg0dicBcaTcSdfP+j5uxzFJjFMPY9IbBx/v4HHbNxbH7Th+eo/HG/prm9IYc6c0ptwUbxiN94yBHZbZJEs+/pU9TiW9h4UY0YUkl6taJOVgfUQO2ii6MXQm5KiqY1a1X0++5/A+W46U2s0ujzE1Q92R6pRcnZcnz0uO5Z0EosKNmHVHK3KmdtaqH8X1lR64oinO7xyNpVvVBQ688+wqR/X0+GT839BEPE95lCx5XtM4d3DajS1qrrb7mWeQKVpZ1XZqyG1U7aAONrLyZ3quephwzWGxIquYEPAWAuJIecuV8IFxZOTaforIw28Q61lHKiEmTNWRSrczXh9A7tAQ+3ZtgTmTElTzWhzq0M8a92lfDy/d2Bz3zD7g8JmxE2VN0SwxNhizKXTwP8/t0qy6Zjl4zzoM67OMIYVqP9my/Wm2xVx4H7VQSVbtbMU3fmJCoAYBri/26FVNqYxAqrKFlSsnX95EEXKp0dRnP1oe3PyzuxDPfnUYG/adCd9kJyo2Msjhc+MHQfasxYT1sDezbq8Pf96eR2JChcXVSz3ofb5axEdyi8rBBbgdtVJyOu0ZK8tq7TuBojWs/V2zdwzZXp2AOFLVecgnFQIVlPOhZkYPF/tjxSQ1szdetX19aRvPlgzt3Qqzb4mDh5SzfQlPtbGyVO/OI8V4h4qfOmJqs0dcHJSfQj/40UFHunS4IKdDnWtszEV0bRnnSNky/oOuliPFaoTyXbRFT9Zz7balW/NwIdUfunpAA1K/808mvdtGYd5j7fETKYe++O1RCuUNp7DFaP88WR84qzd/SsMsnXMcnTnt6T8eAy/uMBY50mrfPdye6qLVFjzSur+0qyQgjpR8E4SAjxOYPDoe0Z6dDPRpYg9d0QS7jpx0qAZMVaEJayc/9vwEsGjA15QbocVCKF/krJZ1/wesecNQm8Pdf9z2jNQhCutTe/JdMwzS5kFkQ0ASYCdbywyLv8Dh2lfDusdRjiZJYYoJAS8h4MzMqJcM3auGIY6UV10OGYwQcJyAOFGOMeObuDdvaYnRz+60q6pn6VmLut7Ua5OxlYQntqbaF5/g/KGwEPUZVcux3fnKYhO2rKikQpl14npYNS013baTxW27tKidpLd8Wz7+2pJXsyubn49mqudg8Y4L1ufgCMliO2N8c3tWS8njcoadu/fp3bYeljzfWZfDXPDwVrv93EmlD8acp4/Ca7CNqD0Wd2kYI7dcdi+GNPAYgWgnQkw9NjgfOpD8r/ahiyVDFQJCQB8C9Sjp/YNJlPROzlROgW0lPz5aDP2xiSeFPXvGjhEn0l/61A5wDLya1aVaX9VxNWsQCg7JtZW8vY9mpaw5Umr5Udy/tRmp9ZQnord0+AqS0ubFGWtHuTriSDlDzv37hIcaqAabbSdf7xGwsqcnj6f3+KU/IeAMAZmRcoZa7X3s3x3U3kfWCAEhIAR8ngDnB7GE+XWv7lGVKs4rqlAUuB6jBHl7xqFyL9/UAhPf2qva9Jc1Obh9uHqdJtUOdNrIT8kb04zTERuzPweOF6Nfh9q1rtRmpEKDjWjXpPaMlE5DrtNumNXArrFOj2H1rnylMK2WDjo3j0TD2NqzgVr25TZchDqfkuvtWVL9UHRwouZXBAmKiAkBIeCbBMIpt5qVZ8VcJyCOlOsMpQchIAR8lEDfDtHKbNMJO/K7PJPSi1T2Lu5u/yZai2oTF7y9770DmPd4hzpPtE+m8D5bjpSt9ftUFP06ktCErfAmH/2anB72BV1iwIsztoxDGzfnato1uUEYvn+kHSJCnbvR2UWCKhc/sV3TsaZel4whZ9v/XmvqTBoJAQcJsBz8tRc2dGgvVgUVc41AgoSZugawyt7iSFWBIW+FgBAILALLSDnMnhNlIXL/BwfQIbkjWqgINHDbb1dkWnZRfd1M+VQzSD3wrhFJqu3cvZFnWWzZYRszVbuP2lb0O6dV3Yto2Dqfulp/stSEhz7Srqb1/H+bO+1E8Tk+Q5LbWhx6VpwUJ6quvhVyXCbAM6J3DG8kMDxMoEGM7d99Dw/F5w8njpTPX0L3nYAJJvx8dDXmp63Bv1m7sL97OswGrsFgXQZ9/KGPgUPuG0+tnlvTGl5qmVnJ+ZhDT/3nfFaOGFM4OsQkY1iLc3F9x2FICJenr7WQBeiKb5ZnaT5zDvG79e19+IHkjMNIdc+aZeSV06yDdkGF1+elYeg5cWjftO5kF/lGxpZZm5EqLjXDloPF/ZzdSgQcavJ88bujOJShLtBh2ec//RKUorSWz46+cjHbJRpFPe4Z3djR7qW9EBACfkCggcxI6XYVxZHSDaV/dbQyczvu2zgTe/KPnDkx56JMzuzvsXcGGCn3w8jFScKCUUSO34r8nVi0fC2eXP0BHu11PR7oMd5jo6mrA5npvP9J247fU//B3twjOFqQASNJ1jWt1xDTz78b0aGBfcPLxRl/J9U3R4wV+Z78/BCev7651d3mrspSzbequZM3hPglxdl+MnmYZM5r2h6qL6UmfS4zUtWJsSz+R3+kV19p4xOLHjxxTTMbW+2vNtEzLi4Aq8VkNkoLJWnjTwS4jmA3Nyt1Pv3FYRzPUS+2e2X/BFzYzbkQYS3X4+tlmXYfpiTIjJQWlJraiCOlCVNgNZqT+icmb5yFcpP9RGXfIGNAeHQkQsJCkXciGw//PROr07bh6+FPI8jgf7HWqfnH8c6mufho+684UZRt9RKtT9+F+aNfQaPIeKvbA2HlvNXZKC5zvMr9nL8yMLBLrNV8qW//1j7DZWHMIX7vzD+OOy+tm/AWa6p8lrGl0Q1BBSGqWjB1N9XgsmVxUaJ+VpUNFy5+4MNUm6qIVdvy+yfHJqN+Ped/k75enokdh21fn6rHu/cymY2qykPe+z8Bzt/kxZ32ylwutKvuSLGQDJdfcJctWGc/F1PtAZq7xuWv/Yoj5a9X1snz+vPEBty/YRYqzP7iRJ0BERQajOiGschLy8EPe5fijsWvYuagKWca+Pi7XTmH8MSq9/DdniV086t+/Tam70Hfr2/Bz6OmoVN8io+fuXPD//hPbbME1nqf8tFBCmHriEZVZnO2pJ7E9kP2a0hZ6+/tX9JwzYAE1EW4hVpoH8uip2WXghPCLaaWH+WqnDgfJyrceUfCMkaWZy9xwkm27K/X67Tvj2quVcZqgJed6/zNFc+wvkzH02I8GzX4LO8OcS4pM0NNHVLLeWptwyG5at9rrf0k0u+BSEprpSXt3EXgeE7tSIKax6r6t6vmNvnsGAFxpBzj5detS0xlmLLxXb90oiwXLphmpcKjI1CcX4TZW+ZhfIehGNDkLMtmn3w9WpiBpyhk8cNtv9p1oKqe4MG8NJz3zW34YtiTuLhFn6qb/P79wg252Knxyb01GFx76u7ZB/DF5LbgAr9sM8gZctYKiyswfd4xPEtFfT1tajNSPBa+yazmSB1TEZpo7ZrQxIs3tHApP8jCbsjj27FTZebM0s6dr6zS9+6CE5oPcZIKIP+yNkcRfwi1kYNnqzOeNbxtxn7Nwim+MBu1/dBJjHp2h61T1nU9i77w4qpNva45rruwgavdyP5CwCUC9kILuXN7v/suDSDAdvaZrJcAuy51cro/HPkbqUXa//DXySB1OGh47JmbvWnrPtehx7rpgmcNX1v/FTp+Oh7vbfnJISfKMuLckgKMmPcApq75xLIqIF7fsuP0NCP5aa6HpGZcCPb7lZWhfLtIxY5vgl2xz5dkYD8VwPW02Ss2nJ5XPUxlJ0lr27I+7WrXnLLV1p/XZ+WX415ytNVyyWqe/+pdBeQM7UOPezbjoY9TsWZ3Yc0mNj8//tkhsAKlFjubVBW9fTZKy3lIG/0I/O1kUWv9RiA96UXATHmSR7Oq/2Zb61scKWtUnFunfqfgXJ+yl48SYHW+QDAWoQgKrUywX5i6BifLPX/z6irnf45vQ68v/w+Tl72FglLnwsksYzCZTfjfytm4/OeHkVeq/ebNsr+vva7YUYD1JACgZg9d0QT3X66eQ3JWyyhc2rMyFOuNn9JUb5pDaIbh6fHqs03lFWawupunLSzEgDAqzmjLMmlGymL5J03gsDlrxufYo7U4Uszm/g8Oap4dqskyt6gc7FRf8fxODHhoK1798ZhN5rzv7N9P4LO/tIWp1osIwhs3p9Q8pHwOYAIvfHsUY6ft1iW0MYAxes2pczkPFjGyZ03iz4Rr22sr29UJ2P7rqb6fbPVDAvsKOEkyMCwopDIPo7SiDCzO4CtWZirHoytmUUje7eA8Jz1t3r7l6PnlBGxI361nt17X1+sUQqdmKYlhGNG7Pm4d1gh92kdbbcoFUz+8uzXCQw3YS8Vpf15jXdTDsvOVJGl9w0UN7RZz/XVtNv614+RZ+tTzNSbSdl5SehVHagsJY9iaZeG8G+YR6PbhonT8sdF+srcWTuy0TidHih2q/zy3ixymDOSSDL/FOER16tdVlFUtG2y8TruxBfj7LSYEuIzBLW/vPx3S+MXSDIHiBwT2qIReW06PCxonkEKomD4ExJHSh6Nf9JJdmu8X56HlJIzGM1/9jGJ9bnq0HNeVNhsz9iizUC+s/cypMD4tx96bcwT9KW+K88f80X5ek4OVO9S/57cNTyKZeCi5T9P/rwWi6Sl+VYuNDMbH97Y+LQzxxk/HVFXZgkmK/85TRXefHJcMnrmxZTxjwBLWnja1BPnMKqF9rDBoy6w5neV0z19QbP/pqK0+fXF968bh4FpQeohmVD3/tXsK8MgnqUro362UDzWHZq3umnVA9btXdf8bLkqkGdS4qqvkfYASOJFbjjEvknLrujMPgL5dkUUzGXXw4xOg18Bdp73jsO3Qa8sxm9spKm9pJ6/aCIhLqo1TQLQKrJ9Q3zrb6Ru+VmTbeQbN3VZMoY63/jkNK49twTuDJiMsyD9CAArphv7pLw+r4mMFuyv7n5GEZ5GFR69qquSs8I7sBL17Zyu0oZtltn8or+WHVWduRpSVNf7h2iXJDSoZtk4Ko5mpRMxeUHsWlB20T+9rQzMOZ0LpanTlto9VZ6SYwVkpkUq9FQ5frKrEt+mAiiNF+VEcm79+X6ESOsmv7HjdPaox7hheN9LubgOm0vH5naMVwYySsubgGaMfV2cpRZr1UhHksB2eueRFq/F1fPyaplqbSzs/JsAiHje8vhfHsqoru7GAzq+U5+mKcqQfY/OZU9NS/qBFQ5mV1vOCiiOlJ03pSwjoTCCrOA83LJyKX/av0Lln+919vH0+Nmfuww8jnleK+Nrfw7tbvEYhUizlrWa3UDhfCM0gVbVxFzTAXBKVYDGAl0hVrm+HyjwgDo2ZTDWCbIW6cR9BNLV116nZKEufk0Ym4atlGcirEqLFhVjn3N8WnZtH2C2kaOlHz9cbByfijkuN6EYOlJos7mYVR+oeElfIKaztBNa8YdNz3N7cF+eejegVpyycW/YbPf3/kWqXcWJ/hQenHbm218zbW9b6XnszOxmbewiwmM1/nt8FVgm1ZqxcKI6UNTK+s06LI5XSSBwpPa+oOFJ60pS+hICOBP4+thlj5z+BIwXaEsl1PPTprv49sRO9v5qIuSOeQ+9GnU6v97U3W6nG0weL1BUp2ZkZT06TNXuBHKjf/s3BFf3OzFZNm3sUB46rh1Fcdm48WtTISeEwuolDG+GVH44qh0qMDcHnU9qiXZPKWS5rx3f3utF97Ncv4tmmAzaEJnh81pwoXn882/2zqHwcb7boCCPGnJegLCwnz475l8syNdeYcvbcDKTN/9r/pVSTr3e2L0/vFxsVhIvPcT0UccF6+2qa7ZtFIEWHp/SWmWdPs9J6vIwqYbrW9uGb8AX/5lotNm6tvR7rqj+20qPHwO2DH9hs01DLsAN938X0IyCOlH4spSchoBuBNzZ+iynL3kY5iUt42hIj62N4Sl/0b9INzaMboVm9hkiKPONAeHo8rh6Pk/NvJVlpVsVTswlDEm2KJXBIXtXwtHUkCPH+QnXHzGhlNspy/AlDE5X9I8OM+PKBtl4nAJBTWAEO4+OFZ6E2HSjEkUz12TzLudV8PWZnFrBme3//zEWXJ16cqCxr9xTiS0ry/4nESk6W6J9LxhLH/B3zRWtJT81n39XK5aE3v+lfu31cTU7u/9H/STHghe+O4CIq1hxcPTVU0PgAgb8256JMQ54bPzgQ04+AOFL6sQzIngwwIMhgRDnVNHK38bHubnt5rcOsy96NZRmba633xRVF5cWYuOhFfLlrkUeHHxkSjhs7Dce49kPRJ6kTkfaP54RcU4MT8m1Jdlsgs6AE5y5pMRZPuP/9g3aT/EeS8l8rcsCsWb1wI+WsNFPCBJtRHlZdGtc82kIzdltTKx2nTfuLcCjDusS5M+M8JjNSNrH1bBMFXliEhHOpvlyaiY371aX5bXZmZQOHVV790i50TI7EhCENMZpmSMNUxE6sdCGrfIQA/9bpYRkkRHE4s8TrHu7ocW7+3geLKdkzzvNtW4fRD/bG54vbxZHyxatWh2MOMQZhbPNBuLRxb3SNbYn40BjFkcorK0JacRY5NFvw67HVWJquv2Njhhn3tPsPooKrh0BN3fa5XzhS+/OO4rKfHsYWykvylPHs0x1nXYHbu16O+PAYTx3WY8d5mcLv+CmdPePcKA6/smdlNKs18c292JemHtLHs1GTauRG1ex7TBVRi5rb3PWZcyQ2kqO088hJcBgPhzzayxtzdSwcysbcxGwTYMeaw0p5YTGA90lC/WvKo9PLtlO4z2SqbfXcN0dw7cCGuO7CBqq5cHodV/rxHIGj5DSr5WtqGUlzCm/8+N42HnWi5JdBy5Wx34ZzL6uqMNrag8tUyMMUW3ScWy+OlHPcAnKvq5IvwIMdrkbzyNpP7mNCIsFLu+hmmNByGBaf2Ij7N87EoSLr+T1dYlPA/aVEJSElksLHIhviRHE2toidthUAAEAASURBVOcfwo68VGyjZUXmVmSW5J1mzX8ksgpzERVb3ZHKysw83cZX3/x1eD2umv84Mk/av+nX4xwjgsPwQI/xeKDneIT7iSpfTS4nS01465fa6ng123G8+O0keW7P+IkvCyrwHyx7xmGC3vjU7535x5VQMnvj13M7/789niN5UlqYcs2uX0g57XcNeT1a+qvZhmcfWa7/nflpGN0nHrde0qhOc/Nqjk8+O0+AH5K4Yue0jsIHk1pLfSFXILq4L19Dzp2sT/mB9esFK6U3ODSXl/BQI4VbGhBMD+m4egvnP5aWmZS6cn9tztNclLtXWyma7uJlqrW7OFK1kMgKawQmtx+jOFHWtllbd2HiWfih/1O4dNljykyVpU2nmBZ4qOM1uCSpl2XV6dfoehFoXa8JRjTuo6wrKD+J13Z9h7f2/Ei1dczKD8fJQpJfjj29i/KmOJfW+bDN2DQX9y59w2P5UFe2vRDTzrtDyX/yYWx2h67l6Syr6r18UwtN+QBPkXT6T//Yl5xulRSOB/7TxO74bDXgP5Dusu50s8Q5OZ62YyRUIWabwO6jxXh3wQmS0s+CXjLpto8GJY/i278z8R3VDhpM+TC3kTw9hxiK+S4BVxypS3rUxxs3p4CVJsXqjgDnBa4hdViuGecuu7BbjRsodx0ogPoVRyqALrazp9q9fhtMaX+Vw7vzzNWb3e/AmBXPKPu2ISfpp/OeUWautHRWLzgCj3e6Fq2iGuPeDTMpsM+MCtROyDZxUqz7U7S0DNmhNhWUVzbpr+mYufkHh/ZztnEyCUe8P/ghXJTc09kufGo/i0Oi5lBx0j9LftuzVTsL8CGFW9kzDul7dUILr70hYUfKE8YOaqfkCPSm2lJ92tdTZN1X7bQ/k+eJsXnLMfJOVtDME9WZIudp6dZ8l8OynDkv/r+xcEOOsvCTap6Zvegs/wvxdYaNr+3DqqLO2M0U1vwY1coT8w4CT45rhhFP73DLYBJiQnAu/R6L6UtAHCl9efplbze3uhRGK0/JV+1aT2pTf+BkaQm6tWiPawaMRHhI9eT6gQ3PQt+ETtiSux+f9nlIsxNVFeT4FhfR/gfw3v75Vm82DHTT5muWX1qkhPL9fvAfjwz92g4X482B9yIm1DM30h45KTsHiaBQiE/ubY0pVOtpvxWZcnag7r9c28wR//GZ91h7PPxJKrZQkVlbdjM5Zq46K2qOn63jal3flgoJs7BGPt3E62mhwUalcG8fcpzYeepJN+Wc9+OoLaCbQZ6dcdWyqbioN1ouqSFy2N7PFL63fFueJoUtT53Hmt0FuPH1PeAcivsuayIOlafA63CcfWkl9H1y7EEFP+x4enyyki+nwxCkC50I8N8lfqjB/x/1Nlan9MHbJb0x6N6fOFK6I/W/DgckdKl1Uj+v/RNXvXxntfU//LMQPzw0q9o6/jCyybloSblQPCNV00rLy7B8+1pa1tANXj2M6jUYrZOa12yGByg365ODpGTnez5TrXNJzT+OEfOmYGvm/lrb9F6REBGLmYOm4D+tL9C7a5/oj2/qf3+6I1h0YvbvJ04r7XHtpvfuau1Q0u1ZLSPx0+MdwEUrp887VusmuF/HaArpc/3JbkmZ/fRrK881NF0P3u/sVlFYtvVM7qGmHWs0igwLQg8KBbM4TpxfoUcC86eL7c/61RiKV38sJ391MznefFPEzDm/zp4Mv9YTYmGA/5HyYxzlU8z49Tj+3KRPfiWPlx2qs1pGYfLljXFBF5mh0npN6qrdh3+csPqQ0dZ4osKD8PatLTGoW+W15RIRz319pFbzjVT6wJ59szwT60jG35qxqI09Y0XVBz9KtdfM5vbnrm9Ohc9tbvbJDdcPaqi7I8UP0DgCQ0x/AuJI6c/Ur3pkGewG4bVjan/99y8ENYhAULNo8K+YKacYCzcvx6/rFiu5TIcz06juTBrJqKZhT+MC3HT2qFpc8k8Wov/DV2JP2sHT2575+k1smj4fzRKqJ//XD62H/g06n27nq2/WntiBUfMexPGiLLefQm+SMf9m+DNUByqwfzw57v9RCl0Z2DVGkULn2ZjZ5ERxjR1Hjf9g30VqfBxnPmnWfuw5Vjl7kkJFd2fd3kpTrpW9Y3LisD3jGyFnjWfMHHWkOPGZn5IqoXrknHahWQt/u3lxlmfV/VjghG8q/yHH6R/KdVi/r1D3+lCcdH7npUm4hYQiLM4rX5edR4oVJ5/z+PRw1liG/bpX95DDXA8PXdFECdGseq7OvmcFx39t3Hg726er+x1ML8FqCt/1lDFTveo0sQrnZ4u15z02igvBR/e0UcJtLedbRDXMvliqvQ/Lfvy6mr7nvDhrXCTY2WPzMZ+5Npl+i/zgCWsVgOd1ovsqHY1DzjkXOIGKzovpT0Co6s/Ur3rkvKSC4iLE0GxRVRszcAR+bLwbpaYzSeQV5FRdOe2Oqs2U9yHt4tGt/6Ra69fv34q9J1IRlBSFoIaRMJMCTemRfDz55XTcN2oCjmQdV5wxfj2al44DzXz7afVvB1fjql8fR2GZ/ad0tWA5uOKWrqPx+gX3IMQo/8Ut6PrTjNFPj7fHVpKXPqeV/bwoy37WXrs0j8CvT3TEI5+mKqFaH9zdGrE0M1DVOAfmIXrSGklOTzSFubHzw04dh8FxLQ92RKqGzBbTTTjPWGgJ0YmNrH6sqse1915L6CE7huw4cYher7ZRaEMhgWJnCJRS0UuWwN9FzssuCkXkJ+8ckshP1ytM9mcUz/Tk2LtLe9XH41c3Q5P42g8B2jcNx+sTUxShExau+JLk0/Uo8ruOEt/HvLgLw3rE0QOJZmjR0LW6Z5mkTMj9eZN9/Ec6ePGUbXi9G+J1uKktoe/hfVTTTut3rn3TCEXe3Nr3x1PnLsexT4AdnpaNwq2GpNvfu3qLsBAjptPvwiX0/1fMPQTkLss9XP2mV87X2JK6C/3ad692The2640/G0/Dt4eXYk3WTmzI2YtCitwLalLpcBkjQ2CIDKYlBMbYMBwlZ+jsRu2q9dG9VWd0GNMPqcYzSmjmrg3x5S+/4vNl86q15Q/hAynkr0ut1T6x4pMdvymFdstN7s3dYFnzGYMm4/oOw3yCi6cH2ZSK3/Kih4WHVgpLHM1qYvXGNoZCKYJIrlbPekCWccdFOf/TfQ6F9lU1duo6N6+My+9Bs1W9aHajYYzz/Vft29/ec6jeda/uBouPaL151YNBe5Lof4qK9vbrUP2BlrW++fv9FCWs3z0yCTN/O45P/sxAUYnrOXG/rcvBnxvzcMPghtR3Y01116yNT9bpQ4D99btoVnz3UW0P5vhB0rt3tpbrpg9+t/fCv8PWcnsdOfB5nWKUaIzO9OBPzH0E5K+l+9j6Rc+sfPblip9rOVJ8cu2pZtSjHccp58ny5NvzDmJ5ly2Yd3QV/smqrjqzasd6DO84oBqTeuFR+HPEdHxyYCFWZm7Hvzm7kYk8hHRLRNn2TMUJU5yxiGAYI8gxi6r9FLZah1764cV1c/DI3zPdPrqkqATMG/kieiS2d/ux5ABnCKg93eUQLFZl09u49pWzxjk1Y89vgGTKselFeU6cMyWyx9pocjjWg1c0xZUv7HK7I8W/vZyfdBM5LhyW6qjxjMcjY5riVlJl4/phn1D+maszVKXlJrxLzhnPWF47sIGjQ5L2OhL4lQRL2LnVYpf3jVdCu0LowY6YbxDg32atD+G4vlQsPVxr1yRcEYvh0OuuJFrROqm6+JdvnLnvjVIcKd+7Zh4f8Scbfsb1ey6nOiNdbR6bQ5Q6x6Yoyy2tRyizVE9s/ZheK0M4lqVusLpvbEgU7mp7mbJwAy7guzxjC5akb8Ifx/9FTpn1JFarnXnZSg6L5PpQb2741u0j65LQCj+PnobkAM+HcjtoBw/A4VZ6KzDxDJIzN9ZVh/7iDbUFXapul/e2CZxNYaEPUs7QM18dtt3IhS0cAjqmfwJuuKghWulwI8QOFecIcvFddqhY0MMVh2oK1UgTJ8qFC6zTriN6xVGh62Q8TfXt1JQ+byNJ+4evpHARMZ8icPWABIwhlT3Od+TZ7wqq/FJB78tPvacIcSXiIYzecHSEWN0R8DOtk7oD6ddHbh6Ny168BWv2bNJ8mr3i21NB3qfxn2bnKfusL9qn5D7Z6yA5siHGNr8QM3vcjQ1DZ+GpztcjIsj3nqqUVpRh7PwnPOJEDW3RG8vHvCNOlL0vVx1tH3eBvk/uL+wa65S0eB2dvl8e9v+GJiqKhXqeHM/yPDE2GWte7Uqy1M10caKqjo/zLrhe0PIXu5Aj1JDEDhy/+eIZVhZbEfMOAhOGNMTU65IVgaeaI+IZTf4+iRNVk4zvfGYNjVB6cMalPLicBOfh8v/jxNhgJceOc2XFiar76ymOVN1fA68fQXCrOOSGluCiJ8bj7vefxsYD2zWNOZSEDl4/+3a0rdcUxsRIvPTDu3hv4Vea9uVGUcHhuL3NKKo/9SBCjb4T1pdXWohLfrwf3+xerPlcnW04scso/DzqJUSHuiae4OzxZT/7BDjJN5wSfvWwBlRQkeV+/dUiwoxKnSuW6nVlYZUqdxrdo+LlCSkuX1dOKOeZormPtseS5zuDb4ydqb/lyLly/ttz1ydj4TOdMPQc7QnoE4Yk4gGaiRPzLgI8O/j41dXLLrCKHRcG5++TmBAQAu4lIKF97uXrF71zwduwC5JRsuQQZi/8UlkaxTXAeR17YkDHXhjQqRc6Nmtj9VzDg0IVZ+jegncQ2q0hJr3/FOat/QNTRk9E/449SLXM/g3mBQ274cNek3HDmpesHsObVqYVZeKSHyZjU8Yetw/rkV7X45m+E91+HDmAawQiyTm4gHJcuNisK8Z1g16/OUV5GulKP96872xKhj+/s+vSv0Me364o6bnzXFm97g6aoXnlh6MOHYbrMw09JxYXd49Tchoc2lnHxpw/8d5drUiqvRDPUpjiBpJqt2Xj6Wb9ibHNbG2W9XVMgGdIj2aV4j2qlccPEd64JQUjSeFRq/GsB0uy+6JVVT71xfHLmH2fgDhSvn8NdTsDNafGEBaMsItSUL6PapTszcHx7Ax8t/I3ZeEBNIlvhJuHjsUDl91cazwXN+qhrAvp3BDmonIs2rhcWerXi0VfUgNkRcD+HXqge+suCAmy/pUcmtQD/RI61+pbjxVBGpw5Lcc5mJ+Gwd/fjX25jt1Yaem7ZptpA+7EfedcXXO1fPZSAkPPjnXakeIcFw7F4pAqEYXwrgt82/BG+HZFpiJ7bmtkCTSL2JPUEAd0jlEcKGfql9nqW4/1vUneft5j7fHN31mY+vVhZOVXVxa9ol8CnrtOv1lQDilsRzLcgWys5qm3sTT9v3sLMbJ3vENOFI+Dw8XmPtJO7yFJf0IgIAhYv2sNiFOXk6xJoB6F0qmZgX78Q9rGo3ev3lh3bDtMJ4pgSi9CBb2yvDnXf2pKDtX480dX66ZheJwSmsc1p0J7NVaK+JZty0BOeq5SwJeL+LJFhUXgom798cy4+9C2cYqyruo/PeP0+6E3V6n1okdY3M7sVAyZew+OFLi3FkmQMQizBj2AGzsNr4pG3ns5gT7ttc+yJMaGoBXVbWKhCg696tchWorfeun15Sf591/WBJPe3a+MkGcDWDmrJz3d70GqWz1paUG5T75gY/rHgx3+5745QjWoMhUBA65b9QqFiHEoo17WgEILFz3TUa/upJ9TBLgu3Sf3taGaj87XmBOYQkAIOE5AHCnHmfntHtHB6nk2yZGJmNZtIrrXb4tOv01AeQvKW2oRq/AwFZWhfHc2tlLNqZpWYSK5GbKEsBg0CquPRolxaNS7Pn48sBz5admKM8ZOWVH2Scxbs4hCTTZizzuLa4X99YpuU7Nrpz9XVTmKCa1eV8fRTjek78YwyolKLzpTD8vRPrS0Dw0KwefDnsTlrc/X0tyv27CM77PXqj8lZ6lqb7HmFAb2zu2t6Oa0ckR8Y8r3pqFUoDeaVNqiOCeIkol59sLdOTJ1xYRD2m6iPBs1a6ZTja+XbmyBwmL12kltyeHRw0b3qU/qaWXomBxBs+pRPn39OJmdFR2vIsWweauzleK/5BuK+QgBcaLq/kJxuGxJ2akfehvDaVzfd3K+bZyCrK5CQBypKjAC/W0izRxZMw59Y0nzhzpcfVpB7/72V+LFHWeEI7gAb8TZSbi065BaXWTmZ+PgiM8QbKh+Z3u0OBNLgzYDTSuf1pvLTKhIK8CJjSdwODMNzRtUT2yOD6Z2Vn6fpl5wGx4131TruDVX3L9xFkmqr1dWm6geChuHMzaMsH7eSgM7/6w8tgWXzpuC3JICOy1d2xwWHIpvhz+L4Sl9XevIT/bmm7vrB+mrhuduNJf2dP575u6xeaJ/zn3SI/9Jy1jPIYlyTxk7xbcMU3cQPTUWvY7DhZl5ERMCQsAxAm0omkAssAiIIxVY11v1bNvVa4bfsKZaGwM9N/95wLPoWb96WN3k9mNoZqoNFqStxYHCE2gcEY/xzQeBZc9r2q6j+3FebM+aqzGl3Rj8m70HBeWVldkNpGwWnByDLm06IDmhca322w7vQc9mnWqtrx8ejfpQD50qN1dg7amaVtxBRVllHkCLmCSwIIYztujQWlz+88MoKit2ZnfN+7AT9f2lz2FYiz6a95GGQkAICAEhIASEgBAQAu4lII6Ue/n6VO/toqtLqPLguajs6ozttRwp3jYo8Rxl4fe2jEPonpr7Jj5v+hoaxsRXa3Zug05YPHAaZu+bj+15qWgYHgtW6BuW1MtqXYxth3ahb4tu1frQ+mH17g3IOpiGoCbRMJVXnC5g2Ck+RWsX1dr9uG8Zxv72JErKS6ut1/tDeHAY5o54DkOb99a762r9rd5VRHVxPPcUv9rB5YMQEAJCQAgIASEgBHyQgDhSPnjR3DXkXvEdanXNjtDzs17DJVO6o1Wj5Frb7a14f9HXWJW2FU999QbemvhkreYpUUmY2vXGWutrrsjIy8Ln237HHYPG19yk6fP8dX/BmFDpKJSXnFGl6tu4i6b9qzaas/N33LTweaowfqafqtv1eh9BTtQPI1/A4OTas3l6HOPAiVK89WsW5q/NRDGFVe6d1VWPbqUPISAEhIAQEAJCQAgEBAFxpALiMms7yVbk1DQnQYnUohOnd+Dq6Pn1KnD+Y1fjq/vfVGTKT2+08+ajP7/FlE+eR8j5jfHxirkYN2AUKZB1t7OX9c2TP34eOcEliA6LQnZBLjkxFTCdErGwvkf1tQv2r4ahc2WOVllxyemNjs70zN4yD7ctfvn0jNbpjnR+w+F8c0c8r7sTlVtYgdmLsvHN8kwcyzxTN6ZB/Ridz0C6EwJCQAgIASEgBISAfxMQR8q/r6/DZzeo0Tn4aP+CavuFdGqAnMP7cPFT/8Xl5w5VHKIBnXqTOlXtULCs/Bz8uWUl3p7/KVbv2oCQNvURmhgFU5cGGDF1At6++WmMHTCyWv9qH1h04tE5L+PbdQsQMbw1km7vC/NJx2eCQs9KRAgqxQnKiivD8RpG1kf3xOq5X2pjmbFpLiYtec3tTlSwMRhfXfI0hjTvpTYczdtKy81U6yYXH/2ZiZ2H8qyOv3liYNd10QxTGgoBISAEhIAQEAJC4BQBcaTkq1CNwNXJF9RypAxhQQgf2hIlyw5XK8IbFxWjFOJNpNyngpIiZOSROl/6kdM36sGt4xDSvZHSf3CrOJQcyMWEtx/EzAVzMO78Ubiy7yVUCLB29fWSslIcSK881qvz3kNRSTHC+lL+Fo2DpqJgCKVXqplRKSBdbfg2PwQ1qazazk4U50ixXdt+KElpkOSWBntj47e4d8nrGlq61oRVBD+9+HGMbNnftY5o77+2FuKd+RlYuzMHZRXqUtBdWogj5TJw6UAICAEhIASEgBAIKALiSLl4ua2ocbvYY93uzup87WOSsTPvULWBGMKCETaoBSpoRqOcHCKu+5RTmKcs26q0ZCcnOCkKwe3iEdTwzIyVgfSqwwY2R+maY1izZ5Oy3PfhVMWRahKfiMb1E1FSWoJ9xw8p0ucm8yl58kg6LjlRwSmV9aoir6ydx1Xl8HbflhRUKgRyw5s6j7Dbnhu8uv4rTFn2lqa2rjTiMMr3Bj+Eq9oOcrqbnUdL8ObPmfhjYxYKT2oXwujX/sy1cvrgsqMQEAJCQAgIASEgBAKIQMA7UlzYs6zCeXeoovJ+36++Mje3Go77N8yqdU7sDAVTAV5e2MwlpH53sgzmYgq1CzbCEB4MQ1SIVcU9bm+gNopT1LY+KsgZK0/No1msLGXZdGAHN1GMj2OMDkVQ8xiEdGgAlkXXw3gmqrSoMj/qIhJw0KLY9+K6OXjk75l6HN5uH28OvBf/7XiJ3XY1G2TkldMsXzbmrsxAes4ZR7FmO1ufeVZuYGepfWGLj6wXAkJACAgBISAEhIA1AuJIEYEy9agna9xOrystO/3Wb96Mo3pQr++aW010wtrJccgfL45aUINI8BLSIwlgZ6yInDHOeyKn1lAvFAYq7svOlN5WnEviCqRCyPbUuRPsdv/smo/xxMr37LbTo8EzfSfitq6XO9TV+v0luH3mQRxJL3Bov5qNIyPDEelcKa2aXclnISAEhIAQEAJCQAgEDAF9HvX7MK7wENcGX6g9esq1A3lw72BDEB7ocJXbj8ihbDyLZYyPQFDTaAQl1YORHSk3OFEm8paLCytnay5t2Q/2ZM+fWv2Bx5yoSWePwSO9rneY92/rC112ovigSadk4R0egOwgBISAEBACQkAICIEAJhDwjlS0ixFNBcX++e25Onkg+jdwvMaSt9IozMrn6sKICokAh9Cp2WMr38XTqz9Ua6LbtvEdhuK18yc51d+6PWfky53q4NROHZuK0IQr/GRfISAEhIAQEAJCIDAJiCPloiOV53hKis980147+1ZEBIX5zHhtDbSEZqIstaOe7XczWkRTSKENe3TFLDy/5lMbW/VdfUnKufhg8CNOd7ovrcjpfavu2LttVNWP8l4ICAEhIASEgBAQAkJAA4GAd6RiXHwYn1lQmXOjgbXPNWlJBXrf7n6XTfEIXzih8tJyFGbSbBTZ2PZDMOmsK20O+/GVs/HC2s9sbtdzw7mNO+Ob4c+SRofjOWY8DhN97TLz9HGkBnV18T+BnmCkLyEgBISAEBACQkAI+AiBgHekGkS7JmqQXnmP7tHLfbQ4E89t/wIVpyTC3XnwkU3OxVOd/+vOQ7itb1bpyz+erQhMXNDsHHw4xPbsD+dEPbfmE7eNpWrH7eo3x08jX0JEsPOzfcu3n4SZvSkXLSgoGM0bBPzPgIsUZXchIASEgBAQAkIgEAkEvGpfg2jXLnuGhx2p4yU5uPzvJ7Gv4BjWZe/GB73uR2yIe0Ozbms9AodPpuPdvb+4BsuDe7OTwU6U2WRCp4SWmDviOYQYrX/dn/nnI4/lRCVG1sevo6chPjzGJRoL1rum1Gc5eL0oF2NbLR3JqxAQAkJACAgBISAEAoxAwD+KTqjn2hXPLTKjsLI0kWsdadg7ozSPnKgnFCeKmy9N34RhSx/GvsI0DXu71uTZLjfg0iZ9XOvEU3uTxHn+iWxU0IxUUlQCfhk1DbGh1i80z0I9uep9j4yMhS5+GvUSWsY0cfl4/+7VR2iiUZzzs2Iun4R0IASEgBAQAkJACAgBHyYQ8I5Uo1jXQvv42h+h6DF3W3ZZAa74+ynszj9S7VB7Co4qztTfGVurrdf7AxdtfbfHvbg+ZYjeXevan7miAnnkRJWXlKFbgzZYeuXbaB7dyOoxuNgu50V5woIoF+qLS55Ez8QOuhxuf5o+jlRKosxI6XJBpBMhIASEgBAQAkIg4AgEvCPVrL7r1/xQlut9qPWQV16EMSuexra8g1abZZfmY8zKZ/DpwUVWt+u1MpRC41456xa81f1Or1TzKy8pRc6xLJQXl+G6jsOw8upZaB3b1Orpv/zvF3jk75lWt7lj5dsD78OlKf106fpIVjmKivWZBu3RJlKXMUknQkAICAEhIASEgBAINALiSMW7fskPZ7qe9G9rFIXlxbhq5bPYmLPPVhNlfZmpHPdtmIn/bf2YyiW5bzx8MK4xNf/858Cqft5iJ0nBLi8tByEIwoxBk/HRkEcRHhRqdXivrf8KDy6fYXWbO1ZO7jEWE7uM0q3r71fpkx/FAxrYWRT7dLsw0pEQEAJCQAgIASEQUAQC3pGKohSRuEjXwvv2nHDPd6aoogRjVz2HdVm7NB/gnT0/4drVL4AdMHda55gWWDTwJVzb4iKnJbz1GJ+prAIF6bk4mZ2PPkmdsGzMDNzSZbTNrmdsmovJy96yuV3vDSNb9ccL/W/TtdslW/RROGHFvo5NrQtw6Dpg6UwICAEhIASEgBAQAn5IIOAdKb6mzVycldqdpv8MUImpTHGIVmZuc/hr93vaOlyy7BFS2stweF9HdogJjsRrZ9+GFYNex5jkC2A0eO7rxNLmhZl5yDmaiS71WmDeqBex4qqZqjlIH2z7BZOWvObIKbrUlnO05lz8BGWXueao1xzEjsP6zEjFRctsVE228lkICAEhIASEgBAQAloJeO7OV+uI6qBdq0TXbnT3pQMVJv0GXmYux3//eQnL0jc73en2vFQMXfIg1mTvdLoPrTtyiN8MKtz796DpuLxpf7cW8DUR6KKsfHKgMtAuvAm+GzEVa655z27+0ec7F+KWP16CmRT9PGGNIuMV546V+vS09DwS0yg4qUuXrZIkP0oXkNKJEBACQkAICAEhEJAExJGiy97Wuqib5i9EWbkZB3Wa/Ck3V+CmNa/gj+PrNR/fVsP0klyl5tS3h5faaqLr+jb1muDdnvdi3ZAZ+F/na9E1tqU+/VNNqJLCYpI0z0EoCS1MaDWM1PhmYMO4j3BZqwF2j/H93iW4YeFUmDxQwJgHE06Fdn8Y+TyS6yXaHZujDb5cpk9YHx+3dzv31h9z9NykvRAQAkJACAgBISAEfImAJEjQ1WqT5NqMFF/wrUfMcHVmywQTbl33On47tka371BJRRluW/cGdhccwcMdxurWr1pHyRENcVeby5SFCwivovDElZnbsT5rN1iunVUIbRpNGFWUl6OCcp+CKwxoFppADlkK+rXuhvObnoUuCa1s7mptw68HVmLcb0/SjGGFtc1uWff+4IfQu1Ent/S9aFOebv1efLb12lq6HUA6EgJCQAgIASEgBISAHxMQR4oubjsdxOc2pgIjz3H+m8JKe3f8+xZ+PLLC+U5U9nx153dKDaq3u08i6XLranYquzu9qVFYHEY36acslk5OVpQil+pisSDG8eIcFNMrTxYZyIlKiohHPQqHiwmNRFxYtGUXp17/OLQWV/76GMoqyp3a35md/tfnRlzTbrAzu2raZ8chfWakgoNDcHaK/PfXBF0aCQEhIASEgBAQAkLACgG5kyIo8RThFB9lQFah8/kzG1N5X+dntu4l6fJvD7k3BO+no6uQWpSOOX0eQqNwHQpoWflCaVnFjlxEUKXCR2sKB3SHLTu6EZf9/DBKykvd0b3VPq9qNwhP9LnJ6jY9Vu44UoqTOtWPalhfwvr0uCbShxAQAkJACAgBIRC4BIyBe+r/3955wDdVfXH8l3RvuimjpZSN7L2UjSggqCigAop/UVyI7KFs90Rw4AJREJUlDhRFhgIKKnuWPQotbWnpHvnfUw22aZL3XvKSvLTn8uGTvPfuOPf70uSde849p+zMG9j5PE8BJ67ZmCN10t738enpn8oK5KCjPemJ6LllEvZctZ6XykHDO6XbPy4dQv91E5Fd4NgQ8KUn0ya6IT4SuascWZZsuqpa983i2a1PNZjcERNgAkyACTABJlApCbAi9e9tbxZruzWJuigWARH2n1X+GaIEuh+e/F55QztaJOWkYsC2GVh/cacdvWiz6f4rJ9B37dPIzLeyD0tl0WsERWFt/+ctJgBWa7jN+9VTpPq2sM9tUq05cT9MgAkwASbABJgAE3BXAqxI/XvnmtqpSFE3O08ocw2cd+gzUAJdV5TswjwRHfBlvH5slSuGd8iYx6+eQ+/VTyEtV519RHKE9Pfyxbr+L4DCnTuy5BUYcD5ZnXnp9R7o10rdsOyOnDv3zQSYABNgAkyACTABLRJgRerfu9KkBqDX22eV2n5MviL18pEv8fpR1yoxlFNp3sHPMObPBcgvdl5ABkf8IZy7dhm9Vo3FpexUR3Rvsc8Pek5BM5F419Fl+bZM1XJgRVQJhBfvjnT0LeP+mQATYAJMgAkwgQpOgBWpf29wgA+QYGfanyMXDbhyTfoTs+D4GrxweIV0RSfV+OLs5pJ8Uyn56oXWdpLoJcNczklDL2GJOpN5yZnDYkKrYbirbnenjLlmZ7pq4zTl/VGqseSOmAATYAJMgAkwgcpLgBWpUvfe3n1S1NX249atUuki7Pdbx9aWGlUbb39PPYzemyfhcKYNG71cOIX0vEz0WT0OR9POOFWKnrGtMb/jaKeMKQyH2HdCPUVqQJtgp8jNgzABJsAEmAATYAJMoCITYEWq1N1tHV/qwMa3249Zb1jFKxArO0xHkJe/9YouuHpWhEbvu3Uqfrz0pwtGVz5kVkEObl03AXtTjitvbEeLWsExWH7zLOh1zvnz+WZ3FgpEkmI1CuWP6t+a90epwZL7YAJMgAkwASbABCo3Aec8CboJ4/Z1dHbvk9p21IBCkVzWWmlWJQGftZ8Cf0/hT6ixck0oJ/fufB7vJK7XmGRlxckvKijJE7Xj4oGyFxx85Cfu2ap+8xHm6zyrzrLNaarNqmZ0MDz4r141ntwRE2ACTIAJMAEmUHkJ8CNVqXsfIhbqG9mZTyojx4CdiaU6tfC2fVhDLGk7Ed56Lws1XHe62FCMGfs/xtN73kWhoch1glgYuUjINOT7Z/Hz2d0Wajju9Hs9JjkluETpGfx5XD23vq5NnKcAlp4Dv2cCTIAJMAEmwASYQEUjwIqUyR3tUNe+yH3U3Y/7re+TMg7ZNbIZ3m8zDp4iHLUWy9JTP2Lw9jmgfV1aKg9ufB5rE7c6XaSnWtyNYfV7OXXcn/dlIzcvX7UxR3RlRUo1mNwRE2ACTIAJMAEmUKkJsCJlcvs7Cvc+e8umg9LufcYx+lZtg7daPOa0/TbGceW+bkvej5u3TEFi1kW5TRxa76ktb2LpIecmMKYJdavZEi90fsShczPX+bsbrpg7bdO54MAA1I7SptJu04S4ERNgAkyACTABJsAEXEiAs8mYwG9SEwj01eFarjyrkknzkkNy79sh4h90rmfuavlzd9TogqyiPDz99zvlL2rgTOK1iyXK1IdtnkaXiCYuk2jO7x/jzb+/cPr4sUHRWCGCS3jonKuEFIuP4K5j6u2Palu/itPZ8YBMgAkwASbABKQIFIm95ftPZ2PHkWs4m5KH1MxCpF4rRG5+MSKDvRBVRfwP8ULNSG90aRwszrnm8dVd5JTizdfVI+CaT6J68qveE23E71CH3PPs6/qHfQahSMm3bg2P64mswlw8I/YmabGk51/DXdvn4oWmD2J4nHPd24jHor2rMXPHB05H4yuCS3x16zxE+DlfCVkhkvAWFKgTrY/APdgzzOn81BowM6cY/eccRlau9J69wZ3CMfEO2zc7Lv05BQvWS1tgB3UIw9TB1dWaIvfjAgJZucXoOtW5AWukpmnv51eqf77OBLREgBSnDzdextYDmbK+30l2nU6HprX80bNZCG5pXQV1q/k6fEpak/Py1ULcOuuQ5Lwf61cVI7pHStbjCrYTYEXKDLteN+hk73My07zk1MYDBkzsp0OggsB8jyT0Q3ZRLp4/pJ1kvaXnV1hcJKxm7+Jo5jnMvmEE9OKfM8qKoxvxxObXnDFUuTHe7j4eLaPqlzvvjBNLNqnn1hfg74+O9bUX2EQuxyA/PW4XisvLqy9INvlA/CiP6h2F8CDlX2+FQk9b9G0SLqUXWB3Hx0uPkT3szOBtdQS+6AwC5Hcgda+dIUfpMTJlLBaUrs/vmYA7EvhlXwZeXHWhxAqlVH6DSK6452RWyf9X115E/zahGH97DGpFKXjgkjmoVuUsFi4rcr67aLGIi2MJKH/ScKw8mui9S30d/Lx1yMm33b2P2n77twF3tZNvlaLJP13vTmSKEOQLj2svaa/x5ryb+A3I3W9x66cQ6OnYnEQbTu/EyB/ngb44nV1GN7kNwxvc7OxhS8bLzivGkdPqRetrVdf5FjW1wf2vTxQ+2ZQs+eORI9gt3nAZk+9UbpVa93sqLqRKB/cYLlb4qoW5r2Kq9r3h/pgAE7BMIL/QgKaP74VB/DNXPPQ6HFzYzNylCneOftvmfH4On/6Sosrc6NmAvre/3Z0GsuZOEt4IYTYsopkK4y5ymsrNx84n4ByTgvPnZdeIvuL5SO7+JmsDffWH+S9Na23o2szG92FkfB+pai69vlEk7e27dRrOZF92mBw7kw7izm+no6BIPfc2ucKSFer1G5+UW131em+sTwOFoVerjOweqlZXLuvHz1uPp26LkTX+UqFwXc2SdgM07eyd7y6Znip3HOTngceFuwQXJsAEmIAcAhfTCpCdVwRa5DH3nx7aK0NJySgULtpHVFOiSjMrLDJg+ZYU3Dr7MA6ezSl9SfF7d5FT8cS4gUMIsCJlASu599lbjiYZsP+cbb281PR/uKvmTbY1dlKrwxln0EdE9Ps99YjqIx5KPYV+6yYguyBX9b6lOqziE4SVt8yGt4frLA6fb0uWElP2dT9fP/Rsor7Lg2wBVKw45MYI4Q8vbQW9llMEcvFTUsiF4/A56R/gh/tGo0qAcwOPKJkH12UCTEBbBC7KsHJrS2L1pUkXC1vDXj6GYxekv2PtGf38lXwMmn8E3+6yzaPDXeS0hxG3VZcAK1IWeBrd+yxcln3aVqsUDbCg5aPoV6297LFcUTEl7yoG/ToTK89uVm34s9cu4+a1TyM1N0O1PuV2RJtYP+49DfHByt3C5I4hVe+3IzlIvZotVU329U6N3TfIhOkkhQcMJsl02fvox2QRfVP+Su/bMqxRkSJq1INi/xUXJsAEmIBcAnLcheX25a71Hlp4QtZClRrzI6vf2MWnJN3AzY3lLnKak53PuYYAK1IWuKvl3rdBRO/LtNGoQsEc3ms9Fj2iW1iQUhun84sL8OifCzD30Kd2C0TK081rxuFcpjJrgt0D/9vB+JZD0T++k1rd2dTPy2vUs0aRAE/2C7dJDq026t08BG3rBUqKdzW7EB/JtErtPZWN7YczJft8sn+M2D/JX5uSoLgCE2AC1wlcSLUevOZ6xQr6ZuW2K9gh4/tVzenPu68mokXIdCXFXeRUMieu63gCHGzCCuP+LfQiep/yfRalu6SgE8u3G/BQN9tcBb10nvi47QQM2T4Pv6ZoK0xv6XnS+zeOrsbxaxfwdssn4efhbXpZ8jhbhH+/VbjzHU49LVnXERW6VG+GeR0fckTXsvvMyTPgr+OpsutLVYwIDUazuIr3Z05hxwfOk3Yp/eDHyyUWJCnlR87eKIoINeymCCnkfJ0JMAEmUIZAZXbtI6+AeSvPl+EhddAyQSSPr+qL6uHeCPH3KMkplSz2Vx05nyMi9WVLBp+6v2cUBndWtoDoLnJKsePrzidQ8Z6wVGTYSSTUjQ7R4dJV24JGGEVZscOA4Z11ICuXLcVX741P203B7b/Nwp9px2zpwmltvrmwE/2yp2NZu8mI8ZXvUlZkKMLgb2fgdxFgwhUlyj8Uy12QdNd0ri+vS0URZfxTqfRrq+zHRKVhHd4N/dD2bRWK70SkJmuFkjp+sikFD4mIf5bK6eR8EfFJ2p9+/KBq8OStUZYwuuX5QF89Dixsrlj2WSvOYeVW61HHKBLb3gXKI7F5e9m26KZ4EtzAaQQqs2vf93+mI00k1pVTBrQNw6O3RqNhTcv7YK+I7/Sf9lwticxKipVp6dAgCM8MqWF6WvLYXeSUnAhXcDoB9lGxgpz2YwxqZf+PWlqWAat22aeMBXj6YmWH6WgcUsuKxNq4tDf9BHpvnoQ96YmyBRq18Xl8f2qH7PpqVtTr9Pjs5pmICXC90rFii3TUOLlz1+s9MLaf+4c9tzRfCm/u6SH99/ne95eQJ8IPWyqLN1wC5eSwVhrH+mNAO/ePfGhtjpX1GuUoU/rfW8bnjngq7Zfq+3hKf6Yr671y13lXZte+dTutL3YZ7+m9XSPx1sO1rCpRVJfyA94lrE0/zG6It0bHo0bEf4GUyIL19iPx8LDhydZd5DTy4lftELDh46Yd4Z0hyaDWOvFHaf8P2ye/GlBop6EhxCsAX3SYgTqBrguEIJd5Um4a+m97BusubJdsMvnXt/HJoe8l6zmqwqz2o9CtRktHdS+732WbM5CZZeOGOjOj1KkRirAA+z+7ZrrWxKn4aHmudpevFuDzLeaTG1OEJvKLlyq25KSS6lPqetq1IpxNyRf57Oz84pAaSMZ1LckiQ1yuYoFAZk6xyJNWYHVhwULTCnmakpVSlDdKbCqxlmLX/Curax+lf/z1kHTQqIQYX8wVe5qUFBEXqmRx6/tZDdBPJOT1FXtX3388waYcUu4ipxI+XNd5BNi1T4J1VDBALn5bDktUlLiclP5Pgt4BLe17sI30CcGqTjPRb+t0h+ZwkpiOrMs5RXl4cNermNTg7pJEw+YavfH3F3hp92fmLjnlXN9a7TG1zXCnjCU1yFvfqGeNorGe6GfZnU1KFne5PnZADL76LRVZudb3Mr4rrFL3dI0ot1L56eYU5EooKuQqctMN4ovAQYV+xPedzsbm/RnYIv6fupwHcl+hvCjGEihyV9Fq602Ng9FLBNtoI4JtqLC+Y+z++quWZLkuFL/BXyeykVdgXqH2FhYscnW1VCis/5Kfk0ty65R+oKekpTeKz9PTwmU1LtLbbPOr2UU4JCMnD1lsyZomt5DL7dEL0otGzeL9VQvuQorS98KF9zcR9OD3o9eQmJSLglKWalowjQj2REyYNzqKv/leLULQsnYA6IHdlkJKGv0dJwklLT1L2rVtx5FrVoch63vrOpbvs9XGLrpIi1ilGVsSg3jb+n0WLL4bFwkr1GnxvRkn9rHaUtxFTlvmxm0cT4AVKRmM72ijF4qU9Qc1Gd3gwy0G3NqcLFxyaluuQ3uPvur0LPoLZYosP1oulHX8+UMrcCzzPN5oMQY++v82iq089jOe3rrAZeLHBkVjae8ZLhu/9MAU8vxCSmbpU3a9DwkKxIDWvnb14Q6N6cFn9M3ReHXNBavink3Jw7qdqRjU4b99e7QVbclP0hESp9xZ3Wrftl6kJJz0gPv+D5eRLB44rBXKi3VE5Lii/+8JV0RyZxk7oCru6Bhu9/cJjaslWaxxqKzXHll0QliS8s1O39/HA4ffLr8Xa3diFuZ9fh67jpt/QCdlZs2OVDx2a1Wz/dJJ2th/7yvS+3K/nFIfbevKf8gnpeFhMSepsmFWQ0lXL6k+6PpGsafmhS8vlAQrsFS/SGhaZJmi/3+fyMKib5OEYuVVEmDmfyLlQYiM3HEvfHUBq7anlgRHsKT4mhufXIvveuGouUvXz4UGemLPm02vH7vDmySRiFhOIYuUvcVWJYrGdRc57WXE7R1DwM5HescIpbVeOwuLFAWdsLecTrF/r5RRhlr+0fiq47MI93HcSrlxLDVevzq3FQN/fRbJIu8Ulc3n/8aIH+ZKRt9RY2xzfXjqPbG87yyE+WqD35yV6lqj7uwUaW7aFfLc6JujECXyO0mVRSZ5or4VgSqS0sw/nBr7ooAWzWv7Gw9VeSUFjqIEdpy4H899cV5SiTI36DmhGI7/8DR6zjgICt1ua9GSLLbOobK3y84rKpcvba3Yl0IP5paUKCMzUsLqVLP/IdbYn9ZeyZI3+PmjeOCNRKtKlCW5UzIK8ObXF9FB/K2+vPqipJstKbtk9VOiRFkauyKczy9l8bM2nz+F0u/K4i5yupIRj22ZACtSltlcv0Im57vb2a9IUYfv/GxAtvVnt+vjSr2pF1RDBKCYgWCxd8odyq7Uo+i9ZTK+Prsdg9ZPQX6RvNUqR8xtTocH0b5qY0d0rbjPIxfycfBUquJ2lhp4eHphwsDKExiBQpuPvS3GEo7r58maQyvTxrJMRPOzVsjVZ+Id1axVUXyNQvgOeekY5gsFiiwC9pbEi7kYNP+IyJclbVkzHUtLspjKxsfKCJAVxVjIwvnEe6dkuVTdEOdns0uVcTytvq4WliH629gp3PjsLWQRJoWq9zOHsFPCBc/esSpS+8gQeU5P2w5mlFjFXTV3d5HTVXx4XOsEWJGyzuf61cFCkQrytV+ZSr1mwEfCxU+t0jQkHis6TAVF9XOHci47GQv2fYWrefb/uNk6395xbTGx1T22Nle93YSPLwrLnHrdtm0QAX/zWx7UG0RjPQ29MQJy3EMW/bsP7URSnmQCXspDklDVNp97c3jI1eqWmfQgpp4LJ41DexCEZ5CioiVZFAnOlc0SMCpSFHlstgjNTi7VckqzePdYhJMzl9J1ftqTgXEfnJaMxlm6jZz3tA/n3lePl7j/yalf2euQp4BexuYnWlQa/tpxlylT7iJnZf88aXX+rEjJvDOB4nmKlCk1yjIRwe+ydCAb2UO1Ca2PT9pNgo+HtHuT7E4raMWqIsS5VvZFEeKD5/Lxd6J01Di5t0MHHabfWXnc+oxcaN/h5DuqGw8tvpKr0+/HsvCZCDJhrfh66TFOhpXLWh+lrx0W1rB7X3HMA1iv5lUwqpf8e64lWUoz4ve2E7gkXFQviv0o0z45q6iTprXUdVtVNLiDKlOQh8lLToP2PDmiTBZ7JqOr8G+tHLb+PnpQwBA5hQKAkBvmH+L72dnFXeR0NhceTx4BVqTkcSqpdU9HHXxUSJaYW2DAwo3qfsl3iWiCD9uMh6fIHcTFPAHKF/VJnxmI9NNObqWJSy4CKn4U6tQMR5NYee4U5im579k+LUNEVKtAyQnMoWSqv1pXXkf2jETVUHUelsiF7n6xR0MqsqCk4GYqUISxV0bFmbli/pSWZDEvIZ+1hQApUU+9fwpXs5W5i1ZERYqCRBgtdHJZyrGaUF9KFy3kjl+R6/VoGiJ7ehS99I7njuCBNxPF/j7nKlTuIqdsmFzRaQQq5xOXjXjDhBfEQBG+/POd9j/5rv/bgKEddGggvbVDtrS9o1vh7VZPYvSu14Wrj/lQubI7q4AVp7S5D91rtNLMzPafzcfeE9Yf6JUK++xQyxG4lPbljvWn3lUdt4t9EdbKnpPWf6BD/D3x6C3qcKRF8QcXJJbkqrEmk+k1Ck1dv7ofosTKd5LYvL7vdI5weykbOZT2cC0QCSmryIgmRv1rSRbT+fKxfQTe+iYJtI9HSQn29wDlYqtohdIhSBX6G6fFkv4i/xClFfATlpPLYp/ZIWE5/nZXuvifhkwTntXEosWrChYtpGSoLNfv7xlVEp1UKjJpaR4b/74K+t+ghh/u6xaJ20W01QBfx677u4ucpTnxe20QYEVK4X0Y0UWHr3bpyuR4UdhFSXUKdzp7dTGWPaJXdbPvwGodkd08F2P/flu2n7wt8rtbm87VmmJmuwc0JfaEj0TIbvt18utziq0ahhsbVLLNUddn/88byrPSp2UVbPgz3eSK/MOHb4mWFepYTo9fCsvXXwoiUlE+nmlCGezYsGxeFVKC9ovV2rkrz2OHyIND5Snheqgk5LSWZJHDjuvIJ2BNiWonco51ahSMeiI6n7fwqKDkyhR4Jc/eDPHyxXNaTYpgaSlMvFEISty6YmJdNI71M54qeSULNP3v1iQYU+6shpdWX8Bykcibfqsph9NbD8dLfi9QKPm7u0SU6Xf5lhSsFWHmrRWyiH02vq61KiUyWK2g0YuUX4y+08YuPqVYQnJDnvbJGTz35XncKVI9jOwRidoq7lstLZC7yFlaZn6vDQKsSCm8DzHCK6xPEx2+ERYle8uhCwYs3WbASKGcqVmGxXZHVmEupu77UM1u3bYvCnH+6c3PCoXVsStaSgD9vD8bB1SM1EdjT75DHSuKknlosS7lffpJROcrndBWrpy092GUWEFVo+SJIBCvrhGumzLL4E7hmD881qz7MO3XJjesleIBkHJPbdmficf7yb/fWpJFJg6uZieB+mI1f7p4gHVkMmk7RVS9+clLeZJ9khXKVIkybUQW4efE3+JwYQ15dvm5EoZykuHWFcpqXZNAn9sOyNsQ3bGBtFuyqZzuckwWJVJKbQ20QwsFH/90ueS7r0ujIIwQClXPZiE2J0u2xM1d5LQkP593DQHtPFm6Zv42jTrqJkqqq47yQ+HQz6jr3VUyp//VvgXTGg2zaX4VrdGHvaaiRqA6D8dqsZn4sbJN4VLjRoVXQb9W7hG5UWou9l6nFcshJqvCcvukMOq+3ur8bVOyX6nVcaNc8+6LLdnrJGcP5ojukfjgidqKHiK0JItxzvzqOAItEwKwdlr9SqVEEU05e6NqRMi32jes6VeyePGosFJzsY/AiyNjQXs67SkUjXKLUExHiT1UnScdKFGsCorsX9QuLZO7yFlaZn7vWgKsSNnAP14EyBrYSp2HrTwReGL2GsfsZxpb93Y8WW+QDTOsOE2ebD4Y/eM7aWpCC79Lx+VU6/t0lAo87jb51gmlfbtj/acGxoCSjSop8dG+Nitg5sZZuU3eCknP5iFiH0BZdyBz/dlzTkuy2DMPbitNgNxDl46rIz7/le/nXSfjZ5n23nBxPgHaj7duen1hDZQXxU9KwrMiKfmMZWdx05SDoO83cn9Wo7iLnGrMlftQh0Dl+6ZVhxvG9NSJHyoZ39oyxtt90oAvflfpW8BkvOkN78GDtfuanK0ch62i6uOFzmM0NVlysXpj7TlVZYoMD8Gwzur8OKkqmAs7iwz2FC42yix0j90aLSzN6gh9NiUfR8/nSHZGeyMmyQjbLtmRlQpaksWKmHxJBQLennq891htBPspW0RQYWhNdEEBIaQKRYZ76998clJ1+bq6BMh1+svJ9dBNQSQ/KQnOCYVq/Ien0WP6QVB+PDWKu8ipxly5D/sJqPTYYL8g7tYDRfBTc2/TGxsMuOSghbLnmozC0Nhu7obYLnkDvf3xWd+Z8NJraxvghCWXkJufb9fcTBvPHVbD9FSlP6aEnFLR+UwhbTmoXqLcn/fK+2O+rV2oiM6nTOEzlVvqWEuySMnK1+0jcK+wbNZU4Lpm32jaa91c5CzSyTBLvfjVeYx4PREHzkgvdmhvlu4tEUXf++jJBLzyQFxJxES1ZpN4MRdDXzqGH1SyOLqLnGrx435sJ8CKlO3scF8nHaKC1bFKZeUZMOWLYpFE0A6BrDR9vcUjuK16Rys1KtalN28aizoh2lIwDp/Px9rfklQFnVA9An1bVLwQxvZAIheP50WUJ6Vl3c40UNQvNcov++RtMH9ApcAW1mTWkizW5ORr9hEI8PXAEwoCkNg3mjZbUyjztiJKoZyySSx29J15CHe/eAxf/5Emohg6xitEjiyVrQ5tMR/cORybn2uMmcNqIiJYnZx9ufnFGP3WCcmE63J5u4uccufD9RxDgBUpO7j6ir/9R4WLn1rlr1MGvKVyol6jbCLIOt4ROaZ6V9VOHiWjbGq/3l2vB0Y01J474/1vnhYh6dXTlHUiCuEr95uEiFIbphv294Xwlz8iw63OdGq0kXnO58oVMNN+6PhMsjyrY0KMY61RWpPFHCs+pw4Bsm5StLnKXmYLCz3lhZJbtot0Ao++fRKtxu7F5CVnsJ+tVHLR2V3P21OHB0Q+r+0v3yCC7dRCkzj7XdSLxEoa3ccNf8rzCpAzCXeRU85cuI76BOR/26g/doXosX8LHepVVU+ZWrLVgG1HHYPGU+eBD9uMR+fIGxwzgAZ6rRUcg3e6T9CAJGVFeGHVFZxPVs91jHpvUS8KLWvzg1Np0hS85RUwwBTCAAAm9UlEQVQFIcdLt6X3FJ5XDdeQ5IwC067LHUeGeCHQwUkmaVAtyVIOAp9QjYCfyI/EBaBIey+OjFOMIiO7qMSScYuwUt0+/yjIQl2oLMex4jG5wT8EfIRCNbhTGL55tgFWi2iTt7UPg5c4Z0+Z/8V51T183EVOe7hxW+UE+JtXObMyLcgd+6m+6mGkVfHpXxYjSb3FlDLy+ui9sKzdZLQOq1fmfEU48NB7YFmfZxDsLTawaaicvVKId79TN8CE3sMTb47iSH2mt3nxD5eRlCbPGmTa1nj8nJ0/wBSON/1aobE7i6+1ohzvkqklWSyC4AtMQGUCZJ17qI/tIct3Hb+Gx949iW7TDuC3w9dUlo67s0aglQjdv+ChWtjxchOMG1gNUWLByZZy8lKuai5+5sZ3FznNyc7n1CWgngagrlxu1Vv7BOCWZuqhvJptwMQVxXBU4vkAD1983mE6moTEuxVnKWGntx2BDjHas7aNeP2MWNlUd2nz5jYxiI1Q7zMnxdYdrqddK8Lb31rfg9ZC/Ej7elnnRpuWP/0lxeYpX8mQVqKocwqz6+iiJVkcPVfunwmUJjD97uol7mIh/rZb7U9fzsOQF49i4sdnkCGSwnJxHgGKvDp2QNUSt7/XHrTN7e/1dRdFcCfH7n1zFzmdd+cq30jWnygqHw+bZzzhVh1CA+wzRZcefN9ZA17/3nFfAMGe/vii4wzUDapeeli3fd+xWhNMbzNCc/Iv+CYNx8+nqypXgL8/3nxAJDPjUobAm19fRKbEw860wdVxV5fwMu3MHbwmfoCv5dq2n01G0LCSIR21UFJ6PlqSpbRc/J4JOIMAuYttnNvQ7nDbK7akoN+sw7gq3P+4OJeAl4cOd3T8x+1v4SPxiiL9JV8twKFzzonM6C5yOvfuVY7RWJFS6T5XEXskJwplSs3y6W/F+PovxylT4d7BWNXxWcQF2O4CoeZ8be0r2CcAn/SeAb0IvqClsv9Mntivc1p1kWYOi4O37YusqsujhQ4puMMnm6xbkSgRJEX0erhvNDzFj7O1ckXscVr4jXXrlqX2cjf8k+uJo4uWZHH0XLl/JmCOAOUEWjI2AV9Mqoc+LaqAcrfZUk4J69ST752ypSm3UYlA/zah+GV+Y1ASc7nlRJLjv2dNZXEXOU3l5mPbCGjrydO2OWim1c1NdbixgW1f0pYmMXuNATuOW7pq//mqvmElylSMn/Qqvf2jOaaHt7qOAwWZ0FKhvSnDXjmBYpXj2TesFYm7O/ppaaqakOXFVReQL2HioehQVGqIEMm3tQuTlPsDsd/qQqp00AjTjmhlMkhGQtSTl/JMm6p+rCVZVJ8cd8gEFBBoVz8Qix+vjc3zG2FUryhUCVS+GkU52d5YZ9sCiwJRuaoVAj5eOix6uDbITVtOcYUiRXK5i5xyGHId6wRYkbLOR/HVaQP0IhKXespUoXggH7+8GEcd+N0d6x9VokxF+Mhf5VEMxkENhtbvhXvq93ZQ77Z3e9/r55Ceqa5LgYeHFxaPqRiumLaTLd+Scj99/Xta+QulzoSLPCUDRCQoY3nklmjJxJ25BcUgBc2WEi4jDDUFpLia5XhXIS3JYgtLbqN9Annib8VdSpwI8vLs0Br449UmWDA6Hq3rBCoSndx+z1+xL6CNogG5cjkCvt46PCiUYTnlhBMWrCzJ4S5yWpKfz8sjwIqUPE6ya0UFA2P7qKdI0cCUrPexJcW4qO5WmzJzqhNYDV92fAYhXvJWeco0dtFBbFA0FnV72kWjWx72g5+u4rcDyZYr2Hjlnu41OMCEGXYU5paiXVorI7pHgkLXGku9ar7o3UJ64WD19lTsO608SS89rMkpB8+qq2ybG1NLspiTj89plwBZNOWUtEx5AVbk9OWsOvR9QNH9Vk2th5XC7a9DgyBZQxeLPEXr/3Dgj7EsKbhS67ryFOBLacq9CtSk6y5yqjnnytYXK1IOuON3tNGhdby8HyC5wydnCmVqaTEyHeju2zg4riSaX6Cn9l3HaD/Ukt7TNRfqnPZFzVtxSu5tlV0vvEow5gwJlV2/slT8ZV8GfjtkPT+Xr8ivQ4qUaXm8n3T4eFLQ5q1UnqS3S2OxoiKjLJKIMiijC8kqWpJFUliuoCkCUWJ/kZyS4oaKVOl5tRduf59PrIuxt8VIWqqp3Q6Rb05u8ZaIEkr90DpQRc9ZlS6s70t/tr6PVS5Tqhfo6yGruhyLfOmO3EXO0jLze9cSYEXKQfxn3q5HkIoufiTmicsGPPVpMQoc6A3UKrQuPm0/Gb4e3g4io063E1oNxY3Vm6vTmUq9XMkowp0vHFc91Lle5Md6/7Fa4gdeJUErSDf08EHWKKlyV+dwhAaW/9FtWssfcpQMUtQ27lGW2K1zI3mr25v3Z4iHMsfmqdGSLFL3iq9ri0BVmYoURUdTUn6VWPxQ0peadccJRWpkj/KLLqZjJCmwcsSESiujtGCTlF5x3QVJSRy98ASmLzsjXk8iy8aIqKXvw98ns0ofWnwfLYO/sbG7yGmUl1+1QYAVKQfdh+rCeEDKlNpl98l/c0w5UJnqGN4YH7WdAC+98s24as/XXH8touphVvsHzV1y2TkKLtFndiKyc9QPIHBfz1i0qq3Ne+Ey4GLgL39LxWGJ0LYeIkLX/6wk5nxChlWK5vjcFxegJG5Io5p+oH1ZcsrzX0org3L6sVRHS7JYkpHPa5NAgK/Y8ysjcMoPf8lfaFjyc7KIsKm+67MpQVstPIPFwotUSc+S78pYTQS3kVMuVOB9V6RAbT/8jxXvu91p6D/nMHYdl6cIWWL37S7r+2KN7epVk+9h4y5yGufGr9ogoP6TvjbmpQkpujcC7umoPuJfDv1jmcqX/12umEfPqBZ4t9VYeOjKr+Qr7kzFBr6ePljW5xnNKXm3PXcal1PVtyzEVg1jlz4zn5+8QgNeWS0dCKJ/21DERVp+kKFIXh0bSluPjl3IwWeblbml3C3jgYym9mdiFqZ9claRaw9FE3zhK+n5G9FpSRajTPzqHgRiQi3//RhnQH8fu8XnWKqs3HYFMz87J1XN7uvvfHcJA+YexrELyn3hg2UojkrcxaqHSfOjCf/4t3xl1G5ATuzgw43J5b47j4uk57fPP4KHhJWKwsorLSu2XpGVNF0n3Dj6tJTeC0vju4ucSllxfccTUP8p3/Eyu9UIY2/W4YYa6vtkbTtqwBOfFCNXmUeFInb9q7XHGy0ekeUzrqhjOyo/3+lhNAiNs6MH9ZuOee8i9p9IVb1jLy9vfDYuVvV+K0KHH/5Iocmtu8LQj+hjMixOTw+sJgvJa2svKnJJeahPFPx85H3F0gr9XS8cxeWr1ldHxD53vC/CsnefdrAkzxVZ5eQULckiR16uox0CVWW6Rk386AxOW3gopuTWzwoFavyHp4VlV3yIHVj2nMzGS2KRZb8IEnOrSKJLShUtvMgt2w5mSFatKkO5NHZSTaYiRXnwUt18r5lxzsZXcl2es8Ky4vz97nT0mH6wxN3v6z/SkJNvPfojpYyYvOQMpi49YxzC6mvrOgGgPGJSxV3klJqHuev090YeM2r9NzdGZT/H/kIO/gR4iueoF4foMWRhMTJy5H+ZyxFrZ6IBI9/Oxtuj/BAaoL6yRjLcXbMrsgpzMWnv+3JEcmidnrGt8XizOx06htLO536RgvU7LiptJqv+xDvjOUqfGVIUMnzRN5fMXCl7ilYiKTqfVGlTN6Bkr9TWA9YfoFJEkl4KDjHhdnmKFyXDva9rJN7bIC0rybjr+DXcMvMQHuwdhVtahyK2lCXtotiT8aNwn/psSwoOnvkviuB8EQiDkowG+VlX2LQki9T94OvaIlD6c2hNMrJK9Z9zBHd2CkP96n4lD7C02EGRKVeJ6JfXchzoj/6vYKSwPfbuSRT8qzhRCgPaR0nWBgouM6hDmAhSYPlvhZSwuTKCy8ixYhtZUQhs+vuTUpKy84pw+3NH8dbD8bghtqw72hWhYFEQhISq8qKBGsd25StZnR5956Sk4kz3itz96D8tPFE4esr1VyPCG1UCPMXiUgHI7fFMch7+EO6AFDVRbhlzi3RAIXeRU+6cTeu9JFJ40H81Ci0g/P7KDWp0VaH6YEXKCbczpgow9049nlxWLBmmWYk4hQU52LE3ETdN9cWGWXURU8XyD4SSfk3rPhB/M7KKcjH7wDLTS047DvUNwke9pjltPDkDzRFK1OLvzsipqrhOs7rRGN3LfULRK56gHQ0WrE/C1WzrlhvqXk5UPqMYTw+MgZQiRXUXC2vQfd0iIXeV/tFbq4JWWi9KWM+MctBDAz340X8fEe2LHsAotDQ9EJorpNy9suYCZoq8OFJFS7JIycrXtUOgt1DUP/1Fnlsr7R0ii6mrClkqzFnFktLyhfvsGcxafg6dRCCYTsKdl4JARIV4iQXOohLr9pb9/wSVkUqlQJbuvq3Ej7qCQkFt1u6Qth5T8th+sw8jPtqnRBktFkEoTl/Ox5HzObhFjLnokXgFo7qu6tXsIjzwRiIyxKuSkpNXLOt7WE6fPZqFoEcz69FT3UVOOfPlOq4j4Jgnb9fNR7Mjd6kPDO+sntWoUFiJMq4kitWZIpH4NQvdpx8RvsbSD5e2Anq8zkA8Xd911qCFIl9UtYAIW8VXvd3slY5TooKDArFiXHXVZa4IHZ4TK5O0WV2qdG0SgiZx/lLVrl9vmRCAm26w/qNLlXOF64mS1T2KFvjumNrwJtO0wkJJTkkBs6REGbtb8lOyZNANqqslWYyy86v2CVDUxxB/9ddc1e7zi19TsUZCWckvLMamvVcx9/NzJdaSwcKddtSbiZix7KzYo5Qua6HzdmHVkhOJr/SdvbPjf8nAS583954sLonCmkPBFMj17dDZ7BIrjJw9aOb6c8W5ILHP7NY2oS7bFhAa6IlZw2pKTt1d5JScCFdwKQHlv+4uFde9B3+8lw4ta9mvTBUV5iEzJREGoUQZS1Z2Dno/ewR/nXTcpqnJDYZgdMKtxiGd9jqkXk/cXbeH08aTGmiWUKLe/94xlihPTy98Pr42AtzHg0MKl6rXSYkhBUOqKLFGGfsaP0iey95Xwk1JSSLd5rX9MeseaYuRUQ6lr+QDP108CMopWpJFjrxcx/UEKCnvA72kQ4IrkbS9SH77wZMJSppYrXspvaBEGbJaSYWL9OA9ZbDyRS6ySDWoUdZdT6k4tKhCLr7uUESwVEy6oxree7S2cDt2bsCqAJFfaulTdcq4Rlti5i5yWpKfz2uDACtSTrwPHoL2q/foERdhuzJVVJj/ryWqvPUpNy8Pdzx3GGt3KY9UJBfD3Bvux31xPeVWt7tetcAILOw2zu5+1Org2eUp+MBBSpQOOswZnoDGNdVf/VVr/q7s58CZHLHiLB3ytl39INC+J6WlWby/cAWRjvBEK8ZzP1cWsvyemyLw4v1x8PK0/W/f2nz2nspGYpK86FdaksXanPiadgg80reqcGeVF31OSupWYg/Mx0KJalBDev+iVF/G6xRQ4PkRsQ6xnBnHIFfbxY8nCHdA5d/P9MBO8pFboD1lt50hw+0Z25a2tE/16xkNStwUbWmvtA1ZOT94IgH0Xa6kuIucSubEdZ1HgBUp57EuGSlELEotHKFHeKDyL9Ti4gJkkjtfkeVVqcLCAjz5zmHMX+W4UKqvNB+N22t0dgq593tMRhUf6fDUjhaGkr+OePMcPvrRMZYokn9g51jc01nZD4Cj562l/mnfkNT+BZLXFmuUcZ5PiYSccgpF9tq0z3pwCtN+hnQJx/LxdUv2PZles+e4YU1/fPNMA0Ub0bUkiz1z57bOIUABEygIgq+3fY8MtFBB1gJ/EVSAwoxXES5YapWB7UPx45yGslx0lY4Z7C9cdIV1pWODQKVNr9cn9+Fpdym3Zl3vQLzZLQLSuFupLQJkfD+rIV4YGYfqMnNq2TJHWkDbMLuhzffIXeS0hQ23cSwB+74VHStbhe2dkvW+OVwPP/HjJLcUFxXiqnDnKyqyHvKZ+isuLsY76xMx9PVLUBDgRq4owm6iw6KWT+DmmDay29hS8eEmA9Enrp0tTVVtQ5Gguk5PxKa/HbeJul5sJN54QDoRpKoTc6POthzIlLUJuVl8AG5sbLvi3bSWP2hzvZxCEfOU/n21rReIjXMa4f6eUTbtmyotF7nMPNE/Rqz41kddGdEJS7el91qSxVQ2PtYegbbCykvKBLlOKS2+wpoz+56a+EhYokpHmIyLVNeHmYLAfDKuDr6cXA+0T1KN0rlRsFDQGqF7U+k9lFLjURoC4uAp3CVtKe60T6r0/MgbZ+iN4djyfGPMvTdWNesmjVEjwgdz7q2JlRProlqYdKjz0nKZvncXOU3l5mPXElBvOci183C70RuJ7RgUFn2siOQnlVfDIJSoksASYm+UkvLr3vPoNDUHX0+LQ4QNFjBrY3no9Pig9dMYtnM+Nl/ea62qTdcSqlTHS10etamtmo2OXyzAwOeOI+NajprdlukrKDAQayZLb4wt06gSHZA1kKxRcsrj/aXD3Ur1Q1YpSo4pZf2iSForRDjyYcJtT0mJCKaN0DUw+uboknDqG/5MB+3xkFvowWFE90jc0zXCaihnOf1pSRY58nId1xLo1iQYP81tdD04g5Q0pHQNah+GUSKkv7nQ3bVEdLo9J6UT+UqNY3qdFgmWiv+0l5ESaW/am4GzKfJ/Pz2EL16fllVwf49IUNJuNctI0eeNYs/UHBHw4qc98j1HAsXCCYUFd+dC++2Gd4/AEKFU/Xoos2T+P4t7c07BvaH5k4t0y4RADO8WUZIqghQgNYu7yKnmnLkv2wnoMDfJbFB+w7Ro23vllrIJrN5lwOw1ljfPU0CJq8Kdr0iEOre1+Pv549OnE9Cqtn2rNebGzy7Kw13b52DnlcPmLps918KrFn46vtPsNTqpF0ra5jvfQseYJhbrOOPChr+yMObtRJGTpPx+NLXG9/b2wdfTG6BhDeWrvGrJwP24ngA98P0iXAWPXsjFFRHSPDlD5I25VghyKQoXIdCjxf4USi5JYZspNLIji5ZkceQ8uW/7CFAEze9EVLnfj15DsgjbnyI+s5QHqKbI/0MuXI1j/dFfRG4LsJK3yT4JlLWmfEH0N5YoQowniaANtHhBuZ1IQakSQP89SwJC0N9ZS/GfXA8dXUgGUiR+O5yJy+I95YvKyi1CRLAXqop9X9HCwhYjEvq2qRuIVsI1UG2FwdHzk9v/0fO5JYrVeRFQgz5LxIKSk1OCXro3YcIFlNxAa0X5oL1QbCnXFLmbOru4i5zO5lJZxtPNu2R2qqxImcXi3JOLfjJg8abyypRBuOhlpCaiMP+/BJy2Subh4YlJg2vj4d7qrq6RPJmF2Rj06yzsSU+UJZ6UIjWh1TA83+kRWX05qhKFN/9gw1lJq4Q943t4eGHZ+AboVF99BdceubgtE2ACTIAJMAEmwASYwH8ELClSKhtE/xuQ38knMKaHDgNalr0VBgMpUSdUUaJIkiLhHjh/xVGMWKD+vqkgT3980XEGGgTHyp+0hZqNw+Mxu/2DFq46/nSeyLLef96pkvDmUq5d9kij8/DAG6PrshJlD0RuywSYABNgAkyACTABFxIo+/TuQkEq+9DPDNShe6N/TdViU0hG6kmhRKnvO77pr/PoMOkELqSVt4DZcw9CvQLxZcdnEB9g+x4VT70nPu41Dd7CUuOKcuh8PlqPO4w9idIZ6O2Rj0LgPjOkDga0Vi/8rz3ycFsmwASYABNgAkyACTAB5QRYkVLOzCEtyPf5BRF84sb6+EeJynNcmNOLKem4acohfLnD9n1X5iBE+1TBqk4zUd1P2eZ7Y19TWt+LllECgAvK2xvScevMQ7jqwKASxmmN7lcbo3ooz3NkbM+vTIAJMAEmwASYABNgAq4nwIqU6+/BdQk8xd14ZiAQ6O244AbGwfLy8zBu8SHc83qSCKZgPGv/aw2hRH3V6VlE+coLIW0csVlkHUxvO9J46LTXq9nF6Df3FJ77XLhRFhU5fNw7bozD1EHqhOV1uLA8ABNgAkyACTABJsAEmIBFAqxIWUTjmgvhQR7YPL8+wquoHxSi3IxEvMatey+gxbgj+O2IdH6qcu0tnEgIiClx8wv1lpfPx0sEwvi413R46h0fJam0yF/vykKbcQex94RjXfmMY/brEIvXRnKuKCMPfmUCTIAJMAEmwASYgDsTYEVKg3evSoAe254TyeUi7U8AKGd6GdeyMPSlgxizOFnktJLTQrpOw6BYrOwwHYFefpKVp7UZgaYRCZL11KqQlVeMe147h0ffPoLcfPUUSGvy3d21Fhb9zzaXR2v98jUmwASYABNgAkyACTAB1xBgRco13CVHDfDRYeu8OqhTPVSyrhoVKNT6+u1n0fTJI1i/O1eNLtG8SgI+azcVfh6W8960iKqHqW3uU2U8OZ0s+SUDzZ88gK37LgNmM6jJ6UV+HQos8UDf2nhpeJj8RlyTCTABJsAEmAATYAJMQPMEWJHS8C3y8gR+mh2PpgnOcwfLzBJJaBcdxMAXziP1mv2aRofwhljSbiK89eUj8ZFL30e9psJD53iXvlOXC9Dj2ROYsfQ48vILnHLXSYl6/LYEzBysbL+YU4TjQZgAE2ACTIAJMAEmwATsIsCKlF34HN9YPItj/bQ4dGkS5fjBjCMI/enPI5dEKPD9mPLpFRTbqU91i2yGxa2fKqcwTW0zHE3CHevSl5tvwJj3LqLr1AM4djbdOEOHv+p0ekweUg/jBzjHPdPhE+IBmAATYAJMgAkwASbABMoQYEWqDA7tHnz6VA0M7VoD+DfVlDMkLSwswKc/nUbjxw/jo0325bS6JaYt3mr5KPRCwaBCUfqmth7u0Gm8sjYVNzyxH+t3XESxcF10VtGLoBnzRtTDI704xLmzmPM4TIAJMAEmwASYABNwNgEd5iaZtTcYpkU7WxYeTwaBpWKPzzPLTjhVMTCKVTU8BFPvqoaBbaQDSBjbmL4uPf0jlh/4EfPbPIgWkfVML6ty/PHPGXh1zXmkOyEnlKnAPj6+eO+xOujW2Nv0Eh8zASbABJgAE2ACTIAJuCEB3bxLZqVmRcosFm2f3HE0D8NfP47c3DyXCFo1MgTPCIWqXyvbFKoD6cLKVSVOddmXbc7AS6svIC0jW/W+5XQYERqCNVPiERvBhl45vLgOE2ACTIAJMAEmwATcgQArUu5wlxTIeOlqMfrPPYGkKxkKWqlbNTo8GGNuqYr7uzkh55UF0Slc+1vfpuGDH5OQnpljoZbjTzetE41VE6vDWwQI4cIEmAATYAJMgAkwASZQcQiwIlVx7uX1mRiEU+aQV89h+wERytuFJdDfH3ffGIWJA8Pg5ySPtrSsYsz7MgVrd1xGXp5zckGZQ6wTm9YGd43Dyxze3BwePscEmAATYAJMgAkwAbcnwIqU299CyxN4cXUqFq4/DQNpVi4sHp6eaFU3HBNvj0TbBMdoVD/vy8Yra5Ox/1QqDPaGE7STlaenF2bfm4B7b/S3syduzgSYABNgAkyACTABJqBVAqxIafXOqCTXxr3ZeHhhIvILnJMjSUrssJBA9G0djrH9QhEdYt+eIcoB9drXqdj41xVkZquTLFhKfqnrgf4BWDYuAS1rsy+fFCu+zgSYABNgAkyACTABdybAipQ73z2ZsielF2Hg/BO4kJIps4Xjq+n0OsTHhGJEtwjc313+XqqCIgPe2XAVn/6SjAtXxHxca2wrA6pebCRWT6qJINtibZTpiw+YABNgAkyACTABJsAEtE2AFSlt3x/VpCPvvlFvnRfWG/NhGlUbyIaOfLy90aFxBCbcFo4msV5me/jtSA5eW5eCXUdTUVRUZLaOq07qRHbku26Kw0u8H8pVt4DHZQJMgAkwASbABJiA0wmwIuV05K4dcPHGq5j/+UmhjDgvEa2SGUeFBaNrkxBcSM2Hl4ceYYEe+HlPKtIyXRO6XEp2Ly8fvDIqAQPb+kpV5etMgAkwASbABJgAE2ACFYiANUWKkhGViwyQNyUa3vZtbalA+NxzKntP5+G+1066LK+Se1IrL3W1qFB8Pj4OcZwfqjwcPsMEmAATYAJMgAkwgQpMIF/YJHyeM+vpla8X0ZvNbqjJzNPQppQKfHMcObWmcT7489UG6N26qiOHqbB96/UeGNqtFnY8H89KVIW9yzwxJsAEmAATYAJMgAlYJmBRJxI6FNmczCpSabnadAmzPE2+Yo6A8JrD+2Oq4d3HG8DX18dcFT5nhkBIUCBWTGqEF+4LM3OVTzEBJsAEmAATYAJMgAlUBgJWdCJSpHRJ5iAcT9PWRn9zMvI5+QT6tvAX1qmGaFEnXH6jSliTAkp0bV4df71aD+3rmg+IUQmx8JSZABNgAkyACTABJlApCVjWiXRJehFW+og5KodTCs2d5nNuTCDQV4+1U0XUuQfrwc+HrVOmt5KsUIufbISlT0TD08P0Kh8zASbABJgAE2ACTIAJVDYCFnUioUOJPVI6s4rUptPaSOxa2W6WM+Z7d8dA7HmzEXq0qCpuv84ZQ2p6DNoLdXuXOPz9Wj30bsoKpqZvFgvHBJgAE2ACTIAJMAEnErCoEwkdyhN6w26Y8eL78WQesoVRyt/TiZLyUE4j4Oulw0ePV8POY2F45O3TSEnPctrYWhootmoYFj9aEw2rswlKS/eFZWECTIAJMAEmwASYgKsJkC5EOpHZInQokcAnapu4mG9aIafAgB9OWGhoWpmP3ZZAu7q+Yu9UfTw+IB7eXpVnT5C/nz+mD6uPbfNrsRLltp9eFpwJMAEmwASYABNgAo4jQLoQ6URmSj7pUHqM1mUL/66dZipg7VFWpMxxqYjnJgwMxb4FN6Bv2xjo9RU3gZinpxeGdIvD/gUN8FDPgIp4K3lOTIAJMAEmwASYABNgAioQsKgLke4kdKh/HPcMhlVirC6m41HjzHwDgrx5H40pm4p47Cfu87sPx+B0ciTGvHse+05cqTDT1On0aN84Ggv/VxURQfx5rjA3lifCBJgAE2ACTIAJMAEHECAdyKIi9Y/uhH9MDz4Bn4kw6OXC9KXlFOPF7dkOEI271DKBuEhPfDM9DutmNEaDOPfOo0QKVKv60fhpbhN8Pi6GlSgtf/BYNibABJgAE2ACTIAJaIQA6UCkC5UvQmcq0Z2E9nT94tykr8X7fteP/33jL4ISHB8TgZjAiuvuZTpnPi5LYHdiHiYtvYCjZ9PKXtDwESlQzepE4qWRVVE/hgNJaPhWsWhMgAkwASbABJgAE9AUgYvXilFnUQqyze+PWo/pVfuTwP9pR576l8zNgDqYubVyRnQzx6MynmuV4IONs+KxZnpjNK8ToemQ6R4enujQOAY/CAvUuinVWYmqjB9YnjMTYAJMgAkwASbABOwgQLqPBSUKKKUz/WeRosHmXtoKGDqbjuuh12HHyDC0juFY6KZsKuPx+SuFmLH8MjbtSUZRkZnY+S6A4u3tg76tozBzaATCA8p+rF0gDg/JBJgAE2ACTIAJMAEm4IYEdl0sRPuPU1FUbC5an24bpkdfjytR9olzXnI3GIp+Njfn6sEe+OP+MHbxMwenkp6jcJCvrkvDF1uTkZrhGqtldEQI7rkpCo/1DRILBJX0RvC0mQATYAJMgAkwASbABOwmQC59bT5KxfkMC4YCD49umBL5i3GgsooUnZ17SQSeMAw1Vij92q66F365Lwy+vOWkNBZ+LwhsOZiDV9YlY09iGoodbKXy8vJG63rhmDQoAi1rV57cV/xBYwJMgAkwASbABJgAE3AMgVyhO3X9JBU7zxdYGEC3XFijhpW+WF6RmpccAxQfgsEQUrqi8f29TfzwyYBg4yG/MoEyBPILDXj3hwx8vi0FZy9liI+RObNomSayDvR6DyTUqIJhN0bg/m4BEN6mXJgAE2ACTIAJMAEmwASYgCoE7luXgWX7csz3pdNdFaElGmJa5MXSFcw/js673Fc8Aa8XlimzzlKkTC2+NZgtU6VJ8vtyBC6mFeHFNVewYfcVXMu28MEs16rsidDgIPRvF45xA0IRxnufysLhIybABJgAE2ACTIAJMAG7CJAl6n/fWFGioCsWkdb6YVrUd6YDmVekqNa8S08LZepl0wbGY3LzW31nFd4zZQTCr1YJbPg7Gwu/SxFJfsXmvSJzMfn/a+7p6YVWwnXvqf4R6Fjf+78L/I4JMAEmwASYABNgAkyACahEgPZEDfoy3Yo7nxhIpxuPadGvmBvSsiJFtede+lhYpUaYa0jnKADFGqFMcTQ/S4T4vCmB7DwDXl+fhq9+S8GVq9kICvCHobgI13LyUE0EjrhbuO6N6RMEL96HZ4qOj5kAE2ACTIAJMAEmwARUIkDR+QYKJcpiYImScXRLxL6okZaGtK5IvWnwQeblTcIy1cFSBxQafVRzP8zsEsDWKUuQ+DwTYAJMgAkwASbABJgAE2ACLidAVijKE/XB3zkWQpz/K6JOtx1BUd3whC7PktDWFSlqNT8zEobstdaUKarm76XDuHYBmNjBH0He0t1SGy5MgAkwASbABJgAE2ACTIAJMAFHE8jMN+DF7dl4daeVZLtGIUiJ0vnfhqlBycZT5l7laTxkmcq4/K41Nz9j56F+etxWz6fkf+/aPvDnHL5GNPzKBJgAE2ACTIAJMAEmwASYgJMIZBcCP5zIw9qj//xPy7G+T/8fsYQ7X3DUaGuWKKP48hQpY+2SABR40VI0P2M146ufsFL1ivdBtzgvNIjwRJ1QD4T66hHko4O32XiAxpb8ygSYABNgAkyACTABJsAEmAATkCaQL/SjTLEPPy23GMdF1OjDKYXYdLoAP57MQ06B3FQ8FJ0PEy0FljAnhTJFinqg0OgwLBeufmbzTJkbhM8xASbABJgAE2ACTIAJMAEmwAQ0SaAkT5RuqLkQ59bkVW4XKomhLhJSQWT35cIEmAATYAJMgAkwASbABJgAE3BbAqTTULLd8nmipKak3CJVusfnkruKcBdzhIWqc+nT/J4JMAEmwASYABNgAkyACTABJqBdArpt8NDPwJTIX2yV0T5Fyjjq/OSbUFw0XlipbhZKFYeXMHLhVybABJgAE2ACTIAJMAEmwAQ0QkAnwk8Yvofe42VMjdxsr1DqKFJGKeZdihZ7p4aKDMC3i9d24rS38RK/MgEmwASYABNgAkyACTABJsAEnEwgX+gmO4Vusgo+AZ9hQtBltcZXV5EqLdW7Bn+kXu6MYl0rIXh9EQWjvtAAq4oqQTCI/6xklabF75kAE2ACTIAJMAEmwASYABOwjYBQlpApmor/uiShaxwRytMR6A27ERa1DaN12bZ1a73V/wFBAkPUVwS6fQAAAABJRU5ErkJggg=="
+                alt="" title="" id="img_smv_tem_25_12" style="width: 146px; height: 49px;" class="">
+        </a>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $(".blogroll").css("right", (405 - (($(".blogroll").width()) / 2)));
+        $('.body-top-nav .link').on('mouseenter', function () {
+            $('.blogroll').show()
+        })
+        $('.body-top-nav .link').on('mouseleave', function () {
+            $('.blogroll').hide()
+        })
+        $('.blogroll').on('mouseleave', function () {
+            $('.blogroll').hide()
+        });
+        $('.statistics .clicks li').click(function () {
+            var index = $(this).index();
+            $('.statistics .clicks li a').removeClass('reds');
+            $(this).find('a').addClass('reds');
+            $(".statistics .click-content .quantity").eq(index).removeClass("none").siblings().addClass("none");
+        });
+    });
+
+</script></body>
+</html>

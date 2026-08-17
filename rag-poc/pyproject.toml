@@ -1,7 +1,7 @@
 [project]
-name = "just-laws-rag-poc"
+name = "just-laws-ai-rag-poc"
 version = "0.1.0"
-description = "Just Laws — RAG legal Q&A (FastAPI + hybrid retrieval + rerank, pgvector/Chroma, local BGE-zh embeddings, OpenAI-compatible LLM)"
+description = "JustLaws AI — RAG legal Q&A (FastAPI + hybrid retrieval + rerank, pgvector/Chroma, local BGE-zh embeddings, OpenAI-compatible LLM)"
 requires-python = ">=3.11"
 dependencies = [
     "openai>=1.40",

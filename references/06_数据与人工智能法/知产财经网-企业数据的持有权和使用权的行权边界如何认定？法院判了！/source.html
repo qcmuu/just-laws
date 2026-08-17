@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+<meta charset="UTF-8" />
+<title>知产财经网-企业数据的持有权和使用权的行权边界如何认定？法院判了！</title>
+<meta name="keywords" content="数据保护" />
+<meta name="description" content="本案系最高人民法院发布的指导性案例264号，本案紧扣《中共中央 国务院关于构建数据基础制度更好发挥数据要素作用的意见》数据产权结构性分置制度，明确了企业数据公开场景下数据来源者的数据资源持有权与数据处理者的数据加工使用权的平行行权规则。根据数据的非竞争性和在自由流通中释放最大价值的特征，界定了企业公开数据在生产、流通、使用过程中各参与主体享有的数据权益内容，对同一数据的数据来源者和数据处理者平行行使数据权益的路径与方式进行了协调。本案为数据权益分级分类保护规则的构建提供了具有建设性的思路，破除了数据流通壁垒，促进了数据价值的充分利用和数据流通，对完善数据权益保护体系、促进数据要素市场化配置具有重要示范意义。" />
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/swiper.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/base.css" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/css.css?v1.1" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/other.css" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/animate.min.css" />
+<script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/pc/js/jquery-1.8.0.min.js "></script>
+<script type="text/javascript" src="/static/pc/js/swiper.min.js "></script>
+<script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="/static/pc/js/layer/layer.js "></script>
+<!--弹窗提示layer-->
+<style>
+.hide {
+    opacity: 0;
+    -moz-transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+</style>
+<!--默认加载样式-->
+<script>
+//页面一打开就执行显示加载样式
+load = layer.load();
+</script>
+<script type="text/javascript">
+$(function(){
+    var uid1 = getQueryString("uid");
+    var myid = getCookie("id");//会员id
+    console.log(uid1)
+    console.log(myid)
+    var aid = "11127";//文章id
+	if(myid){
+	   $(".cookieid").show()
+    	$(".nocookieid").hide()
+	}else{
+		$(".cookieid").hide()
+    	$(".nocookieid").show()
+	}
+    // if(!uid1 && myid ){
+    //     var url = window.location.href
+    //     var url2 = url+'?uid='+myid;
+    //     location.href = url2;
+    // }
+    if(uid1 && uid1 != myid ){
+        $.post('/index.php/index/Api/addshare', {uid:uid1,aid:aid}, function(data) {
+                var url = window.location.href
+                var urlLen = url.length
+                var myidInd = url.indexOf("=")
+                var onlyUrl = url.slice(0, myidInd+1);
+                location.href = onlyUrl+myid;
+            })
+    }
+    if(!uid1 && myid ){
+        var url = window.location.href;
+        var url2 = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'uid=' + myid;
+        location.replace(url2);
+    }
+})
+
+//获取cookie信息
+function getCookie(name) {
+    var cookies = document.cookie.split("; ");
+    for(var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].split("=");
+        if(cookie[0] === name) {
+            return decodeURIComponent(cookie[1]);
+        }
+    }
+}
+ $(function(){
+        var url = window.location.href;
+        var isoldurl = url.indexOf("infolist_ri");
+        // console.log(isoldurl)
+        if(isoldurl){
+            var infolist_ri = getQueryString2("infolist_ri")
+            var author_id = getQueryString2("author_id")
+            // console.log(infolist_ri)
+            // console.log(author_id)
+        }
+    })
+// 接收参数方法1，
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = decodeURI(window.location.search).substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+}
+//接收参数方法2，截取方式
+function getQueryString2(name) {
+    var url = window.location.href;
+    var namelen = name.length;
+    var i1 = url.indexOf(name);
+    var i2 = url.indexOf(".html");
+    var value = url.slice(i1+namelen+1, i2);
+    return value;
+}
+</script>
+</head>
+<body class="pra">
+<input type="hidden" name="" id="tzurl" value="" />
+<script>
+    $(function(){
+        var tzurl = $("#tzurl").val()
+        if(tzurl){
+            window.location.href=tzurl;
+        }
+        
+    })
+</script>
+<div class="hide">
+  <div class="no_lays"></div>
+  <!-- 头部 --> 
+  <script>
+    var width = $("body").width();
+    var url = window.location.href;
+    var mo = url.indexOf("mobile");
+    
+    if(width<=980 && mo <= 0){
+        var urlArr =  url.split('/')
+        console.log(urlArr)
+        var urlNew = "";
+        for(var i = 0;i<urlArr.length;i++){
+            if(i==0){
+                urlNew += urlArr[i]
+            }else if(i==1){
+                urlNew += "/"
+            }else if(i==3){
+                console.log(urlArr[i])
+               if(urlArr[i]=="index.php" || urlArr[i]=="index" ){
+                   urlNew += "/mobile"
+               }else{
+                   urlNew += "/mobile"+"/"+urlArr[i]
+               }
+            }else if(i==4 && urlArr[3]=="index.php" && urlArr[4]=="index" ){
+                urlNew +=""
+            }else{
+                urlNew += "/" +urlArr[i]
+            }
+        }
+        console.log(urlNew)
+        window.location.href = urlNew
+       }
+</script>
+
+<div class="top w1">
+  <div class="top_con w1200">
+    <div class="top_le"> 欢迎访问知产财经官网! </div>
+    <div class="top_ri">
+      <div class="login"> <span><a href="/mobile">手机端</a></span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <span><a href="/login/login.html">登录</a></span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <span><a href="/login/reg.html">注册</a></span> </div>
+      <div class="hezuo"> <span class="dybtn "><a href="/index/goods">订阅</a></span> <span class="hzbtn dybtn"><a href="/page/4.html">合作</a></span> </div>
+    </div>
+  </div>
+</div>
+
+<!-- 头部广告位 -->
+<div class="topadv w1 clear">
+  <div class="topadv_con w1200">
+    <div class="swiper-container banner_guanggao  zanzhitopban clear ">
+      <div class="swiper-wrapper">
+                <div class="swiper-slide"> <a href="https://www.ipeconomy.cn/cehua/" target="_blank"> <img src="https://www.ipeconomy.cn//content/2026071017_4242553.jpg" /> </a> </div>
+                <div class="swiper-slide"> <a href="http://www.anzone-consulting.cn/" target="_blank"> <img src="https://www.ipeconomy.cn//content/2025052312_0600317.jpg" /> </a> </div>
+              </div>
+      <div class="swiper-pagination banerfen"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 导航栏 -->
+<div class="nav w1">
+  <div class="nav_con w1200">
+    <ul>
+      <li class="navtab "> <a href="/index.html">首页</a></li>
+      <!--      <li class="navtab " data-id="3"> <a href="/zixun/">资讯</a></li>-->
+      
+      <li class="navtab"> <a href="/cehua/">特别策划</a></li>
+            <li class="navtab " data-id="2"> <a href="/zhichan/">知产</a></li>
+      
+      <li class="navtab naveng"> <a href="/index/casebook/index">典例簿</a></li>
+            <li class="navtab " data-id="12"> <a href="/caijing/">财经</a></li>
+      
+      
+    <li class="navlogo"> <a href="/"> <img src="/static/pc/img/logo.png" alt="" /> </a> </li>
+      
+            <li class="navtab " data-id="13"> <a href="/shuju/">数据</a></li>
+      
+
+            <li class="navtab cur" data-id="14"> <a href="/anli/">案例</a></li>
+      
+            <li class="navtab " data-id="15"> <a href="/Industry/">产业</a></li>
+      
+            <li class="navtab " data-id="16"> <a href="/guandian/">观点</a></li>
+      
+            <li class="navtab " data-id="17"> <a href="/baogao/">报告</a></li>
+      
+            <li class="navtab " data-id="18"> <a href="/shiting/">视听</a></li>
+      
+
+    </ul>
+  </div>
+</div>
+<script>
+//接收参数方法2，截取方式
+function getString() {
+    var url = window.location.href;
+    var i1 = url.indexOf(".cn/");
+//	console.log(i1)
+    if(i1>0){
+        var value = url.slice(i1+4);
+//		console.log(value)
+        var i2 = value.indexOf("/");
+        var value2 = value.slice(0,i2);
+    }else{
+        var value2 = "";
+    }
+    return value2;
+}
+//用来确定页面是不是特别策划
+$(function(){
+    var navArr = ["article","cehua"];
+    var val = getString()
+    var on = 0;
+    for(var i=0;i<navArr.length;i++){
+        if(val == navArr[i]){
+            $(".nav_con li:eq(1)").addClass("cur");
+            on = 1;
+        }
+    }
+})
+</script> 
+<script>
+var mySwiper = new Swiper ('.banner_guanggao', {
+    // loop: true, // 循环模式选项
+    //autoplay: true,//可选选项，自动滑动
+    autoplay: {
+        delay: 3000,
+        stopOnLastSlide: false,
+        disableOnInteraction: true,
+    },
+    // 如果需要分页器
+    pagination: {
+        el: '.banerfen',
+        clickable :true,
+    },
+})
+
+</script> 
+<script>
+var cookieId = getCookie("id");
+var cookieNickname = getCookie("nickname");
+console.log(cookieId)
+if(cookieId){
+    $(".cookieid").show()
+    $(".nocookieid").hide()
+    var htmlTop = '<span class="user_h_top"><a href="/index/member/index.html">'+cookieNickname+'</a></span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <span><a href="/index/login/out.html">退出</a></span>'
+}else{
+    $(".cookieid").hide()
+    $(".nocookieid").show()
+    var htmlTop = '<span><a href="/login/login.html">登录</a></span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <span><a href="/login/reg.html">注册</a></span>'
+}
+$(".login").html(htmlTop)
+function getCookie(name) {
+    var cookies = document.cookie.split("; ");
+    for(var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].split("=");
+        if(cookie[0] === name) {
+            return decodeURIComponent(cookie[1]);
+        }
+    }
+}
+</script> 
+  <!-- 杂志文章 -->
+  <div class="zz_det w1 mt30">
+    <div class="zz_det_con w1200">
+      <div class="zz_det_le"> 
+        <!-- 面包屑 --> 
+        <div class='curmbs mt18'><a href='/'>首页 </a><a href='/anli'>> 案例 </a><a href='/dongtai'>> 案例动态 </a><a href='#'>> 正文 </a></div>        <div class="zz_det_main">
+          <h1>企业数据的持有权和使用权的行权边界如何认定？法院判了！</h1>
+          <div class="zz_det_aut"> 2026-07-31 09:35来源于  上海市高级人民法院   </div>
+          <div class="zz_det_zhaiyao"> <span>本案系最高人民法院发布的指导性案例264号，本案紧扣《中共中央 国务院关于构建数据基础制度更好发挥数据要素作用的意见》数据产权结构性分置制度，明确了企业数据公开场景下数据来源者的数据资源持有权与数据处理者的数据加工使用权的平行行权规则。根据数据的非竞争性和在自由流通中释放最大价值的特征，界定了企业公开数据在生产、流通、使用过程中各参与主体享有的数据权益内容，对同一数据的数据来源者和数据处理者平行行使数据权益的路径与方式进行了协调。本案为数据权益分级分类保护规则的构建提供了具有建设性的思路，破除了数据流通壁垒，促进了数据价值的充分利用和数据流通，对完善数据权益保护体系、促进数据要素市场化配置具有重要示范意义。</span> </div>
+          <!-- 视频、音频 -->
+          <div class="is_price1" style="display: none">
+                      </div>
+          <div class="is_price0" style="display: none">  </div>
+          <!-- 视频音频结束 -->
+          <div class="content" style="overflow:hidden;display:none;">             <div class="contn content_bb">
+                <p style="text-align: center; "><b>企业数据的持有权和使用权的行权边界认定</b></p><p style="text-align: center;"><b>——某钢铁有限公司诉某电子商务股份有限公司侵权责任纠纷案</b></p><p style="text-align: center;"><b>裁判要旨</b></p><p>　　数据处理者依法采集企业数据，经符合有关标准的编制方法加工形成数据产品并合理利用，未对企业权益造成损害，相关企业要求数据处理者承担侵权责任的，人民法院依法不予支持。</p><p style="text-align: center; "><b>案情简介</b></p><p>　　上海某电子公司（以下简称电子公司）通过微信群收集、电话询问、合同披露等方式向钢厂、贸易商等主体采集各类钢材的出厂价、代理商价、交易合同价等数据后，经内部算法生成数据产品，并对外发布。山西某钢铁公司（以下简称钢铁公司）生产销售钢材，并在微信群中发布钢材的出厂价。主要的微信群是以客户为主、无入群资格审核的数百人群。钢铁公司在本案诉讼期间告知其部分一级代理商禁止向电子公司披露出厂价。</p><p>　　2020年11月18日，双方签订《合作协议》，约定电子公司为钢铁公司提供数据服务和品牌推广，钢铁公司支付服务费。协议于2021年11月30日解除。</p><p>　　协议签订前，电子公司即发布冠以钢铁公司名称的数据产品。钢铁公司对比该产品和电子公司针对同区域、同档次案外公司发布的数据产品，认为冠以其名称的数据产品存在质量问题，要求电子公司下架。电子公司仍发布至今。</p><p>　　钢铁公司认为电子公司未经其授权同意，采集、加工、使用钢铁公司采取了保密措施的出厂价，并发布存在质量问题的数据产品，侵害了钢铁公司作为数据来源者的数据权益。故要求电子公司删除其运营的对外公开渠道中钢铁公司的信息。</p><p style="text-align: center; "><b>裁判理由及结果</b></p><p>　　法院经审理认为：《数据安全法》第三条第一款规定，数据是指任何以电子或者其他方式对信息的记录。故数据是信息的载体。本案涉及的出厂价、代理商价等均可归入数据范畴。出厂价是钢铁公司在生产经营过程中产生的数据，钢铁公司是数据来源者，享有数据资源持有权，电子公司是数据处理者，行使了数据加工使用权。判断电子公司采集加工出厂价是否需经钢铁公司授权同意，本质是分析钢铁公司的数据资源持有权是否可以限制或者排除电子公司的数据加工使用权。</p><p>　　法院认为，钢铁公司和电子公司可以同时行使各自的数据权益，电子公司采集加工使用出厂价并未侵权，理由如下：第一，出厂价属于企业公开数据而非商业秘密。出厂价的报价方式具有公开性，钢铁公司主张的保密措施不具备保密性，仅产生事后部分阻断的效果。钢铁公司并未设置访问出厂价的技术限制措施。</p><p>　　第二，电子公司的行为符合钢铁公司的合理预期。电子公司在《合作协议》签订前即发布数据产品。钢铁公司在合同成立时和履行中均未对数据采集的授权许可提出异议。电子公司有理由相信钢铁公司知晓并默许其采集使用出厂价。</p><p>　　第三，电子公司采集方式适当。电子公司在公开渠道采集，并未实施诸如破坏计算机信息系统安全的暴力采集行为。</p><p>　　第四，电子公司使用方式合理。电子公司的使用并未影响钢铁公司对出厂价的核心利益。</p><p>　　第五，数据具有非竞争性，在汇集、流通、再利用中实现价值的最大化。倘若将钢铁公司的持有权解释为排他性的绝对支配权，为他人的加工使用设置门槛，则会阻碍数据的流通，人为制造数据孤岛。</p><p>　　对于数据产品，电子公司应当履行保障数据质量的注意义务。因钢铁公司并未提交初步证据证明数据质量问题，故钢铁公司关于数据质量问题的主张，法院不予采纳。综上，电子公司并未侵害钢铁公司的数据权益，故驳回钢铁公司的诉讼请求。</p><p style="text-align: center; "><b>典型意义</b></p><p>　　本案系最高人民法院发布的指导性案例264号，本案紧扣《中共中央 国务院关于构建数据基础制度更好发挥数据要素作用的意见》数据产权结构性分置制度，明确了企业数据公开场景下数据来源者的数据资源持有权与数据处理者的数据加工使用权的平行行权规则。</p><p>　　根据数据的非竞争性和在自由流通中释放最大价值的特征，界定了企业公开数据在生产、流通、使用过程中各参与主体享有的数据权益内容，对同一数据的数据来源者和数据处理者平行行使数据权益的路径与方式进行了协调。本案为数据权益分级分类保护规则的构建提供了具有建设性的思路，破除了数据流通壁垒，促进了数据价值的充分利用和数据流通，对完善数据权益保护体系、促进数据要素市场化配置具有重要示范意义。</p><p><b>　　一、数据权益的分置化配置</b></p><p>　　《数据二十条》确立了数据产权结构性分置制度，即同一数据上的多重数据利益形成“权利束”。本案的出厂价即涉及数据来源者的数据资源持有权和数据处理者的数据加工使用权。出厂价是主营业务并非数据服务的企业在经营过程中产生的附带型企业数据，在法律属性上可类比为“副产品”。</p><p>　　此类数据的产生源于业务活动的数字化记录，并不以专门生产数据为直接目的，钢铁公司作为数据来源者对出厂价也能享有数据权益。数据来源者对数据形成事实控制，故天然地享有持有权。而数据处理者享有数据加工使用权，是因为原始数据经过加工使用相较于仅由数据来源者持有更能释放数据价值。</p><p><b>　　二、数据权益的平行行权</b></p><p>　　本案认定钢铁公司仅依据数据资源持有权无法限制、排除电子公司采集、加工、使用出厂价的根本原因是数据资源持有权不具备排他性，数据资源持有权和数据加工使用权可以平行行权。</p><p>　　首先，非排他性符合数据的自然属性。数据具有无形性，因而排他性要求的独占控制较难实现。数据还具有非竞争性，即数据可以同时被不同主体加工使用，价值不会因为被使用而损耗，因而数据本身具有一定的非排他性。</p><p>　　其次，非排他性符合数据权益的复合构造。《数据二十条》构建“共同使用、共享收益”的数据产权新模式。如果数据资源持有权是排他性的绝对权，则意味着各权益之间势必存在冲突，与制度安排不符。</p><p>　　最后，非排他性符合数据释放最优价值的导向。单一数据聚集后，通过筛选、组合、拆解等方式运用于重新定义数据用途的场景，可以更大程度地激发数据的生产力，使数据在自由流通中实现最优价值。若数据资源持有权具有排他效力则从源头处阻断了数据的流通，加剧各利益主体间冲突，从而形成数据孤岛和数据垄断。</p><p><b>　　三、加工使用的行权限制</b></p><p>　　虽然两种权益共生且并存，但是因为均指向同一数据，必然会在行权中产生互动。行使数据加工使用权需要遵从一定的协调规则，从而在保障数据来源者的合法权益和促进有序的数据流通之间实现平衡。</p><p>　　首先，加工使用不得损害数据来源者的法定在先权利，例如知识产权、商业秘密。其次，加工使用行为应当适当且合理，避免因过度采集而不合理地加重数据来源者的负担。杜绝采用暴力采集手段，破坏数据来源者计算机系统，影响数据安全。不应实质性替代数据来源者与该数据的相关业务，或者不合理地超出数据来源者对数据处理的期待。最后，生产数据产品的数据处理者应当履行数据质量保障义务。因为保障数据质量不仅是大数据行业的自律要求，还关系到数据来源者的商誉和社会评价。</p><p style="text-align: center; "><b>案例索引</b></p><p>　　一审：上海市宝山区人民法院（2023）沪0113民初23152号</p><p>　　二审：上海市第二中级人民法院（2023）沪02民终11028号</p> 
+              </div>
+          </div>
+          <script>
+    var aid = "11127";//文章id
+	var isp = 1;//0 可看，1不可看
+	var content1 = $(".content_bb").html();
+    $.post('/index.php/index/Api/isprice', {id:aid}, function(data) {
+        var ndata = JSON.parse(data);
+        isp = ndata.data.is_price;
+
+        if(isp==1){
+            $(".is_price1").show();
+            $(".is_price0").remove();
+            var height = $(".content").height();
+            var text =  $(".content").text();
+            if($(".content").children().length <= 3){
+                $(".content").css("height",height/4);
+                $(".content").css("min-height","560px");
+                var html = text.substring(0,text.indexOf("<br/>"));
+                $(".content").show();
+            }else{
+                if(height>500){
+                    $(".content").css("max-height","900px");
+                    $(".content").children().each(function(index){
+                        if(index>7){
+                            $(this).remove();
+                        }
+                    })
+                    $(".content").show();
+                }
+            }
+        }else{
+            $(".content_bb").html(content1);
+            $(".content").show();
+            $(".is_price0").show();
+            $(".is_price1").hide();
+        }
+    })
+</script> 
+        </div>
+        <div class="fufei is_price1">
+          <div class="fufei_head"><img src="/static/pc/img/meng.png" alt="" width="100%"> </div>
+          <div class="fufei_text1">本文共计3305字，订阅后享全网免费阅读</div>
+            <script>
+            $(function(){
+                var liveurl = ""
+                if(liveurl && liveurl !=""){
+                    $(".fufei_text1").hide()
+                }
+            })
+            </script>
+          <div class="fufei_ico"><img src="/static/pc/img/fufeiico.png"></div>
+          <div class="fufei_text_weideng">
+            <div class="nocookieid"> <a href="/login/login.html?id=11127&type=3"> <span class="qudenglu">登录</span> 后获取已订阅的阅读权限</a> </div>
+          </div>
+          <div class="fufei_ligous">
+            <div class="fufei_ligou goumai" style="display: inline-block"> 单篇订阅 </div>
+            <div class="fufei_ligou" style="display: inline-block"> <a href="/index/goods">年度会员订阅</a> </div>
+            <div class="zhifuz">
+              <div class="zhifu_cons">
+                <div class="zhifubuy">
+                  <div class="zhidi_closes"><img src="/static/pc/img/close.png"> </div>
+                  <div class="pay_price_title">
+                    <h2>支付金额：<span class="">￥</span></h2>
+                  </div>
+                  <div class="paylist">
+                    <ul>
+                      <li>
+                        <label for="wx">
+                          <input name="pay" type="radio" id="wx"  checked value="zwx">
+                          <img src="/static/pc/img/pay_wx.png" alt=""> 微信支付</label>
+                      </li>
+                      <li>
+                        <label for="zhifubao">
+                          <input name="pay" type="radio" id="zhifubao" value="zzfb" >
+                          <img src="/static/pc/img/pay_zfb.png" alt=""> 支付宝支付</label>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="buy_bug_lbtns"> <span class="zhibuy_queding">立即支付</span> </div>
+                  <div class="zhitu"> <img src="" alt=""> </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fufei_jieshi">知产财经付费内容  |  请订阅后查看全文</div>
+        </div> 
+    <div class="fenxiang">
+          <div class="fenxi">
+            <wb-share-button data:pic="" data:title="" data:url=""> <a title="分享到微博" class="weibo"></a> <span>分享到微博</span> </wb-share-button>
+          </div>
+          <div class="fenxi fenxins"><div class="bdsharebuttonbox"><a title="分享到微信" href="#" class="bds_weixin weixin" data-cmd="weixin" ></a> <span>分享到微信</span> </div></div>
+        </div>
+<script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://open.weibo.com/views/js/wbsdk.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+wb.init({
+    appkey: '2841753208'
+});    
+
+//全局变量，动态的文章ID
+var ShareURL = "";
+//绑定所有分享按钮所在A标签的鼠标移入事件，从而获取动态ID
+$(function () {
+    $("bdsharebuttonbox a").mouseover(function () {
+        ShareURL = $(this).attr("data-url");
+    });
+});
+
+/* 
+* 动态设置百度分享URL的函数,具体参数
+* cmd为分享目标id,此id指的是插件中分析按钮的ID
+*，我们自己的文章ID要通过全局变量获取
+* config为当前设置，返回值为更新后的设置。
+*/
+function SetShareUrl(cmd, config) {
+    if (ShareURL) {
+        config.bdUrl = ShareURL;    
+    }
+    return config;
+}
+
+//插件的配置部分，注意要记得设置onBeforeClick事件，主要用于获取动态的文章ID
+window._bd_share_config = {
+    "common": {
+        onBeforeClick: SetShareUrl, "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "24"
+    }, "share": {}
+};
+//插件的JS加载部分
+with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+ ~(-new Date() / 36e5)];
+</script>
+<style>
+.weixin {
+    width: 36px!important;
+    height: 36px!important;
+    background-image: url(/static/pc/img/weixin.png)!important;
+    background-position: center top!important;
+    background-size: 100% 100%!important;
+    padding-left: 0!important;
+    display: block!important;
+    float: none!important;
+    margin-left: auto!important;
+    margin-right: auto!important;
+    margin: 0;
+    margin-bottom: 5px!important;
+}
+.weibo {
+    width: 36px!important;
+    height: 36px!important;
+    background-image: url(/static/pc/img/weibo.png)!important;
+    background-position: center top;
+    background-size: 100% 100%;
+    padding-left: 0;
+    display: block;
+/*    float: left;*/
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+</style>
+           <div class="next">
+          <div class="zz_m_last zz_m_ln"><span>上一篇： </span><a href="/dongtai/11127.html">没有了</a></div>
+          <div class="zz_m_next zz_m_ln"> <span>下一篇：</span><a href="/dongtai/11121.html">境内外人员合谋通过境外网站侵犯国内视听作品著作权，法院判了！</a></div>
+        </div>
+        <!-- 热门 -->
+        <div class="remen_tui">
+          <div class="col_cai_tit"> <span class="ri_tit pl22">推荐阅读</span> <span class="ri_more"><a href="/searchlist/推荐">更多</a> </span> </div>
+          <div class="redian_list remen_list">
+            <ul>
+                            <li> <a href="/dongtai/11127.html"> <span class="li_text">企业数据的持有权和使用权的行权边界如何认定？法院判了！ </span></a> </li>
+                            <li> <a href="/dongtai/11121.html"> <span class="li_text">境内外人员合谋通过境外网站侵犯国内视听作品著作权，法院判了！ </span></a> </li>
+                            <li> <a href="/dongtai/11115.html"> <span class="li_text">全国首例！网络游戏策划方案可作为商业秘密受到保护 </span></a> </li>
+                            <li> <a href="/dongtai/11114.html"> <span class="li_text">&ldquo;不提名字就没事&rdquo;？直播间隐晦售假仍属侵权 </span></a> </li>
+                            <li> <a href="/dongtai/11110.html"> <span class="li_text">&ldquo;正当就业权&rdquo;PK&ldquo;保密义务&rdquo; 合理的竞业限制是什么？ </span></a> </li>
+                            <li> <a href="/dongtai/11106.html"> <span class="li_text">帮助商家&ldquo;刷好评&rdquo;提升曝光度，构成不正当竞争吗？ </span></a> </li>
+                            <li> <a href="/dongtai/11096.html"> <span class="li_text">键盘之争，是维权还是不正当竞争？ </span></a> </li>
+                            <li> <a href="/dongtai/11078.html"> <span class="li_text">判赔320万元！抓取&ldquo;试题及答案解析&rdquo;数据构成不正当竞争 </span></a> </li>
+                            <li> <a href="/dongtai/11077.html"> <span class="li_text">加盟开店两次被诉侵权，支付的33万元赔偿款谁担？ </span></a> </li>
+                            <li> <a href="/dongtai/11074.html"> <span class="li_text">判赔80万元！擅售B服游戏账号商品，构成不正当竞争 </span></a> </li>
+                          </ul>
+          </div>
+        </div>
+        <!-- 线 -->
+        <div class="zz_xian"> </div>
+        <!-- 评论输入 -->
+        <div class="zz_pinglun">
+          <div class="zz_pl_t">             <b><img src="/static/pc/img/logo22.png" alt=""></b> <span>请登录</span> 
+            </div>
+          <div class="pin_in_d">
+            <form method="post" action="/index.php/index/article/comment.html">
+              <input type="hidden" name="id" value="11127">
+              <textarea  class="pin_in" name="content" placeholder="评论仅代表网友个人观点"  required oninvalid="setCustomValidity('评论内容不能为空');" oninput="setCustomValidity('');"></textarea>
+              <button class="pinlun_btn" type="submit"> 发表评论 </button>
+            </form>
+          </div>
+        </div>
+        <!-- 评论内容 -->
+        <div class="pinglun_con"> <span class="ri_tit pl22">全部评论</span>
+          <div class="pinlun_list mt30">
+            <ul>
+            </ul>
+          </div>
+        </div>
+        <!-- 查看更多 -->
+        <div class="gengduo clear"> <a href="javascript:;">查看更多</a> </div>
+      </div>
+      <div class="zz_det_ri"> 
+  <!-- 左侧广告轮播 -->
+  <div class="gao_lun  mt30 clear">
+    <div class="swiper-container banner_guanggao zuo_gaun_ban clear ">
+      <div class="swiper-wrapper">
+                <div class="swiper-slide"> <a href="https://www.ipeconomy.cn/page/2.html" target="_blank"> <img src="https://www.ipeconomy.cn/./content/2022061410_1028864.jpg"></div>
+                <div class="swiper-slide"> <a href="http://www.anzone-consulting.cn/" target="_blank"> <img src="https://www.ipeconomy.cn//content/2025061017_0450280.jpg"></div>
+                </a> </div>
+      <div class="swiper-pagination banerfen"></div>
+    </div>
+  </div>
+  <!-- 广告end --> 
+  <!-- 今日要闻 -->
+  <div class="zz_yaowen mt30">
+    <div class="col_cai_tit"> <span class="ri_tit pl22">今日要闻</span> <span class="ri_more"><a href="/searchlist/图片新闻">更多</a> </span> </div>
+    <div class="yao_tulist">
+      <ul>
+                <li> <a href="/reping/11125.html">          <div class="yaow_tu"><img src="https://www.ipeconomy.cn//content/3629178541116260.jpg" alt=""></div>
+          <div class="yaow_tu_text"><p>王艳芳：&ldquo;商业维权&rdquo;与恶意诉讼之区辨</p></div>
+          </a> </li>
+                <li> <a href="/suping/11124.html">          <div class="yaow_tu"><img src="https://www.ipeconomy.cn//content/18391785383420123.jpeg" alt=""></div>
+          <div class="yaow_tu_text"><p>卢海君、王芷若：&ldquo;文化挪用&rdquo;还是&ldquo;正当维权&rdquo;？&mdash;&mdash;LV诉茉莉奶白案中传统文化公共资源与商标私权保护的平衡</p></div>
+          </a> </li>
+              </ul>
+    </div>
+    <div class="redian_list zz_yaolist">
+      <ul>
+                <li> <a href="/reping/11125.html"> <span class="li_text">
+          观点          | 王艳芳：&ldquo;商业维权&rdquo;与恶意诉讼之区辨</span></a> </li>
+                <li> <a href="/suping/11124.html"> <span class="li_text">
+          观点          | 卢海君、王芷若：&ldquo;文化挪用&rdquo;还是&ldquo;正当维权&rdquo;？&mdash;&mdash;LV诉茉莉奶白案中传统文化公共资源与商标私权保护的平衡</span></a> </li>
+                <li> <a href="/yuanchuang/11122.html"> <span class="li_text">
+          观点          | 专业破局赢得程序竞速：深度解析慕尼黑法院中止西门子诉荣耀SEP侵权案</span></a> </li>
+                <li> <a href="/yuanchuang/11119.html"> <span class="li_text">
+          观点          | 知财速评：裁判有据 舆情难平&mdash;&mdash;LV诉茉莉奶白案的冷思考</span></a> </li>
+                <li> <a href="/yuanchuang/11116.html"> <span class="li_text">
+          观点          | 专利纠纷频发，智能清洁行业为何亟需回归创新本位？</span></a> </li>
+              </ul>
+    </div>
+  </div>
+  
+  <!-- 分类1 -->
+  <div class="zixun_fenlei1 ri mt30">
+    <div class="col_cai_tit"> <span class="ri_tit pl22">最新文章</span> <span class="ri_more"><a href="/searchlist/">更多</a> </span> </div>
+    <div class="redian_list">
+      <ul>
+                <li> <a href="/dongtai/11127.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 企业数据的持有权和使用权的行权边界如何认定？法院判了！</span></a> </li>
+                <li> <a href="/fagui/11126.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 新修改的《专利优先审查管理办法》，9月1日起施行</span></a> </li>
+                <li> <a href="/reping/11125.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 王艳芳：&ldquo;商业维权&rdquo;与恶意诉讼之区辨</span></a> </li>
+                <li> <a href="/suping/11124.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 卢海君、王芷若：&ldquo;文化挪用&rdquo;还是&ldquo;正当维权&rdquo;？&mdash;&mdash;LV诉茉莉奶白案中传统文化公共资源与商标私权保护的平衡</span></a> </li>
+                <li> <a href="/yuanchuang/11122.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 专业破局赢得程序竞速：深度解析慕尼黑法院中止西门子诉荣耀SEP侵权案</span></a> </li>
+                <li> <a href="/dongtai/11121.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 境内外人员合谋通过境外网站侵犯国内视听作品著作权，法院判了！</span></a> </li>
+                <li> <a href="/fagui/11120.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 国家知识产权局：完善新兴领域知识产权保护制度</span></a> </li>
+                <li> <a href="/yuanchuang/11119.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 知财速评：裁判有据 舆情难平&mdash;&mdash;LV诉茉莉奶白案的冷思考</span></a> </li>
+              </ul>
+    </div>
+  </div>
+  
+  <!-- 分类2 -->
+  <div class="zixun_fenlei1 ri mt30">
+    <div class="col_cai_tit"> <span class="ri_tit pl22">热门阅读</span> <span class="ri_more"><a href="/searchlist/热点阅读">更多</a> </span> </div>
+    <div class="redian_list">
+      <ul>
+                <li> <a href="https://www.ipeconomy.cn/yuanchuang/10906.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text">《商业秘密保护规定》与司法解释的对比与变化</span></a> </li>
+                <li> <a href="https://www.ipeconomy.cn/yuanchuang/10731.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text">以&ldquo;情势变更&rdquo;应对商标恶意抢注的实践</span></a> </li>
+                <li> <a href="https://www.ipeconomy.cn/yuanchuang/10361.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text">知财观察：2025年专利授权量企业百强榜出炉，格力等头部企业引领创新浪潮</span></a> </li>
+                <li> <a href="https://www.ipeconomy.cn/suping/10934.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text">从典型案例看企业商业秘密保护及风险防范</span></a> </li>
+                <li> <a href="https://www.ipeconomy.cn/yuanchuang/10733.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text">多平台立体侵权的维权困境及解决</span></a> </li>
+                <li> <a href="https://www.ipeconomy.cn/yuanchuang/10436.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text">最高法松绑备位诉讼，知产案件是迎？是防？</span></a> </li>
+                <li> <a href="https://www.ipeconomy.cn/yuanchuang/10103.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text">&ldquo;豆包手机助手&rdquo;引发AI Agent法律边界大讨论：专家深度剖析数据合规与竞争秩序</span></a> </li>
+                <li> <a href="https://www.ipeconomy.cn/yuanchuang/9967.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text">马忠法、崔亚星：评欧盟诉中国知识产权执法案上诉仲裁裁决</span></a> </li>
+              </ul>
+    </div>
+  </div>
+  
+  <!--  -->
+  <div class="gao_lun mt30 clear">
+    <div class="swiper-container banner_guanggao zuo_gaun_ban  clear ">
+      <div class="swiper-wrapper">
+                <div class="swiper-slide"> <a href="https://www.ipeconomy.cn/index.php/index/listen/shiting/id/18.html" target="_blank"> <img src="https://www.ipeconomy.cn/./content/2022030710_0730261.jpg"> </a> </div>
+                <div class="swiper-slide"> <a href="" target="_blank"> <img src="https://www.ipeconomy.cn//content/2025032711_3434118.jpg"> </a> </div>
+              </div>
+      <div class="swiper-pagination banerfen"></div>
+    </div>
+  </div>
+</div>
+<script>   
+
+  var mySwiper = new Swiper ('.banner_guanggao', {
+  
+    // loop: true, // 循环模式选项
+   //  autoplay: true,//可选选项，自动滑动
+      autoplay: {
+        delay: 3000,
+        stopOnLastSlide: false,
+        disableOnInteraction: true,
+        },
+    // 如果需要分页器
+    pagination: {
+      el: '.banerfen',
+       clickable :true,
+    },
+    
+  })        
+  </script>  </div>
+  </div>
+  <!-- 友情链接 --> 
+  <div class="blogroll w1 clear"> 
+   <div class="blogroll_con w1200"> 
+    <ul> 
+     <li> <span class="blo_tit">友情链接：</span></li> 
+          <li><a href="http://www.gov.cn/" target="_blank">中国政府网</a></li> 
+          <li><a href="https://www.miit.gov.cn/" target="_blank">工业和信息化部</a></li> 
+          <li><a href="http://www.court.gov.cn/" target="_blank">最高人民法院</a></li> 
+          <li><a href="http://www.spp.gov.cn/" target="_blank">最高人民检察院</a></li> 
+          <li><a href="http://www.samr.gov.cn/" target="_blank">国家市场监督管理总局</a></li> 
+          <li><a href="http://www.sipo.gov.cn/" target="_blank">国家知识产权局</a></li> 
+          <li><a href="http://www.samr.gov.cn/fldj/" target="_blank">国家反垄断局</a></li> 
+          <li><a href="http://www.ncac.gov.cn/" target="_blank">国家版权局</a></li> 
+         </ul> 
+   </div> 
+  </div> 
+  <!-- 底部 --> 
+  <div class="footer w1 mt30"> 
+   <div class="footer_con w1200"> 
+    <div class="foo_logo"> 
+     <img src="/static/pc/img/logo.png" /> 
+    </div> 
+    <div class="foot_middle"> 
+     <ul> 
+      <li><a href="/page/4.html">关于我们</a></li> 
+      <li><a href="/page/5.html">人员招聘</a></li> 
+      <li><a href="/page/6.html">联系我们</a></li> 
+      <li><a href="/page/7.html">网站声明</a></li> 
+     <li><a href="/index/leave">网站留言</a></li>
+     </ul> 
+     <div class="ft_mo_mo clear"> 
+      <p><a href="https://www.12377.cn" target="_blank">互联网举报中心 防范网络诈骗 违法和不良信息举报电话</a> 
+      <a href="https://dxss.miit.gov.cn" target="_blank">12300电信用户申诉受理中心</a> 
+      <a href="http://jbts.mct.gov.cn" target="_blank">12318全国文化市场举报网站</a> 
+      <a href="http://www.cyberpolice.cn/wfjb/" target="_blank">网络110报警网站</a> 
+      <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502049464"><img src="/static/style/images/viewfile.png"  style="margin-bottom:-3px;"/>京公网安备 11010502049464号</a> 
+      <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">京ICP备20006621号</a> 
+      <a href="http://www.qmwl.cn" target="_blank">技术支持： 北京青梅 </a> </p> 
+     </div> 
+     <div class="banquan"> 
+      <p>版权声明：知产财经网页所涉及的任何资料（包括但不限于文字报道、图片、声音、录像、图表、广告、域名、软件、程序、版面设计、专栏目录与名称、内容分类标准）的版权均属北京知财网络科技有限公司和资料提供者所有。未经许可，任何人不得引用、复制、转载、摘编或以其他任何方式非法使用上述内容。对于有上述行为者，知产财经将保留追究其法律责任的权利。</p> 
+     </div> 
+    </div> 
+    <div class="wechat"> 
+     <div> 
+            <img src="https://www.ipeconomy.cn/./content/2023072414_5201635.jpg" alt="" /> 
+           </div> 
+     <span>关注公众号</span> 
+    </div> 
+   </div> 
+  </div>
+  <input type="hidden" name="" class="mmid" value="">
+  <form method="post" name="myform" action="/index.php/index/Alipay/index" >
+    <input type="hidden" name="aid" value="11127">
+    <input type="hidden" name="price"  class="fwprice"  value="" readonly>
+    <input type="hidden" name="type" value="2">
+  </form>
+</div>
+<script type="text/javascript">
+$(".goumai").click(function(){
+    $(".zhifuz").css("display","block")
+    $(".no_lays").css("display","block")
+    $(".zhitu").css("display","none");
+    $(".paylist").css("display","block");
+    $(".buy_bug_lbtns").css("display","block");
+})
+$(".zhidi_closes").click(function(){
+    $(".zhifuz").css("display","none")
+    $(".no_lays").css("display","none")
+})
+</script> 
+<script>
+$(".zhibuy_queding").click(function(){
+    var zfcanshu=$('input[name="pay"]:checked').val();
+    if(zfcanshu=='zzfb'){
+        if($(".mmid").val()==""){
+            layer.confirm('你还未登录，是否现在去登录？', {
+                btn: ['去登录','取消'] //按钮
+            }, function(){
+                window.location.href='/login/login.html?type=2&id=11127'; 
+            }, function(){
+                location.reload() 
+            });
+        }else{
+            zhifubao();
+        }
+    } else if(zfcanshu=='zwx'){
+        if($(".mmid").val()==""){
+            layer.confirm('你还未登录，是否现在去登录？', {
+                btn: ['去登录','取消'] //按钮
+            }, function(){
+                window.location.href='/login/login.html?type=2&id=11127'; 
+            }, function(){
+                location.reload() 
+            });
+        }else {
+            wechat();
+        }
+    }else if(zfcanshu=='zzyl'){
+    }else{
+        alert("选择错误")
+    }
+    $(".paylist").css("display","none");
+    $(".buy_bug_lbtns").css("display","none");
+    $(".zhitu").css("display","block");
+})
+</script> 
+<script type="text/javascript">
+function  zhifubao(){
+    $(".fwprice").val()
+    document.myform.submit();
+}
+$(function(){
+var page = 1; //传入的页数
+$.ajax({
+type:'post',
+url:'/index.php/index/Article/ajaxcomment?page='+page,
+success:function(data){
+//将后台传过来的数据(data),转换为json
+var oJson = JSON.parse(data);
+var str = '';
+//循环遍历数据,并放在HTML标签里,用jQuery添加到DOM对象里面去.
+for(var index = 0;index < oJson.length;index++){
+uimg=oJson[index].uimg;
+if(!uimg){
+    uimg = "/static/pc/img/logo22.png"
+}
+nickname = oJson[index].nickname;
+if(!nickname){
+    nickname="匿名用户"
+}
+time1 = oJson[index].time;
+time = timestampToTime(time1);
+number = oJson[index].number;
+content = oJson[index].content;
+zan = oJson[index].zan;
+id = oJson[index].id;
+uid = oJson[index].uid;
+uimgs=uimg.slice(1);
+if(!nickname){
+nickname = "匿名用户";
+}
+str +='<li><div class="uid">'+uid+'</div><div class="id">'+id+'</div><div class="ping_user"><img src="'+uimgs+'" alt=""></div>';
+str +='<div class="ping_info"><div class="ping_in_he"><div class="ping_uname">'+nickname+'<span>'+time+'</span> </div>';
+if(zan==0){
+str +='<div class="zan" onclick="dianzan(this)">';
+}else{
+str +='<div class="zan ywzan" onclick="dianzan(this)">';
+}
+str +='<b class="yzan"><img src="/static/pc/img/zanhuang.png"></b> ';
+str +='<b class="weizan"><img src="/static/pc/img/weizan.png" alt=""></b>';
+str +='<span>'+number+'</span> </div></div>';
+str +='<p>'+content+'</p></div></li>';
+}
+if( str == '' ){
+alert('没有更多了');
+}else{
+$(".pinlun_list ul").append(str);
+$(".zan").trigger("myClick")
+}
+},
+error:function(){
+// console.log("失败");
+}
+});
+//	结束加载样式
+$(document).ready(function(){
+	setTimeout(function(){
+		layer.close(load); 
+		$(".hide").css("opacity","1")
+	},300)
+})
+$(".gengduo").click(function(){
+page ++;
+$.ajax({
+type:'post',
+url:'/index.php/index/Article/ajaxcomment?page='+page,
+success:function(data){
+//将后台传过来的数据(data),转换为json
+var oJson = JSON.parse(data);
+var str = '';
+//循环遍历数据,并放在HTML标签里,用jQuery添加到DOM对象里面去.
+for(var index = 0;index < oJson.length;index++){
+uimg=oJson[index].uimg;
+uimgs=uimg.slice(1);
+if(!uimg){
+    uimg = "/pc/img/logo.png"
+}
+nickname = oJson[index].nickname;
+if(!nickname){
+    nickname="匿名用户"
+}
+time1 = oJson[index].time;
+time = timestampToTime(time1);
+number = oJson[index].number;
+content = oJson[index].content;
+zan = oJson[index].zan;
+id = oJson[index].id;
+uid = oJson[index].uid;
+if(!nickname){
+nickname = "匿名用户";
+}
+str +='<li><div class="uid">'+uid+'</div><div class="id">'+id+'</div><div class="ping_user"><img src="'+uimgs+'" alt=""></div>';
+str +='<div class="ping_info"><div class="ping_in_he"><div class="ping_uname">'+nickname+'<span>'+time+'</span> </div>';
+if(zan==0){
+str +='<div class="zan" onclick="dianzan(this)">';
+}else{
+str +='<div class="zan ywzan" onclick="dianzan(this)">';
+}
+str +='<b class="yzan"><img src="/static/pc/img/zanhuang.png"></b> ';
+str +='<b class="weizan"><img src="/static/pc/img/weizan.png" alt=""></b>';
+str +='<span>'+number+'</span> </div></div>';
+str +='<p>'+content+'</p></div></li>';
+}
+if( str == '' ){
+alert('没有更多了');
+}else{
+$(".pinlun_list ul").append(str);
+$(".zan").trigger("myClick")
+}
+},
+error:function(){
+// console.log("失败");
+}
+});
+});
+})
+//  点赞 
+function dianzan(obj){
+var uid = $(obj).parents("li").find(".uid").text();
+var id = $(obj).parents("li").find(".id").text();
+var number1 =$(obj).find("span").text();
+if($(obj).hasClass("ywzan")){
+var zan = 0;
+var number = parseInt(number1)-1;
+$(obj).find("span").text(number);
+}else{
+var zan = 1;
+var number = parseInt(number1)+1;
+$(obj).find("span").text(number);
+}
+$(obj).toggleClass("ywzan");
+$.ajax({
+type:'post',
+url:'/index.php/index/Article/zan?id='+id+'&uid='+uid+'&zan='+zan,
+data:{
+'uid':uid,
+'id':id,
+'zan':zan,
+},
+success:function(data){
+//将后台传过来的数据(data),转换为json
+// console.log(data)
+if(data==0){
+//          $(this).toggleClass("ywzan"); 
+}else{
+//          alert("失败");
+}
+},
+error:function(){
+// console.log("失败");
+}
+});
+}
+//时间戳
+function timestampToTime(timestamp) {
+var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+var Y = date.getFullYear() + '.';
+var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '.';
+var D = date.getDate() + ' ';
+var h = date.getHours() + ':';
+var m = date.getMinutes() + ':';
+var s = date.getSeconds();
+return Y+M+D;
+}
+</script> 
+<script type="text/javascript">
+function  wechat(){
+var price = $(".fwprice").val()
+if(price==""){
+price = 0
+}
+$.ajax({
+url:'/index.php/index/Wxpay/wxpay',
+type: "POST",
+data: {
+aid:11127,
+price:price,
+type:2,
+},
+dataType: "json",
+success: function (result) {
+var result = JSON.parse(result);
+$(".zhitu img").attr('src',result.url);
+clearInterval(t1);
+var timesRun = 0;
+var t1=setInterval(function (){
+timesRun += 1;
+if(timesRun === 1200){    
+clearInterval(t1);    
+}
+$.ajax({
+type: "POST",
+dataType: "json",
+url: "/index.php/index/Wxpay/notifyStatus",
+data: {
+id:result.id
+},
+success: function (data) {
+if(data==0){
+} else if(data==1) {
+window.location.reload()
+}
+},
+error: function (XMLHttpResponse) {
+}
+});
+},2000)
+}
+});
+}
+</script> 
+<script>
+
+</script> 
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?c88fdaa4e9746c6608c3ce29fa762712";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

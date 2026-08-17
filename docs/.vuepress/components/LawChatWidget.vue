@@ -313,7 +313,8 @@ export default {
         return;
       }
       try {
-        const { default: MarkdownIt } = await import("markdown-it");
+        const mod = await import("markdown-it");
+        const MarkdownIt = mod.default || mod;
         // html:false escapes any raw HTML in the model output, and markdown-it's
         // default link validator strips javascript:/data: URLs, so rendering the
         // answer with v-html is safe against injection from the LLM response.
@@ -362,7 +363,7 @@ export default {
         // here, on the first question / panel open.
         const [{ default: MiniSearchCls }, resp] = await Promise.all([
           MiniSearch ? Promise.resolve({ default: MiniSearch }) : import("minisearch"),
-          fetch(withBase("law-corpus.json")),
+          fetch(withBase("/law-corpus.json")),
         ]);
         MiniSearch = MiniSearchCls;
         if (!resp.ok) throw new Error("HTTP " + resp.status);
@@ -460,36 +461,46 @@ export default {
         const reader = resp.body.getReader();
         const dec = new TextDecoder();
         let buf = "";
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
-          const { value, done } = await reader.read();
-          if (done) break;
-          buf += dec.decode(value, { stream: true });
-          let idx;
-          while ((idx = buf.indexOf("\n")) >= 0) {
-            const line = buf.slice(0, idx).trim();
-            buf = buf.slice(idx + 1);
-            if (!line.startsWith("data:")) continue;
-            const payload = line.slice(5).trim();
-            if (payload === "[DONE]") {
-              buf = "";
-              break;
-            }
-            let evt;
-            try {
-              evt = JSON.parse(payload);
-            } catch (e) {
-              continue;
-            }
-            const delta =
-              evt.choices && evt.choices[0] && evt.choices[0].delta
-                ? evt.choices[0].delta.content
+        let streamFinished = false;
+        try {
+          // eslint-disable-next-line no-constant-condition
+          while (!streamFinished) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buf += dec.decode(value, { stream: true });
+            let idx;
+            while ((idx = buf.indexOf("\n")) >= 0) {
+              const line = buf.slice(0, idx).trim();
+              buf = buf.slice(idx + 1);
+              if (!line.startsWith("data:")) continue;
+              const payload = line.slice(5).trim();
+              if (payload === "[DONE]") {
+                streamFinished = true;
+                buf = "";
+                try {
+                  await reader.cancel();
+                } catch (_) {}
+                break;
+              }
+              let evt;
+              try {
+                evt = JSON.parse(payload);
+              } catch (e) {
+                continue;
+              }
+              const deltaObj =
+                evt.choices && evt.choices[0] ? evt.choices[0].delta : null;
+              const delta = deltaObj
+                ? deltaObj.content || deltaObj.text || ""
                 : "";
-            if (delta) {
-              this.answer += delta;
-              this.scrollDown();
+              if (delta) {
+                this.answer += delta;
+                this.scrollDown();
+              }
             }
           }
+        } finally {
+          reader.releaseLock();
         }
         if (!this.answer) {
           this.error = "模型未返回内容，请检查模型名称或额度。";
@@ -620,6 +631,8 @@ export default {
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 13px;
+  background: #fff;
+  color: #1a1a1a;
 }
 .jl-chat__settings-row {
   display: flex;
@@ -746,6 +759,8 @@ export default {
   border-radius: 999px;
   font-size: 13px;
   outline: none;
+  background: #fff;
+  color: #1a1a1a;
 }
 .jl-chat__input:focus {
   border-color: var(--jl-brand);

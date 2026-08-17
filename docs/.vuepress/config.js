@@ -2,9 +2,9 @@ const { defaultTheme } = require("@vuepress/theme-default");
 const { docsearchPlugin } = require("@vuepress/plugin-docsearch");
 
 module.exports = {
-  lang: " ",
-  title: "Just Laws",
-  description: "法律和法律都是相互依存的",
+  lang: "zh-CN",
+  title: "Just Laws AI",
+  description: "中华人民共和国现行法律文库与 AI 智能法律问答系统",
 
   // Site base path. Defaults to "/" (custom domain / nginx root). For a GitHub
   // Pages project site (https://<user>.github.io/just-laws/) set
@@ -69,7 +69,7 @@ module.exports = {
           { text: "全国人民代表大会组织法", link: "/constitutional-relevance/npc-organization-law/" },
           { text: "民族区域自治法", link: "/constitutional-relevance/law-on-regional-national-autonomy/" },
           { text: "香港特别行政区基本法", link: "/constitutional-relevance/hong-kong-special-administrative-region-basic-law/" },
-          { text: "查看全部 24 部宪法相关法", link: "/category/constitutional-relevance" },
+          { text: "查看全部 54 部宪法相关法", link: "/category/constitutional-relevance" },
         ],
       },
       {
@@ -87,7 +87,7 @@ module.exports = {
           { text: "行政处罚法", link: "/administrative/administrative-penalty/" },
           { text: "治安管理处罚法", link: "/administrative/penalties-for-administration-of-public-security/" },
           { text: "义务教育法", link: "/administrative/compulsory-education-law/" },
-          { text: "查看全部 15 部行政法", link: "/category/administrative" },
+          { text: "查看全部 52 部行政法", link: "/category/administrative" },
         ],
       },
       {
@@ -124,6 +124,10 @@ module.exports = {
           { text: "行政诉讼法", link: "/procedural/administrative-procedure/" },
           { text: "民事诉讼法", link: "/procedural/civil-procedure/" },
         ],
+      },
+      {
+        text: "案例与文献",
+        link: "/references/",
       },
     ],
     sidebar: {
@@ -221,8 +225,8 @@ module.exports = {
         },
       ],
     },
-    repo: "https://github.com/ImCa0/just-laws",
-    docsRepo: "https://github.com/ImCa0/just-laws",
+    repo: "https://github.com/qcmuu/just-laws",
+    docsRepo: "https://github.com/qcmuu/just-laws",
     docsBranch: "master",
     docsDir: "docs",
     editLinkText: "在 GitHub 上编辑此页",

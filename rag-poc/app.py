@@ -20,7 +20,7 @@ from pydantic import BaseModel
 import config
 import rag
 
-app = FastAPI(title="Just Laws RAG")
+app = FastAPI(title="Just Laws AI RAG", description="JustLaws AI - Advanced Hybrid Retrieval and Legal RAG PoC")
 
 _origins = [o.strip() for o in config.CORS_ALLOW_ORIGINS.split(",") if o.strip()]
 app.add_middleware(

@@ -25,3 +25,6 @@ batch_*.py
 *.swo
 *~
 .DS_Store
+
+# API Keys
+*exa_keys*.txt

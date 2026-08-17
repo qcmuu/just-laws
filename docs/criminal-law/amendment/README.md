@@ -1,27 +1,27 @@
 ---
-next: /criminal-law/amendment/中华人民共和国刑法修正案.md
+next: /criminal-law/amendment/criminal-law-amendment-i.md
 ---
 
 # 目录
 
-[中华人民共和国刑法修正案](./中华人民共和国刑法修正案.md)
+[中华人民共和国刑法修正案](./criminal-law-amendment-i.md)
 
-[中华人民共和国刑法修正案（二）](./中华人民共和国刑法修正案（二）.md)
+[中华人民共和国刑法修正案（二）](./criminal-law-amendment-ii.md)
 
-[中华人民共和国刑法修正案（三）](./中华人民共和国刑法修正案（三）.md)
+[中华人民共和国刑法修正案（三）](./criminal-law-amendment-iii.md)
 
-[中华人民共和国刑法修正案（四）](./中华人民共和国刑法修正案（四）.md)
+[中华人民共和国刑法修正案（四）](./criminal-law-amendment-iv.md)
 
-[中华人民共和国刑法修正案（五）](./中华人民共和国刑法修正案（五）.md)
+[中华人民共和国刑法修正案（五）](./criminal-law-amendment-v.md)
 
-[中华人民共和国刑法修正案（六）](./中华人民共和国刑法修正案（六）.md)
+[中华人民共和国刑法修正案（六）](./criminal-law-amendment-vi.md)
 
-[中华人民共和国刑法修正案（七）](./中华人民共和国刑法修正案（七）.md)
+[中华人民共和国刑法修正案（七）](./criminal-law-amendment-vii.md)
 
-[中华人民共和国刑法修正案（八）](./中华人民共和国刑法修正案（八）.md)
+[中华人民共和国刑法修正案（八）](./criminal-law-amendment-viii.md)
 
-[中华人民共和国刑法修正案（九）](./中华人民共和国刑法修正案（九）.md)
+[中华人民共和国刑法修正案（九）](./criminal-law-amendment-ix.md)
 
-[中华人民共和国刑法修正案（十）](./中华人民共和国刑法修正案（十）.md)
+[中华人民共和国刑法修正案（十）](./criminal-law-amendment-x.md)
 
-[中华人民共和国刑法修正案（十一）](./中华人民共和国刑法修正案（十一）.md)
+[中华人民共和国刑法修正案（十一）](./criminal-law-amendment-xi.md)

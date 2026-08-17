@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>知产财经-【原创】张凌寒：平台算法责任的认定与限度&mdash;&mdash;评&ldquo;爱奇艺诉字节跳动案&rdquo;</title>
+<meta name="keywords" content="平台算法责任" />
+<meta name="description" content="在推荐算法广泛应用的今天，平台已经不能再主张基于技术中立原则免责，其注意义务相较以往有所提高，平台帮助侵权的认定规则应作出因应性改变。" />
+<!--https 下连接访问不通解决办法，不用https的时候需要注释掉，否则此页面会强制https资源-->
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/swiper.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/base.css" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/css.css" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/other.css" />
+<link rel="stylesheet" type="text/css" href="/static/pc/css/animate.min.css" />
+<script type="text/javascript" src="/static/pc/js/jquery-1.8.0.min.js "></script>
+<script type="text/javascript" src="/static/pc/js/swiper.min.js "></script>
+<script type="text/javascript" src="/static/pc/js/layer/layer.js "></script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?c88fdaa4e9746c6608c3ce29fa762712";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+    $(function(){
+        var tzurl = $("#tzurl").val()
+        if(tzurl){
+            window.location.href=tzurl;
+        }
+         
+        var url = window.location.href;
+        var isoldurl = url.indexOf("infolist_ri");
+        if(isoldurl){
+            var infolist_ri = getQueryString2("infolist_ri")
+            var author_id = getQueryString2("author_id")
+            console.log(infolist_ri)
+            console.log(author_id)
+        }
+    })
+</script>
+<style>
+.uid {
+    display: none;
+}
+.id {
+    display: none;
+}
+</style>
+</head>
+<body class="pra">
+<input type="hidden" name="" id="tzurl" value="" />
+<script>
+    $(function(){
+        var tzurl = $("#tzurl").val()
+        if(tzurl){
+            window.location.href=tzurl;
+        }
+        
+    })
+</script>
+<div class="no_lays"></div>
+<!-- 头部 --> 
+<script>    var width = $("body").width();    var url = window.location.href;    var mo = url.indexOf("mobile");        if(width<=980 && mo <= 0){        var urlArr =  url.split('/')        console.log(urlArr)        var urlNew = "";        for(var i = 0;i<urlArr.length;i++){            if(i==0){                urlNew += urlArr[i]            }else if(i==1){                urlNew += "/"            }else if(i==3){                console.log(urlArr[i])               if(urlArr[i]=="index.php" || urlArr[i]=="index" ){                   urlNew += "/mobile"               }else{                   urlNew += "/mobile"+"/"+urlArr[i]               }            }else if(i==4 && urlArr[3]=="index.php" && urlArr[4]=="index" ){                urlNew +=""            }else{                urlNew += "/" +urlArr[i]            }        }        console.log(urlNew)        window.location.href = urlNew       }</script><div class="top w1">  <div class="top_con w1200">    <div class="top_le"> 欢迎访问知产财经官网! </div>    <div class="top_ri">      <div class="login"> <span><a href="/mobile">手机端</a></span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <span><a href="/login/login.html">登录</a></span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <span><a href="/login/reg.html">注册</a></span> </div>      <div class="hezuo"> <span class="dybtn "><a href="/index/goods">订阅</a></span> <span class="hzbtn dybtn"><a href="/page/4.html">合作</a></span> </div>    </div>  </div></div><!-- 头部广告位 --><div class="topadv w1 clear">  <div class="topadv_con w1200">    <div class="swiper-container banner_guanggao  zanzhitopban clear ">      <div class="swiper-wrapper">                <div class="swiper-slide"> <a href="https://www.ipeconomy.cn/cehua/" target="_blank"> <img src="https://www.ipeconomy.cn//content/2025052312_0426281.jpg" /> </a> </div>                <div class="swiper-slide"> <a href="http://www.anzone-consulting.cn/" target="_blank"> <img src="https://www.ipeconomy.cn//content/2025052312_0600317.jpg" /> </a> </div>              </div>      <div class="swiper-pagination banerfen"></div>    </div>  </div></div><!-- 导航栏 --><div class="nav w1">  <div class="nav_con w1200">    <ul>      <li class="navtab "> <a href="/index.html">首页</a></li>      <!--      <li class="navtab " data-id="3"> <a href="/zixun/">资讯</a></li>-->            <li class="navtab"> <a href="/cehua/">特别策划</a></li>            <li class="navtab " data-id="2"> <a href="/zhichan/">知产</a></li>                  <li class="navtab " data-id="12"> <a href="/caijing/">财经</a></li>                        <li class="navtab " data-id="13"> <a href="/shuju/">数据</a></li>            <li class="navlogo"> <a href="/"> <img src="/static/pc/img/logo.png" alt="" /> </a> </li>            <li class="navtab " data-id="14"> <a href="/anli/">案例</a></li>                  <li class="navtab " data-id="15"> <a href="/Industry/">产业</a></li>                  <li class="navtab " data-id="16"> <a href="/guandian/">观点</a></li>                  <li class="navtab " data-id="17"> <a href="/baogao/">报告</a></li>                  <li class="navtab " data-id="18"> <a href="/shiting/">视听</a></li>            <li class="navtab naveng cur"> <a href="/index/lawfirm/lv_list.html"> 其他 </a></li>    </ul>  </div></div><script>//接收参数方法2，截取方式function getString() {    var url = window.location.href;    var i1 = url.indexOf(".cn/");//	console.log(i1)    if(i1>0){        var value = url.slice(i1+4);//		console.log(value)        var i2 = value.indexOf("/");        var value2 = value.slice(0,i2);    }else{        var value2 = "";    }    return value2;}//用来确定页面是不是特别策划$(function(){    var navArr = ["article","cehua"];    var val = getString()    var on = 0;    for(var i=0;i<navArr.length;i++){        if(val == navArr[i]){            $(".nav_con li:eq(1)").addClass("cur");            on = 1;        }    }})</script> <script>var mySwiper = new Swiper ('.banner_guanggao', {    // loop: true, // 循环模式选项    //autoplay: true,//可选选项，自动滑动    autoplay: {        delay: 3000,        stopOnLastSlide: false,        disableOnInteraction: true,    },    // 如果需要分页器    pagination: {        el: '.banerfen',        clickable :true,    },})</script> <script>var cookieId = getCookie("id");var cookieNickname = getCookie("nickname");console.log(cookieId)if(cookieId){    $(".cookieid").show()    $(".nocookieid").hide()    var htmlTop = '<span class="user_h_top"><a href="/index/member/index.html">'+cookieNickname+'</a></span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <span><a href="/index/login/out.html">退出</a></span>'}else{    $(".cookieid").hide()    $(".nocookieid").show()    var htmlTop = '<span><a href="/login/login.html">登录</a></span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <span><a href="/login/reg.html">注册</a></span>'}$(".login").html(htmlTop)function getCookie(name) {    var cookies = document.cookie.split("; ");    for(var i = 0; i < cookies.length; i++) {        var cookie = cookies[i].split("=");        if(cookie[0] === name) {            return decodeURIComponent(cookie[1]);        }    }}</script> 
+<!-- 杂志文章 -->
+<div class="zz_det w1 mt30">
+  <div class="zz_det_con w1200">
+    <div class="zz_det_le"> 
+      <!-- 面包屑 -->
+      
+      <div class="curmbs mt18"> <a href="/">首页</a> &gt; <a href="/cehua/">特别策划</a> &gt;正文 </div>
+      <div class="zz_det_main">
+        <h1>封面策划|【原创】张凌寒：平台算法责任的认定与限度&mdash;&mdash;评&ldquo;爱奇艺诉字节跳动案&rdquo;</h1>
+        <div class="zz_det_aut"> 2022/4/14 11:31:10 来源于  知产财经  张凌寒 </div>
+        <div class="zz_det_zhaiyao"> <span>在推荐算法广泛应用的今天，平台已经不能再主张基于技术中立原则免责，其注意义务相较以往有所提高，平台帮助侵权的认定规则应作出因应性改变。</span> </div>
+        <div class="content" style="overflow:hidden;display:none;"><p>　　<b>作者：张凌寒</b>&nbsp; 北京科技大学副教授</p><p>　　<b>一、问题的提出</b></p><p>　　2022年初，北京爱奇艺科技有限公司（以下简称爱奇艺公司）诉北京字节跳动科技有限公司（以下简称字节公司）侵害《延禧攻略》信息网络传播权一案在北京市海淀区人民法院宣判，引起了社会各界的广泛关注。该案又被媒体称为“长短视频第一案”与“算法推荐第一案”，该案判决对长短视频媒体生态产生了重大影响，也对平台算法责任认定起到了重要的指导作用。</p><p>　　该案具体案情为2018年电视剧《延禧攻略》（以下简称延剧）在爱奇艺热播之时，大量用户把这部爆款电视剧做成切条视频（又称短视频）上传。爱奇艺公司主张，字节公司未经授权通过其运营的今日头条App利用信息流推荐技术，将用户上传的截取自延剧的短视频向公众传播并推荐，某些内容获得了超百万次的播放量。爱奇艺公司认为字节公司侵害了其对延剧享有的信息网络传播权，请求判令字节公司赔偿经济损失2921.6万元及维权开支78.4万元。字节公司辩称，涉案短视频由用户自行上传，字节公司仅提供信息存储空间服务。字节公司作为网络服务提供者，已尽到合理注意义务，不存在任何侵权的主观过错，不构成侵权。</p><p>　　经审理，法院认定字节公司的涉案行为构成帮助侵权，并判定赔偿原告经济损失150万元及诉讼合理开支50万元，共计200万元。法院在判决书中的两个观点引起了学界和业界的广泛讨论：第一，区分了网络服务提供者的信息存储空间服务与信息流推荐服务；第二，将平台基于算法推荐进行侵权内容传播的行为认定为帮助侵权行为。</p><p>　　对于技术发展造成的网络服务提供者主观过错认定难题，一直是侵权制度（尤其是知识产权制度）研究关注的热点。只不过这一问题的焦点从曾经的深度链接、服务器缓存等，转移到了算法技术对网络服务提供者注意义务变化的影响上。在推荐算法广泛应用的今天，平台已经不能再主张基于技术中立原则免责，其注意义务相较以往有所提高，平台帮助侵权的认定规则应作出因应性改变。然而，平台基于算法所承担的注意义务应提高到何种程度？其边界又在何处？</p><p>　　<b>二、平台算法责任的追责困境</b></p><p>　　算法自动化运行并生成推荐结果造成了侵权的不利后果，很难直接适用传统的侵权责任框架认定平台的侵权责任。盖因平台算法责任的认定面临着两个难题：其一，平台主张算法不过是中立的技术，自动运行生成结果，难谓其平台具有直接的主观过错；其二，平台主张侵权内容是用户上传，自己不过是传输介质，并未起到帮助侵权的作用。</p><p>　　其一，平台算法责任的认定面临“技术中立”的抗辩。在本案中，字节公司即主张其作为网络服务提供者，不存在任何侵权的主观过错，不构成侵权。在既往案例中，平台一向主张基于算法自动运行生成的结果不应承担法律责任。例如快播案中，其创始人王欣在法庭的抗辩理由即为“技术是中立的”[1]，字节公司创始人张一鸣在多个场合提到“算法是没有价值观的”[2]，均在强调平台方对造成的损害结果并无主观过错，因此不应当承担法律责任。</p><p>　　其二，如果是用户行为造成的损害，除技术中立的抗辩之外，法律还面临着“行为人与责任人相分离”的难题。在本案中，《延禧攻略》的短视频并非字节公司制作传播，而是由多个自媒体博主上传，其目的是为了引导流量增加用户。因此，字节公司也辩称，涉案短视频由用户自行上传，字节公司仅提供信息存储空间服务。那么如果用户违法，平台是否要承担法律责任？平台方一贯主张自己是严格的“传输介质属性”，不是内容服务提供者而是网络连接服务提供者。此种情况下将平台作为直接侵权责任人并不符合现实情况，但若仅仅将平台认定为网络连接服务提供者，显然是低估了平台利用算法在内容推荐中所起到的作用。</p><p>　　<b>三、平台算法责任的认定</b></p><p>　　无论是判定平台的主观过错是否构成了“应当知道”，抑或是否采取了必要措施以及是否构成了帮助侵权，都围绕着一个核心的问题，究竟算法在平台运行中起到了何种作用？此问题对于厘清算法带来的平台注意义务的变化至关重要。</p><p>　　争议的焦点在于，在推荐算法广泛应用的今天，平台是内容提供者，还是网络服务提供者？这实际上隐含了平台是“信源”还是“信道”的假设。从技术角度来看，平台基于算法对信息索引、排序、生成、推荐，并以“信息流”的形式呈现给用户。从信息论的角度来讲，推荐算法显著降低了海量网络信息的混乱程度，将用户需要的信息以一定顺序的形式提供给用户，这本身就是信息。平台作为传播者并不提供内容，但平台使用的算法使得信息的洪流有了更明确的结构。</p><p>　　域外案件中，也有平台自身主张基于算法推荐内容成为内容提供者。在搜索王与谷歌的案件（Search King v Google）中，搜索王（Search King）公司声称谷歌恶意篡改网页排名算法导致其访问量急剧下降。[3]谷歌辩称算法并非“客观、中立的”，“谷歌从来没有放弃其作为言论者的权利，即选择向用户提供何种信息以及如何提供这些信息”。[4]基于算法对信息和数据流的处理，平台兼具“信源”属性与“信道”属性，因此其既不是单纯的网络服务提供者，也不可归类为信息内容提供者，而是介于二者之间。</p><p>　　由此可以得出结论，平台（如购物、新闻）等作为“基于算法的信息发布者”兼具“信道”与“信源”的属性。如电商平台虽然不直接出售商品，但对各种商品排序权重的考虑和设计都体现在算法中。用户看到的无论是购物搜索关键词，还是综合排序下的商品页面，都是作为信息发布的“信息流”呈现方式。因此，从这点上来说，平台是信息发布者，但在技术上无法确切掌握和控制“信息流”中的具体信息，又是一个网络服务提供者。</p><p>　　因此该判决对字节公司的角色认定值得肯定。法院认定，字节公司向用户提供的并不仅仅是信息存储空间服务，而是同时提供了信息流推荐服务。这进一步确认了我国司法实践中已经逐渐摒弃允许平台将“技术中立”作为抗辩理由，平台不能够再以结果由算法（技术）自动生成就主张不存在主观过错。字节公司与不采用算法推荐、仅提供信息存储空间服务的其他经营者相比，理应对用户的侵权行为负有更高的注意义务。</p><p>　　实际上，我国对平台基于算法承担法律责任的认定经历了从宽松到严格的发展历程。学界、立法部门与司法实务中逐渐明晰了推荐算法在平台运行中起到的作用。在2015年任某诉百度名誉权案中，法院调查认定百度公司自动补足算法的搜索建议“即任某姓名系百度经过相关算法的处理后显示的客观存在网络空间的字符组合”“检索词的序列动态变化时时更新，故百度公司对相关关键词在搜索结果中出现并不存在主观过错。”在金德管业诉百度案的一审判决中，法院认为自动补足算法提供的搜索建议“上述文字的存在的确会对金德管业公司的名誉造成损害。百度公司未尽到相应审核义务的行为在主观上存在过错”，但在二审采取了相反的立场，认为百度公司不需承担审核义务。这一司法精神继续体现在了之后的案件中。在2016年之后，平台监管部门逐渐认识到了算法在平台信息内容呈现中的重要作用。在立法和实践中，监管部门提高了平台对于信息内容安全的审查义务要求。这也促使平台相应提高了对内容的过滤与审查能力，配备了相应的应对机制与工作人员。2022年3月1日，我国《互联网信息服务算法推荐管理规定》开始实施，其建立的算法技术监管体系穿透了平台运行的“算法技术面纱”，将平台监管的触角和追责视角直接指向背后的算法责任。监管上的趋严也渗透到了民事领域的平台算法责任认定中，此次的“爱奇艺诉字节跳动案”，即要求平台对算法推荐结果侵权承担更高的注意义务。</p><p>　　那么，算法是否真的如平台所辩称的那样，自动运行且无法控制呢？即使是深度学习算法，程序员的意志也可体现在训练目标的设定以及算法的维护、调参中。在平台的实际运行中，算法也并非独立自主运行的“数学公式”，而呈现为叠加多个模块，与过滤、检索、人工审核等多个功能共同运行的功能系统。技术原理是中立的，但是技术的应用是包含主观意图的。平台在算法设计、部署、运行中包含的主观意图与平台是否尽到合理的注意义务，是平台算法追责的根本指向。</p><p>　　具体到本案中，字节公司使用的是协同过滤算法，但这并不能成为其主张“没有主观过错”的理由。协同过滤算法已经不再以用户标签、内容分类作为推荐方式，而是根据用户之间的相似性来推荐内容。例如影视平台常常出现的“猜你喜欢”即是根据收集的用户群观影习惯建立用户兴趣模型，并分析用户行为来挖掘用户的潜在需求。协同过滤算法依赖用户行为，有着大范围、多元化的内容池，以群体协作的方式进行内容推荐。但除此之外，推荐系统在冷启动时（即用户刚刚注册进入平台）还是依赖内容本身的固有属性来进行推荐。与此同时，热搜、栏目推荐、榜单等等多种方式，都与协同过滤算法一起成为平台增加流量、吸引用户的重要手段，也一起构成了所谓的“推荐算法系统”。</p><p>　　因此，法院判决字节公司承担侵权责任，除了通过认定平台的“信息流推荐服务”来认定其注意义务，还结合了多种考量因素。如涉案视频的播放次数单条过百万次，侵权持续时间较长且原告多次通知被告，涉案视频对被告用户和流量的增加起到了一定引流作用等，以及被告是否采取了相应的合理措施。</p><p>　　<b>四、平台算法责任的限度</b></p><p>　　平台需要为算法运行承担更高的注意义务，并不意味着要求平台全知全能，对不利法律后果承担严格责任。这对于拥有海量信息的平台而言，未免过于苛责。那么，平台为算法承担责任的限度应划定在哪里呢？</p><p>　　平台对不同算法系统的控制力，也受到多重因素的影响。在近五年的司法实践中，我国法院逐渐确立了网络服务提供者采取的必要措施应该与其提供的服务类型相适应的规则，即是考虑到了不同的平台对算法以及用户上传内容的控制力并不相同。如2017年乐动卓越诉阿里云案，2019年刀豆网络诉百赞、腾讯案，2020年企查查案等，都讨论了不同类型平台在技术运行产生不利法律后果后，应承担注意义务的范围。</p><p>　　平台基于算法产生的注意义务范围如何确定，离不开法院对于技术功能的分析。如在北京知识产权法院二审“阿里云案”中，法院认为，云服务虽然在技术特征和行业监管层面与自动接入、自动传输服务和自动缓存服务有所不同，但在对具体内容控制能力层面则接近于上述二类服务。 因此，法院根据云服务的技术特征作出了判决。在国外的研究中，搜索引擎自动补足算法的侵权案件中，即有研究显示自动补足词汇在搜索引擎界面中占据了72%的用户注意力（眼球运动轨迹追踪），甚至使用户忽略了搜索结果的页面显示，并且在搜索引擎提供的五类结果中（包括即时搜索，搜索预览等），自动补足算法是唯一能够影响用户行为的算法。自动补足算法提供的搜索建议能够引发用户的好奇心，使得用户进一步点击搜索建议，从而增加搜索建议的点击量和热度，使得搜索建议被更多的呈现。因此，在各国相关案件中，越来越多的判例主张运用自动补足算法的平台承担帮助侵权的责任。概而言之，由于算法的不同功能，平台的法律地位在“信源”与“信道”的光谱间移动，其承担的注意义务无法一概而论，而需根据算法技术的具体功能具体分析。</p><p>　　但可以确定的是，平台不应基于推荐算法被认定为纯粹的“内容提供者”而负有过高的注意义务。在信息内容安全的监管中，对于违反法律禁止规定的内容，可以要求平台承担过滤审查义务。但在民事领域判断侵权与否，要求平台承担类似法官的判断，履行侵权内容的一般过滤审查义务并无充分的正当性。判定平台是否承担法律责任的问题，往往落在了平台是否实施了足够的、合理的、必要的措施阻止侵权行为的反复发生。这也体现在“爱奇艺诉字节跳动案”中，法院认为“本案证据所反映出的实际处理结果来看，其在当时所采取的措施，并不符合有效制止、预防明显侵权的实质要求，应当认定其在本案中所采取的相关措施尚未达到‘必要’的程度。”“必要措施”的判断和平台的体量、技术能力、侵权内容的类型等息息相关。字节公司在此案中败诉，也并不意味着所有的推荐算法服务提供平台均要承担“一刀切”的帮助侵权责任——并非所有的平台都具有字节公司的推荐算法与技术能力。在具体个案中，仍需考量平台的用户数量、平台的体量、技术能力等情况，对于版权人事先提供的供版权过滤比对的权源性作品，对于具有先进推荐算法技术的平台，以及对于具有高度传播性和海量用户的平台来说，注意义务都要相应提高，而这需要实践中精细的司法作业。</p><p>　　注释:</p><p>　　[1]白龙：《用法治方式读懂“快播案“》，载《 人民日报》2016年1月11日，第5版。</p><p>　　[2]崔文佳：《价值观引领算法才有更多优质“头条”》，载《北京日报》2018年4月13日，第3版。</p><p>　　[3]Search King, Inc. v. Google Technology, Inc., Case No. CIV-02-1457-M (W.D. Okla. May. 27, 2003) .</p><p>　　[4]See Blackman, Josh. What happens if data is speech. 16 University of Pennsylvania Journal of Constitutional Law Heightened Scrutiny.25 (2014).</p></div>
+        <script>
+var aid = "4865";//文章id
+var isp = 1;//0 可看，1不可看
+var content1 = $(".content").html();
+$.post('/index.php/index/Api/isprice', {id:aid}, function(data) {
+    var ndata = JSON.parse(data);
+    isp = ndata.data.is_price;
+    if(isp==1){
+        $(".is_price1").show();
+        $(".is_price0").hide();
+        var height = $(".content").height();
+        var text =  $(".content").text();
+        if($(".content").children("p").length <= 3){
+            $(".content").css("height",height/4);
+            var html = text.substring(0,text.indexOf("<br/>"));
+            $(".content").show();
+        }else{
+            if(height>500){
+                $(".content").css("max-height","900px");
+                $(".content").children().each(function(index){
+                    if(index>7){
+                        $(this).remove();
+                    }
+                })
+                $(".content").show();
+            }
+        } 
+    }else{
+        $(".content").html(content1);
+        $(".content").show();
+        $(".is_price0").show();
+        $(".is_price1").hide();
+    }
+})
+//接收参数方法2，截取方式
+function getQueryString2(name) {
+    var url = window.location.href;
+    var namelen = name.length;
+    var i1 = url.indexOf(name);
+    var i2 = url.indexOf(".html");
+    var value = url.slice(i1+namelen+1, i2);
+    return value;
+}
+</script> 
+      </div>
+      <div class="fufei is_price1">
+        <div class="fufei_head"><img src="/static/pc/img/meng.png" alt="" width="100%"> </div>
+        <div class="fufei_text1">本文共计5583字，订阅后享全网免费阅读</div>
+        <div class="fufei_ico"><img src="/static/pc/img/fufeiico.png"></div>
+                <div class="fufei_text_weideng"> <a href="/login/login.html?id=4865&type=2"> <span class="qudenglu">登录</span> 后获取已订阅的阅读权限</a> </div>
+                <div class="fufei_ligous">
+          <div class="fufei_ligou guomai" style="display: inline-block"> 单篇订阅 </div>
+          <div class="fufei_ligou" style="display: inline-block" > <a href="/index/goods">年度会员订阅</a> </div>
+          <div class="zhifuz">
+            <div class="zhifu_cons">
+              <div class="zhifubuy">
+                <div class="pay_price_title">
+                  <h2>支付金额：<span class="">￥</span></h2>
+                  <div class="zhidi_closes"><img src="/static/pc/img/close.png"> </div>
+                </div>
+                <div class="paylist">
+                  <ul>
+                    <li>
+                      <label for="wx">
+                        <input name="pay" type="radio" id="wx"  checked value="zwx">
+                        <img src="/static/pc/img/pay_wx.png" alt=""> 微信支付</label>
+                    </li>
+                    <li>
+                      <label for="zhifubao">
+                        <input name="pay" type="radio" id="zhifubao" value="zzfb" >
+                        <img src="/static/pc/img/pay_zfb.png" alt=""> 支付宝支付</label>
+                    </li>
+                    <!--  <li>
+            <label for="yinlian">
+            <input name="pay" type="radio" id="yinlian"  value="zzyl">
+            <img src="/static/pc/img/pay_yl.png" alt="">
+              微信支付</label>
+          </li> -->
+                  </ul>
+                </div>
+                <div class="buy_bug_lbtns"> <span class="zhibuy_queding">立即支付</span> </div>
+                <div class="zhitu"> <img src="" alt=""> </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fufei_jieshi">知产财经付费内容  |  请订阅后查看全文</div>
+      </div>
+      <div class="fenxiang">
+          <div class="fenxi">
+            <wb-share-button data:pic="" data:title="" data:url=""> <a title="分享到微博" class="weibo"></a> <span>分享到微博</span> </wb-share-button>
+          </div>
+          <div class="fenxi fenxins"><div class="bdsharebuttonbox"><a title="分享到微信" href="#" class="bds_weixin weixin" data-cmd="weixin" ></a> <span>分享到微信</span> </div></div>
+        </div>
+<script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://open.weibo.com/views/js/wbsdk.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+wb.init({
+    appkey: '2841753208'
+});    
+
+//全局变量，动态的文章ID
+var ShareURL = "";
+//绑定所有分享按钮所在A标签的鼠标移入事件，从而获取动态ID
+$(function () {
+    $("bdsharebuttonbox a").mouseover(function () {
+        ShareURL = $(this).attr("data-url");
+    });
+});
+
+/* 
+* 动态设置百度分享URL的函数,具体参数
+* cmd为分享目标id,此id指的是插件中分析按钮的ID
+*，我们自己的文章ID要通过全局变量获取
+* config为当前设置，返回值为更新后的设置。
+*/
+function SetShareUrl(cmd, config) {
+    if (ShareURL) {
+        config.bdUrl = ShareURL;    
+    }
+    return config;
+}
+
+//插件的配置部分，注意要记得设置onBeforeClick事件，主要用于获取动态的文章ID
+window._bd_share_config = {
+    "common": {
+        onBeforeClick: SetShareUrl, "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "24"
+    }, "share": {}
+};
+//插件的JS加载部分
+with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+ ~(-new Date() / 36e5)];
+</script>
+<style>
+.weixin {
+    width: 36px!important;
+    height: 36px!important;
+    background-image: url(/static/pc/img/weixin.png)!important;
+    background-position: center top!important;
+    background-size: 100% 100%!important;
+    padding-left: 0!important;
+    display: block!important;
+    float: none!important;
+    margin-left: auto!important;
+    margin-right: auto!important;
+    margin: 0;
+    margin-bottom: 5px!important;
+}
+.weibo {
+    width: 36px!important;
+    height: 36px!important;
+    background-image: url(/static/pc/img/weibo.png)!important;
+    background-position: center top;
+    background-size: 100% 100%;
+    padding-left: 0;
+    display: block;
+/*    float: left;*/
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+</style>
+      <div class="next">
+        <div class="zz_m_last zz_m_ln"><span>上一篇： </span> <a href="/article/4864.html"> 【原创】李自柱：算法推荐下网络服务提供者侵犯著作权责任的判断 </a></div>
+        <div class="zz_m_next zz_m_ln"> <span>下一篇：</span> <a href="/article/4866.html"> 【原创】宋健 ：UGC平台&ldquo;通知-必要措施&rdquo;规则的发展趋向 </a></div>
+      </div>
+      
+      <!-- 热门 -->
+      
+      <div class="remen_tui">
+        <div class="col_cai_tit"> <span class="ri_tit pl22">推荐阅读</span> <span class="ri_more"><a href="/searchlist/推荐">更多</a> </span> </div>
+        <div class="redian_list remen_list">
+          <ul>
+                        <li> <a href="/article/4880.html"> <span class="li_text">【原创】&ldquo;盗图抄店&rdquo;维权难 </span></a> </li>
+                        <li> <a href="/article/4879.html"> <span class="li_text">【原创】青年&middot;创造&mdash;&mdash;中国高校知识产权教育访谈录 </span></a> </li>
+                        <li> <a href="/article/4878.html"> <span class="li_text">【原创】谁动了我的Cookies？ </span></a> </li>
+                        <li> <a href="/article/4877.html"> <span class="li_text">【原创】崔国斌：专利联营许可反垄断审查制度的完善建议 </span></a> </li>
+                        <li> <a href="/article/4876.html"> <span class="li_text">【原创】祝建军：英国法院重申SEP全球许可条件管辖规则&mdash;&mdash;评诺基亚诉OPPO案 </span></a> </li>
+                        <li> <a href="/article/4875.html"> <span class="li_text">【原创】周清华、黄旭东：论关键词推广的法律边界 </span></a> </li>
+                        <li> <a href="/article/4874.html"> <span class="li_text">【原创】张程博、唐黎妍：关于&ldquo;以分工合作方式共同提供作品&rdquo;司法认定标准的实务研究 </span></a> </li>
+                        <li> <a href="/article/4873.html"> <span class="li_text">【原创】吴贵明、潘宗桃：美国专利侵权诉讼中如何利用&ldquo;专利不可执行&rdquo;成功抗辩&mdash;&mdash;从PureCircle公司诉Almendra公司专利侵权案谈起 </span></a> </li>
+                        <li> <a href="/article/4871.html"> <span class="li_text">【原创】蔡伟、陈颖：设计空间在外观设计专利侵权判断中的适用 </span></a> </li>
+                        <li> <a href="/article/4870.html"> <span class="li_text">【原创】余博：民法典体系下的知识产权侵权责任承担 </span></a> </li>
+                      </ul>
+        </div>
+      </div>
+      <!-- 线 -->
+      <div class="zz_xian"> </div>
+      <!-- 评论输入 -->
+      <div class="zz_pinglun"> 
+        <!--       自己的头像-->
+        <div class="zz_pl_t">  <b><img src="/static/pc/img/logo22.png" alt=""></b> <span>请登录</span>  </div>
+        <div class="pin_in_d">
+          <form method="post" action="/index.php/index/article/comment.html">
+            <input type="hidden" name="id" value="4865">
+            <textarea  class="pin_in" name="content" placeholder="评论仅代表网友个人观点"></textarea>
+            <button class="pinlun_btn" type="submit"> 发表评论 </button>
+          </form>
+        </div>
+      </div>
+      
+      <!-- 评论内容 -->
+      
+      <div class="pinglun_con"> <span class="ri_tit pl22">全部评论</span>
+        <div class="pinlun_list mt30">
+          <ul>
+          </ul>
+        </div>
+      </div>
+      <!-- 查看更多 -->
+      <div class="gengduo clear"> <a href="javascript:;">查看更多</a> </div>
+    </div>
+    <div class="zz_det_ri"> 
+      <!-- 左侧广告轮播 -->
+      <div class="gao_lun mt30 clear">
+        <div class="swiper-container banner_guanggao zuo_gaun_ban clear ">
+          <div class="swiper-wrapper">
+                        <div class="swiper-slide"> <a href="https://datayi.cn/w/a9a61lZR" target="_blank"> <img src="https://www.ipeconomy.cn/./content/2023072414_5423928.jpg" /> </a> </div>
+                      </div>
+          <div class="swiper-pagination banerfen"></div>
+        </div>
+      </div>
+      <!-- 广告end --> 
+      
+      <!-- 今日要闻 -->
+      <div class="zz_yaowen mt30">
+        <div class="col_cai_tit"> <span class="ri_tit pl22">今日要闻</span> <span class="ri_more"><a href="/searchlist/滚动头条">更多</a> </span> </div>
+        <div class="yao_tulist">
+          <ul>
+                        <li> <a href="/anjian/9756.html">              <div class="yaow_tu"><img src="https://www.ipeconomy.cn//content/915317562616756.jpg" alt="" style="width: 100%"></div>
+              <div class="yaow_tu_text"> UPC驳回戴森核心禁令请求，追觅产品技术独创性获重要验证 </div>
+              </a> </li>
+                        <li> <a href="/reping/9735.html">              <div class="yaow_tu"><img src="https://www.ipeconomy.cn//content/99021756174421网络黑产.jpg" alt="" style="width: 100%"></div>
+              <div class="yaow_tu_text"> 喻玲 程轩琮：社交关系链识别行为的不正当性认定 </div>
+              </a> </li>
+                      </ul>
+        </div>
+        <div class="redian_list zz_yaolist">
+          <ul>
+                        <li> <a href="/anjian/9756.html"> <span class="li_text"> 知产|UPC驳回戴森核心禁令请求，追觅产品技术独创性获重要验证 </span></a> </li>
+                        <li> <a href="/reping/9735.html"> <span class="li_text"> 观点|喻玲 程轩琮：社交关系链识别行为的不正当性认定 </span></a> </li>
+                        <li> <a href="/zhuanti/9730.html"> <span class="li_text"> 专题推荐|附判决┃45个涉商品包装、装潢不正当竞争案例合集（2022-2025） </span></a> </li>
+                        <li> <a href="/qianyan/9715.html"> <span class="li_text"> 产业|撤销3.61亿元赔偿！涉白血病药物专利无效 </span></a> </li>
+                        <li> <a href="/qianyan/9714.html"> <span class="li_text"> 产业|滴滴与美团在巴西互诉 </span></a> </li>
+                      </ul>
+        </div>
+      </div>
+      
+      <!-- 分类1 -->
+      <div class="zixun_fenlei1 ri mt30">
+        <div class="col_cai_tit"> <span class="ri_tit pl22">最新文章</span> <span class="ri_more"><a href="/searchlist">更多</a> </span> </div>
+        <div class="redian_list">
+          <ul>
+                        <li> <a href="/anjian/9760.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 附起诉状┃苹果与OpenAI被诉垄断AI市场 </span></a> </li>
+                        <li> <a href="/dongtai/9759.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 附判决┃《长相思》案判赔2900万元，法院明确平台主动过滤拦截侵权内容义务 </span></a> </li>
+                        <li> <a href="/dongtai/9758.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 附判决┃惩罚性赔偿6000万元！腾讯诉快手《德云斗笑社》侵权案二审判了 </span></a> </li>
+                        <li> <a href="/qianyan/9757.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 索赔2.13亿元！AI公司再被诉 </span></a> </li>
+                        <li> <a href="/anjian/9756.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> UPC驳回戴森核心禁令请求，追觅产品技术独创性获重要验证 </span></a> </li>
+                        <li> <a href="/dongtai/9755.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 外卖骑手抢单靠&ldquo;外挂&rdquo;？法院颁布诉前禁令！ </span></a> </li>
+                        <li> <a href="/dongtai/9754.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 深圳中院：超限度的&ldquo;警示函&rdquo;构成商业诋毁吗？ </span></a> </li>
+                        <li> <a href="/qianyan/9752.html"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 联想被诉，涉5G设备专利！ </span></a> </li>
+                      </ul>
+        </div>
+      </div>
+      
+      <!-- 分类2 -->
+      <div class="zixun_fenlei1 ri mt30 mb30">
+        <div class="col_cai_tit"> <span class="ri_tit pl22">热门阅读</span> <span class="ri_more"><a href="/searchlist/热点阅读">更多</a> </span> </div>
+        <div class="redian_list">
+          <ul>
+                        <li> <a href="https://www.ipeconomy.cn/huodong/9520.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 陈天伟：商品和服务分类的调整对商标保护的影响研究 </span></a> </li>
+                        <li> <a href="https://www.ipeconomy.cn/reping/9672.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 丁雷：惩罚性赔偿证据规则与举证责任分配 </span></a> </li>
+                        <li> <a href="https://www.ipeconomy.cn/reping/9599.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 过度干预的隐忧：标准生态系统平衡需要审慎维护 </span></a> </li>
+                        <li> <a href="https://www.ipeconomy.cn/dongtai/9676.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 附判决┃杭州中院：通过AI写作工具提供&ldquo;种草文案&rdquo;等服务构成不正当竞争 </span></a> </li>
+                        <li> <a href="https://www.ipeconomy.cn/yuanchuang/9513.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 专利无效修改的实务要点与典型案例解析 </span></a> </li>
+                        <li> <a href="https://www.ipeconomy.cn/zhuanti/9560.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 附判决┃2020-2025年涉知识产权技术秘密侵权案例合集（27件） </span></a> </li>
+                        <li> <a href="https://www.ipeconomy.cn/yuanchuang/9632.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 对话INTA CEO：我们正试图改变知识产权在金融中的估值 </span></a> </li>
+                        <li> <a href="https://www.ipeconomy.cn/qianyan/9686.html" target="_blank"> <b class="liico"><img src="/static/pc/img/liico.png" alt=""></b> <span class="li_text"> 附诉讼梳理┃小米在全球遭多起NPE诉讼 </span></a> </li>
+                      </ul>
+        </div>
+      </div>
+      
+      <!--  --> 
+      <!-- 左侧广告轮播 -->
+      <div class="gao_lun mt30 clear">
+        <div class="swiper-container banner_guanggao  zuo_gaun_ban clear ">
+          <div class="swiper-wrapper">             <div class="swiper-slide"> <a href="http://www.anzone-consulting.cn/" target="_blank"><img src="https://www.ipeconomy.cn//content/2025061017_0831690.jpg"></a></div>
+             </div>
+          <div class="swiper-pagination banerfen"></div>
+        </div>
+      </div>
+      <!-- 广告end --> 
+    </div>
+  </div>
+</div>
+
+<!-- 友情链接 --> 
+<div class="blogroll w1 clear"> 
+   <div class="blogroll_con w1200"> 
+    <ul> 
+     <li> <span class="blo_tit">友情链接：</span></li> 
+          <li><a href="http://www.gov.cn/" target="_blank">中国政府网</a></li> 
+          <li><a href="https://www.miit.gov.cn/" target="_blank">工业和信息化部</a></li> 
+          <li><a href="http://www.court.gov.cn/" target="_blank">最高人民法院</a></li> 
+          <li><a href="http://www.spp.gov.cn/" target="_blank">最高人民检察院</a></li> 
+          <li><a href="http://www.samr.gov.cn/" target="_blank">国家市场监督管理总局</a></li> 
+          <li><a href="http://www.sipo.gov.cn/" target="_blank">国家知识产权局</a></li> 
+          <li><a href="http://www.samr.gov.cn/fldj/" target="_blank">国家反垄断局</a></li> 
+          <li><a href="http://www.ncac.gov.cn/" target="_blank">国家版权局</a></li> 
+         </ul> 
+   </div> 
+  </div> 
+  <!-- 底部 --> 
+  <div class="footer w1 mt30"> 
+   <div class="footer_con w1200"> 
+    <div class="foo_logo"> 
+     <img src="/static/pc/img/logo.png" /> 
+    </div> 
+    <div class="foot_middle"> 
+     <ul> 
+      <li><a href="/page/4.html">关于我们</a></li> 
+      <li><a href="/page/5.html">人员招聘</a></li> 
+      <li><a href="/page/6.html">联系我们</a></li> 
+      <li><a href="/page/7.html">网站声明</a></li> 
+     <li><a href="/index/leave">网站留言</a></li>
+     </ul> 
+     <div class="ft_mo_mo clear"> 
+      <p><a href="https://www.12377.cn" target="_blank">互联网举报中心 防范网络诈骗 违法和不良信息举报电话</a> 
+      <a href="https://dxss.miit.gov.cn" target="_blank">12300电信用户申诉受理中心</a> 
+      <a href="http://jbts.mct.gov.cn" target="_blank">12318全国文化市场举报网站</a> 
+      <a href="http://www.cyberpolice.cn/wfjb/" target="_blank">网络110报警网站</a> 
+      <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502049464"><img src="/static/style/images/viewfile.png"  style="margin-bottom:-3px;"/>京公网安备 11010502049464号</a> 
+      <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">京ICP备20006621号</a> 
+      <a href="http://www.qmwl.cn" target="_blank">技术支持： 北京青梅 </a> </p> 
+     </div> 
+     <div class="banquan"> 
+      <p>版权声明：知产财经网页所涉及的任何资料（包括但不限于文字报道、图片、声音、录像、图表、广告、域名、软件、程序、版面设计、专栏目录与名称、内容分类标准）的版权均属北京知财网络科技有限公司和资料提供者所有。未经许可，任何人不得引用、复制、转载、摘编或以其他任何方式非法使用上述内容。对于有上述行为者，知产财经将保留追究其法律责任的权利。</p> 
+     </div> 
+    </div> 
+    <div class="wechat"> 
+     <div> 
+            <img src="https://www.ipeconomy.cn/./content/2023072414_5201635.jpg" alt="" /> 
+           </div> 
+     <span>关注公众号</span> 
+    </div> 
+   </div> 
+  </div>
+<input type="hidden" class="mmid" name="" value="">
+<form method="post" name="myform" action="/index.php/index/Alipay/index" >
+  <input type="hidden" name="aid"  value="4865">
+  <input type="hidden" name="price"  class="fwprice"  value="" readonly>
+  <input type="hidden" name="type" value="2">
+</form>
+<script type="text/javascript">
+$(".guomai").click(function(){
+         $(".zhifuz").css("display","block")
+         $(".no_lays").css("display","block")
+          $(".zhitu").css("display","none");
+           $(".paylist").css("display","block");
+         $(".buy_bug_lbtns").css("display","block");
+})
+
+ $(".zhidi_closes").click(function(){
+         $(".zhifuz").css("display","none")
+         $(".no_lays").css("display","none")
+        
+    })
+</script> 
+<script>
+    
+    $(".zhibuy_queding").click(function(){
+      
+      
+      var zfcanshu=$('input[name="pay"]:checked').val();
+    
+      if(zfcanshu=='zzfb'){
+          if($(".mmid").val()==""){
+          
+             layer.confirm('你还未登录，是否现在去登录？', {
+                btn: ['去登录','取消'] //按钮
+              }, function(){
+
+                window.location.href='/login/login.html?type=2&id=4865'; 
+              }, function(){
+                   location.reload() 
+              });
+
+          }else{
+            zhifubao();
+          }
+
+
+        
+      } else if(zfcanshu=='zwx'){
+
+        if($(".mmid").val()==""){
+          
+             layer.confirm('你还未登录，是否现在去登录？', {
+                btn: ['去登录','取消'] //按钮
+              }, function(){
+
+                window.location.href='/login/login.html?type=2&id=4865'; 
+              }, function(){
+                   location.reload() 
+              });
+
+          }else {
+              wechat();
+          }
+      
+
+      }else if(zfcanshu=='zzyl'){
+
+      }else{
+        alert("选择错误")
+      }
+
+       $(".paylist").css("display","none");
+      $(".buy_bug_lbtns").css("display","none");
+      $(".zhitu").css("display","block");
+    
+    })
+    
+    
+    
+    $(".zhidi_closes").click(function(){
+      $(".zhifuz").removeClass("acitve")
+    })
+    
+  </script> 
+<script type="text/javascript">
+function  zhifubao(){
+
+ 
+
+
+  $(".fwprice").val()
+  document.myform.submit();
+ 
+}
+
+</script> 
+<script>
+$(function(){
+	var page = 1;	//传入的页数
+	$.ajax({
+		type:'post',
+		url:'/index/Article/ajaxcomment?page='+page,
+		success:function(data){
+			//将后台传过来的数据(data),转换为json
+			var oJson = JSON.parse(data);
+			var str = '';
+			//循环遍历数据,并放在HTML标签里,用jQuery添加到DOM对象里面去.
+			for(var index = 0;index < oJson.length;index++){
+				uimg=oJson[index].uimg;
+                if(!uimg){
+                    uimg = "/static/pc/img/logo22.png"
+                }
+				nickname = oJson[index].nickname;
+                if(!nickname){
+                    nickname="匿名用户"
+                }
+				time1 = oJson[index].time;
+				time = timestampToTime(time1);
+				number = oJson[index].number;
+				content = oJson[index].content;
+				zan = oJson[index].zan;
+				id = oJson[index].id;
+				uid = oJson[index].uid;
+         uimgs=uimg.slice(1);
+       // console.log(uimg)
+				
+				
+				str +='<li><div class="uid">'+uid+'</div><div class="id">'+id+'</div><div class="ping_user"><img src="'+uimgs+'" alt=""></div>';
+              	str +='<div class="ping_info"><div class="ping_in_he"><div class="ping_uname">'+nickname+'<span>'+time+'</span> </div>';
+				if(zan==0){
+					str +='<div class="zan" onclick="dianzan(this)">';
+				}else{
+					str +='<div class="zan ywzan" onclick="dianzan(this)">';
+				}
+				str +='<b class="yzan"><img src="/static/pc/img/zanhuang.png"></b> ';
+				str +='<b class="weizan"><img src="/static/pc/img/weizan.png" alt=""></b>';
+				str +='<span>'+number+'</span> </div></div>';
+                str +='<p>'+content+'</p></div></li>';
+			}
+			if( str == '' ){
+				alert('没有更多了');
+			}else{
+				$(".pinlun_list ul").append(str);
+				$(".zan").trigger("myClick")
+			}
+		},
+		error:function(){
+			console.log("失败");
+		}
+	});
+$(".gengduo").click(function(){
+		page ++;
+		$.ajax({
+		type:'post',
+		url:'/index/Article/ajaxcomment?page='+page,
+		success:function(data){
+			//将后台传过来的数据(data),转换为json
+			var oJson = JSON.parse(data);
+			var str = '';
+			//循环遍历数据,并放在HTML标签里,用jQuery添加到DOM对象里面去.
+			for(var index = 0;index < oJson.length;index++){
+				uimg=oJson[index].uimg;
+                if(!uimg){
+                    uimg = "/pc/img/logo.png"
+                }
+				nickname = oJson[index].nickname;
+                if(!nickname){
+                    nickname="匿名用户"
+                }
+				time1 = oJson[index].time;
+				time = timestampToTime(time1);
+				number = oJson[index].number;
+				content = oJson[index].content;
+				zan = oJson[index].zan;
+				id = oJson[index].id;
+				uid = oJson[index].uid;
+          uimgs=uimg.slice(1);
+				
+				
+				str +='<li><div class="uid">'+uid+'</div><div class="id">'+id+'</div><div class="ping_user"><img src="'+uimgs+'" alt=""></div>';
+              	str +='<div class="ping_info"><div class="ping_in_he"><div class="ping_uname">'+nickname+'<span>'+time+'</span> </div>';
+				if(zan==0){
+					str +='<div class="zan" onclick="dianzan(this)">';
+				}else{
+					str +='<div class="zan ywzan" onclick="dianzan(this)">';
+				}
+				str +='<b class="yzan"><img src="/static/pc/img/zanhuang.png"></b> ';
+				str +='<b class="weizan"><img src="/static/pc/img/weizan.png" alt=""></b>';
+				str +='<span>'+number+'</span> </div></div>';
+                str +='<p>'+content+'</p></div></li>';
+			}
+			if( str == '' ){
+				alert('没有更多了');
+			}else{
+				$(".pinlun_list ul").append(str);
+				$(".zan").trigger("myClick")
+			}
+		},
+		error:function(){
+			console.log("失败");
+		}
+	});
+}); 
+
+	
+})
+//	点赞 
+function dianzan(obj){
+		var uid = $(obj).parents("li").find(".uid").text();
+		var id = $(obj).parents("li").find(".id").text();
+		var number1 =$(obj).find("span").text();
+		if($(obj).hasClass("ywzan")){
+			var zan = 0;
+			var number = parseInt(number1)-1;
+			$(obj).find("span").text(number);
+		}else{
+			var zan = 1;
+			var number = parseInt(number1)+1;
+			$(obj).find("span").text(number);
+		}
+		$(obj).toggleClass("ywzan"); 
+		
+		
+		
+		$.ajax({
+			type:'post',
+			url:'/index/Article/zan?id='+id+'&uid='+uid+'&zan='+zan,
+			data:{
+					'uid':uid,
+					'id':id,
+					'zan':zan,
+			},
+			success:function(data){
+				//将后台传过来的数据(data),转换为json
+				console.log(data)
+				if(data==0){
+//					$(this).toggleClass("ywzan"); 
+				}else{
+//					alert("失败");
+				}
+			},
+			error:function(){
+				console.log("失败");
+			}
+		});
+	}
+	//时间戳
+function timestampToTime(timestamp) {
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = date.getDate() + ' ';
+        var h = date.getHours() + ':';
+        var m = date.getMinutes() + ':';
+        var s = date.getSeconds();
+        return Y+M+D;
+    }
+</script> 
+<script>   
+
+  var mySwiper = new Swiper ('.banner_guanggao', {
+   // loop: true, // 循环模式选项
+    //autoplay: true,//可选选项，自动滑动
+     autoplay: {
+    delay: 3000,
+    stopOnLastSlide: false,
+    disableOnInteraction: true,
+    },
+    // 如果需要分页器
+    pagination: {
+      el: '.banerfen',
+       clickable :true,
+    },
+  })        
+  </script> 
+<script type="text/javascript">
+function  wechat(){
+
+                      
+                      $.ajax({
+                              url:'/index.php/index/Wxpay/wxpay',
+                              type: "POST",
+                              data: {
+
+                              aid:4865,
+                              price:,
+                              
+                              type:2,
+
+                            },
+                              dataType: "json",
+                              success: function (result) {
+                                 // console.log(result)
+                                 // console.log(typeof(result))
+
+                                 var result = JSON.parse(result);
+                                 //  console.log(typeof(result))
+                               
+                                 // console.log(result.id)
+                                 // console.log(result.url)
+                       
+                            $(".zhitu img").attr('src',result.url);
+                            
+                             
+                              clearInterval(t1);
+                            
+                            var timesRun = 0;
+                            
+                            var t1=setInterval(function (){
+                               timesRun += 1;
+                                  if(timesRun === 1200){    
+                                      clearInterval(t1);    
+                                  }
+                                    
+                                //console.log(3)
+                                    $.ajax({
+                                        type: "POST",
+                                        dataType: "json",
+                                        url: "/index.php/index/Wxpay/notifyStatus",
+                                        data: {
+                                         id:result.id
+                                        },
+                                    success: function (data) {
+                                      //console.log(data)
+                                         if(data==0){
+                                         
+                                         } else if(data==1) {
+                                        
+                                        
+                                        window.location.reload()
+                                     
+                                           
+                                         }
+                                  },
+                                  error: function (XMLHttpResponse) {
+                                          
+                                  }
+                                  });
+                              
+                                },2000)
+                            
+                              }
+                          });
+
+
+}
+
+
+</script>
+</body>
+</html>

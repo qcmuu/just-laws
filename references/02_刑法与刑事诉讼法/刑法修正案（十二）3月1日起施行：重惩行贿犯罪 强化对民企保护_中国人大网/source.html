@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title> 刑法修正案（十二）3月1日起施行：重惩行贿犯罪 强化对民企保护_中国人大网</title>
+<meta name="keywords" content=""/>
+<link type="text/css" href="../../../images/common_content.css" rel="stylesheet" />
+<link type="text/css" href="../../../images/secondlevel.css" rel="stylesheet" />
+<script src="../../../images/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- 引入video.js相关文件 -->
+        <link href="/npcVideo/video.js/video-js.min.css" rel="stylesheet">
+        <script src="/npcVideo/video.js/ie8/videojs-ie8.min.js" type="text/javascript"></script>
+        <script src="/npcVideo/video.js/video.min.js" type="text/javascript"></script>
+        <script src="/npcVideo/video.js/lang/zh-CN.js" type="text/javascript"></script>
+
+        <!-- 引入audio.js相关文件 -->
+        <script src="/npcVideo/audio.js/audio.min.js" type="text/javascript"></script>
+        <script src="/npcVideo/audio.js/audioplayer.min.js" type="text/javascript"></script>
+
+        <!-- 增加一个样式，用于初始隐藏WCM生成的播放代码，可加到网站主样式表 -->
+        <style type="text/css">
+            .video_hide {
+                display: none;
+            }
+            .audio_hide {
+                display: none;
+            }
+             .video-js {background:none!important;width: 100%!important;}
+        </style>
+
+        <script type="text/javascript">
+            //判断是否是移动设备
+            var isMobile = {
+                Android: function() {
+                    return navigator.userAgent.match(/Android/i) ? true : false;
+                },
+                BlackBerry: function() {
+                    return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+                },
+                iOS: function() {
+                    return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+                },
+                Windows: function() {
+                    return navigator.userAgent.match(/IEMobile/i) ? true : false;
+                },
+                any: function() {
+                    return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+                }
+            };
+
+            $(document).ready(function() {
+                //设置flash播放器的地址，如果浏览器不支持html5，会用这个flash播放器播放
+                videojs.options.flash.swf = "video.js/video-js.swf";
+
+                //遍历WCM生成的视频播放代码
+                $("embed[mediatype=video]").each(function(index, el) {
+                    //从原始标签中获取播放属性（高宽、自动播放、循环播放、显示控制条等）
+                    //loop属性通过HTML属性获取，用jquery获取有误
+                    var loop = $(this)[0].getAttribute('loop') == 1;
+                    var autoplay = $(this).attr('autostart') == 1;
+                    var controls = $(this).attr('menu') == 1;
+                    var options = {
+                        "controls": controls,
+                        "autoplay": autoplay,
+                        "loop": loop,
+                        "width": $(this).attr('width'),
+                        "height": $(this).attr('height'),
+                        "language": "zh-CN"
+                    };
+                    //生成video标签
+                    var video = $('<video>').addClass('video-js vjs-default-skin vjs-big-play-centered')
+                        .attr('id', 'videojs_' + index)
+                        .append($('<source>').attr({
+                            'type': 'video/mp4',
+                            'src': $(this).attr('src')
+                        }));
+                    //将原播放标签替换
+                    $(this).replaceWith(video);
+                    //初始化播放代码
+                    var myPlayer = videojs("videojs_" + index, options);
+                });
+
+                //遍历WCM生成的音频播放代码
+                $("embed[mediatype=audio]").each(function(index, el) {
+                    //从原始标签中获取播放属性（自动播放、循环播放）
+                    //loop属性通过HTML属性获取，用jquery获取有误
+                    var loop = $(this)[0].getAttribute('loop') == 1;
+                    var autoplay = $(this).attr('autostart') == 1;
+                    //生成audio标签
+                    var audio = $('<audio>')
+                        .attr('controls', 'controls')
+                        .attr('preload', 'auto')
+                        .attr('src', $(this).attr('src'));
+                    if (loop) audio.attr('loop', 'loop');
+                    if (autoplay) audio.attr('autoplay', 'autoplay');
+                    //将原播放标签替换
+                    $(this).replaceWith(audio);
+                    
+                });
+                //根据不同的设备（PC/移动）调用不同的显示方式
+                if (!isMobile.any()) {
+                    //$('<script>').attr('src', 'audio.js/audio.min.js').appendTo('body');
+                    var as = audiojs.createAll();
+                } else {
+                    //$('<script>').attr('src', 'audio.js/audioplayer.min.js').appendTo('body');
+                    $('<link>').attr('href', 'audio.js/audioplayer.css').attr('rel', 'stylesheet').appendTo('body');
+                    $('audio').audioPlayer();
+                }
+            });
+        </script>
+</head>
+<body>
+<a name="top1" id="top1"></a> 
+
+<div class="wrap01"><iframe id="headIfr" src="../../../c191/c12481/c12451/" width="100%" height="209" frameborder="0" scrolling="no" marginheight="0"></iframe></div>
+
+<div class="wrapper">
+<div class="content">
+<div class="article-crumbs">当前位置：<a href="../../../" title="首页" class="CurrChnlCls">首页</a></div>
+
+<div class="fl w680">
+<div class="tit"><h2></h2>
+<h1>刑法修正案（十二）3月1日起施行：<div>重惩行贿犯罪 强化对民企保护</div></h1>
+<h3></h3>
+<p>《中国人大》全媒体记者 张维炜</p>
+<p></p>
+</div>
+
+<div class="fontsize"> 来源： 中国人大网&nbsp;&nbsp;浏览字号： <a href="#" onclick="Zoom.style.fontSize='24px';">大</a> <a href="#" onclick="Zoom.style.fontSize='16px';">中</a> <a href="#" onclick="Zoom.style.fontSize='12px';">小</a>
+<span class="fr" id="zzrq"></span>  
+  </div>
+<script type="text/javascript">
+    $(function(){
+        var fbrq = "2024年03月01日 10:23"
+        if($('#zzrq').html() == ''){
+            $('#zzrq').html(fbrq);
+        }
+    })
+</script>
+<div id="Zoom">
+<div class=TRS_Editor><style type="text/css">
+
+.TRS_Editor P{}.TRS_Editor DIV{}.TRS_Editor TD{}.TRS_Editor TH{}.TRS_Editor SPAN{}.TRS_Editor FONT{}.TRS_Editor UL{}.TRS_Editor LI{}.TRS_Editor A{}</style>
+<div class="TRS_Editor"><style type="text/css">
+
+.TRS_Editor P{}.TRS_Editor DIV{}.TRS_Editor TD{}.TRS_Editor TH{}.TRS_Editor SPAN{}.TRS_Editor FONT{}.TRS_Editor UL{}.TRS_Editor LI{}.TRS_Editor A{}</style>
+<div>　　腐败治理是一项长期、系统工程，是刑事立法一直关注研究的重点问题之一。</div>
+<div>　　为贯彻落实党中央决策部署，近些年我国不断完善反腐败刑事法律制度，加大惩处力度。去年12月29日，十四届全国人大常委会第七次会议审议通过刑法修正案（十二），自今年3月1日起正式施行。</div>
+<div>　　该修正案共八条，一方面对行贿犯罪作出重要修改，另一方面对民营企业内部人员腐败相关犯罪作出完善规定。</div>
+<div>　　有关部门将采取哪些措施推动法律落地？执法司法中如何准确理解和适用法律？近日，全国人大常委会法工委、最高人民法院、最高人民检察院、公安部等相关部门负责人对贯彻实施刑法修正案十二的关注热点和重点工作进行解读。</div>
+<div><b>　　加大对行贿犯罪处罚力度</b></div>
+<div><font face="黑体">　　将党中央从严惩治行贿的政策要求上升为法律规定，坚持受贿行贿一起查</font></div>
+<div>　　“关于腐败治理和行贿犯罪，我们要深刻认识到，行贿人不择手段“围猎”党员干部是当前腐败增量仍有发生的重要原因，行贿与受贿是一体两面，行贿人“围猎”是政治生态的一个重要“污染源”，行贿不禁，受贿不止。” 全国人大常委会法工委刑法室副主任许永安谈到此次修法背景时表示，当前实践中存在对行贿惩处偏弱的情况，对于行贿犯罪的查处和打击与人民群众的期待仍有一定差距，需要进一步发挥刑法在一体推进不敢腐、不能腐、不想腐体制机制中的重要作用。</div>
+<div>　　2015年通过的刑法修正案（九）对行贿犯罪作出修改完善，进一步织密法网、加大处罚力度。这次通过的刑法修正案（十二）在刑法修正案（九）的基础上对行贿犯罪又一次作出重要修改。</div>
+<div>　　许永安介绍，此次修改的总体精神和要求是，将党中央从严惩治行贿的政策要求上升为法律规定，坚持受贿行贿一起查，进一步加大行贿犯罪的惩治力度，主要体现在三个方面：</div>
+<div>　　一是，明确列举了严重行贿情形。具体包括七种情形：多次行贿或者向多人行贿的；国家工作人员行贿的；在国家重点工程、重大项目中行贿的；为谋取职务、职级晋升、调整行贿的；对监察、行政执法、司法工作人员行贿的；在生态环境、财政金融、安全生产、食品药品、防灾救灾、社会保障、教育、医疗等领域行贿，实施违法犯罪活动的；将违法所得用于行贿的。明确规定对这七类行贿行为要从重处罚。“从重处罚的精神不仅体现在司法适用中的量刑方面，也体现在监察执法环节查处方面。”</div>
+<div>　　二是调整提高单位行贿罪的刑罚。实践中，一些行贿人以单位名义行贿，规避处罚，导致案件处理不平衡，各方面反映对单位行贿惩处力度不足，刑法因此作了相应修改。</div>
+<div>　　三是对其他贿赂犯罪的刑罚作出相应调整。我国刑法根据贿赂犯罪的主体、对象、行为等不同，规定了较多罪名，对行贿罪、单位行贿罪作出调整后，为贯彻从严惩治的精神，相应地调整对单位行贿罪等其他贿赂犯罪的法定刑，做好衔接和平衡。</div>
+<div>　　“当前，反腐败斗争取得压倒性胜利并全面巩固，但形势依然严峻。实践中，与受贿案件相比，仍然存在对行贿惩处偏弱的情况，行贿案件立案、查处的比例仍然较低。”许永安表示，刑法修正案（十二）通过施行后，有关执法司法部门应当准确把握立法精神，加强和改进有关工作。“在保持惩治受贿犯罪高压态势的同时，加大对行贿行为惩治力度，妥善把握查处行贿案件的政策尺度，扭转有的执法办案人员重打击受贿轻打击行贿的观念，不断提升办案能力和水平，对法律规定重点查处的行贿案件，该立案的坚决予以立案，该处理的坚决作出处理，一般情况下不能轻易不移送或者不处罚，而是应当从严把握。”</div>
+<div><font face="黑体">　　制定司法解释，确保法律得到全面、正确和有效实施</font></div>
+<div>　　刑法修正案（十二）加大对行贿犯罪的惩治力度，抓住斩断“围猎”腐蚀、权钱交易利益链条的关键，对于铲除腐败问题产生的土壤和条件，进一步发挥刑法在一体推进不敢腐、不能腐、不想腐体制机制中的作用具有重要意义。</div>
+<div>　　最高人民法院审判委员会委员、刑事审判第二庭庭长马岩表示，审判工作中，要重点做好以下三方面工作：</div>
+<div>　　一是坚持依法惩处行贿犯罪。行贿不查，受贿不止。要贯彻落实党中央决策部署，坚持受贿行贿一起查，切实扭转“重受贿、轻行贿”的观念。要始终坚持严的基调、严的措施、严的氛围，在保持惩治受贿犯罪高压态势的同时，切实加大对行贿犯罪的惩治力度。</div>
+<div>　　二是突出重点、精准有效惩治。对于多次行贿、巨额行贿、向多人行贿、危害一方政治生态的行贿人，依法从严惩处。对于在国家重点工程、重大项目中行贿，在组织人事、执纪执法司法、生态环保、财政金融、安全生产、食品药品、防灾救灾、社会保障、教育医疗等领域行贿的，依法严惩不贷，保持零容忍震慑不变、高压惩治力量常在。</div>
+<div>　　三是深化标本兼治、系统施治。加大对行贿所获不正当利益的追缴和纠正力度，加大对行贿犯罪分子财产刑适用和执行力度，决不让其从中获利。进一步推动完善对行贿人联合惩戒工作机制，合力惩戒行贿犯罪，持续发力、纵深推进反腐败斗争。</div>
+<div>　　“目前，最高人民法院正会同最高人民检察院研究制定《关于办理贪污贿赂刑事案件适用法律若干问题的解释（二）》。” 马岩说，该司法解释将结合刑法修正案（十二）新规定、新要求，明确单位行贿、对单位行贿等犯罪的定罪量刑标准，统一法律适用，确保刑法修正案（十二）得到全面、正确和有效的实施。</div>
+<div><font face="黑体">　　以坚定决心和务实举措，依法精准有力惩治行贿犯罪</font></div>
+<div>　　“行受贿犯罪是对合犯，行贿犯罪是受贿犯罪的重要诱因，‘围猎’腐蚀之风不刹，难以有效遏制腐败增量。” 最高人民检察院法律政策研究室主任高景峰分析称，近年来，检察机关在惩治行贿犯罪的过程中，发现行贿犯罪主要呈现行贿金额上升、重点领域行贿犯罪多发、单位行贿犯罪增多的特点。</div>
+<div>　　党的二十大强调“以零容忍态度反腐惩恶，更加有力遏制增量，更加有效清除存量”“坚持受贿行贿一起查”。</div>
+<div>　　“以往查处贿赂犯罪过程中，由于涉及人数多、查处难度大等因素的影响，一定程度上出现‘重受贿、轻行贿’现象。”高景峰说，近年来，检察机关加强与监察机关、审判机关互相配合、互相制约，共同加大惩治行贿犯罪力度，办案质量不断提高，落实坚持受贿行贿一起查决策部署的成效正在彰显。</div>
+<div>　　2022年12月，最高检专门印发《关于加强行贿犯罪案件办理工作的指导意见》，进一步贯彻落实党中央部署要求，结合办理行贿犯罪案件的新情况新问题，为各级检察机关立足职能从严惩治行贿犯罪、提升办案质效提供规范指引，助力推进受贿行贿一起查，推动惩治腐败问题标本兼治。</div>
+<div>　　高景峰表示，刑法修正案（十二）施行以后，检察机关将结合落实《关于加强行贿犯罪案件办理工作的指导意见》，从以下几个方面把握立法精神，加强对行贿犯罪的打击力度：</div>
+<div>　　第一，提高政治站位，更新执法司法理念。深刻领会“受贿行贿一起查”决策部署的重大政治意义，充分认识行贿人不择手段“围猎”党员干部是当前腐败增量仍有发生的重要原因，坚决摒弃“重受贿轻行贿”的认识偏差，以“遏源”“断流”的坚定决心和务实举措，依法精准有力惩治行贿犯罪。</div>
+<div>　　第二，严格落实配合制约法定责任，形成工作合力。加强对受贿案件中行贿行为的审查，依法将行贿犯罪线索及时移送监察机关，同时跟踪处置，确保依法追究落到实处。重点审查行贿案件量刑偏轻或不均衡等问题，综合运用判决同步审查、抗诉、纠正违法、检察建议等方式，依法进行审判监督。</div>
+<div>　　第三，加大对行贿所获不正当利益的追缴和纠正力度。对于行贿犯罪取得的不正当财产性利益，严格依照刑法第六十四条的规定予以追缴、责令退赔或者返还被害人。对于行贿犯罪取得的不正当非财产性利益，建议相关单位依照法律法规等规定通过撤销、变更等措施及时予以纠正。</div>
+<div>　　第四，进一步做好源头预防相关工作。继续做好涉行贿犯罪企业合规工作，促进企业依法依规经营；充分运用办案大数据，分析研判常见多发行贿犯罪的特点和背后管理漏洞，及时提出有针对性的检察建议或专项报告，促进社会治理；结合办案加强普法宣传，解读相关政策和法律，增强社会公众对行贿犯罪的免疫力，营造风清气正的社会氛围。</div>
+<div><b>　　强化对民营企业保护</b></div>
+<div><font face="黑体">　　进一步依法平等保护民营企业和企业家权益</font></div>
+<div>　　我国1997年刑法第一百六十五条、第一百六十六条和第一百六十九条分别规定了国有公司、企业相关人员非法经营同类营业罪、为亲友非法牟利罪和徇私舞弊低价折股、出售国有资产罪。</div>
+<div>　　近些年，随着民营经济的发展壮大，这方面的犯罪也出现一些新情况、新问题，这些行为也逐渐在民营企业中出现和增长，严重侵害民营企业、企业家权益，要求依法加强惩治的呼声很高。</div>
+<div>　　全国人大常委会法工委刑法室副主任许永安介绍，此次刑法修改，通过广泛深入调研，在会同有关方面共同研究，形成共识的基础上，将实践中反映最为集中、迫切的发生在民营企业内部的非法经营同类营业、为亲友非法牟利和徇私舞弊低价折股、出售资产等三类行为规定为犯罪，进一步依法平等保护民营企业和企业家权益。</div>
+<div>　　对于如何准确理解和适用刑法修正案（十二），许永安表示，实践中要注意做好以下方面的工作：</div>
+<div>　　一是，要深刻领会党中央关于促进民营经济发展壮大的重要政策文件精神，执法司法中充分考虑民营企业发展的实际情况，准确把握本次修改的三个犯罪的犯罪本质和构成条件，通过依法惩治民营企业内部人员腐败犯罪实现保护民营企业的目的。</div>
+<div>　　二是执法司法中要落实加大对民营企业的保护力度，有关方面要重视和研究解决实践中反映突出的涉民营企业内部腐败案件的立案难、查处难等问题。</div>
+<div>　　三是准确界定法律责任，对于涉及企业内部股东之间、家族成员之间的矛盾纠纷，要注意把握好犯罪界限和民刑交叉法律问题，防止利用刑事手段干涉企业正常生产经营活动。</div>
+<div>　　四是进一步完善民营企业内部腐败的源头防范和治理腐败的体制机制。</div>
+<div><font face="黑体">　　审判实践中准确把握“三个要点”</font></div>
+<div>　　刑法修正案（十二）加大对行贿犯罪的惩治力度，抓住斩断“围猎”腐蚀、权钱交易利益链条的关键，对于铲除腐败问题产生的土壤和条件，进一步发挥刑法在一体推进不敢腐、不能腐、不想腐体制机制中的作用具有重要意义。</div>
+<div>　　最高人民法院审判委员会委员、刑事审判第二庭庭长马岩表示，审判工作中，要重点做好以下三方面工作：</div>
+<div>　　一是准确把握立法精神。要抓住“保护”“平等”两个关键词。首先是“保护”，修法针对的是企业内部人员利用职务便利实施“损企肥私”的行为，旨在加大对侵害民营企业行为的惩治力度，助力企业、企业家内部反腐。其次是“平等”，修法将相关犯罪主体扩展到民营企业内部人员，通过对侵害国企财产和侵害民企财产行为的同等惩罚，实现对民营企业产权和企业家合法权益的平等保护。</div>
+<div>　　二是准确把握犯罪构成要件。刑法修正案（十二）对民营企业内部人员腐败犯罪的修改完善，涉及刑法第一百六十五条、第一百六十六条和第一百六十九条。上述犯罪，本质上是企业内部人员利用职务之便，搞非法利益输送，损害企业利益。司法实践中，应当正确把握入罪的前提是违反法律、行政法规规定，客观上要有“损企肥私”的行为，并造成公司、企业重大损失，防止脱离构成要件，不当认定犯罪。</div>
+<div>　　三是准确把握政策尺度。在加大对民营企业内部人员腐败犯罪惩治力度的同时，要充分考虑民营企业发展的实际情况，准确把握政策尺度，做到该宽则宽、当严则严，宽严相济、罚当其罪。对于经公司企业同意、没有违反忠实义务的经营同类营业等行为，不宜以犯罪论处。对于民营企业内部人员主动交代犯罪行为，积极退赃退赔，减少损害结果发生，与企业达成谅解和解的，依法从宽处理。</div>
+<div><font face="黑体">　　推动构建民营企业源头防范和腐败治理机制</font></div>
+<div>　　“随着民营经济的发展，民营企业内部人员侵害企业合法权益的犯罪也越来越突出。”分析当前民营企业内部人员犯罪呈现的特点，最高人民检察院法律政策研究室主任高景峰介绍说，民营企业内部人员，尤其是民营企业高管、财务、采购、销售、技术等关键岗位人员犯罪，不仅严重损害民营企业合法权益，影响民营企业核心竞争力和创新发展，而且扰乱公平竞争市场秩序，破坏民营企业发展环境。</div>
+<div>　　近年来内外勾结型犯罪、群体性腐败则成为民营企业内部人员犯罪的新趋势。从涉案人员任职情况看，主要包括公司高级管理人员、部门、项目或区域业务负责人，以及会计、出纳、采购、销售等关键岗位的工作人员。这些人员掌握较大的企业经营管理权限，具备实施犯罪的天然“便利条件”。</div>
+<div>　　2023年7月，为深入贯彻落实《中共中央、国务院关于促进民营经济发展壮大的意见》，最高检印发《关于依法惩治和预防民营企业内部人员侵害民营企业合法权益犯罪，为民营经济发展营造良好法治环境的意见》，指导各级检察机关依法惩治民营企业内部人员犯罪。</div>
+<div>　　高景峰说，检察机关将结合落实该《意见》，从以下几个方面贯彻执行刑法修正案（十二）相关规定，切实保护民营企业产权和企业家合法权益：</div>
+<div>　　一是严格依法办案。依法惩治影响民营企业健康发展的民营企业内部人员尤其是关键岗位人员犯罪，依法加大对民营企业内部人员实施的职务侵占、挪用资金等腐败行为的惩处力度，结合办案推动民营企业源头防范和腐败治理；依法处理民营企业内部人员利用职务便利，非法经营同类营业、为亲友非法牟利和徇私舞弊低价折股、出售企业资产等行为；严厉打击影响企业创新发展的民营企业关键技术岗位、管理岗位人员侵犯商业秘密、商标权、著作权等犯罪。依法保护民营企业产权和企业家合法权益，推动构建民营企业源头防范和腐败治理机制。</div>
+<div>　　二是切实履行法律监督职能，加强对诉讼活动的监督，特别是持续加强立案监督，充分发挥侦查监督与协作配合机制作用，坚决防止和纠正利用刑事手段干预经济纠纷；加强涉产权刑事强制措施监督，避免超权限、超范围、超数额、超时限查封扣押冻结财产，最大限度减少办案对企业正常办公和合法生产经营的影响。</div>
+<div>　　三是根据刑法修正案（十二）及时调整并完善相关司法解释和立案追诉标准，促进统一依法惩治民营企业内部关键人员犯罪司法标准，在法律实施上进一步落实平等保护要求。</div>
+<div>　　四是深化涉案企业合规改革工作，高质效办理涉案企业合规案件，会同有关方面加强实践探索，推进刑事诉讼全流程适用合规整改，探索建立中国特色现代企业合规司法制度，指导支持民营企业防范应对涉外法律风险等外部挑战，促进合规守法经营成为民营企业的自觉遵循。</div>
+<div>　　五是加强行政执法与刑事司法的有效衔接，形成惩治民营企业内部关键人员犯罪工作合力。加强民营企业家、民营企业关键岗位人员法治教育，通过以案释法等方式，常态化开展法治宣传教育，促进提高企业家和企业员工法治意识。</div>
+<div><font face="黑体">　　进一步规范涉企执法活动，加强对民营企业平等保护</font></div>
+<div>　　会同最高检联合修订《关于公安机关管辖的刑事案件立案追诉标准的规定（二）》；出台建立健全经济犯罪案件管理工作机制的指导意见和便民利企十项工作指引；进一步规范经济犯罪案件接报案工作流程；持续开展涉民营企业刑事诉讼“挂案”专项清理……近年来，公安机关采取多种举措积极推进执法规范化建设，全面规范涉企执法行为，依法保护民营企业产权和企业家合法权益。</div>
+<div>　　“《刑法修正案（十二）》充分体现了对民营企业平等保护的精神，对公安机关执法活动提出了更高要求。” 公安部法制局副局长孙萍表示，下一步，公安机关将进一步规范涉企执法活动，从制度、机制和实践各方面加强对民营企业的平等保护。</div>
+<div>　　一是完善配套制度规范。会同最高检有关部门尽快研究起草《关于公安机关管辖的刑事案件立案追诉标准的规定（二）的补充规定》，为《刑法修正案（十二）》涉及的非法经营同类营业罪等三个罪名的执法司法提供明确依据。</div>
+<div>　　二是强化涉企案件执法监督。会同最高检进一步完善侦查监督与协作配合工作机制，加强公安机关执法监督与人民检察院侦查监督的相互衔接，提升监督效能和办案质效。进一步强化案件审核和执法全流程监督，完善投诉、举报处理机制。充分发挥“12389”企业诉求平台作用，严肃处理公安机关违规受立案、插手干预经济纠纷、违规收费处罚等损害企业利益问题。</div>
+<div>　　三是推进羁押必要性评估工作。推动严格适用《人民检察院 公安机关羁押必要性审查、评估工作规定》，严格区分经济纠纷与经济犯罪，依法规范适用拘留、逮捕等羁押性强制措施，在保障办案的前提下尽可能减少对企业生产经营的影响。</div>
+<div>　　四是依法保障企业财产权益。持续整治逐利执法和超职权、超范围、超数额、超时限查封、扣押、冻结涉案财物等执法活动的顽瘴痼疾，集中排查纠正不规范冻结等执法问题，探索利用大数据和信息化手段加强执法监督。</div>
+<div>　　据了解，近些年，全国人大代表、全国政协委员提出的关于完善民营企业内部人员腐败相关犯罪规定的意见建议很多，其中多数是来自民营企业的代表、委员。</div>
+<div>　　许永安说，本次刑法修改坚持问题导向，立足实践需要，对于完善民营企业内部人员腐败相关犯罪作出规定，将进一步增强民营企业家信心，为民营企业有效预防惩治内部腐败犯罪提供法律手段。“刑法修正案（十二）审议通过后，通过多种方式收到部分全国人大代表、政协委员和企业家代表对于刑法中完善民营企业内部人员腐败背信相关犯罪的认可。”</div>
+</div></div>
+</div>
+
+<div class="editor">编       辑： 刘海滨</div>
+<div class="editor">责       编： 于浩</div>
+
+<div class="share"><a class="fl back" href="../../../"><< 返回首页</a> 
+
+<div class="bdsharebuttonbox" style="width:280px;float:left;">
+<!--<a href="#" class="bds_more" data-cmd="more"></a>-->
+<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+
+
+<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+
+</div>
+
+<script type="text/javascript">
+<!--
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{},"image":{"viewList":["qzone","tsina","weixin"],"viewText":"分享到：","viewSize":"16"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=86835285.js?cdnversion='+~(-new Date()/36e5)];
+-->
+</script>
+
+ <span style="display:none;"><a class="fr download" href="http://npc.unisk.cn/download.html" target="_blank"> </a></span></div>
+
+<div class="about-article">
+
+<h4>相关文章</h4>
+<ul>
+
+</ul>
+
+</div>
+<script>
+var aboutArticle=document.getElementsByClassName("about-article")[0]; 
+var aboutLi=aboutArticle.getElementsByTagName("li").length;
+if(aboutLi==''){
+	aboutArticle.getElementsByTagName("h4")[0].style.display='none'
+}
+</script>
+
+<div class="printbox"><a href="javascript:window.print()"><img src="../../../images/button_print1.gif" />  </a> <a href="javascript:window.close()"><img src="../../../images/button_close1.gif" />  </a> <a href="#top1"><img src="../../../images/button_back1.gif" border="0" /></a></div>
+</div>
+
+<div class="fr s_rw"><iframe id="rightty3" src="../../../c191/c12481/c22235/" width="272" height="900" scrolling="no" marginheight="0" frameborder="0"></iframe></div>
+</div>
+</div>
+
+<div class="wrap02"><iframe id="headIfr" src="/npc/c191/c12481/c12453/index.shtml" width="100%" height="110" frameborder="0" scrolling="no" marginheight="0"></iframe></div>
+</body>
+</html>

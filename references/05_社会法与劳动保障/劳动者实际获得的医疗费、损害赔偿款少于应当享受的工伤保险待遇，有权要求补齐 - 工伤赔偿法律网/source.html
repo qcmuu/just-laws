@@ -1,0 +1,545 @@
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>劳动者实际获得的医疗费、损害赔偿款少于应当享受的工伤保险待遇，有权要求补齐 - 工伤赔偿法律网</title>
+<meta name="keywords" content="劳动者,实际,获得,得的,医疗费,损害赔偿,款,少于,应当,享受,的,工伤保险,待遇,有权,要求,补齐">
+<meta name="description" content="依法享受工伤保险待遇是劳动者享有的法定权利，市政府不得以劳动者签订民事调解协议并领取损害赔偿款为由撤销《认定工伤决定书》，劳动者实际获得的医疗费、损害赔偿款少于应当享受的工伤保险待遇，有权要求补齐。裁判日期：2020年7月30日案号：（20">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link rel="stylesheet" type="text/css" href="/css/list.css">
+<link rel="stylesheet" href="/css/swiper-bundle.min.css" />
+<script src="/js/slide.js"></script>
+</head>
+<body>
+<div class="top">
+	<div class="date" id="current-time"></div>
+</div>
+<div class="header">
+	<div class="head">
+		<div class="logo"><img src="/image/logo_03.jpg"></div>
+	</div>
+</div>
+<div class="menunav">
+	<div class="nav">
+		<ul>
+			<li class="home"><a href="/">首页</a></li>
+			<li><a href="/gssj">工伤数据</a></li>
+			<li><a href="/gsal">工伤案例</a></li>
+			<li><a href="/gsfg">工伤法规</a></li>
+			<li><a href="/gsgd">工伤观点</a></li>
+			<li><a href="/gsls">工伤律师</a></li>
+			
+            <li><a href="/guestbook">留言板</a></li>
+            <li><a href="https://7.ft22.com/" target="_blank">计算器</a></li>
+            <div class="sousuo">
+			<form method="get" action="/zwplus/seachview.php">
+				<input name="zw_seachkey" type="text" class="qinput" value=""  onfocus="if(this.value===''){this.value=''}" onblur="if(this.value===''){this.value=''}">
+				<input type="submit" class="qbtn" value=".">
+			</form>
+			</div>
+		</ul>
+	</div>
+</div>
+<nav class="navbar">
+	<div class="nav-container">
+		<a href="/" class="logo">
+			<i class="fas fa-rocket"></i>
+			<span>工伤赔偿法律网</span>
+		</a>
+         <div class="sousuo">
+			<form method="get" action="/zwplus/seachview.php">
+				<input name="zw_seachkey" type="text" class="qinput" value=""  onfocus="if(this.value===''){this.value=''}" onblur="if(this.value===''){this.value=''}">
+				<input type="submit" class="qbtn" value=" ">
+			</form>
+		</div>
+		<div class="menu-toggle">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<button class="close-btn">
+			<i class="fas fa-times"></i>
+		</button>
+	</div>
+</nav>
+<div class="nav-menu">
+	<ul class="nav-list">
+		<li class="nav-item">
+			<a href="/" class="nav-link">
+				<i class="fas fa-home"></i>
+				<span>首页</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gssj" class="nav-link">
+				<i class="fas fa-compass"></i>
+				<span>工伤数据</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gsal" class="nav-link">
+				<i class="fas fa-bell"></i>
+				<span>工伤案例</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gsfg" class="nav-link">
+				<i class="fas fa-envelope"></i>
+				<span>工伤法规</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gsgd" class="nav-link">
+				<i class="fas fa-user"></i>
+				<span>工伤观点</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gsls" class="nav-link">
+				<i class="fas fa-cog"></i>
+				<span>工伤律师</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/guestbook" class="nav-link">
+				<i class="fas fa-question-circle"></i>
+				<span>留言板</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="https://7.ft22.com/" class="nav-link">
+				<i class="fas fa-question-circle"></i>
+				<span>计算器</span>
+			</a>
+		</li>
+	</ul>
+</div>
+<div class="overlay"></div>
+<script>
+	function updateTime() {
+		const now = new Date();
+		const year = now.getFullYear();
+		const month = now.getMonth() + 1;
+		const day = now.getDate();
+		const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+		const weekday = weekdays[now.getDay()];
+		// 获取时间
+		let hours = now.getHours();
+		const minutes = now.getMinutes().toString().padStart(2, '0');
+		const seconds = now.getSeconds().toString().padStart(2, '0');
+		// 判断上午/下午/晚上
+		let timeOfDay;
+		if (hours >= 5 && hours < 11) {
+			timeOfDay = "上午好";
+		} else if (hours >= 11 && hours < 13) {
+			timeOfDay = "中午好";
+		} else if (hours >= 13 && hours < 18) {
+			timeOfDay = "下午好";
+		} else {
+			timeOfDay = "晚上好";
+		}
+		const timeString = `${year}年${month}月${day}日 ${weekday} ${timeOfDay}！`;
+		document.getElementById('current-time').textContent = timeString;
+	}
+	updateTime();
+	setInterval(updateTime, 1000);
+</script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const menuToggle = document.querySelector('.menu-toggle');
+		const navMenu = document.querySelector('.nav-menu');
+		const closeBtn = document.querySelector('.close-btn');
+		const overlay = document.querySelector('.overlay');
+		menuToggle.addEventListener('click', function() {
+			navMenu.classList.add('active');
+			overlay.classList.add('active');
+			menuToggle.classList.add('active');
+		});
+		function closeMenu() {
+			navMenu.classList.remove('active');
+			overlay.classList.remove('active');
+			menuToggle.classList.remove('active');
+		}
+		closeBtn.addEventListener('click', closeMenu);
+		overlay.addEventListener('click', closeMenu);
+		const navLinks = document.querySelectorAll('.nav-link');
+		navLinks.forEach(link => {
+			link.addEventListener('click', closeMenu);
+		});
+	});
+</script>
+<div class="gonggao"></div><div class="main">
+	<div class="list_art">
+		<div class="listleft">
+			<div class="pos">所在位置：<a href='/'>首页</a>&nbsp; > &nbsp;<a href='/gsal'>工伤案例</a>&nbsp; > &nbsp;<a href='/gsal/dianxinganli'>典型案例</a>&nbsp; > &nbsp;正文</div>
+				<div class="article">
+					<div class="nrtitle">
+						<h3>劳动者实际获得的医疗费、损害赔偿款少于应当享受的工伤保险待遇，有权要求补齐</h3>
+						<p>
+							　
+							来源：中国裁判文书网　
+							发布时间：2026-02-27　
+							浏览：<script src="/zwplus/clicknum.php?aid=12897" type='text/javascript' language="javascript"></script>次
+						</p>
+					</div>
+					<div class="art_cont">
+						<p>
+	依法享受工伤保险待遇是劳动者享有的法定权利，市政府不得以劳动者签订民事调解协议并领取损害赔偿款为由撤销《认定工伤决定书》，劳动者实际获得的医疗费、损害赔偿款少于应当享受的工伤保险待遇，有权要求补齐。
+</p>
+<p>
+	裁判日期：2020年7月30日
+</p>
+<p>
+	案&nbsp; &nbsp; &nbsp;号：（2020）最高法行再118号
+</p>
+<p>
+	裁判要点：本院认为，东锐公司与周祖华之间并非典型的劳动关系，而是法律拟制的用工主体责任关系，周祖华在劳动仲裁机构认定其与东锐公司不存在劳动关系的情形下，对其能否要求工伤保险赔偿存在认识不足。而且，民事损害赔偿系周祖华在未进行伤残等级鉴定的情况下与谢耀坤调解达成，赔偿金额可能低于工伤保险赔偿金额。依法享受工伤保险待遇是劳动者享有的法定权利，东莞市政府仅以周祖华签订调解协议并领取损害赔偿款为由，撤销《认定工伤决定书》，可能损害周祖华的法定权利，应当予以纠正。需要说明的是，周祖华在认定工伤、鉴定劳动能力后，若实际获得的医疗费、损害赔偿款少于应当享受的工伤保险待遇，有权要求补齐。
+</p>
+<p>
+	附：判决全文
+</p>
+<p style="text-align:center;">
+	中华人民共和国最高人民法院
+</p>
+<p style="text-align:center;">
+	行 政 判 决 书
+</p>
+<p style="text-align:center;">
+	（2020）最高法行再118号
+</p>
+<p style="text-align:center;">
+	<br />
+</p>
+<p>
+	再审申请人（一审原告、二审上诉人）周祖华。
+</p>
+<p>
+	委托诉讼代理人谭国君、谭光彩，四川顺安律师事务所律师。
+</p>
+<p>
+	被申请人（一审被告、二审被上诉人）广东省东莞市人民政府。
+</p>
+<p>
+	法定代表人肖亚非，市长。
+</p>
+<p>
+	委托诉讼代理人张剑萍、李振玉，广东省东莞市司法局工作人员。
+</p>
+<p>
+	原审第三人东莞市东锐机电设备工程有限公司。
+</p>
+<p>
+	法定代表人崔志权，执行董事。
+</p>
+<p>
+	再审申请人周祖华因诉被申请人广东省东莞市人民政府（以下简称东莞市政府）及原审第三人东莞市东锐机电设备工程有限公司（以下简称东锐公司）行政复议一案，不服广东省高级人民法院（2018）粤行终1134号行政判决，向本院申请再审。本院于2019年11月20日作出（2019）最高法行申5982号行政裁定，提审本案。提审后，本院依法组成合议庭进行审理。现已审理终结。
+</p>
+<p>
+	2016年7月25日，东锐公司将其承包的中央空调安装工程分包给“包工头”谢耀坤负责施工，并签订了分包合同，约定谢耀坤自行招用施工人员并负责薪酬。周祖华于2016年8月19日被谢耀坤招用并安排至东莞市樟木头镇××号“一村山庄工地”从事管道安装的焊工工作，由谢耀坤对其进行管理。2016年8月30日，周祖华在工作期间摔伤右脚，随后送至樟木头人民医院住院治疗。2016年9月24日，周祖华出院，樟木头人民法院出具诊断证明，诊断为右侧跟骨粉碎性骨折，并做了复位锁定钢板内固定术。医生建议骨折愈合（1年后）可拆除内固定装置，拆除内固定装置住院总费用约1万元左右。
+</p>
+<p>
+	2016年12月，周祖华向樟木头仲裁庭申请劳动仲裁，请求确认其与东锐公司存在劳动关系。2016年12月8日，樟木头仲裁庭认定周祖华与东锐公司不存在劳动关系，不予支持周祖华的仲裁申请。2017年2月8日，周祖华以东锐公司为工作单位，向广东省东莞市社会保障局提出工伤认定申请，广东省东莞市社会保障局于2017年4月20日受理。在上述工伤认定审查期间，周祖华又于2017年2月21日，以谢耀坤为被告向广东省东莞市第三人民法院提起民事诉讼，请求法院解除与谢耀坤的雇佣合同关系；确认谢耀坤已支付周祖华受伤期间的医疗费、手术费、护理费及住院生活费；判令谢耀坤向周祖华支付伤残赔偿金、后续治疗费及营养费、误工费、护理费、精神抚慰金、交通费、在职期间工资待遇等费用共计6万元。该案经法院主持调解，周祖华与谢耀坤达成调解协议：一、确认周祖华与谢耀坤的雇佣关系已解除；二、谢耀坤自愿于2017年3月5日前支付周祖华损害赔偿款共计6万元；三、双方互不再追究对方其他经济责任。上述调解书生效后如期履行。2017年5月18日，广东省东莞市社会保障局作出《认定工伤决定书》（东社保工伤认字GSRD2203598511号），该认定书认定东锐公司为责任单位。东锐公司不服上述认定，于2017年7月4日向东莞市政府提出行政复议申请，请求撤销广东省东莞市社会保障局的《认定工伤决定书》。
+</p>
+<p>
+	东莞市政府受理行政复议申请后，期间经过延长审查期限，于2017年9月21日作出东府行复[2017]330号《行政复议决定书》（以下简称330号复议决定），认为东锐公司将承包的“一村山庄宴会厅”等工程分包给不具备用工主体资格的谢耀坤，谢耀坤聘用的周祖华从事承包业务时受伤，按照《最高人民法院关于审理工伤保险行政案件若干问题的规定》第三条第一款第四项和第二款的规定，东锐公司应先行承担工伤保险责任，之后有权向谢耀坤追偿。《工伤保险条例》的立法宗旨是为了保障因工作遭受事故伤害或患职业病的职工获得医疗救治和经济补偿。周祖华在申请工伤认定前已经领取了谢耀坤支付的损害赔偿款60000元，其因工作遭受的事故伤害已经获得了医疗救治和经济补偿，不再具有工伤认定所需保护的权利。依据《中华人民共和国行政复议法》第二十八条第一款的规定，撤销《认定工伤决定书》。周祖华不服，遂于2017年9月30日提起行政诉讼，请求撤销330号复议决定。
+</p>
+<p>
+	广东省东莞市中级人民法院（2017）粤19行初62号行政判决认为：首先，工伤认定是社会保障部门对劳动者因事故伤害（或患职业病）是否属于工伤或视同工伤给予定性的行政确认行为，其目的在于保障劳动者受伤后及时获得医疗救治和经济补偿。本案，周祖华申请工伤认定后与雇主谢耀坤针对赔偿事宜达成调解协议，该协议内容已包括周祖华受伤期间已发生的医疗费用以及后续治疗费、伤残赔偿金等项目，且已实际履行，可见周祖华受伤后的医疗救治和经济补偿已得到切实保障。因此，广东省东莞市社会保障局再行通过工伤认定以厘定工伤责任的行政管理目的已然不存在。丧失行政管理最初目的的行政行为属于明显不合理，应被撤销。其次，就本案的实际情况而言，周祖华如被认定为工伤，最终的赔偿责任人是雇主谢耀坤，而民事调解的赔付责任人也是谢耀坤，两者均是围绕伤者对雇主的经济追偿目的，两者在起因、目的和责任主体并无二致，只是救济途径不同。因调解协议中明确约定互不追究对方其他经济责任，故如责任人在民事调解中承担赔付责任后又成为工伤认定后的被追偿对象，那么将明显违反调解协议，对责任主体不公平，且不利于维护司法调解的公信力和稳定性。周祖华称其法律意识不强、调解协议乘人之危等一说，欠缺理据和说服力，不予支持。遂依据《中华人民共和国行政诉讼法》第六十九条的规定，判决驳回周祖华的诉讼请求。周祖华不服，提起上诉。
+</p>
+<p>
+	广东省高级人民法院（2018）粤行终1134号行政判决认为：《工伤保险条例》第十八条第一款规定：“提出工伤认定申请应当提交下列材料：（一）工伤认定申请表；（二）与用人单位存在劳动关系（包括事实劳动关系）的证明材料；（三）医疗诊断证明或者职业病诊断证明书（或者职业病诊断鉴定书）。”依据上述规定，职工申请工伤认定的，应当提交其与用人单位存在劳动关系的证明材料。本案中周祖华曾就其与东锐公司是否存在劳动关系申请劳动仲裁，劳动仲裁机构作出认定，对周祖华的申请不予支持。现本案中周祖华又以东锐公司为用人单位申请工伤认定缺乏事实依据，不符合上述申请工伤的条件，《认定工伤决定书》认定周祖华于2018年8月30日受伤属于工伤理由不足。且周祖华亦以和案外人谢耀坤存在雇佣关系为由，向广东省东莞市第三人民法院提起民事诉讼要求赔偿，经法院调解，谢耀坤支付了周祖华6万元损害赔偿费用，周祖华因伤遭受的损失已经得到弥补，330号复议决定书撤销《认定工伤决定书》，并无不当，予以维持。周祖华上诉主张理据不足，不予采纳。依据《中华人民共和国行政诉讼法》第八十九条第一款第一项的规定，判决驳回上诉，维持原判。
+</p>
+<p>
+	周祖华申请再审称：周祖华与谢耀坤签订的调解协议显失公平，周祖华的医疗费用和各项开支远超协议约定的6万元。而且周祖华构成九级伤残，6万元也远低于其应当享受的工伤保险待遇。东莞市政府330号复议决定撤销《认定工伤决定书》，认定事实不清，适用法律错误。请求：撤销一、二审判决，撤销330号复议决定，确认《认定工伤决定书》有效。
+</p>
+<p>
+	东莞市政府答辩称：本案若认定工伤，则工伤保险责任由东锐公司承担，东锐公司可向谢耀坤追偿。由于谢耀坤已经支付了医疗费用及调解款，周祖华获得医疗救治和经济补偿的目的已经实现，不再具有工伤认定所需保护的权利。请求：维持二审判决。
+</p>
+<p>
+	东锐公司述称：周祖华与谢耀坤达成的调解协议真实有效公平，工伤赔偿责任系民事赔偿责任的补充，周祖华已经通过民事调解获得充分赔偿，广东省东莞市第三人民法院出具了民事调解书予以确认。请求：维持二审判决。
+</p>
+<p>
+	本院再审审理过程中，周祖华申请增加诉讼请求，请求判令东锐公司向其支付工伤赔偿275100元。依照《中华人民共和国行政诉讼法》第二条第一款“公民、法人或者其他组织认为行政机关和行政机关工作人员的行政行为侵犯其合法权益，有权依照本法向人民法院提起诉讼”及《最高人民法院关于适用〈中华人民共和国行政诉讼法〉的解释》第一百二十条第一款“人民法院审理再审案件应当围绕再审请求和被诉行政行为合法性进行。当事人的再审请求超出原审诉讼请求，符合另案诉讼条件的，告知当事人可以另行起诉”的规定，周祖华在再审期间增加诉讼请求，且该请求亦不属于行政诉讼受案范围，本院不予准许。
+</p>
+<p>
+	本院经审理认为，《工伤保险条例》第二条第二款规定，中华人民共和国境内的各类企业的职工和个体工商户的雇工，均有依照本条例的规定享受工伤保险待遇的权利。第十四条第一项规定，职工在工作时间和工作场所内，因工作原因受到事故伤害的，应当认定为工伤。《最高人民法院关于审理工伤保险行政案件若干问题的规定》第三条规定，用工单位违反法律、法规规定将承包业务转包给不具备用工主体资格的组织或者自然人，该组织或者自然人聘用的职工从事承包业务时因工伤亡的，社会保险行政部门认定用工单位为承担工伤保险责任单位的，人民法院应予支持。承担工伤保险责任的单位承担赔偿责任或者社会保险经办机构从工伤保险基金支付工伤保险待遇后，有权向相关组织、单位和个人追偿。”本案中，东锐公司将承包的“一村山庄宴会厅”等工程分包给不具备用工主体资格的谢耀坤，谢耀坤聘用的周祖华从事承包工程时受伤，周祖华以东锐公司为用工单位申请认定工伤，东莞市社会保障局作出《认定工伤决定书》，符合法律规定。
+</p>
+<p>
+	东锐公司不服，申请行政复议。东莞市政府以周祖华已领取了谢耀坤支付的损害赔偿款，其因工作遭受的事故伤害已获医疗救治和经济补偿，不再具有工伤认定所保护的权利为由，撤销了《认定工伤决定书》。本院认为，东锐公司与周祖华之间并非典型的劳动关系，而是法律拟制的用工主体责任关系，周祖华在劳动仲裁机构认定其与东锐公司不存在劳动关系的情形下，对其能否要求工伤保险赔偿存在认识不足。而且，民事损害赔偿系周祖华在未进行伤残等级鉴定的情况下与谢耀坤调解达成，赔偿金额可能低于工伤保险赔偿金额。依法享受工伤保险待遇是劳动者享有的法定权利，东莞市政府仅以周祖华签订调解协议并领取损害赔偿款为由，撤销《认定工伤决定书》，可能损害周祖华的法定权利，应当予以纠正。需要说明的是，周祖华在认定工伤、鉴定劳动能力后，若实际获得的医疗费、损害赔偿款少于应当享受的工伤保险待遇，有权要求补齐。
+</p>
+<p>
+	综上，东莞市政府撤销《认定工伤决定书》，适用法律错误。一、二审判决分别驳回周祖华的诉讼请求和上诉，亦属于适用法律错误。依照《中华人民共和国行政诉讼法》第七十条第二项、第八十九条第二项，《最高人民法院关于适用〈中华人民共和国行政诉讼法〉的解释》第八十九条、第一百一十九条第一款的规定，判决如下：
+</p>
+<p>
+	一、撤销广东省高级人民法院（2018）粤行终1134号行政判决；
+</p>
+<p>
+	二、撤销广东省东莞市中级人民法院（2017）粤19行初62号行政判决；
+</p>
+<p>
+	三、撤销广东省东莞市人民政府东府行复[2017]330号《行政复议决定书》；
+</p>
+<p>
+	四、恢复广东省东莞市社会保障局《认定工伤决定书》（东社保工伤认字GSRD2203598511号）的法律效力。
+</p>
+<p>
+	一、二审案件受理费100元，由被申请人广东省东莞市人民政府负担。
+</p>
+<p>
+	本判决为终审判决。
+</p>
+<p style="text-align:right;">
+	审判长&emsp;&emsp;寇秉辉
+</p>
+<p style="text-align:right;">
+	审判员&emsp;&emsp;宋楚潇
+</p>
+<p style="text-align:right;">
+	审判员&emsp;&emsp;杨志华
+</p>
+<p style="text-align:right;">
+	二〇二〇年七月三十日
+</p>					</div>
+					<div class="bdsharebuttonbox" style="margin-bottom:-30px;"><a href="#" class="bds_more" data-cmd="more">分享到：</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a></div>
+					<div class="wzlink">本文地址：https://www.ft22.com/gsal/dianxinganli/202602/12897.html</div>
+					<div class="nrpage">
+						<p>上一篇：<a href="/gsal/dianxinganli/202602/12896.html" target="_blank">因急性酒精中毒死亡，属于法律规定不得认定为工伤的情形</a></p>
+						<p>下一篇：<a href="/gsal/dianxinganli/202602/12898.html" target="_blank">未确认劳动关系，人社局不能直接适用《工伤保险条例》第十四条第五项的规定作出认定工伤的结论</a></p>
+					</div>
+				</div>
+				<script type="text/javascript">
+    /*640*60 创建于 2016年9月27日*/
+    var cpro_id = "u2774039";
+</script>
+<script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>			</div>
+			<div class="listright">
+	<div class="liuyan"><a href="/guestbook"><img src="/image/guestbook.jpg" width="100%" /></a></div>
+	<div class="wqtd">
+		<div class="ls">
+			<div class="list_title">
+				<h3>维权团队</h3>
+				<a href="/gsls">更多>></a>
+			</div>
+		</div>
+		<div class="lb">
+			<div class="swiper mySwiper">
+				<div class="swiper-wrapper">
+					<div class='swiper-slide'><a href='/gsls/201805/8368.html'><img src='/uploadfile/201805/5/158477253.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/201612/7278.html'><img src='/uploadfile/201612/9/1112377081.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/201612/7273.html'><img src='/uploadfile/201612/8/1935488753.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/201612/7270.html'><img src='/uploadfile/201612/8/1051544781.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/201612/7265.html'><img src='/uploadfile/201612/7/758333125.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/200906/540.html'><img src='/uploadfile/201611/24/92211393.jpg'></a></div>
+				</div>
+				<div class="swiper-button-next"></div>
+				<div class="swiper-button-prev"></div>
+			</div>
+<script src="/js/swiper-bundle.min.js"></script>
+<script>
+	var swiper = new Swiper(".mySwiper", {
+		slidesPerView: 3,
+		spaceBetween: 10,
+		slidesPerGroup: 3,
+		loop: true,
+		loopFillGroupWithBlank: true,
+		pagination: {
+			el: ".swiper-pagination",
+			clickable: true,
+		},
+		navigation: {
+			nextEl: ".swiper-button-next",
+			prevEl: ".swiper-button-prev",
+		},
+	});
+</script>
+		</div>
+	</div>
+	<div class="ywfw">
+		<div class="list_title">
+			<h3>业务范围</h3>
+			<a href="#">更多>></a>
+		</div>
+		<ul>
+			<li><A href="https://7.ft22.com/" target="_blank"><img src="/image/jsq.jpg" /></A></li>
+			<li><A href="/guestbook"><img src="/image/gszx.jpg" /></A></li>
+			<li><A href=""><img src="/image/ajdl.jpg" /></A></li>
+		</ul>
+	</div>
+	<br />
+	<script type="text/javascript">
+    /*300*250 创建于 2016-04-06*/
+    var cpro_id = "u2589973";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>	<div class="hot">
+		<div class="hotnav">
+			<div class="h1" id="t1" onClick="ka1('d1','t1')">热点新闻</div>
+			<div class="h2" id="t2" onClick="ka1('d2','t2')">最新文章</div>
+		</div>
+		<div class="wzlb" id="d1" style="display:block;">
+			<ul>
+				<li><a href='/gsfg/baoxiantiaoli/201101/1958.html' title='工伤保险条例全文（适用2026年）'>工伤保险条例全文（适用2026年）</a></li>
+<li><a href='/jiandingbiaozhun/201503/5979.html' title='2015年工伤十级伤残鉴定标准'>2015年工伤十级伤残鉴定标准</a></li>
+<li><a href='/guandian/200910/1049.html' title='2015年工伤赔偿标准(最新整理)'>2015年工伤赔偿标准(最新整理)</a></li>
+<li><a href='/gsfg/baoxiantiaoli/201509/6296.html' title='劳动能力鉴定  职工工伤与职业病致残等级（适用于2026年）'>劳动能力鉴定  职工工伤与职业病致残等...</a></li>
+<li><a href='/peichangbiao/201601/6418.html' title='2016年工伤死亡赔偿标准'>2016年工伤死亡赔偿标准</a></li>
+<li><a href='/peichangbiao/201502/5920.html' title='2015年工伤死亡赔偿标准'>2015年工伤死亡赔偿标准</a></li>
+<li><a href='/peichangbiao/201202/3171.html' title='九级工伤赔偿标准'>九级工伤赔偿标准</a></li>
+<li><a href='/peichangbiao/201010/1891.html' title='工伤赔偿标准计算表'>工伤赔偿标准计算表</a></li>
+			</ul>
+		</div>
+		<div class="wzlb" id="d2" style="display:none;">
+			<ul>
+				<li><a href='/gssj/peichangbiao/202601/12643.html' title='最新标准：2026年一次性工亡补助金标准为1130040元（全国统一）'>最新标准：2026年一次性工亡补助金标准为...</a></li>
+<li><a href='/gsfg/baoxiantiaoli/201101/1958.html' title='工伤保险条例全文（适用2026年）'>工伤保险条例全文（适用2026年）</a></li>
+<li><a href='/gsal/dianxinganli/202603/12949.html' title='职业病诊断结论列明的单位对其工伤保险责任有异议的，应注意鉴定程序的合法性和客观性'>职业病诊断结论列明的单位对其工伤保险责...</a></li>
+<li><a href='/gsal/dianxinganli/202603/12948.html' title='1-4级伤残职工与所在单位签订“一揽子”调解协议后死亡，若协议中未明确包括近亲属的权利项目，不宜认为对此有了约定'>1-4级伤残职工与所在单位签订“一揽子”...</a></li>
+<li><a href='/gsal/dianxinganli/202603/12947.html' title='工伤认定部门应根据证据审查判断规则主动履职，而不能把对相关事实的认定判断权完全交给交警部门'>工伤认定部门应根据证据审查判断规则主动...</a></li>
+<li><a href='/gsal/dianxinganli/202602/12946.html' title='对“依靠因工死亡职工生前提供主要生活来源”的认定'>对“依靠因工死亡职工生前提供主要生活来...</a></li>
+<li><a href='/gsal/dianxinganli/202602/12945.html' title='侵权责任与工伤责任不可互相代替'>侵权责任与工伤责任不可互相代替</a></li>
+<li><a href='/gsal/dianxinganli/202602/12944.html' title='休息时间私自进行体育活动受伤不构成工伤'>休息时间私自进行体育活动受伤不构成工伤</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="mayd"><img src="/uploads/image/202509/18143801_11117.png" /></div>
+</div>		</div>
+	</div>
+</div>
+<div class="footer">
+	<div class="footnav">
+		<a href="/about/202509/1.html">关于我们</a>
+		<a href="/about/202509/2.html">免责声明</a>
+		<a href="/about/202509/3.html">服务范围</a>
+		<a href="/about/202509/4.html">联系我们</a>
+	</div>
+	<div class="ft">
+		<p>地址：石家庄市胜利北大街156号　电话：0311-85378335　公众号：工伤法律人（gsfalvren）</p>
+		<div class="mt"><a href="/about/202509/5.html">公众号</a>|<a href="/about/202509/21.html">抖音</a>|<a href="/about/202509/27.html">知乎</a>|<a href="/about/202509/6.html">今日头条</a></div>
+		<div class="bq">
+			<p>
+				工伤赔偿法律网 版权所有　建站支持：<a href="https://www.zw0311.com/" target="_blank">众旺互联</a><br />
+				<a rel="nofollow" href="https://beian.miit.gov.cn/" target="_blank">冀ICP备06033745号-1</a>　<a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=13010202003181" target="_blank" rel="nofollow"><img src="/image/gabeian.png" style="vertical-align:middle;margin-right:1px;margin-top:-6px;">冀公网安备13010202003181号			</p>
+		</div>
+	</div>
+</div>
+<div class="bottom-fixed">
+	<div class="sjhome"><a href="/"><span id="comp_sjhome_span">首页</span></a></div>
+	<div class="sjtel"><a href="tel:0311-85378335"><span id="comp_sjtel_span">电话</span></a></div>
+	<div class="sjsms"><a href="sms:0311-85378335"><span id="comp_sjsms_span">短信</span></a></div>
+	<div class="sjother"><a href="mqqwpa://im/chat?chat_type=wpa&amp;uin=999999999&amp;version=1"><span id="comp_sjother_span">QQ</span></a></div>
+</div>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const slider = document.querySelector('.slider');
+		const slides = document.querySelectorAll('.slide');
+		const prevBtn = document.querySelector('.prev-btn');
+		const nextBtn = document.querySelector('.next-btn');
+		const indicators = document.querySelectorAll('.indicator');
+		const autoplayToggle = document.querySelector('.autoplay-toggle');
+		let currentSlide = 0;
+		let isAutoplay = true;
+		let autoplayInterval;
+
+		function initSlider() {
+			updateSlider();
+			startAutoplay();
+			prevBtn.addEventListener('click', prevSlide);
+			nextBtn.addEventListener('click', nextSlide);
+			indicators.forEach((indicator, index) => {
+				indicator.addEventListener('click', () => {
+					goToSlide(index);
+				});
+			});
+			autoplayToggle.addEventListener('click', toggleAutoplay);
+			let touchStartX = 0;
+			let touchEndX = 0;
+			slider.addEventListener('touchstart', e => {
+				touchStartX = e.changedTouches[0].screenX;
+			});
+			slider.addEventListener('touchend', e => {
+				touchEndX = e.changedTouches[0].screenX;
+				handleSwipe();
+			});
+		}
+
+		function updateSlider() {
+			slider.style.transform = `translateX(-${currentSlide * 25}%)`;
+			indicators.forEach((indicator, index) => {
+				if (index === currentSlide) {
+					indicator.classList.add('active');
+				} else {
+					indicator.classList.remove('active');
+				}
+			});
+		}
+
+		function nextSlide() {
+			currentSlide = (currentSlide + 1) % slides.length;
+			updateSlider();
+			resetAutoplay();
+		}
+
+		function prevSlide() {
+			currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+			updateSlider();
+			resetAutoplay();
+		}
+
+		function goToSlide(index) {
+			currentSlide = index;
+			updateSlider();
+			resetAutoplay();
+		}
+
+		function handleSwipe() {
+			const threshold = 50;
+			const diff = touchStartX - touchEndX;
+			if (Math.abs(diff) > threshold) {
+				if (diff > 0) {
+					nextSlide();
+				} else {
+					prevSlide();
+				}
+			}
+		}
+
+		function startAutoplay() {
+			if (isAutoplay) {
+				autoplayInterval = setInterval(nextSlide, 5000);
+				autoplayToggle.innerHTML = '<i class="fas fa-pause"></i> 暂停自动播放';
+			}
+		}
+
+		function stopAutoplay() {
+			clearInterval(autoplayInterval);
+			autoplayToggle.innerHTML = '<i class="fas fa-play"></i> 开始自动播放';
+		}
+
+		function toggleAutoplay() {
+			isAutoplay = !isAutoplay;
+			if (isAutoplay) {
+				startAutoplay();
+			} else {
+				stopAutoplay();
+			}
+		}
+
+		function resetAutoplay() {
+			if (isAutoplay) {
+				clearInterval(autoplayInterval);
+				startAutoplay();
+			}
+		}
+		initSlider();
+	});
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b7b75eab5679d941eff28421f46fb930";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</body>
+</html>

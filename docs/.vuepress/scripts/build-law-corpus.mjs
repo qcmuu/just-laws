@@ -86,7 +86,8 @@ function* walk(dir) {
 
 function* parseFile(file) {
   const rel = path.relative(DOCS_DIR, file);
-  if (rel.split(path.sep).join("/").startsWith("category/") || rel === "README.md")
+  const relSlash = rel.split(path.sep).join("/");
+  if (relSlash.startsWith("category/") || relSlash.startsWith("references/") || rel === "README.md")
     return;
 
   const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);

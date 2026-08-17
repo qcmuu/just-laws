@@ -1,0 +1,744 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base target="_blank">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../images/animate.min.css" rel="stylesheet" type="text/css">
+    <link href="../../images/info.css" rel="stylesheet" type="text/css">
+    <link href="../../images/common5.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../../images/jquery-1.11.3.min.js"></script>
+    <title>..::莫纪宏：《合宪性审查法理问题研究》--中国法学网::..</title>
+    <style>
+        body{background: #fff;}
+	.ftitle{text-align: center;font-size: 22px;margin: 0px auto;}
+        .pretitle{font-size:14pt;padding:10px 0px 20px 0px;}
+	.main_img{margin:0 auto;width:1400px;}
+	.main_img img{width:1400px;}
+	.notice_left{margin-top:0px;}
+	.article_mian .title{margin:110px 0 50px;line-height:45px;}
+        .cons img{width:auto;}
+	@media (max-width:1799px){}
+	/*设计可视宽度*/
+	@media (max-width:1379px){}
+	/*笔记本*/
+	@media (max-width:1199px){
+	body{background: #f2f1ed;}
+
+	.article_mian{ background:#FFF;padding:0 0; margin:0 2px; padding-top:2px; margin-top:2px;}
+	.article_top{ margin:0 16px;}
+	.article_mian .title{ margin:26px 0 10px 0; font-size:20px;line-height:35px; font-weight:bold; padding:0 20px;}
+	.article_mian .article_content   table{ width:100% !important} 
+	.article_mian .article_content   table tr{width:100% !important}
+	.article_mian  table td,.article_mian  table td{ font-size:12px !important}
+	.article_mian  table td p{ font-size:12px !important}
+	.article_mian  table td p font{ font-size:12px !important}
+	.article_content img{ width:100% !important; }
+	.article_content{ margin-bottom:20px; background: #FFF;box-shadow: 0 0 0 rgb(0 0 0 / 10%); padding:10px;}
+
+	.footer_content{ padding:16px 0;}
+	.footer_content img{ display:block; margin:0 auto 10px auto }
+	.footer_content p{ font-size:14px}
+	.copyright{ padding:10px 0}
+	.copyright p{ color:#5e5e5e;}
+	.copyright p a{ border-bottom:1px #cacaca solid; color:#5e5e5e}
+
+	}
+	/*比较小的上网本，投影仪*/
+	@media (max-width:993px){
+            video{width:100%;}
+	}
+	/*平板*/
+	@media (max-width:767px){
+            video{width:100%;}		
+	}
+	/*手机*/
+    </style>
+	 <script>
+	 function showlist(item){
+	  var i = 0;
+	  for (i=0; i<5; i++)
+	  {
+		if (i == item)
+		{
+			$(".content ul li:eq("+i+")").addClass("active");
+            $(".notice_right ").eq(i).removeClass("hd");
+		} else {
+			$(".content ul li:eq("+i+")").removeClass("active");
+            $(".notice_right ").eq(i).addClass("hd");
+		}
+	  }
+	 }
+        $(function(){
+            $(".notice_left li").on("click",function(){
+                $(this).addClass("active");
+                $(this).siblings().removeClass("active");
+                var num=$(this).index();
+                $(".notice_right ").addClass("hd");
+                $(".notice_right ").eq(num).removeClass("hd");
+            });
+            $(".size p").on("click",function(){
+                $(this).addClass("active");
+                $(this).siblings().removeClass("active");
+            });
+            $(".small").click(function(){
+                $(".article_content p").css({"font-size":"16px","line-height": "22px"})
+                $(".article_top .time , .article_top .author").css({"font-size":"16px"})
+            })
+            $(".medium").click(function(){
+                $(".article_content p").css({"font-size":"19px","line-height": "32px"})
+                $(".article_top .time , .article_top .author").css({"font-size":"19px"})
+            })
+            $(".big").click(function(){
+                $(".article_content p").css({"font-size":"22px","line-height": "38px"})
+                $(".article_top .time , .article_top .author").css({"font-size":"22px"})
+            })
+		$(".scholar").hide();
+		var author = $(".author").text();
+		if (author.length == 2)
+		{
+			author = author.substr(0,1) + "　" + author.substr(1,1);
+		}
+		getaus(author);
+        })
+	function getaus(author){
+	    var length = author.length;
+	    var authors =new Array();
+	    var i = 0;
+	    var l = 0;
+	    var author1 = "";
+	    var cons = $(".cons").html();
+	    var pre = $(".pretitle").html();
+	    if (author.length == 3)
+	    {
+		var href = $(".scholars a:contains('"+author+"')").attr("href");
+		if (typeof(href) == "undefined")
+		{
+			$(".author").html("作者："+author);
+		} else {
+			$(".author").html("作者：<a href='"+href+"' target='_blank' style='color:#D2972F;'>"+author+"</a>");		
+			if ($(".cla a").text() == "最新作品" || $(".cla a").text() == "最新作品隐藏" || $(".cla a").text() == "本网首发" || $(".cla a").text() == "理论文章")
+			{
+				$(".scholarimg").append("<div class='author"+i.toString()+"'></div>");
+				getls(i,author,href);
+			}
+		}
+	    } else if (author.length > 3)
+	    {
+		authors = author.split("、");
+		var aus = "作者：";
+		var astr = "";
+		for (i=0; i<authors.length; i++)
+		{
+			author = authors[i];
+			$(".scholarimg").append("<div class='author"+i.toString()+"'></div>");
+			if (author.length == 2)
+			{
+				author = author.substr(0,1) + "　" + author.substr(1,1);
+			}
+			var href = $(".scholars a:contains('"+author+"')").attr("href");
+			if (typeof(href) == "undefined")
+			{
+				aus = aus + author + "、";
+			} else {
+				aus = aus + "<a href='"+href+"' target='_blank'>"+author+"</a>、";
+				getls(i,author,href);
+			}
+		}
+		$(".author").html(aus.substr(0,aus.length-1));
+	    }
+	    authors = $(".isbn").text().split("、");
+	    if (authors != "")
+	    {
+		var aus = "相关学者：";
+		for (i=0; i<authors.length; i++)
+		{
+			author = authors[i];
+			author1 = author;
+			if (author.length == 2)
+			{
+				author = author.substr(0,1) + "　" + author.substr(1,1);
+				l = 2;
+			} else {
+				l = 3;
+			}
+			var href = $(".scholars a:contains('"+author+"')").attr("href");
+			if (typeof(href) == "undefined")
+			{
+				aus = aus + author + "、";
+			} else {
+				aus = aus + "<a href='"+href+"' target='_blank'>"+author+"</a>、";
+				if ($(".cla a").text() == "学术会议" || $(".cla a").text() == "对外交流" || $(".cla a").text() == "学者行踪" || $(".cla a").text() == "建言献策" || $(".cla a").text() == "学术讲座" || $(".cla a").text() == "法学教育" || $(".cla a").text() == "学界动态" || $(".cla a").text() == "热点视频" || $(".cla a").text() == "本网首发" || $(".cla a").text() == "信息" || $(".cla a").text() == "成果推荐" || $(".cla a").text() == "优秀成果" || $(".cla a").text() == "荣誉奖项" || $(".cla a").text() == "法学研究所" || $(".cla a").text() == "国际法研究所")
+				{
+					if (l == 2)
+					{
+						cons = updatescholar(author1, href, cons);
+						pre = updatescholar(author1, href, pre);
+					} else {
+						cons = updatescholar(author, href, cons);
+						pre = updatescholar(author, href, pre);
+					}
+				}
+			}
+		}
+		$(".cons").html(cons);
+		$(".pretitle").html(pre);
+	    }
+	}
+	function getls(i,author,url){
+		if (typeof(url) != "undefined")
+		{
+			$.get(url,function(data){
+				var str = data;
+				var indexstart = str.indexOf("<ul id=\"01\">");
+				if (indexstart != -1 && i == 0)
+				{
+					var indexend = str.indexOf("<ul id=\"02\">",indexstart);
+					var indexend = str.indexOf("</ul>",indexend);
+					var list = str.substring(indexstart,indexend);
+					var title = $(".toptitle").text();
+					if (getversion())
+					{
+						$(".contnew .right").css("width","100%");
+					}else{
+						$(".newscon5").css("width","880px");
+					}
+					$(".disline").html(list);
+					if ($(".rel").html() == "" && $(".rel1").html() == "")
+					{
+						if ($(".yaowen ul li a:contains('" + title + "')").parent().prev().html() == null)
+						{
+							if ($(".yaowen ul li a:contains('" + title + "')").parent().next().html() != null)
+							{
+								$(".zuo").html("下一篇：" + $(".yaowen ul li a:contains('" + title + "')").parent().next().html());
+							}
+						} else if ($(".yaowen ul li a:contains('" + title + "')").parent().next().html() == null)
+						{
+							$(".zuo").html("上一篇：" + $(".yaowen ul li a:contains('" + title + "')").parent().prev().html());
+						} else 
+						{
+							$(".zuo").html("上一篇：" + $(".yaowen ul li a:contains('" + title + "')").parent().prev().html() + "<br>下一篇：" + $(".yaowen ul li a:contains('" + title + "')").parent().next().html());
+						}
+					}
+					$(".yaowen ul li a:contains('" + title + "')").parent().hide();
+					$(".yaowen ul li:gt(30)").hide();
+					$(".right").show();
+					$(".contnew .jitit a, .back").attr("href",url);
+				}
+				indexstart = str.indexOf("<div class=\"img6\" style=\"display:none;\">");
+				indexend = str.indexOf("</div>",indexstart);
+				var scholarimg = $(".scholarimg").html();
+				$(".author"+i.toString()).html("<a href='"+url+"' target='_blank'>"+str.substring(indexstart+40,indexend)+"<br>"+author+"</a>");
+			});
+		}
+	}
+	function getversion(){
+		var u = navigator.userAgent;
+		return u.match(/AppleWebKit.*Mobile.*/);
+	}
+	function updatescholar(substr, url, str){
+		var reg = new RegExp(substr, "g");
+		var regstr = "<a href='"+url+"' style='color:#c89a3e;'>"+substr+"</a>";
+		var result = str.replace(reg, regstr);
+		return result;
+	}
+	function setrel(){
+		if ($(".rel").html() != "")
+		{
+			$(".zuo").html($(".rel").html());
+		} else if ($(".rel1").html() != "")
+		{
+			$(".zuo").html($(".rel1").html());
+		} else {
+			$(".shang").hide();
+		}
+	}
+    </script>
+
+    <script type="text/javascript" src="../../images/index1.js"></script>
+
+</head>
+<body>
+    <!-- 头部 -->
+
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+<script>LA.init({id:"3LOw5e2fb1qLtRLn",ck:"3LOw5e2fb1qLtRLn"})</script>
+<style>
+.header{height:154px;width:100%;background:url("http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220920341276811855.jpg") no-repeat center center;}
+.nav_bg {top:150px;}
+.bsgkBoxLeftList li{width:18%;}
+</style>
+<div class="index_top">
+        <div class="header_top">
+            <img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020230118841950066524.png" alt="中国法学网" class="top_logo" />
+            <div class="time fl"></div>
+            <div class="right fr">
+                <p><a href="http://iolawen.cssn.cn/">English</a></p>
+                <p><a href="/rwz//">日本語</a></p>
+                <p><a href="/hwz/">한국어</a></p>
+                <img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824560917909620.png" class="icon topSerBtn" />
+                <div class="mOpenBtn"><i></i><i></i><i></i><i></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="mMenuLayBg"></div>
+    <div class="mCloseBtn"></div>
+    <div class="mMmenuLay">
+        <dl>
+            <dt><a href="/" class="mMenu_a1 on">首页</a><i class="mToggle"></i></dt>
+        </dl>
+        
+        <dl>
+            <dt><a href="/zwsy/org/fxs/" class="mMenu_a1">法学研究所概况</a><i class="mToggle"></i></dt>
+        </dl>
+        
+        <dl>
+            <dt><a href="/zwsy/org/gjfs/" class="mMenu_a1">国际法研究所概况</a><i class="mToggle"></i></dt>
+        </dl>
+        
+        <dl>
+            <dt><a href="http://iolaw.cssn.cn/scholar/keyan/" class="mMenu_a1">研究人员</a><i class="mToggle"></i></dt>
+            
+        </dl>
+        <dl>
+            <dt><a href="http://iolaw.cssn.cn/zzwx/" class="mMenu_a1">科研成果</a><i class="mToggle"></i></dt>
+        </dl>
+        
+        <dl>
+            <dt><a href="http://iolaw.cssn.cn/xshd/" class="mMenu_a1">学术活动</a><i class="mToggle"></i></dt>
+        </dl>
+        
+        <dl>
+            <dt><a href="http://iolaw.cssn.cn/journal/" class="mMenu_a1">法学刊物</a><i class="mToggle"></i></dt>
+        </dl>
+
+        <dl>
+            <dt><a href="http://iolaw.cssn.cn/fxjy/fxx/" class="mMenu_a1">法学教育</a><i class="mToggle"></i></dt>
+        </dl>
+
+        <dl>
+            <dt><a href="/tsg/" class="mMenu_a1">图书馆</a><i class="mToggle"></i></dt>
+        </dl>
+        
+    </div>
+    <!--搜索弹出层-->
+    <script type="text/javascript">
+        function toSearch(keyword) {
+            var key = document.getElementById(keyword).value;
+            var searchscope="DocTitle";
+            var keyword = "";   
+            if(key.match(/[~!@#$%\^\+\*&\/\?\|{}()\'-;=\"]/g) != null){
+                keyword = "'" + key +"'";
+            }else{
+                keyword=key;
+            }
+            if (key.length == '') { alert('请输入关键词'); return; }
+            $('.J_keyword').val("");
+            
+            // window.open('/was5/web/search/was5/web/search?channelid=213031&searchword=' + encodeURIComponent(keyword.replace(/[$]/g,"\\$")) + '&page=1&catetype=search&searchscope='+searchscope, '_blank');
+        }
+
+
+        function getHeaderKey(){
+            $(document).keydown(function(event) { //键盘响应函数
+                event = event || window.event; //兼容多浏览器
+                if (event.keyCode == 13) { //监听回车键
+                    var keyword = $('#SearchKeyword_pc').val()
+                    if(keyword==''){
+                        keyword = $('#SearchKeyword_mobile').val()
+                    }
+                    $('.J_keyword').val("");
+                    //if (keyword == '') { alert('请输入关键词'); return; }
+                    // window.open('/was5/web/search/was5/web/search?channelid=213031&searchword=' + encodeURIComponent(keyword.replace(/[$]/g,"\\$")) + '&page=1&catetype=search&searchscope=DocTitle', '_blank');
+                }
+            }); //键盘相应结束
+        }
+    </script>
+    <!--搜索弹出层-->
+
+<div class="serBg dsNone"></div>
+    <div class="serLayer dsNone">
+        <a href="javascript:;" class="serClose" target="_self"></a>
+        <div class="serBox">
+            <h6>搜索</h6>
+            <div class="serIntBox">
+	        <form action="/was5/web/search?" method="" target="_blank">
+                <input name="searchword" type="text" placeholder='输入内容' class="ip1 J_keyword" id="SearchKeyword_mobile" />
+		<input name="channelid" id="channelid" type="hidden" value="213031" />
+                <input name="" value="搜 索" type="button" class="ip2" onkeypress="getHeaderKey();" onclick="toSearch('SearchKeyword_mobile')" style="cursor: pointer;" />
+		</form>
+            </div>
+            
+        </div>
+    </div>
+    <div class="header">
+        <div class="language_main">
+                        <p class="tblank">　</p>
+			<p><a href="http://iolawen.cssn.cn/">English</a></p>
+			<p><a href="/rwz/">日本語</a></p>
+			<p><a href="/hwz/">한국어</a></p>
+        </div>
+	<div class="header_content">
+		<a href="/"><img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020230118841950066524.png" alt="中国法学网" class="top_logo" /></a>
+		<!-- <div class="fr"> -->
+	   
+			<!-- <div class="icon_box">
+				<img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824596761413798.png" class="icon" />
+				<img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824596836973123.png" class="icon" />
+			</div> -->
+			
+		<!-- </div> -->
+		<div class="frt">		
+			<img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824596761413798.png" width="100" height="100" class="footer_logo" />
+			<img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824596836973123.png" width="100" height="100" class="footer_logo" />
+		</div>
+        </div>
+            <div class="nav_bg">
+            <nav>
+                <div class="nav_content">
+                    <div class="item_nav shade_nav">
+                        <div class="nav_title"><a href="/zwsy/org/fxs/" target="_blank" style="color:#fff">法学研究所概况</a></div>
+                        <div class="bsgkBox" style="display: none">
+                            <div class="bsgkBoxLeft">
+                                <div class="bsgkBoxTop"><p class="spLine">法学研究所简介</p></div>
+                                <div class="bsgkBoxLeftTu clearfix">
+                                    <a href="./bsgk/zxsjs/"><img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824452533075856.jpg" width="220" height="150" /></a>
+                                    <div class="bsgkBoxLeftText"><p>中国社会科学院法学研究所（Institute of Law, Chinese Academy of Social Sciences）是国家级法学研究机构，座落于北京故宫东北角，景山东麓，所在地址是1919年“五四”新文化运动旧址的一部分。首任所长为张友渔。历任所长张友渔、王仲方、孙亚明、王叔文、王家福、刘海年、夏勇、李林、陈甦。现任所长：莫纪宏……<a href="/zwsy/org/fxs/"><详情></a></p></div>
+                                </div>
+                                <div class="mChangeTag">
+                                    <div class="bsgkBoxTop"><p class="spLine">现任领导</p></div>
+                                    <div class="mCon_conTxt">
+                                        <div class="bsgkBoxLeftList">
+                                            <!-- <a href="./bsgk/xrld/" class="moreBtn">详情</a> -->
+                                            <ul class="clearfix">
+						<li> <a target="_blank" oldsrc="W020210716344185268645.jpg" href="/scholar/wlxx/201908/t20190823_4961069.shtml"> <img width="190" alt="" border="0" photodocid="5347855" fromphoto="1" src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020260729321941192714.jpg" />
+							<div class="bottom">
+								<h2>翟国强</h2>
+								<p>联合党委书记<BR>(负责法学研究所所务)</p>
+							</div>
+							</a> </li>
+						<li> <a target="_blank" oldsrc="W020210716519855636230.jpg" href="/scholar/gjfyj/201908/t20190823_4961029.shtml"> <img width="160" alt="" border="0" photodocid="5347855" fromphoto="1" src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020260722348901031111.jpg" />
+							<div class="bottom">
+								<h2>柳华文</h2>
+								<p>联合党委副书记</p>
+							</div>
+							</a>
+						</li>
+						<li>
+						    <a target="_blank" oldsrc="W020210929563007383460.jpg" uploadpic="U020210929562568514883.jpg" href="/scholar/shf/201908/t20190823_4961349.shtml"> <img width="190" title="" alt="" border="0" src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020241205588322458743.jpg" />
+							<div class="bottom">
+								<h2>谢增毅</h2>
+								<p>联合党委常委、<BR>联合纪委书记、副所长</p>
+							</div>
+						    </a>
+						</li>
+						<li><a target="_blank" oldsrc="W020210929563007383460.jpg" uploadpic="U020210929562568514883.jpg" href="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020260618420820666879.jpg"> <img width="190" title="" alt="" border="0" src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020260618420820666879.jpg" />
+							<div class="bottom">
+								<h2>杨　柳</h2>
+								<p>联合党委常委、副所长</p>
+							</div>
+							</a>
+						</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                          
+                                </div>
+                            </div>
+                            <div class="bsgkBoxRight">
+                                <div class="bsgkBoxTop bsgkBoxTop1"><p class="spLine">组织机构</p>
+                                    <!-- <a href="./bsgk/zzjg/" class="btnLinke">详情</a> -->
+                                </div>
+                                <div class="bsgkBoxRight_1 clearfix">
+                                    <div class="bsgkBoxRight_2">
+                                        <h2><span><a href="./bsgk/zzjg/yjs/">研究室</a></span></h2>
+                                        <ul>
+						<li><a href="/xxsz/202511/t20251117_5949595.shtml" title="习近平法治思想研究室">习近平法治思想研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660640.shtml" title="法理研究室">法理研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660670.shtml" title="法制史研究室">法制史研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660674.shtml" title="宪法与行政法研究室">宪法与行政法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660683.shtml" title="民法研究室">民法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660654.shtml" title="商法研究室">商法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660643.shtml" title="经济法研究室">经济法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660641.shtml" title="知识产权研究室">知识产权研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660646.shtml" title="刑事法研究室">刑事法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660638.shtml" title="网络与信息法研究室">网络与信息法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660650.shtml" title="社会法研究室">社会法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660669.shtml" title="法治国情调查研究室">法治国情调查研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660673.shtml" title="生态法研究室">生态法研究室</a></li>
+                                        </ul>
+                                        <h2><span><a href="">编辑部</a></span></h2>
+                                        <ul>
+						<li><a href="/xxsz/201807/t20180723_4660964.shtml" title="《法学研究》编辑部">《法学研究》编辑部</a></li>
+						<li><a href="/xxsz/201807/t20180723_4660960.shtml" title="《环球法律评论》编辑部">《环球法律评论》编辑部</a></li>
+                                        </ul>
+					<h2><span><a href="/tsg/">图书馆</a></span></h2>
+                                    </div>
+                                    <div class="bsgkBoxRight_2 bsgkBoxRight_3">
+                                        <h2><span><a href="">研究中心</a></span></h2>
+                                        <ul>
+						<li><a href="/">习近平法治思想研究中心</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660678.shtml" title="人权研究中心">人权研究中心</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660668.shtml" title="台港澳法研究中心">台港澳法研究中心</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660671.shtml" title="知识产权中心">知识产权中心</a></li>
+						<li><a href="/xxsz/201807/t20180723_4660963.shtml" title="文化法制研究中心">文化法制研究中心</a></li>
+						<li><a href="/zt/gfzx/" title="法治宣传教育与公法研究中心">法治宣传教育研究中心</a></li>
+						<li><a href="/xxsz/fzzs/" title="国家法治指数研究中心">国家法治指数研究中心</a></li>
+						<li><a href="/xxsz/sfzx/" title="私法研究中心">私法研究中心</a></li>
+						<li><a href="/xxsz/201807/t20180723_4660924.shtml" title="性别与法律研究中心">性别与法律研究中心</a></li>
+						<li><a href="/xxsz/202010/t20201022_5198629.shtml" title="科技与法研究中心">科技与法研究中心</a></li>
+                                        </ul>
+					<h2><span><a href="">全面依法治国智库</a></span></h2>
+					<ul>
+						<li><a href="/" title="枫桥经验与社会治理研究部">枫桥经验与社会治理研究部</a></li>
+						<li><a href="/" title="战争审判与国际刑法研究部">战争审判与国际刑法研究部</a></li>
+					</ul>
+                                        <h2><span><a href="./bsgk/zzjg/zncs/">职能处室</a></span></h2>
+                                        <ul>
+						<li><a href="/xxsz/201807/t20180716_4660799.shtml" title="人事党办">人事党办</a></li>
+						<li><a href="/xxsz/202512/t20251203_5953728.shtml" title="法学所科研处">科研处</a></li>
+						<li><a href="/xxsz/201807/t20180713_4660789.shtml" title="办公室">办公室</a></li>
+                                        </ul>
+                                        <h2><span><a href="">博士后流动站</a></span></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="item_nav shade_nav">
+                        <div class="nav_title"><a href="/zwsy/org/gjfs/" target="_blank" style="color:#fff">国际法研究所概况</a></div>
+                        <div class="bsgkBox gj_bsgkBox" style="display: none">
+                            <div class="bsgkBoxLeft">
+                                <div class="bsgkBoxTop"><p class="spLine">国际法研究所简介</p></div>
+                                <div class="bsgkBoxLeftTu clearfix">
+                                    <a href="./bsgk/zxsjs/"><img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824452533075856.jpg" width="220" height="150" /></a>
+                                    <div class="bsgkBoxLeftText">
+                                        <p>中国社会科学院国际法研究所是中国国际法学的研究重镇。她的前身是中国社会科学院国际法研究中心、中国社会科学院法学研究所国际法研究室和最早时的中国社会科学院法学研究所国际法组。</p>
+                                        <p>1959年，中国科学院哲学社会科学部建立法学研究所之后的第二年，法学研究所成立了国际法组。 <a href="/zwsy/org/gjfs/"><详情></a></p> 
+                                    </div>
+                                </div>
+                                <div class="mChangeTag">
+                                    <div class="bsgkBoxTop"><p class="spLine">现任领导</p></div>
+                                    <div class="mCon_conTxt">
+                                        <div class="bsgkBoxLeftList">
+                                            <!-- <a href="./bsgk/xrld/" class="moreBtn">详情</a> -->
+                                            <ul class="clearfix">
+						<li> <a target="_blank" oldsrc="W020210716344185268645.jpg" href="/scholar/wlxx/201908/t20190823_4961069.shtml"> <img width="160" alt="" border="0" photodocid="5347855" fromphoto="1" src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020260729321941192714.jpg" />
+							<div class="bottom">
+								<h2>翟国强</h2>
+								<p>联合党委书记</p>
+							</div>
+							</a> </li>
+						<li> <a target="_blank" oldsrc="W020210716519855636230.jpg" href="/scholar/gjfyj/201908/t20190823_4961029.shtml"> <img width="160" alt="" border="0" photodocid="5347855" fromphoto="1" src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020260722348901031111.jpg" />
+							<div class="bottom">
+								<h2>柳华文</h2>
+								<p>联合党委副书记、所长</p>
+							</div>
+							</a>
+						</li>
+						<li>
+						    <a target="_blank" oldsrc="W020210929563007383460.jpg" uploadpic="U020210929562568514883.jpg" href="/scholar/shf/201908/t20190823_4961349.shtml"> <img width="160" title="" alt="" border="0" src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020241205588322458743.jpg" />
+							<div class="bottom">
+								<h2>谢增毅</h2>
+								<p>联合党委常委<BR>联合纪委书记</p>
+							</div>
+						    </a>
+						</li>
+						<li><a target="_blank" oldsrc="W020210929563007383460.jpg" uploadpic="U020210929562568514883.jpg" href="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020260618420820666879.jpg"> <img width="190" title="" alt="" border="0" src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020260618420820666879.jpg" />
+							<div class="bottom">
+								<h2>杨　柳</h2>
+								<p>联合党委常委、副所长</p>
+							</div>
+							</a>
+						</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bsgkBoxRight">
+                                <div class="bsgkBoxTop bsgkBoxTop1"><p class="spLine">组织机构</p>
+                                    <!-- <a href="./bsgk/zzjg/" class="btnLinke">详情</a> -->
+                                </div>
+                                <div class="bsgkBoxRight_1 clearfix">
+                                    <div class="bsgkBoxRight_2">
+                                        <h2><span><a href="./bsgk/zzjg/yjs/">研究室</a></span></h2>
+                                        <ul>
+						<li><a href="/xxsz/201807/t20180706_4660645.shtml" title="国际公法研究室">国际公法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660686.shtml" title="国际私法研究室">国际私法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660651.shtml" title="国际经济法研究室">国际经济法研究室</a></li>
+						<li><a href="/xxsz/201807/t20180706_4660672.shtml" title="国际人权法研究室">国际人权法研究室</a></li>
+					</ul>
+                                        <h2><span><a href="">编辑部</a></span></h2>
+                                        <ul>
+                                            <li><a href="/xxsz/201807/t20180723_4660962.shtml" title="《国际法研究》编辑部">《国际法研究》编辑部</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="bsgkBoxRight_2 bsgkBoxRight_3">
+                                        <h2><span><a href="">研究中心</a></span></h2>
+                                        <ul>
+						<li><a href="/xxsz/201908/t20190823_4961209.shtml" title="海洋法治研究中心">海洋法治研究中心</a></li>
+						<li><a href="/xxsz/201807/t20180723_4660961.shtml" title="竞争法研究中心">竞争法研究中心</a></li>
+						<li><a href="/xxsz/202109/t20210928_5363620.shtml" title="涉外法治研究中心">涉外法治研究中心</a></li>
+                                        </ul>
+						<h2><span><a href="">全面依法治国智库</a></span></h2>
+                                        <h2><span><a href="./bsgk/zzjg/zncs/">职能处室</a></span></h2>
+                                        <ul>
+                                            <li><a href="/xxsz/202604/t20260414_5980402.shtml">科研处</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item_nav"><a href="http://iolaw.cssn.cn/scholar/keyan/"><div class="nav_title">研究人员</div></a></div>
+                    <div class="item_nav"><a href="http://iolaw.cssn.cn/zzwx/"><div class="nav_title">科研成果</div></a></div>
+                    <div class="item_nav"><a href="http://iolaw.cssn.cn/xshd/"><div class="nav_title">学术活动</div></a></div>
+                    <div class="item_nav"><a href="http://iolaw.cssn.cn/journal/"><div class="nav_title">学术刊物</div></a></div>
+                    <div class="item_nav"><a href="http://iolaw.cssn.cn/fxjy/fxx/"><div class="nav_title">法学教育</div></a></div>
+                    <div class="item_nav"><a href="/tsg/"><div class="nav_title">图书馆</div></a></div>
+					<div class="item_nav">
+						<div class="input_box">
+						<form action="/was5/web/search?" method="" target="_blank">
+						<input type="text" name="searchword" id="keywords" placeholder="请输入搜索关键词" />
+						<input name="channelid" id="channelid" type="hidden" value="213031" />
+						<INPUT TYPE="image" src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824560917909620.png" class="icon" />
+						</form>
+						</div>
+					</div>
+                </div>
+            </nav>
+	    </div>
+    </div>
+
+    <!-- end -->
+        
+    <div class="info_main gjinfo_box1">
+        <div class="nav border">
+	<a href="/"><span>首页</span></a> > <span class="cla"><a href="../">学术著作</a></span></a>
+        </div>
+        <div class="main article_mian">
+            <div class="article_top">
+                <div class="title">莫纪宏：《合宪性审查法理问题研究》</div>
+                <div class="ftitle"></div>
+                <div class="time">
+                    <div class="disauthor"></div>
+                </div>
+                <div class="clearfix">
+                    <div class="size fr">
+                        <div class="icon"><img src="../../images/font.png" />字号:</div>
+                        <p class="active small">小</p>
+                        <p class="medium">中</p>
+                        <p class="big">大</p>
+                    </div>
+                </div>
+            </div>
+            <div class="article_content">
+                <div class="cons"><div class=TRS_Editor><div class="TRS_PreAppend" style="overflow-x: hidden; word-break: break-all">
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><span lang="EN-US"><img style="border-left-width: 0px; border-right-width: 0px; width: 450px; border-bottom-width: 0px; border-top-width: 0px" alt="" complete="complete" oldsrc="W020230811395190586865.png" src="./W020230811395190586865.png" />&nbsp;</span></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><b><span style="font-family: 楷体">《合宪性审查法理问题研究》</span></b></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><b><a href="http://iolaw.cssn.cn/scholar/xfxzf/201908/t20190823_4961063.shtml"><span style="font-family: 楷体">莫纪宏</span></a></b><b><span style="font-family: 楷体">著</span></b></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><b><span style="font-family: 楷体">中国民主法制出版社 2023年版</span></b></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><b><span lang="EN-US">&nbsp;</span></b></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><b><span style="font-family: 宋体">【作者简介】</span></b></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><span lang="EN-US">&nbsp;</span></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><span lang="EN-US"><img style="border-left-width: 0px; border-right-width: 0px; width: 550px; border-bottom-width: 0px; border-top-width: 0px" alt="" complete="complete" oldsrc="W020230811395190691112.jpg" src="./W020230811395190691112.jpg" />&nbsp;</span></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><span lang="EN-US">&nbsp;</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">莫纪宏，中国社会科学院法学研究所所长、研究员，中国社会科学院大学法学院院长、教授。毕业于北京大学法律学系和中国社会科学院研究生院，法学博士。目前兼任中国法学会学术委员会委员、中国法学会宪法学研究会常务副会长，</span><span lang="EN-US">2004</span><span style="font-family: 宋体">年获得</span><span lang="EN-US">"</span><span style="font-family: 宋体">全国十大杰出中青年法学家</span><span lang="EN-US">"</span><span style="font-family: 宋体">称号，</span><span lang="EN-US">2018</span><span style="font-family: 宋体">年被国际宪法学协会执委会授予终身名誉主席称号。已出版个人专著</span><span lang="EN-US">20</span><span style="font-family: 宋体">余部，在《中国社会科学》《法学研究》《中国法学》等顶级期刊和权威期刊发表学术论文</span><span lang="EN-US">30</span><span style="font-family: 宋体">余篇。代表作有《现代宪法的逻辑基础》《依宪立法原则与合宪性审查》等。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span lang="EN-US">&nbsp;</span></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><b><span style="font-family: 宋体">【导语：从“受权发布”与“授权发布”说开起】</span></b></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span lang="EN-US">&nbsp;</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">党的十九大报告明确指出：“加强宪法实施和监督，推进合宪性审查工作，维护宪法权威。”据此，“合宪性审查”的概念正式进入了我们日常生活的视野。什么是“合宪性审查”呢？它对我们当今的生活会有何种实质性的影响呢？为什么在立法法中已经明确提出了“合法性审查”的概念和制度要求之后，仍然要提“合宪性审查”？“合宪性审查”能解决哪些“合法性审查”不能解决的法律问题？“合宪性审查”要审查谁？审查什么？审查的事项有哪些？如何确定“合法性审查”与“合宪性审查”之间的制度界限</span><span lang="EN-US">?</span><span style="font-family: 宋体">“合宪性审查”是仅仅审查法律规范性文件，还是连同国家机关行使宪法职权的行为一起审查？“合宪性审查”的法律后果是什么？那些被判定为不合宪的法律规范和行为如何处理？是否存在如同刑法学、民法学法理上的“违宪”与“不违宪”、“合宪”与“不合宪”的明确的法律判断？“合宪性审查”的依据是宪法条文吗？作为合宪性审查依据的宪法精神是什么？与宪法规定有什么区别？怎样在合宪性审查操作层面有效区分宪法规定和宪法精神这两种不同的合宪性审查依据？“合宪性审查”的审查标准如何确定？那些被法学家们奉为圭臬的“小宪法”“准宪法”“市民社会的宪法”还能接受“合宪性审查”的检验吗？在没有“合宪性审查”的时代对宪法的权威性是如何加以保障的？谁来进行社会公众都能接受的“合宪性审查”？等等，诸如此类的理论问题和实践问题，随着“推进合宪性审查工作”进入政策层面而日渐显现出来，不仅为法学界所关注，一般社会公众也很有兴趣。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">不过，热度归热度，大家都关注并不意味着大家都明白，虽然“合宪性审查”作为一个制度化概念已经被政府和社会公众普遍接受，但是，要在实践中真正有效地运行起来，并不是一朝一夕的事情。首先遇到的理论难题就是可以通过“合宪性审查”机制来加以评判的法律问题在哪？事实上，这个问题看似简单，但真要从法理上讲清楚和讲明白，不是一件容易的事情，它需要扎实和系统的宪法学理论作支撑，不是简单地照搬刑法学、民法学等部门法学的违法性理论和犯罪理论就可以轻易架构起“合宪性审查”的理论框架。有鉴于法学界对“推进合宪性审查工作”可能遇到的重大法理问题刚刚启动研究之门，在大规模的“偏论”出现之前，有必要认真地梳理一下我国现行宪法、立法法、监督法等规定中的“合宪性审查”制度存在的现状，以便对“合宪性审查”这个概念形成对真问题和现实问题的有效探讨。本书汇集了近三年来笔者研究“合宪性审查”重大理论问题的学术心得，研究范围已经覆盖了目前制度上可能存在的与“合宪性审查”相关的主要问题，研究焦点在于对各项法律规范的形式与内容合宪性的判断。对于国家机关履行宪法职权职责的行为或活动的合宪性问题的研究，尚未完全展开，但该问题并非不重要，而是目前相关法理还比较复杂，实践中的问题暴露不够充分，从合宪性审查的一般法理来看，只要用心巡查，就会发现对法律行为进行合宪性控制是大有必要的。</span></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><span lang="EN-US">&nbsp;</span></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><span lang="EN-US"><img style="border-left-width: 0px; border-right-width: 0px; width: 500px; border-bottom-width: 0px; border-top-width: 0px" alt="" complete="complete" oldsrc="W020230811395191024962.png" src="./W020230811395191024962.png" /></span></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><span lang="EN-US">&nbsp;</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">有些实践中的行为和做法，看上去没毛病，但是，从合宪性审查的角度出发，用专业的眼光来审视，就有很多讲不清楚道理、模棱两可的地方。合宪性审查的制度目标实际上是很简单的，不外是强调“于法有据”，法律之间要有统一性，同一个法律文本法律规范的制度设计要有逻辑上的一致性，说话做事前后不矛盾，等等。这些非常朴实易懂的合宪性价值要求要在实践中真正落实到位却是不容易的。往往越容易的越是难以做到。仅就“受权发布”与“授权发布”这两个法律行为而言，其术语表达就很容易引发与宪法不一致的问题。例如，</span><span lang="EN-US">2020</span><span style="font-family: 宋体">年</span><span lang="EN-US">6</span><span style="font-family: 宋体">月</span><span lang="EN-US">1</span><span style="font-family: 宋体">日，由新华社发布的《中华人民共和国民法典》终于与社会公众见面了。社会各界在喜阅民法典的同时，也对新华社“两会受权发布”的提法产生了诸多疑问，网友们也提出了不少质疑。从严格的法治主义原则出发，新华社“两会受权发布”的提法确实缺少法律依据，至少法律程序要明确，否则很难闯过严格的“合宪性审查”大关。建议有关部门今后要认真研究，慎用“两会受权发布”的提法，要注重运用法治方式来为新华社发布国家重要的法律文件提供充足的法律依据。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">首先要明确的是，发布《中华人民共和国民法典》是中华人民共和国主席的宪法和法律职权。法律业经国家立法机关制定生效之后，必须要按照法定的程序公布，这是依宪立法、依法立法原则的重要体现。根据我国现行宪法、立法法的规定，公布法律是中华人民共和国主席的宪法和法律职权。现行宪法第</span><span lang="EN-US">80</span><span style="font-family: 宋体">条明确规定，“中华人民共和国主席根据全国人民代表大会的决定和全国人民代表大会常务委员会的决定，公布法律”。与此同时，立法法又将中华人民共和国主席公布法律的宪法规定具体化，其第</span><span lang="EN-US">58</span><span style="font-family: 宋体">条明文规定：“签署公布法律的主席令载明该法律的制定机关、通过和施行日期。法律签署公布后，及时在全国人民代表大会常务委员会公报和中国人大网以及在全国范围内发行的报纸上刊载。在常务委员会公报上刊登的法律文本为标准文本。”</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">由上可知，一部新的法律出台后，需要按照法定程序由中华人民共和国主席公布，这是一项基本的宪法制度，涉及中华人民共和国主席的宪法职权。由于新的法律通过之后存在着法律文本的核实和校刊问题，故中华人民共和国主席公布法律后，法律文本可以随即发布，也可以之后发布，但本质上发布法律文本是中华人民共和国主席公布法律的宪法职权的一项重要内容。为了发布法律文本的便利，中华人民共和国主席公布法律后，可以依法授权其他机构发布正式的法律文本。根据立法法第</span><span lang="EN-US">58</span><span style="font-family: 宋体">条的规定，法律文本的正式发布也需要按照严格的法定程序进行，即必须要在权威和官方的媒体上发布。立法法认可的发布法律文本的媒体有：全国人大常委会公报；中国人大网；在全国范围内发行的报纸。但不论是哪一种媒体发布法律文本，都必须获得中华人民共和国主席的依宪依法“授权”。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span lang="EN-US">2020</span><span style="font-family: 宋体">年</span><span lang="EN-US">5</span><span style="font-family: 宋体">月</span><span lang="EN-US">28</span><span style="font-family: 宋体">日，中华人民共和国主席习近平签署了第</span><span lang="EN-US">45</span><span style="font-family: 宋体">号主席令。该主席令规定：“《中华人民共和国民法典》已由中华人民共和国第十三届全国人民代表大会第三次会议于</span><span lang="EN-US">2020</span><span style="font-family: 宋体">年</span><span lang="EN-US">5</span><span style="font-family: 宋体">月</span><span lang="EN-US">28</span><span style="font-family: 宋体">日通过，现予公布，自</span><span lang="EN-US">2021</span><span style="font-family: 宋体">年</span><span lang="EN-US">1</span><span style="font-family: 宋体">月</span><span lang="EN-US">1</span><span style="font-family: 宋体">日施行。”根据上述主席令，《中华人民共和国民法典》经公布后，即可由媒体对外发布正式法律文本。但媒体在对外发布《中华人民共和国民法典》时必须声明获得了中华人民共和国主席的发布“授权”，而不是新华社现在使用的“两会受权发布”，否则，就侵犯了宪法和立法法所规定的中华人民共和国主席所具有的公布法律的宪法和法律职权。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">其次，“两会受权发布”《中华人民共和国民法典》的提法缺少明确的法律依据。根据我国现行立法制度，《中华人民共和国民法典》是第十三届全国人大第三次会议</span><span lang="EN-US">2020</span><span style="font-family: 宋体">年</span><span lang="EN-US">5</span><span style="font-family: 宋体">月</span><span lang="EN-US">28</span><span style="font-family: 宋体">日通过的，是全国人大作为最高国家立法机关行使国家立法权制定基本法律的体现。虽然在全国人大开会期间，全国政协也参与了讨论和提出建议，但全国政协不是国家机关，更不是立法机关，宪法和立法法没有赋予全国政协制定法律的权限，所以，把全国政协与全国人大捆绑在一起向新华社“授权”发布《中华人民共和国民法典》的提法，很明显存在于法无据的问题。此外，即便是全国人大，也不宜“授权”新华社发布《中华人民共和国民法典》，因为现行宪法和立法法已经明确将公布法律的权限授予了中华人民共和国主席，也就是说公布法律是中华人民共和国主席的专有职权，所以，“两会受权发布”的提法在法律上站不住脚。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">最后，新华社发布《中华人民共和国民法典》的合法性依据的正确表达应当是“中华人民共和国主席授权发布”。新华社使用“两会受权发布”来发布《中华人民共和国民法典》的方式不仅缺少明确的法律依据，而且还模糊了“受权”与“授权”的法律关系。从立法法的规定来看，只有“授权”和“被授权”的对应关系，没有“受权”的提法，所以，“两会受权发布”不是内涵清晰的法律用语。虽然可以在语言学上一般性地意会有全国两会的“授权”自然就有新华社的“受权”，但这种不规范的表达方式明显与法治原则不符，不利于维护现行宪法</span><span lang="EN-US">5</span><span style="font-family: 宋体">条第</span><span lang="EN-US">2</span><span style="font-family: 宋体">款所要求的社会主义法制统一性原则。正确的提法应当是“中华人民共和国主席授权发布”，这一提法既讲清楚了授权主体，又为新华社发布《中华人民共和国民法典》提供了合法性依据。所以，必须要从提升法治思维的高度来严肃地对待发布法律的合法性依据和法定程序的规范性问题。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">由此可见，仅仅是“两会受权发布”这个提法背后就有非常复杂的合宪性审查问题，其中最重要的宪法问题就是公布法律应当属于中华人民共和国主席依据宪法所具有的专有职权，要维护法治原则，就必须要在公布和发布法律的实践中自觉地维护中华人民共和国主席的宪法地位。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">从“两会受权发布”提法背后所包含的复杂合宪性问题就可以发现，合宪性审查已经不是学理上要不要的问题，而是在实践中怎样做的问题。当然，法学界同行们曾经设计了健全合宪性审查程序和机制的学术方案，甚至还弄出了《合宪性审查程序法》《宪法解释程序法》等保证合宪性审查顺利进行的专门程序性法律，但其实这些学术上的努力价值很小，因为在我国现行的人民代表大会制度下，全国人大及其常委会依据宪法和法律的履职活动程序和机制是统一的，没有必要再为合宪性审查或者是宪法解释单独准备一套法律程序，即便是需要突出强调一下程序的重要性，也只需要把全国人大及其常委会履职活动的一般程序照搬一下就可以了，故程序合法根本就不是问题。但在启动合宪性审查程序相对容易的情形下，为何全国人大常委会迄今为止没有以正式的法律文件作出具有法律效力的合宪性审查结论呢？这是一个真实的制度和实践问题，这个实践难题不破解，合宪性审查的法理也很难科学和有效地构建起来。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">目前，全国人大常委会已经从日常的工作出发出台了《法规、司法解释备案审查工作办法》（以下简称《备案审查工作办法》）。这个《备案审查工作办法》出来比较晚，内容比较新，是</span><span lang="EN-US">2019</span><span style="font-family: 宋体">年</span><span lang="EN-US">12</span><span style="font-family: 宋体">月</span><span lang="EN-US">16</span><span style="font-family: 宋体">日第十三届全国人大常委会第四十四次委员长会议通过的。《备案审查工作办法》的出台取代了</span><span lang="EN-US">2005</span><span style="font-family: 宋体">年</span><span lang="EN-US">12</span><span style="font-family: 宋体">月</span><span lang="EN-US">16</span><span style="font-family: 宋体">日第十届全国人大常委会第四十次委员长会议修订、通过的《行政法规、地方性法规、自治条例和单行条例、经济特区法规备案审查工作程序》和《司法解释备案审查工作程序》。如果认真地研读《备案审查工作办法》关于法规、司法解释合宪性审查的程序和机制，就会发现其在制度层面已经相当完善，甚至于比先前的《行政法规、地方性法规、自治条例和单行条例、经济特区法规备案审查工作程序》和《司法解释备案审查工作程序》对合宪性审查程序和机制作了更加周密的安排。令人困惑的是，为什么如此完备的合宪性审查程序和机制方面的法律文件只以全国人大常委会委员长会议的方式通过，而且只是内部使用，除了全国人大常委会纸质版公报刊登之外，中国人大网和其他新闻媒体并没有转载？如果不经常阅读全国人大常委会公报，甚至专业人员也无从了解《备案审查工作办法》的具体内容，以至于一些专家在论著中设计的理想的合宪性审查程序和机制与《备案审查工作办法》所规定的合宪性审查程序和机制相比要远远地落后，明显呈现出理论落后于现实的局面。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">既然有了这样完备的合宪性审查工作程序，那么，接下来就应当会出现正式的合宪性审查结论性的决定或者规范性文件了。可惜的是，全国人大宪法和法律委员会由全国人大法律委员会更名已</span><span lang="EN-US">4</span><span style="font-family: 宋体">年时间，而把“宪法”两字加在“法律委员会”前面的实际效果却尚未充分体现出来。目前的基本状况是“三无”：一无正式的具有法律效力的可供社会公众阅读、学习和使用的合宪性审查决定；二无全国人大常委会依据宪法规定作出的正式的宪法解释；三无全国人大常委会在对法规、司法解释进行合宪性审查时对相关宪法条款作出的释义或者对宪法适用的对与错作出宪法判断的实例。可见，即使合宪性备案审查程序再完善，如果不从根本上解决与合宪性审查相关的重大法理问题，合宪性审查的结论在实践中也是很难有效产生的。目前的状况显示了合宪性审查机关的“回避态度”，或者说是“鸭子浮水”式的私下交流，即便是认定受审查对象明显存在不合宪问题，也是“私下”处理，至少是受审查主体自身主动地修改、废止其被认为与宪法不一致的法规、司法解释</span><span lang="EN-US">,</span><span style="font-family: 宋体">充分体现其对全国人大常委会作为合宪性审查主体的权威性的尊重。但这里面也隐含着有问题的受审查对象被“是非不清”地处理了，合宪性审查结论中的说理部分被刻意地回避了，社会公众无从知晓究竟是因为何种原因受审查对象被判定为与宪法不一致或相抵触，这就引发了合宪性审查程序是否应当具有公开性的问题。事实上，《备案审查工作办法》法律文本的完整版，尤其是电子文档在公开的信息平台上很难搜寻到，故该办法还没有真正地做到公开，依据该办法形成的合宪性审查结论中的法理还没有得到社会公众的检验和认可。这个问题可以视为合宪性审查制度建设的瓶颈问题。如果说合宪性审查是法治建设的瓶颈，那么，以正式有效的法律文书公布合宪性审查结论文书则是“瓶颈中的瓶颈”，是真正的实施法治的“技术”和“硬壳”。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">当然，与合宪性审查程序相关的重大理论问题还包括是采用“事前审查”还是“事后审查”这样的审查方式之争。所谓的“事前审查”，指受审查对象在正式生效前接受合宪性审查，被发现与宪法不一致或相抵触的，必须加以修改后才能公布生效；所谓的“事后审查”，指受审查对象在正式生效后接受合宪性审查，被发现有与宪法不一致或相抵触的，必须加以修改或予以废止。从《备案审查工作办法》第</span><span lang="EN-US">9</span><span style="font-family: 宋体">条第</span><span lang="EN-US">1</span><span style="font-family: 宋体">款规定来看，对法规、司法解释的合宪性审查基本上属于“事后审查”。该条款规定：“法规、司法解释应当自公布之日起三十日内报送全国人大常委会备案。”从上述规定来看，备案是合宪性审查的前提，而备案又是在法规、司法解释公布之后才发生的事</span><span lang="EN-US">,</span><span style="font-family: 宋体">只不过“三十日内”报送的要求使得受合宪性审查的法规、司法解释基本上处于尚未付诸实施的阶段。因此，根据《备案审查工作办法》由全国人大常委会对法规、司法解释进行的合宪性审查，原则上不属于如同国外违宪审查中的“事后审查”，而是比较靠近“事前审查”，即在受审查对象付诸实施前就对发现的与宪法不一致的问题及时加以纠正，以免与宪法不一致的受审查对象在被实施中因为与宪法不一致而影响相对人的合法权益。不过值得关注的是，《备案审查工作办法》将审查方式确定为四种形式，包括依职权审查、依申请审查、移送审查、专项审查，其中依申请审查涉及的法规、司法解释通常都是在实践中出现了问题，被申请人提出合宪性审查要求和建议的，因此，事实上，《备案审查工作办法》对法规、司法解释的合宪性审查也有一部分属于“事后审查”。而纯粹的“事前审查”体现为立法法规定的对设区的市的地方性法规的审查。立法法第</span><span lang="EN-US">72</span><span style="font-family: 宋体">条第</span><span lang="EN-US">2</span><span style="font-family: 宋体">款规定：“设区的市的人民代表大会及其常务委员会根据本市的具体情况和实际需要，在不同宪法、法律、行政法规和本省、自治区的地方性法规相抵触的前提下，可以对城乡建设与管理、环境保护、历史文化保护等方面的事项制定地方性法规，法律对设区的市制定地方性法规的事项另有规定的，从其规定。设区的市的地方性法规须报省、自治区的人民代表大会常务委员会批准后施行。省、自治区的人民代表大会常务委员会对报请批准的地方性法规，应当对其合法性进行审查，同宪法、法律、行政法规和本省、自治区的地方性法规不抵触的，应当在四个月内予以批准。”</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">根据立法法第</span><span lang="EN-US">72</span><span style="font-family: 宋体">条的上述规定，对设区的市的地方性法规由省、自治区人大常委会进行的合宪性审查属于“事前审查”，即审查后若与宪法等不抵触，就可以批准生效。虽然上述条款使用了广义上的“合法性审查”，但在具体列举审查依据时首先列出的是宪法，故立法法第</span><span lang="EN-US">72</span><span style="font-family: 宋体">条所规定的合法性审查已经包含了合宪性审查的内容，由此又引发了合宪性审查理论中的重大课题——“合宪性”与“合法性”的关系，这是一个非常复杂、令合宪性审查机构头疼之事。因为根据我国宪法确立的立法体制，全国人大及其常委会制定的法律都可以视为宪法文本的具体化，故法规、司法解释要违反宪法，首先应当违反将宪法相关条文具体化后的法律，故法规、司法解释的合法性审查是真实的、可靠的，在实践中会经常性地出现的，而法规、司法解释的合宪性审查必须以没有相应的法律将宪法条款予以具体化为前提，而这种立法上的判断是很难科学作出的，由此就产生了实践中的合宪性审查困境，即可以被视为合宪性审查对象的首先也是合法性审查的对象，当然这里的“法”是指全国人大及其常委会制定的法律。因此，在合法性审查理论和法律是宪法的具体化理论背景下，法规、司法解释直接与宪法不一致或相抵触的情形在立法技术上很难发生，除非能够对全国人大及其常委会制定的法律进行合宪性审查。但不巧的是，《备案审查工作办法》所确立的合宪性审查程序和机制并不包括对全国人大及其常委会自身制定的法律的合宪性审查。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">回过头来仔细研究“受权发布”与“授权发布”，倒是因为需要从源头上界定授权主体的来源，涉及宪法规定的中华人民共和国主席公布法律的宪法职权，故对“两会受权发布”的合宪性审查反而在法理上逻辑更加合理清晰。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">本书中的主要内容大都成稿于《备案审查工作办法》通过生效之前，故一些合宪性审查程序问题没有充分结合《备案审查工作办法》的规定作进一步细致深入的研究，为此，在本书成稿中，又结合《备案审查工作办法》的相关规定，作了进一步补充和完善，目的是为了避免出现知识性的错误。由于正文中受主题限制，无法详尽地阐述与合宪性审查相关的重要基础法理，故以“受权发布”和“授权发布”为引子，对合宪性审查机制的必要性和可行性作进一步补充说明，权且作为阅读本书、深入思考相关问题的向导。并以此证明在制度层面确实存在对合宪性审查的真实需求，这个问题是全面依法治国必须要加以解决的问题。为方便阅读，笔者还在每一个研究问题的正文前加上了内容提示和关键词，以辅助读者用最快速度了解相关段落的主要内容和思想，更好地理解和接受笔者的主要学术观点，或供参考，或供批评之用。</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span lang="EN-US">&nbsp;</span></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><b><span style="font-family: 宋体">【目录】</span></b></p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px">&nbsp;</p>
+<p align="center" class="MsoNormal" style="text-align: center; line-height: 150%; text-indent: 0px"><b><span style="font-family: 宋体"><img style="border-left-width: 0px; border-right-width: 0px; width: 500px; border-bottom-width: 0px; border-top-width: 0px" alt="" complete="complete" oldsrc="W020230811395191121233.png" src="./W020230811395191121233.png" /></span></b></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span lang="EN-US">&nbsp;</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><b><span style="font-family: 宋体">导语</span> </b><b><span style="font-family: 宋体">从“受权发布”与“授权发布”说开起</span></b></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span lang="EN-US">&nbsp;</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第一篇</span> <span style="font-family: 宋体">合宪性审查机制建设的四十年</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第二篇</span> <span style="font-family: 宋体">推进合宪性审查工作应注意的几个理论问题</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第三篇</span> <span style="font-family: 宋体">依宪治国是推进合宪性审查工作的制度目标</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第四篇</span> <span style="font-family: 宋体">加强合宪性审查工作的机制制度建设</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第五篇</span> <span style="font-family: 宋体">依宪立法原则与合宪性审查</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第六篇</span> <span style="font-family: 宋体">论宪法保留原则在合宪性审查中的应用</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第七篇</span> <span style="font-family: 宋体">论法律的合宪性审查机制</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第八篇</span> <span style="font-family: 宋体">论行政法规的合宪性审查机制</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第九篇</span> <span style="font-family: 宋体">军事法规合宪性审查的可行性问题研究</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十篇</span> <span style="font-family: 宋体">监察法规合宪性审查的可行性问题研究</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十一篇</span> <span style="font-family: 宋体">地方性法规合宪性审查中的几个法理问题探讨</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十二篇</span> <span style="font-family: 宋体">自治条例和单行条例合宪性审查的法理与分层</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十三篇</span> <span style="font-family: 宋体">论规章的合宪性审查机制</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十四篇</span> <span style="font-family: 宋体">论司法解释和司法判决的合宪性问题及其审查机制</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十五篇</span> <span style="font-family: 宋体">司法改革要关注法律审的合宪性问题</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十六篇</span> <span style="font-family: 宋体">加强对政策性文件合宪性审查的理论研究</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十七篇</span> <span style="font-family: 宋体">合宪性审查与合法性审查“制度分工”的几个尺度探寻</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十八篇</span> <span style="font-family: 宋体">宪法解释是推进合宪性审查工作重要的制度抓手</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span style="font-family: 宋体">第十九篇</span> <span style="font-family: 宋体">推进合宪性审查工作与中国未来法治建设的走向</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span lang="EN-US">&nbsp;</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><b><span style="font-family: 宋体">参考法律法规</span></b></p>
+<p align="left" class="MsoNormal" style="text-align: left"><b><span style="font-family: 宋体">参考文献</span></b></p>
+<p align="left" class="MsoNormal" style="text-align: left"><b><span style="font-family: 宋体">索引</span></b></p>
+<p align="left" class="MsoNormal" style="text-align: left"><span lang="EN-US">&nbsp;</span></p>
+<p align="left" class="MsoNormal" style="text-align: left"><b><span style="font-family: 宋体">后记</span></b></p>
+</div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部 -->
+    
+    <footer style="width:100%;background:#D2972F;">
+        <div class="footer_content clearfix">
+	    <!--<div class="footer_left fl">		
+                <img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824596761413798.png" width="100" height="100" class="footer_logo" />
+	        <img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220824596836973123.png" width="100" height="100" class="footer_logo" />
+	    </div>-->
+            <div class="footer_center fl">
+                <p><img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220825343401904093.png" class="footer_logo2" /></p>
+                <p>主办：中国社会科学院法学研究所、国际法研究所 </p>
+                <p>地址：北京市东城区沙滩北街15号 </p>
+            </div>
+            <div class="footer_right fr">
+                <ul class="fl">
+                    <li>法学所概况</li>
+                    <li>国际法所概况</li>
+                    <li>研究人员</li>
+                    <li>科研成果</li>
+                    <li>学术活动</li>
+                </ul>
+                <ul class="fl">
+                    <li>学术刊物</li>
+                    <li>法学教育</li>
+                    <li>图书馆</li>
+                    <li>工作平台</li>
+                </ul>
+                <div class="footer_code fl">
+                    <img src="http://iolaw.cssn.cn/zwsy/resource/2022/images/P020220825343453679385.png" style="width:100%;" />
+                    <p>[官方微信]</p>
+                </div>
+            </div>
+        </div>
+    </footer>    
+<div class="scholars" style="display:none;"><a href="/scholar/tp1/201908/t20190826_4961954.shtml">常纪文</a><a href="/scholar/sfs/201905/t20190505_4874336.shtml">陈　洁</a><a href="/scholar/xbwy/201905/t20190517_4897560.shtml">陈　甦</a><a href="/scholar/txo/201908/t20190824_4961669.shtml">陈春龙</a><a href="/scholar/fzzl/201908/t20190823_4961368.shtml">陈根发</a><a href="/scholar/fzs/201908/t20190823_4961651.shtml">陈国平</a><a href="/scholar/txo/201908/t20190824_4961670.shtml">陈明侠</a><a href="/scholar/fzzl/201908/t20190823_4961367.shtml">陈欣新</a><a href="/scholar/xfxzf/201908/t20190823_4961074.shtml">陈云生</a><a href="/scholar/txo/201906/t20190603_4912503.shtml">陈泽宪</a><a href="/scholar/sfs/201905/t20190517_4897588.shtml">崔勤之</a><a href="/scholar/gjrqf/201905/t20190521_4900217.shtml">戴瑞君</a><a href="/scholar/shf/201908/t20190823_4961351.shtml">邓　丽</a><a href="/scholar/xf/201908/t20190823_4961283.shtml">邓子滨</a><a href="/scholar/shf/201908/t20190823_4961350.shtml">董文勇</a><a href="/scholar/mfs/201908/t20190823_4961158.shtml">窦海阳</a><a href="/scholar/xf/201908/t20190823_4961274.shtml">樊　文</a><a href="/scholar/fxyj/201908/t20190823_4961654.shtml">冯　珏</a><a href="/scholar/qt/201908/t20190824_4961659.shtml">冯　军</a><a href="/scholar/txo/201908/t20190824_4961671.shtml">冯　锐</a><a href="/scholar/gjsf/201908/t20190822_4961001.shtml">傅攀峰</a><a href="/scholar/ryxb/201908/t20190823_4961642.shtml">高　恒</a><a href="/scholar/fzs/201908/t20190820_4959811.shtml">高汉成</a><a href="/scholar/fzs/201908/t20190822_4960996.shtml">高旭晨</a><a href="/scholar/zscq/201908/t20190823_4961237.shtml">管育鹰</a><a href="/scholar/ryxb/201908/t20190823_4961643.shtml">韩延龙</a><a href="/scholar/jjfs/201908/t20190820_4959781.shtml">郝俊淇</a><a href="/scholar/gjgf/201908/t20190820_4959284.shtml">郝鲁怡</a><a href="/scholar/gjjjf/201908/t20190823_4961024.shtml">何晶晶</a><a href="/scholar/gjfyj/201908/t20190823_4961033.shtml">何田田</a><a href="/scholar/fls/201908/t20190820_4959795.shtml">贺海仁</a><a href="/scholar/fzgq/201908/t20190823_4961364.shtml">胡昌明</a><a href="/scholar/fls/201908/t20190820_4959794.shtml">胡水君</a><a href="/scholar/xf/201908/t20190823_4961282.shtml">黄　芳</a><a href="/scholar/fzs/201911/t20191127_5049665.shtml">黄　海</a><a href="/scholar/gjjjf/201908/t20190823_4961022.shtml">黄　晋</a><a href="/scholar/tp1/201908/t20190826_4961972.shtml">冀祥德</a><a href="/scholar/fls/201908/t20190820_4959798.shtml">黄金荣</a><a href="/scholar/txo/201908/t20190824_4961672.shtml">黄　列</a><a href="/scholar/fzzl/201908/t20190823_4961371.shtml">贾　茵</a><a href="/scholar/huanqiu/202006/t20200619_5145301.shtml">贾　元</a><a href="/scholar/qt/201908/t20190824_4961661.shtml">蒋　隽</a><a href="/scholar/gjgf/201908/t20190819_4959272.shtml">蒋小红</a><a href="/scholar/xf/201908/t20190823_4961284.shtml">焦旭鹏</a><a href="/scholar/jjfs/201908/t20190820_4959287.shtml">金善明</a><a href="/scholar/ryxb/201908/t20190823_4961644.shtml">李步云</a><a href="/scholar/xfxzf/201908/t20190823_4961067.shtml">李洪雷</a><a href="/scholar/zscq/201908/t20190823_4961249.shtml">李菊丹</a><a href="/scholar/xbwy/201908/t20190820_4959796.shtml">李　林</a><a href="/scholar/zscq/201908/t20190823_4961238.shtml">李明德</a><a href="/scholar/fxyj/201908/t20190823_4961655.shtml">李　强</a><a href="/scholar/gjsf/201908/t20190822_4961000.shtml">李庆明</a><a href="/scholar/zscq/201908/t20190824_4961656.shtml">李顺德</a><a href="/scholar/gjfyj/201908/t20190823_4961030.shtml">李西霞</a><a href="/scholar/xfxzf/201908/t20190823_4961084.shtml">李　霞</a><a href="/scholar/gjgf/201908/t20190820_4959283.shtml">李　赞</a><a href="/scholar/fzzl/201908/t20190823_4961366.shtml">李　忠</a><a href="/scholar/fzgq/201908/t20190823_4961362.shtml">栗燕杰</a><a href="/scholar/xbwy/201908/t20190823_4961639.shtml">梁慧星</a><a href="/scholar/gjfkyc/201908/t20190819_4959264.shtml">廖　凡</a><a href="/scholar/qt/201908/t20190824_4961663.shtml">林　青</a><a href="/scholar/gjsf/201908/t20190822_4960999.shtml">林　欣</a><a href="/scholar/stf/201908/t20190823_4961358.shtml">林潇潇</a><a href="/scholar/wlxx/201908/t20190823_4961345.shtml">刘灿华</a><a href="/scholar/ssf/201908/t20190824_4961665.shtml">刘晨琦</a><a href="/scholar/txo/201908/t20190824_4961674.shtml">刘翠霄</a><a href="/scholar/xfxzf/201908/t20190823_4961081.shtml">刘海波</a><a href="/scholar/ryxb/201908/t20190823_4961645.shtml">刘海年</a><a href="/scholar/txo/201908/t20190824_4961673.shtml">刘　瀚</a><a href="/scholar/stf/201908/t20190823_4961355.shtml">刘洪岩</a><a href="/scholar/gjjjf/201908/t20190823_4961020.shtml">刘敬东</a><a href="/scholar/ryxb/201908/t20190823_4961646.shtml">刘楠来</a><a href="/scholar/xf/201908/t20190823_4961272.shtml">刘仁文</a><a href="/scholar/gjrqf/201906/t20190603_4912509.shtml">刘小妹</a><a href="/scholar/fzgq/201908/t20190823_4961363.shtml">刘雁鹏</a><a href="/scholar/txo/201908/t20190824_4961675.shtml">刘兆兴</a><a href="/scholar/xfxzf/202001/t20200116_5079333.shtml">刘志鑫</a><a href="/scholar/gjfyj/201908/t20190823_4961029.shtml">柳华文</a><a href="/scholar/xfxzf/201908/t20190823_4961086.shtml">卢　超</a><a href="/scholar/fzgq/201908/t20190823_4961359.shtml">吕艳滨</a><a href="/scholar/gjfyj/201908/t20190823_4961032.shtml">罗欢欣</a><a href="/scholar/gjgf/201910/t20191012_5013409.shtml">马金星</a><a href="/scholar/ssf/201908/t20190823_4961301.shtml">马　可</a><a href="/scholar/ryxb/201908/t20190823_4961647.shtml">马骧聪</a><a href="/scholar/gjjjf/201908/t20190823_4961026.shtml">毛晓飞</a><a href="/scholar/xfxzf/201908/t20190823_4961063.shtml">莫纪宏</a><a href="/scholar/ssf/201908/t20190823_4961300.shtml">祁建建</a><a href="/scholar/fzs/201908/t20190822_4960995.shtml">齐　钧</a><a href="/scholar/gjrqf/201906/t20190603_4912508.shtml">曲相霏</a><a href="/scholar/xf/201908/t20190823_4961275.shtml">屈学武</a><a href="/scholar/mfs/201908/t20190823_4961143.shtml">渠　涛</a><a href="/scholar/shf/201908/t20190823_4961348.shtml">冉　昊</a><a href="/scholar/fls/201908/t20190820_4959800.shtml">冉井富</a><a href="/scholar/gjfkyc/201908/t20190819_4959271.shtml">任宏达</a><a href="/scholar/qt/201908/t20190824_4961664.shtml">邵　波</a><a href="/scholar/gjsf/201908/t20190822_4960998.shtml">沈　涓</a><a href="/scholar/txt/201908/t20190824_4961678.shtml">沈卫利</a><a href="/scholar/txt/201908/t20190824_4961679.shtml">史探径</a><a href="/scholar/fzs/201908/t20190822_4960992.shtml">孙家红</a><a href="/scholar/gjjjf/202009/t20200911_5181993.shtml">孙南翔</a><a href="/scholar/gjrqf/201906/t20190603_4912507.shtml">孙世彦</a><a href="/scholar/xbwy/201908/t20190823_4961640.shtml">孙宪忠</a><a href="/scholar/txo/201908/t20190824_4961676.shtml">陶正华</a><a href="/scholar/huanqiu/201908/t20190824_4961688.shtml">田　夫</a><a href="/scholar/fzgq/201908/t20190823_4961360.shtml">田　禾</a><a href="/scholar/qt/201908/t20190824_4961666.shtml">田建设</a><a href="/scholar/gjgf/201908/t20190820_4959282.shtml">王翰灵</a><a href="/scholar/xbwy/201905/t20190517_4897507.shtml">王家福</a><a href="/scholar/txt/201908/t20190824_4961680.shtml">王可菊</a><a href="/scholar/tp2/201908/t20190826_4962001.shtml">王敏远</a><a href="/scholar/xbwy/201908/t20190823_4961641.shtml">王叔文</a><a href="/scholar/fzs/201908/t20190822_4960997.shtml">王帅一</a><a href="/scholar/shf/201908/t20190823_4961352.shtml">王天玉</a><a href="/scholar/fzgq/201908/t20190823_4961361.shtml">王小梅</a><a href="/scholar/jjfs/201908/t20190820_4959286.shtml">王晓晔</a><a href="/scholar/huanqiu/201908/t20190824_4961689.shtml">王雪梅</a><a href="/scholar/fls/201908/t20190820_4959801.shtml">王耀海</a><a href="/scholar/fzgq/201908/t20190823_4961365.shtml">王祎茗</a><a href="/scholar/txt/201908/t20190824_4961681.shtml">文伯屏</a><a href="/scholar/ryxb/201908/t20190823_4961648.shtml">吴建璠</a><a href="/scholar/wlxx/201908/t20190823_4961339.shtml">吴　峻</a><a href="/scholar/xfxzf/201908/t20190823_4961077.shtml">吴新平</a><a href="/scholar/txo/201908/t20190824_4961703.shtml">吴玉章</a><a href="/scholar/jjfs/201906/t20190604_4912531.shtml">席月民</a><a href="/scholar/sfs/201905/t20190517_4897586.shtml">夏小雄</a><a href="/scholar/jjfs/201908/t20190820_4959780.shtml">肖　京</a><a href="/scholar/txo/201908/t20190824_4961677.shtml">肖贤富</a><a href="/scholar/fxyj/201908/t20190823_4961653.shtml">谢海定</a><a href="/scholar/mfs/201908/t20190823_4961138.shtml">谢鸿飞</a><a href="/scholar/ryxb/201908/t20190823_4961649.shtml">谢怀栻</a><a href="/scholar/shf/201908/t20190823_4961349.shtml">谢增毅</a><a href="/scholar/fzzl/201908/t20190823_4961369.shtml">熊秋红</a><a href="/scholar/wlxx/201908/t20190823_4961343.shtml">徐　斌</a><a href="/scholar/txt/201908/t20190824_4961682.shtml">徐　炳</a><a href="/scholar/ssf/201908/t20190823_4961295.shtml">徐　卉</a><a href="/scholar/qt/202006/t20200612_5142682.shtml">徐　持</a><a href="/scholar/fzs/201908/t20190820_4959814.shtml">徐立志</a><a href="/scholar/shf/201908/t20190823_4961347.shtml">薛宁兰</a><a href="/scholar/qt/201908/t20190824_4961667.shtml">杨力军</a><a href="/scholar/zscq/201908/t20190823_4961246.shtml">杨延超</a><a href="/scholar/ryxb/201908/t20190823_4961650.shtml">杨一凡</a><a href="/scholar/huanqiu/201908/t20190824_4961687.shtml">姚　佳</a><a href="/scholar/fzzl/201908/t20190823_4961370.shtml">叶远涛</a><a href="/scholar/ssf/201908/t20190823_4961299.shtml">叶自强</a><a href="/scholar/fzs/201908/t20190822_4960994.shtml">尤韶华</a><a href="/scholar/txt/201908/t20190824_4961683.shtml">于　敏</a><a href="/scholar/huanqiu/202011/t20201106_5212502.shtml">余佳楠</a><a href="/scholar/stf/201908/t20190823_4961357.shtml">岳小花</a><a href="/scholar/wlxx/201908/t20190823_4961069.shtml">翟国强</a><a href="/scholar/fxyj/201908/t20190823_4961652.shtml">张广兴</a><a href="/scholar/zscq/202111/t20211126_5377308.shtml">张浩然</a><a href="/scholar/fxyj/201908/t20190824_4961706.shtml">张　辉</a><a href="/scholar/zscq/201908/t20190823_4961253.shtml">张　鹏</a><a href="/scholar/xfxzf/201908/t20190823_4961072.shtml">张庆福</a><a href="/scholar/xf/201908/t20190823_4961278.shtml">张绍彦</a><a href="/scholar/txt/201908/t20190824_4961684.shtml">张少瑜</a><a href="/scholar/fzs/201908/t20190820_4959810.shtml">张　生</a><a href="/scholar/gjgf/201908/t20190820_4959285.shtml">张卫华</a><a href="/scholar/gjjjf/201908/t20190823_4961023.shtml">张文广</a><a href="/scholar/zscq/201908/t20190824_4961657.shtml">张玉瑞</a><a href="/scholar/xf/201908/t20190823_4961285.shtml">张志钢</a><a href="/scholar/stf/201908/t20190823_4961356.shtml">张忠利</a><a href="/scholar/gjrqf/201906/t20190603_4912506.shtml">赵建文</a><a href="/scholar/qt/201908/t20190824_4961668.shtml">赵九燕</a><a href="/scholar/sfs/201905/t20190513_4885730.shtml">赵　磊</a><a href="/scholar/txt/201908/t20190824_4961685.shtml">赵维田</a><a href="/scholar/xbwy/201908/t20190824_4961708.shtml">郑成思</a><a href="/scholar/huanqiu/201908/t20190824_4961686.shtml">支振锋</a><a href="/scholar/gjrqf/201906/t20190604_4912518.shtml">钟瑞华</a><a href="/scholar/wlxx/201908/t20190823_4961342.shtml">周　辉</a><a href="/scholar/zscq/201908/t20190823_4961243.shtml">周　林</a><a href="/scholar/xfxzf/201908/t20190823_4961061.shtml">周汉华</a><a href="/scholar/mfs/201908/t20190823_4961142.shtml">朱广新</a><a href="/scholar/gjgf/201908/t20190824_4961658.shtml">朱晓青</a><a href="/scholar/xfxzf/202011/t20201123_5220390.shtml">朱学磊</a><a href="/scholar/sfs/201905/t20190517_4897511.shtml">邹海林</a><a href="/scholar/mfs/202101/t20210115_5245192.shtml">蔡　睿</a><a href="/scholar/gjfyj/202101/t20210115_5245213.shtml">谭观福</a><a href="/scholar/ssf/202102/t20210207_5310852.shtml">董　坤</a><a href="/scholar/fxyj/202102/t20210218_5312091.shtml">王　怡</a><a href="/scholar/fls/202104/t20210412_5325834.shtml">李广德</a><a href="/scholar/sfs/202111/t20211104_5371734.shtml">唐林垚</a><a href="/scholar/xfxzf/202207/t20220723_5419231.shtml">戴杕</a><a href="/scholar/gangwei/xingsu/202105/t20210526_5336267.shtml">程　捷</a><a href="/scholar/gangwei/guojifa/202106/t20210603_5338172.shtml">陈晓华</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338143.shtml">陈　鑫</a><a href="/scholar/gangwei/xingsu/202105/t20210518_5334353.shtml">方　军</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338108.shtml">伏创宇</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338146.shtml">龚赛红</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338148.shtml">关淑芳</a><a href="/scholar/gangwei/shangjing/202106/t20210603_5338222.shtml">韩　伟</a><a href="/scholar/gangwei/xingsu/202105/t20210518_5334335.shtml">何庆仁</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338101.shtml">黄钰洲</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338123.shtml">江　辉</a><a href="/scholar/gangwei/xingsu/202105/t20210526_5336292.shtml">姜丽萍</a><a href="/scholar/gangwei/xingsu/202105/t20210518_5334343.shtml">姜文秀</a><a href="/scholar/gangwei/xingsu/202106/t20210601_5337519.shtml">孔金萍</a><a href="/scholar/gangwei/xingsu/202105/t20210526_5336295.shtml">李　静</a><a href="/scholar/gangwei/xingsu/202105/t20210518_5334204.shtml">李卫红</a><a href="/scholar/gangwei/guojifa/202106/t20210603_5338210.shtml">李晓玲</a><a href="/scholar/gangwei/shangjing/202106/t20210604_5338350.shtml">梁　鹏</a><a href="/scholar/gangwei/guojifa/202106/t20210603_5338216.shtml">梁文琼</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338106.shtml">柳建龙</a><a href="/scholar/gangwei/shangjing/202106/t20210604_5338368.shtml">刘晓春</a><a href="/scholar/gangwei/xingsu/202105/t20210526_5336261.shtml">门金玲</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338103.shtml">苗鸣宇</a><a href="/scholar/gangwei/guojifa/202106/t20210603_5338170.shtml">秦一禾</a><a href="/scholar/gangwei/xingsu/202105/t20210526_5336252.shtml">孙　远</a><a href="/scholar/gangwei/shangjing/202106/t20210603_5338226.shtml">谭　袁</a><a href="/scholar/gangwei/shangjing/202106/t20210603_5338219.shtml">汤洁茵</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338099.shtml">王莉君</a><a href="/scholar/gangwei/xingsu/202105/t20210518_5334356.shtml">王新清</a><a href="/scholar/gangwei/guojifa/202106/t20210603_5338184.shtml">王　艺</a><a href="/scholar/gangwei/guojifa/202106/t20210603_5338174.shtml">吴　用</a><a href="/scholar/gangwei/shangjing/202106/t20210604_5338359.shtml">于　晶</a><a href="/scholar/gangwei/xianmin/202106/t20210603_5338147.shtml">张初霞</a><a href="/scholar/gangwei/guojifa/202106/t20210603_5338178.shtml">张美榕</a><a href="/scholar/gangwei/shangjing/202106/t20210604_5338365.shtml">张小勇</a><a href="/scholar/gangwei/guojifa/202106/t20210603_5338208.shtml">张新娟</a><a href="/scholar/gangwei/shangjing/202106/t20210604_5338354.shtml">周宝妹</a><a href="/scholar/wlxx/202201/t20220110_5387702.shtml">徐玖玖</a><a href="/scholar/mfs/202306/t20230614_5645072.shtml">萧　鑫</a><a href="/scholar/xf/202309/t20230914_5685607.shtml">邹玉祥</a><a href="/scholar/qt/202312/t20231212_5705584.shtml">毕小青</a><a href="/scholar/sfs/202403/t20240315_5738582.shtml">王　琦</a><a href="/scholar/gjjjf/202207/t20220725_5419406.shtml">王惠茹</a></div>
+</body>
+</html>

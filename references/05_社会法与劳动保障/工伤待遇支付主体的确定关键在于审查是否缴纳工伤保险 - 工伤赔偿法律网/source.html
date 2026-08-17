@@ -1,0 +1,608 @@
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工伤待遇支付主体的确定关键在于审查是否缴纳工伤保险 - 工伤赔偿法律网</title>
+<meta name="keywords" content="工伤,待遇,支付,主体,的,确定,关键,在于,审查,是否,缴纳,工伤保险">
+<meta name="description" content="工伤待遇支付主体的确定关键在于审查是否缴纳工伤保险——湖南浩宇建设有限公司诉湖南省常德市工伤保险服务中心工伤保险行政给付案【案号】（2020）湘07行终39号【裁判要旨】人民法院审查判定应由用人单位还是工伤保险基金支付职工的工伤保险待遇，关">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link rel="stylesheet" type="text/css" href="/css/list.css">
+<link rel="stylesheet" href="/css/swiper-bundle.min.css" />
+<script src="/js/slide.js"></script>
+</head>
+<body>
+<div class="top">
+	<div class="date" id="current-time"></div>
+</div>
+<div class="header">
+	<div class="head">
+		<div class="logo"><img src="/image/logo_03.jpg"></div>
+	</div>
+</div>
+<div class="menunav">
+	<div class="nav">
+		<ul>
+			<li class="home"><a href="/">首页</a></li>
+			<li><a href="/gssj">工伤数据</a></li>
+			<li><a href="/gsal">工伤案例</a></li>
+			<li><a href="/gsfg">工伤法规</a></li>
+			<li><a href="/gsgd">工伤观点</a></li>
+			<li><a href="/gsls">工伤律师</a></li>
+			
+            <li><a href="/guestbook">留言板</a></li>
+            <li><a href="https://7.ft22.com/" target="_blank">计算器</a></li>
+            <div class="sousuo">
+			<form method="get" action="/zwplus/seachview.php">
+				<input name="zw_seachkey" type="text" class="qinput" value=""  onfocus="if(this.value===''){this.value=''}" onblur="if(this.value===''){this.value=''}">
+				<input type="submit" class="qbtn" value=".">
+			</form>
+			</div>
+		</ul>
+	</div>
+</div>
+<nav class="navbar">
+	<div class="nav-container">
+		<a href="/" class="logo">
+			<i class="fas fa-rocket"></i>
+			<span>工伤赔偿法律网</span>
+		</a>
+         <div class="sousuo">
+			<form method="get" action="/zwplus/seachview.php">
+				<input name="zw_seachkey" type="text" class="qinput" value=""  onfocus="if(this.value===''){this.value=''}" onblur="if(this.value===''){this.value=''}">
+				<input type="submit" class="qbtn" value=" ">
+			</form>
+		</div>
+		<div class="menu-toggle">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<button class="close-btn">
+			<i class="fas fa-times"></i>
+		</button>
+	</div>
+</nav>
+<div class="nav-menu">
+	<ul class="nav-list">
+		<li class="nav-item">
+			<a href="/" class="nav-link">
+				<i class="fas fa-home"></i>
+				<span>首页</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gssj" class="nav-link">
+				<i class="fas fa-compass"></i>
+				<span>工伤数据</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gsal" class="nav-link">
+				<i class="fas fa-bell"></i>
+				<span>工伤案例</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gsfg" class="nav-link">
+				<i class="fas fa-envelope"></i>
+				<span>工伤法规</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gsgd" class="nav-link">
+				<i class="fas fa-user"></i>
+				<span>工伤观点</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/gsls" class="nav-link">
+				<i class="fas fa-cog"></i>
+				<span>工伤律师</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="/guestbook" class="nav-link">
+				<i class="fas fa-question-circle"></i>
+				<span>留言板</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="https://7.ft22.com/" class="nav-link">
+				<i class="fas fa-question-circle"></i>
+				<span>计算器</span>
+			</a>
+		</li>
+	</ul>
+</div>
+<div class="overlay"></div>
+<script>
+	function updateTime() {
+		const now = new Date();
+		const year = now.getFullYear();
+		const month = now.getMonth() + 1;
+		const day = now.getDate();
+		const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+		const weekday = weekdays[now.getDay()];
+		// 获取时间
+		let hours = now.getHours();
+		const minutes = now.getMinutes().toString().padStart(2, '0');
+		const seconds = now.getSeconds().toString().padStart(2, '0');
+		// 判断上午/下午/晚上
+		let timeOfDay;
+		if (hours >= 5 && hours < 11) {
+			timeOfDay = "上午好";
+		} else if (hours >= 11 && hours < 13) {
+			timeOfDay = "中午好";
+		} else if (hours >= 13 && hours < 18) {
+			timeOfDay = "下午好";
+		} else {
+			timeOfDay = "晚上好";
+		}
+		const timeString = `${year}年${month}月${day}日 ${weekday} ${timeOfDay}！`;
+		document.getElementById('current-time').textContent = timeString;
+	}
+	updateTime();
+	setInterval(updateTime, 1000);
+</script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const menuToggle = document.querySelector('.menu-toggle');
+		const navMenu = document.querySelector('.nav-menu');
+		const closeBtn = document.querySelector('.close-btn');
+		const overlay = document.querySelector('.overlay');
+		menuToggle.addEventListener('click', function() {
+			navMenu.classList.add('active');
+			overlay.classList.add('active');
+			menuToggle.classList.add('active');
+		});
+		function closeMenu() {
+			navMenu.classList.remove('active');
+			overlay.classList.remove('active');
+			menuToggle.classList.remove('active');
+		}
+		closeBtn.addEventListener('click', closeMenu);
+		overlay.addEventListener('click', closeMenu);
+		const navLinks = document.querySelectorAll('.nav-link');
+		navLinks.forEach(link => {
+			link.addEventListener('click', closeMenu);
+		});
+	});
+</script>
+<div class="gonggao"></div><div class="main">
+	<div class="list_art">
+		<div class="listleft">
+			<div class="pos">所在位置：<a href='/'>首页</a>&nbsp; > &nbsp;<a href='/gsal'>工伤案例</a>&nbsp; > &nbsp;<a href='/gsal/dianxinganli'>典型案例</a>&nbsp; > &nbsp;正文</div>
+				<div class="article">
+					<div class="nrtitle">
+						<h3>工伤待遇支付主体的确定关键在于审查是否缴纳工伤保险</h3>
+						<p>
+							　
+							来源：裁判文书网　
+							发布时间：2026-02-27　
+							浏览：<script src="/zwplus/clicknum.php?aid=12902" type='text/javascript' language="javascript"></script>次
+						</p>
+					</div>
+					<div class="art_cont">
+						<p>
+	工伤待遇支付主体的确定关键在于审查是否缴纳工伤保险——湖南浩宇建设有限公司诉湖南省常德市工伤保险服务中心工伤保险行政给付案
+</p>
+<p>
+	【案号】（2020）湘07行终39号
+</p>
+<p>
+	【裁判要旨】人民法院审查判定应由用人单位还是工伤保险基金支付职工的工伤保险待遇，关键在于审查用人单位是否依法为职工缴纳工伤保险费。
+</p>
+<p>
+	<br />
+</p>
+<p style="text-align:center;">
+	湖南省常德市中级人民法院
+</p>
+<p style="text-align:center;">
+	行 政 判 决 书
+</p>
+<p style="text-align:right;">
+	(2020)湘07行终39号
+</p>
+<p style="text-align:right;">
+	<br />
+</p>
+<p>
+	上诉人（原审被告）常德市工伤保险服务中心，住所地湖南省常德市武陵区武陵大道北段。
+</p>
+<p>
+	法定代表人胡育禾，该中心主任。
+</p>
+<p>
+	委托代理人孙秋材，该中心工作人员，代理权限为特别授权代理。
+</p>
+<p>
+	委托代理人孙**，湖南中思律师事务所律师，代理权限为一般授权代理。
+</p>
+<p>
+	被上诉人（原审原告）湖南浩宇建设有限公司，住所地湖南省常德市鼎城区玉霞街道迎宾社区小圆盘路。
+</p>
+<p>
+	法定代表人欧克兵，该公司经理。
+</p>
+<p>
+	委托代理人雷彪，湖南博集律师事务所律师，代理权限为特别授权代理。
+</p>
+<p>
+	原审第三人邱以德，男，1950年9月5日出生，土家族，住湖南省常德市鼎城区。
+</p>
+<p>
+	原审第三人文香英，女，1954年1月10日出生，土家族，住湖南省常德市鼎城区。
+</p>
+<p>
+	原审第三人邱塬，女，2002年11月24日出生，土家族，住湖南省常德市鼎城区。
+</p>
+<p>
+	原审第三人邱峰，女，2009年2月2日出生，土家族，住湖南省常德市鼎城区。
+</p>
+<p>
+	原审第三人暨邱塬、邱峰的法定代理人赵光琼，女，1976年9月2日出生，土家族，住湖南省常德市鼎城区，系邱塬、邱峰二人母亲。
+</p>
+<p>
+	五位原审第三人共同委托代理人吴军，湖南人和人（常德）律师事务所律师，代理权限为特别授权代理。
+</p>
+<p>
+	上诉人常德市工伤保险服务中心（以下简称常德市工保中心）因与被上诉人湖南浩宇建设有限公司（以下简称浩宇公司）、原审第三人赵光琼、邱塬、邱以德、文香英、邱峰等五人（以下简称赵光琼等人）社会保障行政给付一案，不服湖南省常德市鼎城区人民法院（2019）湘0703行初93号行政判决，向本院提起上诉。本院受理后依法组成合议庭进行了审理。本案现已审理终结。
+</p>
+<p>
+	一审判决认定，浩宇公司承建尼古桥泵站和生态滤池建设工程—顶管工程，于2017年2月21日为顶管工程项目缴纳了工伤保险费。浩宇公司三次申请对该项目工伤保险参保延期，经常德市工伤保险处批准，顶管工程项目工伤保险参保期延长至2019年2月28日。2017年11月14日，赵光琼等人亲属邱某某开始在顶管工程项目工地务工。12月2日，邱某某在前往该工程工地上班途中，于当日6时45分左右发生交通事故，经抢救无效死亡，交警部门认定邱某某在该交通事故中负同等责任。常德市人力资源和社会保障局（以下简称常德市人社局）于2018年11月13日作出常人社工伤认字[2018]0-1101号认定工伤决定书，将邱某某因交通事故死亡认定为工亡。浩宇公司于2018年11月23日对邱某某申报工伤保险参保人员登记，常德市工伤保险处向浩宇公司出具工伤保险参保人员确认通知书，确认邱某某系顶管工程新增人员。同时，浩宇公司对上述认定工伤决定书不服，向常德市人民政府申请行政复议，常德市人民政府于2019年2月19日作出常政复决字[2019]20号《行政复议决定书》，维持常德市人社局作出的《认定工伤决定书》。2019年3月15日，浩宇公司通过邮寄方式向常德市工伤保险处提交《关于给邱某某同志办理参加工伤保险人员登记手续及享受工伤保险待遇的请示》，要求为邱某某办理参加工伤保险人员登记手续、办理享受工伤保险待遇的所有相关手续并予以支付工伤保险待遇。常德市工伤保险处未予以书面回复。
+</p>
+<p>
+	另查明，常德市人社局工伤保险处于2019年3月变更为常德市工伤保险服务中心。
+</p>
+<p>
+	一审法院认为，根据《中华人民共和国社会保险法》（以下简称《社会保险法》）第八条、《工伤保险条例》第五条规定，原常德市工伤保险处作为常德市社会保险经办机构，具有支付社会保险待遇的法定职责，常德市工伤保险处变更为常德市工保中心后，相应保险待遇支付职能随之转移，常德市工保中心是本案适格被告。本案争议焦点为：1.邱某某的工亡待遇由用人单位支付还是工伤保险部门支付？2.如邱某某的工亡待遇应由工伤保险部门支付，浩宇公司是否按照工伤保险待遇的相关规定已经提出申请？
+</p>
+<p>
+	关于焦点1，根据《社会保险法》第三十八条规定，劳动者因工死亡的，其近亲属依法应当享受的工伤保险待遇丧葬补助金、供养亲属抚恤金和因工死亡补助金，按规定从工伤保险基金中支付。同时，根据《社会保险法》第四十一条规定，只有在用人单位未缴纳工伤保险费的情况下，工伤保险待遇才由用人单位支付。本案中，浩宇公司为案涉顶管工程缴纳了工伤保险费，申请工伤保险延期至2019年2月底亦得到常德市工保中心的批准，顶管工程的工伤保险尚在保险期限内。邱某某作为在顶管工程工地务工的劳动者，其工伤保险权益应被包含在该工程项目的工伤保险之内，虽浩宇公司未及时将邱某某登入该项目的工伤保险管理名册，该问题系浩宇公司管理不规范，属于程序上的瑕疵，该瑕疵不能作为常德市工保中心拒付邱某某近亲属应当享受的工伤保险待遇的理由或导致由浩宇公司承担支付工伤保险待遇的后果。同时，浩宇公司在邱某某被认定为工亡后，及时向原常德市工伤保险处申报补登，原常德市工伤保险处接受了申报并通过书面方式告知邱某某已作为新增人员登记在顶管工程项目，原常德市工伤保险处将已死亡的人员予以登记系其本身的工作疏漏，不利后果不应由浩宇公司来承担。且根据《湖南省实施&lt;工伤保险条例&gt;办法》第二十八条规定，申报工伤保险待遇应提交工伤认定证明，而邱某某的事故是否属于工亡的争议至2019年2月19日常德市人民政府作出复议决定后，才最终确定，邱某某工亡申报相关待遇的条件也才具备，浩宇公司据此为邱某某家属申报享受工伤保险待遇也符合法律规定。邱某某发生工亡事故时，涉案工程项目的工伤保险费已经缴纳，与该工程项目有关的劳动者的工伤保险关系已经潜在建立，浩宇公司为邱某某家属申请享受工伤保险待遇时，顶管工程项目仍在工伤保险时段内，常德市工保中心应当对顶管工程项目建设范围及工伤保险时段内的工伤事故承担支付工伤保险待遇的责任。常德市工保中心关于浩宇公司未办理邱某某的工伤保险参保登记手续、邱某某不属于工伤保险的参保人员的辩称主张，根据《社会保险法》第三十三条规定，缴纳工伤保险费系用人单位义务。浩宇公司履行了缴纳工伤保险费的义务，就整个顶管工程项目统一缴纳了工伤保险费，根据人社部发（2014）103号《关于进一步做好建筑业工伤保险工作的意见》第一条、第四条的规定，浩宇公司为顶管工程项目参加的工伤保险依法覆盖该项目上的所有职工，邱某某作为该项目工地的劳动者，自进入该工地工作即为该项目的工伤保险所覆盖，对常德市工保中心该抗辩意见，不予采纳。常德市工保中心提交的证据不足以证实案涉工程违法转包、分包事实，故对该局称关于涉案工程涉及违法转包、分包的情形、邱某某工亡的工伤保险待遇应由浩宇公司承担的辩称主张，不予采纳。
+</p>
+<p>
+	对于焦点2，《社会保险法》及《工伤保险条例》均未对申请享受工伤保险待遇应提交哪些资料作出明确规定，《湖南省实施&lt;工伤保险条例&gt;办法》第二十八条规定了用人单位申报办理工伤保险待遇需持职工的工伤认定证明和死者亲属资料，浩宇公司向常德市工保中心提交了请示，请示内容明确提出了支付邱某某工亡的工伤保险待遇的请求，应视为已提出申请。如常德市工保中心对此有特别的格式要求，应明确告知浩宇公司，该中心未提交证据证实其履行了告知义务前提下，以浩宇公司未按标准格式提出申请对其要求不予处理不当。常德市工保中心关于浩宇公司未提出正式的工亡待遇申请直接向法院起诉不符合法律规定的辩称意见，不予支持。
+</p>
+<p>
+	综上，根据《中华人民共和国行政诉讼法》第七十二条之规定，判决责令常德市工保中心于本判决生效之日起六十日内履行核发邱某某工亡的工伤保险待遇的法定职责。案件受理费50元，由常德市工保中心负担。
+</p>
+<p>
+	上诉人常德市工保中心不服，向本院提起上诉，请求：撤销一审判决，改判驳回浩宇公司的全部诉讼请求。理由如下：第一，一审判决认为浩宇公司未将邱某某登入项目工伤保险管理名册属于程序瑕疵、不能成为拒付工伤保险待遇的理由的观点错误。1.根据《社会保险法》、《工伤保险条例》、《湖南省实施〈工伤保险条例〉办法》等规定，用人单位为职工参加工伤保险，并缴纳工伤保险费，是职工享受工伤保险待遇的前提条件。人社部的文件规定，建设工程务工人员工伤保险实行动态实名制管理，要求及时办理施工人员的参保登记异动手续不是程序性的规定。2.浩宇公司既未在事故发生前及时办理邱某某的参保人员登记手续或新增手续，也未在事故发生后10个工作日内办理补登记手续，故邱某某的工伤保险关系并未生效，其工伤保险待遇应由其单位浩宇公司负担。第二，一审判决认定浩宇公司已经为邱某某办理参保人员的新增人员登记手续错误。邱某某于2017年12月2日工亡，2018年11月23日浩宇公司才办理邱某某的工伤保险参保人员新增手续，没有在10个工作日内办理补登记，不符合规定。第三，一审判决认为，案涉工程不存在违法转包、分包，进而对邱某某的工伤保险待遇应由浩宇公司承担的主张不予支持，是错误的。1.浩宇公司提交的《情况说明》中承认将案涉工程全部发包给自然人张立斌；生效的常政复决字[2019]20号行政复议决定书查明的事实也确认浩宇公司将涉案工程违法转包给无施工主体资格的张立斌的事实。2.根据《最高人民法院关于审理工伤保险行政案件若干问题的规定》第三条第一款第四项及第二款的规定，存在非法转包的情况下，社会保险经办机构支付工伤保险待遇后享有追偿权。故此情形下，工伤保险经办机构仅承担先行支付的责任，先行支付的前提条件是用人单位不支付或者第三人不支付。本案中，只有浩宇公司不能支付，邱某某家属提起先行支付的情况下，常德市工保中心才作为先行支付的主体承担先行支付的责任。
+</p>
+<p>
+	被上诉人浩宇公司答辩请求驳回上诉，维持原判。主要理由如下：一、“动态实名制”管理不影响工伤保险待遇的获得，仅影响是否为工伤的认定。常德市工保中心认为浩宇公司没有为邱某某办理工伤保险实名登记，所以工伤保险基金无需支付其工伤保险待遇的主张不能成立。二、涉案工程不存在非法转包、违法分包的情形，即使存在此情形，也不能成为常德市工保中心拒付工伤保险待遇的理由。
+</p>
+<p>
+	原审第三人赵光琼等人未向本院提交书面陈述意见。
+</p>
+<p>
+	当事人一审提交并经质证的证据已随案移送本院，经审查，一审判决采信的证据可以作为认定本案事实的依据。一审判决认定的事实本院予以确认。
+</p>
+<p>
+	本院认为，《社会保险法》第三十六条第一款规定，职工因工作原因受到事故伤害或者患职业病，且经工伤认定的，享受工伤保险待遇。本案中，赵光琼等人家属邱某某在上班途中发生交通事故死亡，已被常德市人社局认定为工亡，用人单位为浩宇公司，根据上述规定，邱某某应享受工伤保险待遇。
+</p>
+<p>
+	根据《工伤保险条例》第二条第一款规定，浩宇公司作为用人单位，应当依照该条例的规定为其全部职工缴纳工伤保险费。该条例第十条第三款规定，对难以按照工资总额缴纳工伤保险费的行业，其缴纳工伤保险费的具体方式，由国务院社会保险行政部门规定。人力资源社会保障部、住房城乡建设部、安全监管总局、全国总工会《关于进一步做好建筑业工伤保险工作的意见》（人社部发[2014]103号）规定，对不能按用人单位参保、建筑项目使用的建筑业职工特别是农民工，按项目参加工伤保险。在项目开工前由施工总承包单位一次性代缴本项目工伤保险费，覆盖项目使用的所有职工。施工总承包单位应当在工程项目施工期内督促专业承包单位、劳务分包单位建立职工花名册等台账，对项目施工期内全部施工人员实行动态实名制管理。常德市人力资源和社会保障局、常德市住房和城乡建设局《关于进一步做好建筑施工企业务工人员参加工伤保险工作的通知》（常人社发[2012]30号）和《关于进一步加强我市建筑施工企业参加工伤保险工作的通知》（常人社发[2015]33号）进一步明确，建筑施工企业务工人员参加工伤保险实行动态实名制管理。建筑施工企业应在建设工程项目开工之日起10日内申报务工人员名册。施工人员发生变化时，应当自变化之日起30日内办理异动手续；已参加工伤保险的建设工程临时增加或调用且尚未办理参加工伤保险人员登记手续的，应自事故发生后10日内办理人员登记手续，超过规定期限的不予办理。结合本案，浩宇公司为承建的顶管工程项目办理了工伤保险，缴纳了工伤保险费，提交了参保人员名单，但同时应按上述规定对项目施工期内全部施工人员实行动态实名制管理，依规定按时申报办理施工人员参保登记。根据查明的情况，邱某某于2017年11月14日开始在案涉工程项目工地务工，2017年12月2日发生交通事故死亡，期间浩宇公司未按规定将邱某某申报参保人员登记，建立工伤保险关系，直至2018年11月23日，在常德市人社局作出工伤认定后，浩宇公司才对邱某某申报参保人员登记，浩宇公司将已死亡人员作为新增参保人员申报参保登记，不符合上述规定。因此，不能认定邱某某为该项目的合法参保人员，常德市工保中心不应承担支付工伤保险金的责任。浩宇公司未依照规定为邱某某申请办理参保人员登记，根据《社会保险法》第四十一条第一款的规定，应由浩宇公司支付邱某某的工伤保险待遇。一审法院认为浩宇公司未及时将邱某某登入项目保险管理名册是公司管理不规范，属程序瑕疵，不能作为常德市工保中心拒付工伤保险待遇的理由或导致由浩宇公司承担支付待遇的后果，该认定缺乏法律依据，不予支持。
+</p>
+<p>
+	另外，需要指出，根据上述规定，超期申请办理参保人员登记手续的，应不予办理，但常德市工保中心却为邱某某出具了参保人员登记，违反相关规定，应予纠正。参保单位浩宇公司申请支付工伤保险待遇，常德市工保中心应将相关情况回复告知用人单位及工伤职工家属，而该中心未予回复，存在不当。
+</p>
+<p>
+	综上所述，浩宇公司请求常德市工保中心支付邱某某工亡的工伤保险待遇没有法律依据，应予驳回。常德市工保中心提出的上诉理由成立，本院予以支持。一审判决适用法律不当，应予撤销。据此，依照《中华人民共和国行政诉讼法》第六十九条、第八十九条第一款第二项的规定，判决如下：
+</p>
+<p>
+	一、撤销湖南省常德市鼎城区人民法院（2019）湘0703行初93号行政判决；
+</p>
+<p>
+	二、驳回原审原告湖南浩宇建设有限公司的诉讼请求。
+</p>
+<p>
+	本案一、二审案件受理费各50元，共计100元，由被上诉人湖南浩宇建设有限公司负担。
+</p>
+<p>
+	本判决为终审判决。
+</p>
+<p style="text-align:right;">
+	审 判 长&emsp;王继春
+</p>
+<p style="text-align:right;">
+	审 判 员&emsp;唐招军
+</p>
+<p style="text-align:right;">
+	审 判 员&emsp;刘应典
+</p>
+<p style="text-align:right;">
+	二〇二〇年四月七日
+</p>
+<p style="text-align:right;">
+	法官助理&emsp;曾丰琪
+</p>
+<p style="text-align:right;">
+	书 记 员&emsp;杜&emsp;玲
+</p>
+<p>
+	附：相关法律法规
+</p>
+<p>
+	一、《中华人民共和国行政诉讼法》
+</p>
+<p>
+	第六十九条行政行为证据确凿，适用法律、法规正确，符合法定程序的，或者原告申请被告履行法定职责或者给付义务理由不成立的，人民法院判决驳回原告的诉讼请求。
+</p>
+<p>
+	第八十九条人民法院审理上诉案件，按照下列情形，分别处理：
+</p>
+<p>
+	（一）原判决、裁定认定事实清楚，适用法律、法规正确的，判决或者裁定驳回上诉，维持原判决、裁定；
+</p>
+<p>
+	（二）原判决、裁定认定事实错误或者适用法律、法规错误的，依法改判、撤销或者变更；
+</p>
+<p>
+	（三）原判决认定基本事实不清、证据不足的，发回原审人民法院重审，或者查清事实后改判；
+</p>
+<p>
+	（四）原判决遗漏当事人或者违法缺席判决等严重违反法定程序的，裁定撤销原判决，发回原审人民法院重审。
+</p>
+<p>
+	原审人民法院对发回重审的案件作出判决后，当事人提起上诉的，第二审人民法院不得再次发回重审。
+</p>
+<p>
+	人民法院审理上诉案件，需要改变原审判决的，应当同时对被诉行政行为作出判决。
+</p>
+<p>
+	二、《中华人民共和国社会保险法》
+</p>
+<p>
+	第四十一条职工所在用人单位未依法缴纳工伤保险费，发生工伤事故的，由用人单位支付工伤保险待遇。用人单位不支付的，从工伤保险基金中先行支付。
+</p>
+<p>
+	从工伤保险基金中先行支付的工伤保险待遇应当由用人单位偿还。用人单位不偿还的，社会保险经办机构可以依照本法第六十三条的规定追偿。
+</p>
+<p>
+	<br />
+</p>					</div>
+					<div class="bdsharebuttonbox" style="margin-bottom:-30px;"><a href="#" class="bds_more" data-cmd="more">分享到：</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a></div>
+					<div class="wzlink">本文地址：https://www.ft22.com/gsal/dianxinganli/202602/12902.html</div>
+					<div class="nrpage">
+						<p>上一篇：<a href="/gsal/dianxinganli/202602/12901.html" target="_blank">湖南省政府的规章在法律、行政法规之外增设了用人单位的支付义务，但该规定符合保险制度基本原理，人民法院应当参照适用</a></p>
+						<p>下一篇：<a href="/gsal/dianxinganli/202602/12904.html" target="_blank">突发疾病案件中对于工作时间和工作岗位的认定应结合具体案件情况予以综合判断</a></p>
+					</div>
+				</div>
+				<script type="text/javascript">
+    /*640*60 创建于 2016年9月27日*/
+    var cpro_id = "u2774039";
+</script>
+<script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>			</div>
+			<div class="listright">
+	<div class="liuyan"><a href="/guestbook"><img src="/image/guestbook.jpg" width="100%" /></a></div>
+	<div class="wqtd">
+		<div class="ls">
+			<div class="list_title">
+				<h3>维权团队</h3>
+				<a href="/gsls">更多>></a>
+			</div>
+		</div>
+		<div class="lb">
+			<div class="swiper mySwiper">
+				<div class="swiper-wrapper">
+					<div class='swiper-slide'><a href='/gsls/201805/8368.html'><img src='/uploadfile/201805/5/158477253.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/201612/7278.html'><img src='/uploadfile/201612/9/1112377081.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/201612/7273.html'><img src='/uploadfile/201612/8/1935488753.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/201612/7270.html'><img src='/uploadfile/201612/8/1051544781.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/201612/7265.html'><img src='/uploadfile/201612/7/758333125.jpg'></a></div>
+<div class='swiper-slide'><a href='/gsls/200906/540.html'><img src='/uploadfile/201611/24/92211393.jpg'></a></div>
+				</div>
+				<div class="swiper-button-next"></div>
+				<div class="swiper-button-prev"></div>
+			</div>
+<script src="/js/swiper-bundle.min.js"></script>
+<script>
+	var swiper = new Swiper(".mySwiper", {
+		slidesPerView: 3,
+		spaceBetween: 10,
+		slidesPerGroup: 3,
+		loop: true,
+		loopFillGroupWithBlank: true,
+		pagination: {
+			el: ".swiper-pagination",
+			clickable: true,
+		},
+		navigation: {
+			nextEl: ".swiper-button-next",
+			prevEl: ".swiper-button-prev",
+		},
+	});
+</script>
+		</div>
+	</div>
+	<div class="ywfw">
+		<div class="list_title">
+			<h3>业务范围</h3>
+			<a href="#">更多>></a>
+		</div>
+		<ul>
+			<li><A href="https://7.ft22.com/" target="_blank"><img src="/image/jsq.jpg" /></A></li>
+			<li><A href="/guestbook"><img src="/image/gszx.jpg" /></A></li>
+			<li><A href=""><img src="/image/ajdl.jpg" /></A></li>
+		</ul>
+	</div>
+	<br />
+	<script type="text/javascript">
+    /*300*250 创建于 2016-04-06*/
+    var cpro_id = "u2589973";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>	<div class="hot">
+		<div class="hotnav">
+			<div class="h1" id="t1" onClick="ka1('d1','t1')">热点新闻</div>
+			<div class="h2" id="t2" onClick="ka1('d2','t2')">最新文章</div>
+		</div>
+		<div class="wzlb" id="d1" style="display:block;">
+			<ul>
+				<li><a href='/gsfg/baoxiantiaoli/201101/1958.html' title='工伤保险条例全文（适用2026年）'>工伤保险条例全文（适用2026年）</a></li>
+<li><a href='/jiandingbiaozhun/201503/5979.html' title='2015年工伤十级伤残鉴定标准'>2015年工伤十级伤残鉴定标准</a></li>
+<li><a href='/guandian/200910/1049.html' title='2015年工伤赔偿标准(最新整理)'>2015年工伤赔偿标准(最新整理)</a></li>
+<li><a href='/gsfg/baoxiantiaoli/201509/6296.html' title='劳动能力鉴定  职工工伤与职业病致残等级（适用于2026年）'>劳动能力鉴定  职工工伤与职业病致残等...</a></li>
+<li><a href='/peichangbiao/201601/6418.html' title='2016年工伤死亡赔偿标准'>2016年工伤死亡赔偿标准</a></li>
+<li><a href='/peichangbiao/201502/5920.html' title='2015年工伤死亡赔偿标准'>2015年工伤死亡赔偿标准</a></li>
+<li><a href='/peichangbiao/201202/3171.html' title='九级工伤赔偿标准'>九级工伤赔偿标准</a></li>
+<li><a href='/peichangbiao/201010/1891.html' title='工伤赔偿标准计算表'>工伤赔偿标准计算表</a></li>
+			</ul>
+		</div>
+		<div class="wzlb" id="d2" style="display:none;">
+			<ul>
+				<li><a href='/gssj/peichangbiao/202601/12643.html' title='最新标准：2026年一次性工亡补助金标准为1130040元（全国统一）'>最新标准：2026年一次性工亡补助金标准为...</a></li>
+<li><a href='/gsfg/baoxiantiaoli/201101/1958.html' title='工伤保险条例全文（适用2026年）'>工伤保险条例全文（适用2026年）</a></li>
+<li><a href='/guizhou/202604/13293.html' title='贵州省高级人民法院关于印发《劳动争议案件法律适用问题座谈会会议纪要》的通知（黔高法〔2009〕181号）'>贵州省高级人民法院关于印发《劳动争议案...</a></li>
+<li><a href='/guizhou/202604/13292.html' title='贵州省高级人民法院第六届民事审判研讨会会议纪要（劳动争议部分节选）（2008年）'>贵州省高级人民法院第六届民事审判研讨会...</a></li>
+<li><a href='/henansheng/202604/13291.html' title='河南省高级人民法院民一庭关于劳动争议案件审理中疑难问题的解答（2023）'>河南省高级人民法院民一庭关于劳动争议案...</a></li>
+<li><a href='/shandongsheng/202604/13290.html' title='聊城市劳动仲裁、中院关于劳动人事争议案件裁审衔接有关问题的处理意见（2019.12）'>聊城市劳动仲裁、中院关于劳动人事争议案...</a></li>
+<li><a href='/shandongsheng/202604/13289.html' title='青岛市关于审理劳动人事争议案件会议纪要（十四）(青中法联字〔2019〕6号)'>青岛市关于审理劳动人事争议案件会议纪要...</a></li>
+<li><a href='/shandongsheng/202604/13288.html' title='青岛市关于审理劳动争议案件会议纪要（十三）(青中法联字〔2018〕5号)'>青岛市关于审理劳动争议案件会议纪要（十...</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="mayd"><img src="/uploads/image/202509/18143801_11117.png" /></div>
+</div>		</div>
+	</div>
+</div>
+<div class="footer">
+	<div class="footnav">
+		<a href="/about/202509/1.html">关于我们</a>
+		<a href="/about/202509/2.html">免责声明</a>
+		<a href="/about/202509/3.html">服务范围</a>
+		<a href="/about/202509/4.html">联系我们</a>
+	</div>
+	<div class="ft">
+		<p>地址：石家庄市胜利北大街156号　电话：0311-85378335　公众号：工伤法律人（gsfalvren）</p>
+		<div class="mt"><a href="/about/202509/5.html">公众号</a>|<a href="/about/202509/21.html">抖音</a>|<a href="/about/202509/27.html">知乎</a>|<a href="/about/202509/6.html">今日头条</a></div>
+		<div class="bq">
+			<p>
+				工伤赔偿法律网 版权所有　建站支持：<a href="https://www.zw0311.com/" target="_blank">众旺互联</a><br />
+				<a rel="nofollow" href="https://beian.miit.gov.cn/" target="_blank">冀ICP备06033745号-1</a>　<a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=13010202003181" target="_blank" rel="nofollow"><img src="/image/gabeian.png" style="vertical-align:middle;margin-right:1px;margin-top:-6px;">冀公网安备13010202003181号			</p>
+		</div>
+	</div>
+</div>
+<div class="bottom-fixed">
+	<div class="sjhome"><a href="/"><span id="comp_sjhome_span">首页</span></a></div>
+	<div class="sjtel"><a href="tel:0311-85378335"><span id="comp_sjtel_span">电话</span></a></div>
+	<div class="sjsms"><a href="sms:0311-85378335"><span id="comp_sjsms_span">短信</span></a></div>
+	<div class="sjother"><a href="mqqwpa://im/chat?chat_type=wpa&amp;uin=999999999&amp;version=1"><span id="comp_sjother_span">QQ</span></a></div>
+</div>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const slider = document.querySelector('.slider');
+		const slides = document.querySelectorAll('.slide');
+		const prevBtn = document.querySelector('.prev-btn');
+		const nextBtn = document.querySelector('.next-btn');
+		const indicators = document.querySelectorAll('.indicator');
+		const autoplayToggle = document.querySelector('.autoplay-toggle');
+		let currentSlide = 0;
+		let isAutoplay = true;
+		let autoplayInterval;
+
+		function initSlider() {
+			updateSlider();
+			startAutoplay();
+			prevBtn.addEventListener('click', prevSlide);
+			nextBtn.addEventListener('click', nextSlide);
+			indicators.forEach((indicator, index) => {
+				indicator.addEventListener('click', () => {
+					goToSlide(index);
+				});
+			});
+			autoplayToggle.addEventListener('click', toggleAutoplay);
+			let touchStartX = 0;
+			let touchEndX = 0;
+			slider.addEventListener('touchstart', e => {
+				touchStartX = e.changedTouches[0].screenX;
+			});
+			slider.addEventListener('touchend', e => {
+				touchEndX = e.changedTouches[0].screenX;
+				handleSwipe();
+			});
+		}
+
+		function updateSlider() {
+			slider.style.transform = `translateX(-${currentSlide * 25}%)`;
+			indicators.forEach((indicator, index) => {
+				if (index === currentSlide) {
+					indicator.classList.add('active');
+				} else {
+					indicator.classList.remove('active');
+				}
+			});
+		}
+
+		function nextSlide() {
+			currentSlide = (currentSlide + 1) % slides.length;
+			updateSlider();
+			resetAutoplay();
+		}
+
+		function prevSlide() {
+			currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+			updateSlider();
+			resetAutoplay();
+		}
+
+		function goToSlide(index) {
+			currentSlide = index;
+			updateSlider();
+			resetAutoplay();
+		}
+
+		function handleSwipe() {
+			const threshold = 50;
+			const diff = touchStartX - touchEndX;
+			if (Math.abs(diff) > threshold) {
+				if (diff > 0) {
+					nextSlide();
+				} else {
+					prevSlide();
+				}
+			}
+		}
+
+		function startAutoplay() {
+			if (isAutoplay) {
+				autoplayInterval = setInterval(nextSlide, 5000);
+				autoplayToggle.innerHTML = '<i class="fas fa-pause"></i> 暂停自动播放';
+			}
+		}
+
+		function stopAutoplay() {
+			clearInterval(autoplayInterval);
+			autoplayToggle.innerHTML = '<i class="fas fa-play"></i> 开始自动播放';
+		}
+
+		function toggleAutoplay() {
+			isAutoplay = !isAutoplay;
+			if (isAutoplay) {
+				startAutoplay();
+			} else {
+				stopAutoplay();
+			}
+		}
+
+		function resetAutoplay() {
+			if (isAutoplay) {
+				clearInterval(autoplayInterval);
+				startAutoplay();
+			}
+		}
+		initSlider();
+	});
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b7b75eab5679d941eff28421f46fb930";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</body>
+</html>

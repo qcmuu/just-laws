@@ -1,18 +1,21 @@
 ---
 home: true
-title: Home
+title: 首页
 heroImage: /images/logo.png
 actions:
-  - text: 开始阅读
+  - text: 开始阅读法律
     link: /constitution/preamble.md
     type: primary
+  - text: 典型案例与文献
+    link: /references/
+    type: secondary
 features:
   - title: 简洁至上
-    details: 采用文档化风格呈现法律条文，结构清晰、界面整洁，提供优雅纯净的阅读体验。
-  - title: 访问便捷
-    details: 跨平台适配 PC 与移动端，随时随地触手可及；内置搜索功能，让法律检索更加高效。
-  - title: 动态更新
-    details: 持续收录新法律，及时跟进已收录法律的修订与修正，确保内容时效性。
+    details: 采用文档化风格呈现 167+ 部中华人民共和国现行法律，结构清晰、界面整洁，提供优雅纯净的阅读体验。
+  - title: AI 智能问答
+    details: 纯静态客户端 BYOK RAG 架构，毫秒级本地法条检索与大模型智能解答，条文精准溯源。
+  - title: 案例文献知识库
+    details: 精选 279 篇真实司法判例文书、最高法指导性案例及权威法学学术文献，全量落地归档。
 ---
 
 <div class="footer">MIT Licensed | <a class="icp" href="https://beian.miit.gov.cn/#/Integrated/index" target="blank">浙ICP备2020040461号-2</a> | ©2022-2026 <a class="imcao" href="https://www.imcao.cn" target="blank">ImCaO</a></div>
