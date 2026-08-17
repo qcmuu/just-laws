@@ -47,7 +47,7 @@ module.exports = {
     ["link", { rel: "icon", href: `${siteBase}images/logo.png` }],
     // --- SEO: social cards & misc (the <meta name="description"> comes from
     // `description` above; og/twitter apply site-wide) ---
-    ["meta", { name: "theme-color", content: "#de2910" }],
+    ["meta", { name: "theme-color", content: "#b13a2e" }],
     [
       "meta",
       {
@@ -90,7 +90,7 @@ module.exports = {
   ],
 
   theme: defaultTheme({
-    logo: "/images/logo.png",
+    logo: "/images/seal.svg",
     navbar: [
       {
         text: "全部类别",

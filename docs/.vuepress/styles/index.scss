@@ -1,19 +1,940 @@
+/* ============================================================
+   Just Laws AI · 「法典编辑」设计系统
+   概念：法律典籍的出版气质 —— 宋体标题、朱砂印章、
+   宣纸暖色纸面、线装书「文武线」分隔。
+   全部基于 @vuepress/theme-default 的 --c-* 变量覆盖。
+   ============================================================ */
+
 :root {
-  --c-brand: #DE2910;
-  --c-brand-light: #bb0000;
-  --search-input-width: 10rem !important;
+  /* —— 品牌：朱砂（印泥色），替代上游的旗红 #de2910 —— */
+  --c-brand: #b13a2e;
+  --c-brand-light: #8f2d24;
+
+  /* —— 宣纸色阶（背景）—— */
+  --c-bg: #faf8f3;
+  --c-bg-light: #f3efe6;
+  --c-bg-lighter: #ece6d9;
+  --c-bg-navbar: rgba(250, 248, 243, 0.92);
+  --c-bg-sidebar: #f5f1e9;
+  --c-bg-arrow: #c9bfae;
+
+  /* —— 墨色色阶（文字）—— */
+  --c-text: #2c2620;
+  --c-text-accent: var(--c-brand);
+  --c-text-light: #574e43;
+  --c-text-lighter: #857b6d;
+  --c-text-lightest: #a39a8a;
+  --c-text-quote: #8a7f6f;
+
+  /* —— 界栏（边框）—— */
+  --c-border: #e6dfcf;
+  --c-border-dark: #d8cfba;
+
+  /* —— 组件令牌（自有组件通过 var(--jl-brand) 自动协调）—— */
+  --jl-brand: #b13a2e;
+  --jl-seal-ink: #b13a2e;
+  --jl-paper: #faf8f3;
+  --jl-code-bg: #262019;
+  --jl-shadow-sm: 0 2px 10px rgba(59, 44, 24, 0.06);
+  --jl-shadow-md: 0 10px 30px rgba(59, 44, 24, 0.10);
+  --jl-shadow-brand: 0 8px 22px rgba(177, 58, 46, 0.28);
+
+  /* —— 字体：标题用衬线宋体栈（系统字体，零下载）—— */
+  --font-family-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC",
+    "STSong", "SimSun", Georgia, "Times New Roman", serif;
+
+  /* —— 排版 —— */
+  --content-width: 760px;
+  --search-input-width: 10rem;
 }
 
 html.dark {
-  --c-brand: #DE2910;
-  --c-brand-light: #bb0000;
+  /* —— 玄墨色阶：暖黑 + 绢帛文字 —— */
+  --c-brand: #d4614c;
+  --c-brand-light: #e07a65;
+
+  --c-bg: #171310;
+  --c-bg-light: #1e1a15;
+  --c-bg-lighter: #272119;
+  --c-bg-navbar: rgba(23, 19, 16, 0.92);
+  --c-bg-sidebar: #1b1712;
+  --c-bg-arrow: #5a5044;
+
+  --c-text: #e8e0d1;
+  --c-text-accent: var(--c-brand);
+  --c-text-light: #b7ac98;
+  --c-text-lighter: #948a78;
+  --c-text-lightest: #7d745f;
+  --c-text-quote: #8d8270;
+
+  --c-border: #342d23;
+  --c-border-dark: #403829;
+
+  --jl-brand: #d4614c;
+  --jl-seal-ink: #d4614c;
+  --jl-paper: #171310;
+  --jl-code-bg: #211c15;
+  --jl-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.35);
+  --jl-shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --jl-shadow-brand: 0 8px 22px rgba(212, 97, 76, 0.3);
 }
 
-.theme-default-content:not(.custom) {
-  max-width: 740px;
-  margin: 0 auto;
-  padding: 2rem 2.5rem;
+/* ============================================================
+   全局基调
+   ============================================================ */
+
+::selection {
+  background: rgba(177, 58, 46, 0.22);
 }
+html.dark ::selection {
+  background: rgba(212, 97, 76, 0.32);
+}
+
+/* 宣纸颗粒（极低透明度噪声，不干扰阅读） */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+html.dark body::after {
+  opacity: 0.05;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--c-border-dark);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--c-text-lightest);
+  background-clip: content-box;
+  border: 2px solid transparent;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--c-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   导航栏：纸面悬浮 + 文武线 + 宋体品牌
+   ============================================================ */
+
+.navbar {
+  backdrop-filter: saturate(1.4) blur(12px);
+  -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  border-bottom: 1px solid var(--c-border);
+  box-shadow: none;
+}
+/* 文武线：粗-细双线，取自线装书界栏 */
+.navbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: var(--c-border);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.navbar .logo {
+  margin-right: 0.6rem;
+  border-radius: 6px;
+}
+
+.navbar .site-name {
+  font-family: var(--font-family-serif);
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--c-text);
+  position: relative;
+}
+/* 品牌落款印点 */
+.navbar .site-name::after {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-left: 7px;
+  vertical-align: 0.5em;
+  background: var(--c-brand);
+  border-radius: 1px;
+}
+
+.navbar-links a {
+  color: var(--c-text-light);
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+}
+.navbar .navbar-links .navbar-links-item > a:not(.external):hover,
+.navbar .navbar-links .navbar-links-item > a:not(.external).router-link-active {
+  color: var(--c-brand);
+}
+.navbar .navbar-links .navbar-links-item > a:hover {
+  text-decoration: none;
+}
+
+/* 下拉菜单：纸卡质感 */
+.navbar-dropdown-wrapper .navbar-dropdown {
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  box-shadow: var(--jl-shadow-md);
+  padding: 6px;
+  overflow: hidden;
+}
+.navbar-dropdown-wrapper .navbar-dropdown .navbar-dropdown-item a {
+  font-size: 0.9rem;
+  border-radius: 6px;
+  line-height: 1.5;
+  padding: 0.45rem 0.8rem 0.45rem 1rem;
+  color: var(--c-text-light);
+  border: 0;
+  position: relative;
+}
+.navbar-dropdown-wrapper .navbar-dropdown .navbar-dropdown-item a:hover {
+  color: var(--c-brand);
+  background: var(--c-bg-light);
+  text-decoration: none;
+}
+/* 下拉项左侧朱砂短标 */
+.navbar-dropdown-wrapper .navbar-dropdown .navbar-dropdown-item a::before {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  border-radius: 2px;
+  background: var(--c-brand);
+  transition: height 0.18s ease;
+}
+.navbar-dropdown-wrapper .navbar-dropdown .navbar-dropdown-item a:hover::before {
+  height: 14px;
+}
+
+/* 搜索框 */
+.search-box input {
+  border-radius: 8px;
+  border-color: var(--c-border-dark);
+  background: var(--c-bg);
+  color: var(--c-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.search-box input:focus {
+  border-color: var(--c-brand);
+  box-shadow: 0 0 0 3px rgba(177, 58, 46, 0.12);
+  cursor: auto;
+}
+html.dark .search-box input:focus {
+  box-shadow: 0 0 0 3px rgba(212, 97, 76, 0.18);
+}
+.search-box .suggestions {
+  border-radius: 10px;
+  border: 1px solid var(--c-border);
+  box-shadow: var(--jl-shadow-md);
+  overflow: hidden;
+}
+.search-box .suggestion.focused {
+  background: var(--c-bg-light);
+  color: var(--c-brand);
+}
+
+/* ============================================================
+   侧栏：分组宋体标题 + 朱砂活动标
+   ============================================================ */
+
+.sidebar {
+  border-right: 1px solid var(--c-border);
+  padding-top: 0.5rem;
+}
+.sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -3px;
+  width: 1px;
+  background: var(--c-border);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.sidebar-group-items li {
+  margin: 0.12rem 0;
+}
+
+.sidebar-group a {
+  font-size: 0.9rem;
+  color: var(--c-text-light);
+  border-left: 3px solid transparent;
+  padding-left: 1rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.sidebar-group a.sidebar-link:hover {
+  color: var(--c-brand);
+  text-decoration: none;
+}
+.sidebar-group a.sidebar-link.active {
+  color: var(--c-brand);
+  font-weight: 500;
+  border-left-color: var(--c-brand);
+}
+
+.sidebar-heading {
+  font-family: var(--font-family-serif);
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  color: var(--c-text-lighter);
+  font-weight: 600;
+}
+.sidebar-heading.clickable:hover {
+  color: var(--c-brand);
+}
+.sidebar-heading.open {
+  color: var(--c-text);
+}
+
+/* ============================================================
+   正文排版：典籍阅读体验
+   ============================================================ */
+
+.theme-default-content:not(.custom) {
+  max-width: var(--content-width);
+  padding-top: 2.6rem;
+  padding-bottom: 3rem;
+  font-size: 16px;
+}
+
+.theme-default-content h1 {
+  font-family: var(--font-family-serif);
+  font-size: 1.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding-bottom: 0.85rem;
+  margin: 0 0 2.2rem;
+  border-bottom: 3px double var(--c-border-dark);
+}
+
+.theme-default-content h2 {
+  font-family: var(--font-family-serif);
+  font-size: 1.42rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-top: 2.8rem;
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+.theme-default-content h2::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  margin-right: 0.65rem;
+  background: var(--c-brand);
+  border-radius: 2px;
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 3px rgba(177, 58, 46, 0.14);
+}
+html.dark .theme-default-content h2::before {
+  box-shadow: 0 0 0 3px rgba(212, 97, 76, 0.16);
+}
+
+.theme-default-content h3 {
+  font-family: var(--font-family-serif);
+  font-size: 1.16rem;
+  font-weight: 700;
+  margin-top: 2.1rem;
+}
+
+.theme-default-content h4 {
+  font-family: var(--font-family-serif);
+  font-size: 1.02rem;
+}
+
+.theme-default-content p {
+  line-height: 1.9;
+  margin-bottom: 1.1rem;
+}
+
+/* 法典长文适合两端对齐（窄屏关闭，避免拉伸断行） */
+@media (min-width: 768px) {
+  .theme-default-content:not(.custom) p {
+    text-align: justify;
+  }
+}
+
+.theme-default-content a {
+  color: var(--c-brand);
+  text-decoration: underline;
+  text-decoration-color: rgba(177, 58, 46, 0.35);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+html.dark .theme-default-content a {
+  text-decoration-color: rgba(212, 97, 76, 0.4);
+}
+.theme-default-content a:hover {
+  color: var(--c-brand-light);
+  text-decoration-color: currentColor;
+}
+
+/* 引文：仿古籍注疏体 */
+.theme-default-content blockquote {
+  margin: 1.4rem 0;
+  padding: 0.9rem 1.3rem;
+  border-left: 4px double rgba(177, 58, 46, 0.5);
+  border-radius: 0 8px 8px 0;
+  background: var(--c-bg-light);
+  color: var(--c-text-light);
+  font-size: 0.95em;
+}
+.theme-default-content blockquote p {
+  line-height: 1.85;
+}
+
+/* 表格：只保留横向界线（编辑风） */
+.theme-default-content table {
+  display: table;
+  width: 100%;
+  font-size: 0.94rem;
+  border-collapse: collapse;
+}
+.theme-default-content th {
+  font-family: var(--font-family-serif);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--c-bg-light);
+  border-bottom: 2px solid var(--c-border-dark);
+}
+.theme-default-content td {
+  border-bottom: 1px solid var(--c-border);
+}
+.theme-default-content th,
+.theme-default-content td {
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  padding: 0.6rem 0.9rem;
+}
+
+/* 分隔符：界点 ❖ */
+.theme-default-content hr {
+  position: relative;
+  height: 1px;
+  margin: 3rem auto;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--c-border-dark) 18%,
+    var(--c-border-dark) 82%,
+    transparent
+  );
+}
+.theme-default-content hr::after {
+  content: "❖";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -52%);
+  font-size: 0.62rem;
+  color: var(--c-brand);
+  background: var(--c-bg);
+  padding: 0 0.9rem;
+  opacity: 0.85;
+}
+
+/* 行内代码：暖纸底 + 朱砂字 */
+.theme-default-content code {
+  color: #96382c;
+  background-color: rgba(177, 58, 46, 0.08);
+  padding: 0.15rem 0.45rem;
+  border-radius: 5px;
+  font-size: 0.86em;
+}
+html.dark .theme-default-content code {
+  color: #e39a89;
+  background-color: rgba(212, 97, 76, 0.14);
+}
+
+div[class*="language-"] {
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: var(--jl-shadow-sm);
+}
+html.dark div[class*="language-"] {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* 提示容器：左侧色条 + 衬线标题 */
+.custom-container {
+  border-radius: 8px;
+  border-width: 0 0 0 3px;
+  border-style: solid;
+  box-shadow: var(--jl-shadow-sm);
+}
+.custom-container .custom-container-title {
+  font-family: var(--font-family-serif);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* 页脚信息区 */
+.page-meta {
+  font-size: 0.82rem;
+}
+.page-edit .edit-link a {
+  color: var(--c-text-lighter);
+}
+.page-nav .inner {
+  border-color: var(--c-border);
+}
+.page-nav .inner::before {
+  border-color: var(--c-border);
+}
+
+/* 右侧目录 */
+#toc .toc-item a {
+  font-size: 0.82rem;
+}
+#toc .toc-item a.active {
+  color: var(--c-brand);
+  border-left-color: var(--c-brand);
+}
+
+/* 返回顶部：方形印章按钮 */
+.back-to-top {
+  --back-to-top-color: var(--c-text-light);
+  --back-to-top-color-hover: var(--c-brand);
+  border-radius: 8px;
+  border: 1px solid var(--c-border-dark);
+  box-shadow: var(--jl-shadow-sm);
+}
+
+/* ============================================================
+   首页：印章 Hero + 竖排批注 + 水印
+   ============================================================ */
+
+.home {
+  overflow-x: hidden;
+}
+
+/* 背景水印「法」（置于左端，避开右侧竖排批注） */
+.home::before {
+  content: "法";
+  position: absolute;
+  top: -5rem;
+  left: -8rem;
+  z-index: 0;
+  font-family: var(--font-family-serif);
+  font-size: 28rem;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--c-text);
+  opacity: 0.028;
+  pointer-events: none;
+  user-select: none;
+}
+html.dark .home::before {
+  opacity: 0.045;
+}
+
+.home .hero {
+  position: relative;
+  z-index: 1;
+  margin: 4.5rem auto 2rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+/* 竖排批注（宽屏显示，取意古籍夹批） */
+@media (min-width: 1280px) {
+  .home .hero::after {
+    content: "以法为据 · 以典为凭";
+    position: absolute;
+    top: 50%;
+    right: max(2rem, calc(50% - 30rem));
+    transform: translateY(-58%);
+    writing-mode: vertical-rl;
+    letter-spacing: 0.55em;
+    font-family: var(--font-family-serif);
+    font-size: 0.85rem;
+    color: var(--c-brand);
+    opacity: 0.75;
+    padding-left: 1.1rem;
+    border-left: 1px solid var(--c-border-dark);
+    pointer-events: none;
+  }
+}
+
+/* 印章标题徽记 */
+.home .hero h1 {
+  position: relative;
+  font-family: var(--font-family-serif);
+  font-size: clamp(2.1rem, 5vw, 2.9rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--c-text);
+}
+.home .hero h1::before {
+  content: "法";
+  display: block;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 1.6rem;
+  font-size: 2.9rem;
+  font-weight: 700;
+  line-height: 84px;
+  color: var(--jl-seal-ink);
+  border: 3px solid var(--jl-seal-ink);
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1px var(--c-bg), inset 0 0 0 4px transparent,
+    0 4px 14px rgba(177, 58, 46, 0.16);
+  background: rgba(177, 58, 46, 0.05);
+  transform: rotate(-4deg);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.dark .home .hero h1::before {
+  box-shadow: inset 0 0 0 1px var(--c-bg), 0 4px 14px rgba(0, 0, 0, 0.4);
+  background: rgba(212, 97, 76, 0.09);
+}
+.home .hero h1:hover::before {
+  transform: rotate(0deg);
+}
+
+.home .hero .description {
+  max-width: 40rem;
+  margin: 1.4rem auto 2.2rem;
+  font-family: var(--font-family-serif);
+  font-size: 1.08rem;
+  line-height: 2;
+  color: var(--c-text-lighter);
+  border: 0;
+}
+
+/* 行动按钮：编辑风格（小圆角，非胶囊） */
+.home .hero .action-button {
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  border: 1.5px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    border-color 0.2s ease, color 0.2s ease;
+}
+.home .hero .action-button.primary {
+  background: linear-gradient(180deg, #bd4536, var(--c-brand));
+  color: #fdfbf6;
+  box-shadow: var(--jl-shadow-brand);
+  border: 0;
+  padding-bottom: calc(0.5rem - 1px);
+}
+.home .hero .action-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(177, 58, 46, 0.35);
+}
+.home .hero .action-button.secondary {
+  background: transparent;
+  color: var(--c-text-light);
+  border-color: var(--c-border-dark);
+  box-shadow: none;
+}
+.home .hero .action-button.secondary:hover {
+  color: var(--c-brand);
+  border-color: var(--c-brand);
+  transform: translateY(-2px);
+}
+
+/* 入场动画（阶梯式浮现） */
+@keyframes jl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.home .hero .figure,
+.home .hero h1 {
+  animation: jl-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+.home .hero .description {
+  animation: jl-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+}
+.home .hero .actions {
+  animation: jl-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.27s both;
+}
+
+/* —— 特性卡：壹貳叁编号 + 文武线顶边 —— */
+.home .features {
+  position: relative;
+  z-index: 1;
+  margin: 1.5rem auto 0;
+  padding: 0 1.5rem 0.5rem;
+}
+
+.home .feature {
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-top: 4px double var(--c-border-dark);
+  border-radius: 10px;
+  padding: 1.7rem 1.6rem 1.5rem;
+  box-shadow: var(--jl-shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+.home .feature:hover {
+  transform: translateY(-4px);
+  border-color: rgba(177, 58, 46, 0.4);
+  border-top-color: var(--c-brand);
+  box-shadow: var(--jl-shadow-md);
+}
+html.dark .home .feature:hover {
+  border-color: rgba(212, 97, 76, 0.45);
+}
+
+.home .feature h2 {
+  font-family: var(--font-family-serif);
+  font-size: 1.06rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border: 0;
+  margin: 0 0 0.7rem;
+  padding: 0;
+  display: block;
+  color: var(--c-text);
+  transition: color 0.25s ease;
+}
+.home .feature:hover h2 {
+  color: var(--c-brand);
+}
+/* 汉字编号章 */
+.home .feature h2::before {
+  content: "";
+  display: inline-block;
+  width: 1.7em;
+  margin-right: 0.55em;
+  font-size: 0.82em;
+  line-height: 1.7em;
+  text-align: center;
+  font-family: var(--font-family-serif);
+  color: var(--c-brand);
+  border: 1px solid rgba(177, 58, 46, 0.45);
+  border-radius: 4px;
+  vertical-align: -0.2em;
+  background: rgba(177, 58, 46, 0.05);
+  box-shadow: none;
+  transform: none;
+}
+html.dark .home .feature h2::before {
+  border-color: rgba(212, 97, 76, 0.5);
+  background: rgba(212, 97, 76, 0.08);
+}
+.home .feature:nth-child(1) h2::before {
+  content: "壹";
+}
+.home .feature:nth-child(2) h2::before {
+  content: "贰";
+}
+.home .feature:nth-child(3) h2::before {
+  content: "叁";
+}
+.home .feature h2::after {
+  display: none;
+}
+
+.home .feature p {
+  font-size: 0.89rem;
+  line-height: 1.85;
+  color: var(--c-text-lighter);
+}
+
+/* —— 首页内容区（数据带 / 部门法目录 / 页脚）—— */
+.home .theme-default-content {
+  position: relative;
+  z-index: 1;
+  max-width: var(--content-width, 760px);
+}
+
+/* 数据带 */
+.jl-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 3rem auto 0;
+  border-top: 3px double var(--c-border-dark);
+  border-bottom: 1px solid var(--c-border);
+  padding: 1.4rem 0 1.5rem;
+}
+.jl-stat {
+  text-align: center;
+  padding: 0 0.5rem;
+}
+.jl-stat + .jl-stat {
+  border-left: 1px solid var(--c-border);
+}
+.jl-stat__num {
+  display: block;
+  font-family: var(--font-family-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--c-brand);
+  line-height: 1.2;
+}
+.jl-stat__label {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  color: var(--c-text-lighter);
+}
+
+/* 部门法目录 */
+.jl-catalog {
+  margin: 3.2rem auto 0;
+}
+.jl-catalog__title {
+  font-family: var(--font-family-serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin: 0 0 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--c-text);
+}
+.jl-catalog__title::after {
+  content: "";
+  flex: 1;
+  height: 3px;
+  border-top: 1px solid var(--c-border-dark);
+  border-bottom: 1px solid var(--c-border);
+}
+.jl-catalog__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+}
+.jl-catalog__item {
+  display: block;
+  padding: 1.05rem 1.15rem;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  background: var(--c-bg);
+  box-shadow: var(--jl-shadow-sm);
+  text-decoration: none !important;
+  transition: transform 0.22s ease, box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+.jl-catalog__item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(177, 58, 46, 0.45);
+  box-shadow: var(--jl-shadow-md);
+}
+html.dark .jl-catalog__item:hover {
+  border-color: rgba(212, 97, 76, 0.5);
+}
+.jl-catalog__name {
+  display: block;
+  font-family: var(--font-family-serif);
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--c-text);
+}
+.jl-catalog__item:hover .jl-catalog__name {
+  color: var(--c-brand);
+}
+.jl-catalog__desc {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--c-text-lighter);
+}
+.jl-catalog__go {
+  display: inline-block;
+  margin-top: 0.55rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--c-brand);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.jl-catalog__item:hover .jl-catalog__go {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 959px) {
+  .jl-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem 0;
+  }
+  .jl-stat:nth-child(3) {
+    border-left: 0;
+  }
+  .jl-catalog__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .jl-catalog__grid {
+    grid-template-columns: 1fr;
+  }
+  .jl-stat + .jl-stat {
+    border-left: 0;
+  }
+  .jl-stats {
+    gap: 1rem;
+  }
+}
+
+/* 首页页脚 */
+.home .footer {
+  padding: 2.6rem 1.5rem 2.8rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--c-border);
+  text-align: center;
+  color: var(--c-text-lighter);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  transition: border-color var(--t-color);
+}
+.home .footer .author {
+  font-weight: inherit;
+  color: var(--c-text-lighter) !important;
+  text-decoration-color: rgba(177, 58, 46, 0.35);
+}
+
+/* ============================================================
+   案例文献页（保留原有容器宽度扩展）
+   ============================================================ */
 
 .references-index .theme-default-content:not(.custom) {
   max-width: 980px;
@@ -29,13 +950,9 @@ html.dark {
   gap: 0.5rem 0.75rem;
   margin: 0 0 1.25rem;
   padding: 0.85rem 1rem;
-  border: 1px solid var(--c-border, #eaecef);
+  border: 1px solid var(--c-border);
   border-radius: 8px;
-  background: var(--c-bg-light, #f6f8fa);
-}
-
-html.dark .jl-ref__toc {
-  background: var(--c-bg-light, #2a2a2a);
+  background: var(--c-bg-light);
 }
 
 .jl-ref__toc a {
@@ -50,9 +967,9 @@ html.dark .jl-ref__toc {
 
 .jl-ref__fold {
   margin: 0 0 0.75rem;
-  border: 1px solid var(--c-border, #eaecef);
+  border: 1px solid var(--c-border);
   border-radius: 8px;
-  background: var(--c-bg, #fff);
+  background: var(--c-bg);
   overflow: hidden;
   scroll-margin-top: 4.5rem;
 }
@@ -89,7 +1006,10 @@ html.dark .jl-ref__toc {
 }
 
 .jl-ref__fold > summary:hover {
-  background: rgba(222, 41, 16, 0.04);
+  background: rgba(177, 58, 46, 0.05);
+}
+html.dark .jl-ref__fold > summary:hover {
+  background: rgba(212, 97, 76, 0.08);
 }
 
 .jl-ref__fold-title {
@@ -97,7 +1017,7 @@ html.dark .jl-ref__toc {
 }
 
 .jl-ref__fold-count {
-  color: var(--c-text-lighter, #6a737d);
+  color: var(--c-text-lighter);
   font-size: 0.88rem;
   white-space: nowrap;
 }
@@ -105,7 +1025,7 @@ html.dark .jl-ref__toc {
 .jl-ref__scroll {
   overflow-x: auto;
   padding: 0 0.6rem 0.85rem;
-  border-top: 1px solid var(--c-border, #eaecef);
+  border-top: 1px solid var(--c-border);
 }
 
 .jl-ref__scroll table {
@@ -123,4 +1043,28 @@ html.dark .jl-ref__toc {
 .jl-ref__scroll td:first-child {
   width: 3.2rem;
   text-align: center;
+}
+
+/* ============================================================
+   动效可关闭：尊重系统减少动态偏好
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .home .hero .figure,
+  .home .hero h1,
+  .home .hero .description,
+  .home .hero .actions {
+    animation: none;
+  }
+  .home .hero h1::before {
+    transition: none;
+  }
+  .home .feature,
+  .jl-catalog__item,
+  .home .hero .action-button {
+    transition: none;
+  }
+  * {
+    scroll-behavior: auto;
+  }
 }
