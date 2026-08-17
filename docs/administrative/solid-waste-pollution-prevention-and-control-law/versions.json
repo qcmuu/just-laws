@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "lawId": "administrative/solid-waste-pollution-prevention-and-control-law",
+  "title": "中华人民共和国固体废物污染环境防治法",
+  "repealedBy": {
+    "title": "中华人民共和国生态环境法典",
+    "path": "/ecological-environment/ecological-environment-code/"
+  },
+  "versions": [
+    {
+      "id": "2020-revision",
+      "label": "2020年修订版",
+      "promulgatedOn": "2020-04-29",
+      "effectiveFrom": "2020-09-01",
+      "effectiveTo": "2026-08-15",
+      "entry": "versions/2020-09-01/README.md"
+    },
+    {
+      "id": "2026-repeal",
+      "label": "2026年废止提示",
+      "promulgatedOn": "2026-03-12",
+      "effectiveFrom": "2026-08-15",
+      "effectiveTo": null,
+      "entry": "README.md"
+    }
+  ]
+}

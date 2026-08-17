@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "lawId": "economic/certified-public-accountants-law",
+  "title": "中华人民共和国注册会计师法",
+  "versions": [
+    {
+      "id": "2014-amendment",
+      "label": "2014年修正版",
+      "promulgatedOn": "2014-08-31",
+      "effectiveFrom": "2014-08-31",
+      "effectiveTo": "2027-01-01",
+      "entry": "README.md"
+    },
+    {
+      "id": "2026-amendment",
+      "label": "2026年修正版",
+      "promulgatedOn": "2026-06-26",
+      "effectiveFrom": "2027-01-01",
+      "effectiveTo": null,
+      "entry": "versions/2027-01-01/README.md"
+    }
+  ]
+}

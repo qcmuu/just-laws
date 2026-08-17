@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "lawId": "economic/cleaner-production-promotion-law",
+  "title": "中华人民共和国清洁生产促进法",
+  "repealedBy": {
+    "title": "中华人民共和国生态环境法典",
+    "path": "/ecological-environment/ecological-environment-code/"
+  },
+  "versions": [
+    {
+      "id": "2012-amendment",
+      "label": "2012年修正版",
+      "promulgatedOn": "2012-02-29",
+      "effectiveFrom": "2012-07-01",
+      "effectiveTo": "2026-08-15",
+      "entry": "versions/2012-07-01/README.md"
+    },
+    {
+      "id": "2026-repeal",
+      "label": "2026年废止提示",
+      "promulgatedOn": "2026-03-12",
+      "effectiveFrom": "2026-08-15",
+      "effectiveTo": null,
+      "entry": "README.md"
+    }
+  ]
+}

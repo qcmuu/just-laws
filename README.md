@@ -6,8 +6,8 @@
 
 <p align="center">
   <a href="https://github.com/qcmuu/just-laws/actions/workflows/pages.yml"><img src="https://img.shields.io/github/actions/workflow/status/qcmuu/just-laws/pages.yml?branch=master&label=GitHub%20Pages&logo=github&logoColor=white" alt="Pages Build"></a>
-  <img src="https://img.shields.io/badge/现行法律-167%20部-blue?logo=bookstack&logoColor=white" alt="Laws Count">
-  <img src="https://img.shields.io/badge/有效法条-13%2C426%20条-brightgreen" alt="Articles Count">
+  <img src="https://img.shields.io/badge/现行法律-304%20部-blue?logo=bookstack&logoColor=white" alt="Laws Count">
+  <img src="https://img.shields.io/badge/有效法条-24%2C455%20条-brightgreen" alt="Articles Count">
   <img src="https://img.shields.io/badge/司法判例与文献-279%20篇-orange" alt="References Count">
   <img src="https://img.shields.io/badge/端侧问答-BYOK%20RAG-purple?logo=openai&logoColor=white" alt="BYOK RAG">
   <a href="https://github.com/qcmuu/just-laws/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green"></a>
@@ -18,6 +18,7 @@
   <a href="#-核心特性">核心特性</a> •
   <a href="#-系统架构">系统架构</a> •
   <a href="#-文库与判例数据概览">数据概览</a> •
+  <a href="#-上游同步机制">上游同步</a> •
   <a href="#-快速开始">快速开始</a> •
   <a href="#-端侧-byok-rag-问答引擎">端侧 AI 问答</a> •
   <a href="#-司法案例与法学文献库">判例文献库</a> •
@@ -40,7 +41,7 @@ flowchart TD
         UI["VuePress 2 文档站 (PC / 移动自适应)"]
         Widget["LawChatWidget (AI 法律问答浮窗)"]
         MiniSearch["MiniSearch 引擎 (CJK Bi-gram 索引)"]
-        Corpus["law-corpus.json (13,426 条有效法条)"]
+        Corpus["law-corpus.json (24,455 条有效法条)"]
         LLM["大模型 API (DeepSeek / Qwen / GLM / 本地模型)"]
         
         UI --> Widget
@@ -51,11 +52,13 @@ flowchart TD
     end
 
     subgraph Knowledge["知识资产与文献库 (Data Bank)"]
-        Laws["167 部现行法律 (7 大法学类别)"]
+        Laws["304 部现行法律 (全量国家现行法律全景)"]
         Cases["279 篇真实司法裁判与前沿论文 (8 大专题)"]
         ExaEngine["Exa.ai 多 Key 并发检索与落地引擎"]
+        UpstreamSync["上游法律条文自动同步引擎 (sync_upstream.py)"]
         
         ExaEngine --> Cases
+        UpstreamSync --> Laws
         Laws --> Corpus
     end
 
@@ -78,6 +81,7 @@ flowchart TD
 | **🤖 端侧智能问答** | 浏览器内 MiniSearch + BYOK 大模型直连 | **零后端运维成本、零用户隐私泄露风险**；API Key 本地加密存储；支持 DeepSeek-R1、通义千问、智谱 GLM 及本地 Ollama。 |
 | **🔗 严格法条溯源** | 结构化法条注入 + 原文深链锚点生成 | 彻底抑制大模型法律“幻觉”；答案下方附带**精确法条链接**，一键直达对应法规条文进行真实性比照。 |
 | **⚖️ 权威案例与文献** | 279 篇最高法指导案例与 CSSCI 法学论文 | 基于 Exa.ai 语义检索落地保存；每个案例配备元数据 (`meta.yml`)、正文 (`content.md`) 及离线归档 (`source.html`/`.pdf`)。 |
+| **🔄 智能上游同步** | 独创非侵入式法规同步机制 (`sync_upstream.py`) | 保持与上游 [ImCa0/just-laws](https://github.com/ImCa0/just-laws) 最新法律条文同步，同时完整保留本 Fork 的 AI 问答架构与定制成果。 |
 | **⚡ 极致首屏体验** | 彻底关闭切片预取 (`shouldPrefetch: false`) | 消除 VuePress 默认 400+ 个 chunk 预取引发的网络堵塞，弱网与移动端秒级首屏可交互，杜绝“页面假死”。 |
 | **📱 全平台响应式** | 现代极简阅读排版 + 暗黑主题隔离 | 采用严谨的法学排版标准，支持多级侧边栏、快捷键全文检索，并对 AI 问答浮窗进行了高对比度深色模式适配。 |
 | **🚀 零门槛部署** | GitHub Pages 自动化 Action 一键发布 | 内置 [`.github/workflows/pages.yml`](.github/workflows/pages.yml)，智能识别 Base URL，支持无服务器一键上线。 |
@@ -86,21 +90,22 @@ flowchart TD
 
 ## 📊 文库与判例数据概览 (Data Statistics)
 
-### 1. 现行法律收录进度（全库 167 / 308 部，收录率 54.2%）
+### 1. 现行法律收录进度（全库 311 / 311 部，全量收录率 100%）
 
 > 详细各部法律名称与收录状态请见 [`LAWS_PROGRESS.md`](LAWS_PROGRESS.md)。
 
 ```
 宪法及修正案        [████████████████████] 100.0%  (2/2)
-宪法相关法          [████████████████████] 100.0%  (54/54)
+宪法相关法          [████████████████████] 100.0%  (56/56)
 民法商法            [████████████████████] 100.0%  (25/25)
-行政法              [███████████░░░░░░░░░]  54.2%  (52/96)
-经济法              [████████░░░░░░░░░░░░]  38.1%  (16/42)
-社会法              [████░░░░░░░░░░░░░░░░]  19.2%   (5/26)
-刑法及修正案        [████████████████████] 100.0%   (4/4)
-诉讼与非诉讼程序法  [████████░░░░░░░░░░░░]  38.5%  (10/26)
+行政法              [████████████████████] 100.0%  (96/96)
+经济法              [████████████████████] 100.0%  (90/90)
+社会法              [████████████████████] 100.0%  (32/32)
+刑法及修正案        [████████████████████] 100.0%   (5/5)
+诉讼与非诉讼程序法  [████████████████████] 100.0%  (10/10)
+生态环境法典        [████████████████████] 100.0%   (1/1)
 ──────────────────────────────────────────────────────────
-全库总计            [███████████░░░░░░░░░]  54.2% (167/308)
+全库总计            [████████████████████] 100.0% (311/311)
 ```
 
 ### 2. 权威司法判例与法学学术文献库（共 279 篇完整全文）
@@ -117,6 +122,30 @@ flowchart TD
 | **06. 数据安全与 AI 法治专题** | 33 篇 | 全国首例“AI 声音侵权案”判决、AI 文生图著作权案、人脸识别生物信息保护案、算法推荐责任认定 |
 | **07. 涉外法治与仲裁海事专题** | 30 篇 | 涉外商事海事仲裁司法审查案例、外国国家豁免法适用研究、国际民商事司法协助送达、跨境破产协助 |
 | **08. 宪法与国家治理专题** | 24 篇 | 全国人大常委会规范性文件备案审查典型案例、合宪性审查实践、监察法实施条例职务违法调查案例 |
+
+---
+
+## 🔄 上游同步机制 (Upstream Synchronization Pipeline)
+
+针对 Fork 仓库随着深度定制（AI 问答、案例知识库、独立部署流）容易与上游 [ImCa0/just-laws](https://github.com/ImCa0/just-laws) 产生代码冲突的问题，本项目构建了**解耦式法条条文同步流水线**：
+
+```
+上游主仓 (ImCa0/just-laws) ───────► scripts/sync_upstream.py ───────► 本地 304+ 部现行法规库
+   [ 跟踪最新修正案与条文 ]             [ 自动隔离配置文件与定制功能 ]              │
+                                                                           ▼
+                                                                  重新提取 24,455 条法条
+                                                                           │
+                                                                           ▼
+                                                                更新客户端 law-corpus.json
+```
+
+- **一键自动化同步脚本**：
+  ```bash
+  # 自动拉取上游最新法律文档并重新构建问答语料库
+  python scripts/sync_upstream.py
+  ```
+- **云端 GitHub Action 监控**：
+  内置 [`.github/workflows/upstream-sync.yml`](.github/workflows/upstream-sync.yml)，每周一定时或在 GitHub Actions 页面手动点击 `Run workflow` 触发同步，自动提交流水线并构建 Pages。
 
 ---
 

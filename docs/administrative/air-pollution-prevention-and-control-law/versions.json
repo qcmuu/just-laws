@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "lawId": "administrative/air-pollution-prevention-and-control-law",
+  "title": "中华人民共和国大气污染防治法",
+  "repealedBy": {
+    "title": "中华人民共和国生态环境法典",
+    "path": "/ecological-environment/ecological-environment-code/"
+  },
+  "versions": [
+    {
+      "id": "2018-amendment",
+      "label": "2018年修正版",
+      "promulgatedOn": "2018-10-26",
+      "effectiveFrom": "2018-10-26",
+      "effectiveTo": "2026-08-15",
+      "entry": "versions/2018-10-26/README.md"
+    },
+    {
+      "id": "2026-repeal",
+      "label": "2026年废止提示",
+      "promulgatedOn": "2026-03-12",
+      "effectiveFrom": "2026-08-15",
+      "effectiveTo": null,
+      "entry": "README.md"
+    }
+  ]
+}

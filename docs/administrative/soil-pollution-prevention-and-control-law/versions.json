@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "lawId": "administrative/soil-pollution-prevention-and-control-law",
+  "title": "中华人民共和国土壤污染防治法",
+  "repealedBy": {
+    "title": "中华人民共和国生态环境法典",
+    "path": "/ecological-environment/ecological-environment-code/"
+  },
+  "versions": [
+    {
+      "id": "2018-enactment",
+      "label": "2018年通过版",
+      "promulgatedOn": "2018-08-31",
+      "effectiveFrom": "2019-01-01",
+      "effectiveTo": "2026-08-15",
+      "entry": "versions/2019-01-01/README.md"
+    },
+    {
+      "id": "2026-repeal",
+      "label": "2026年废止提示",
+      "promulgatedOn": "2026-03-12",
+      "effectiveFrom": "2026-08-15",
+      "effectiveTo": null,
+      "entry": "README.md"
+    }
+  ]
+}

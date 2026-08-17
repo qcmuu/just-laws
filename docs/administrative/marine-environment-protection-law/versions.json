@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "lawId": "administrative/marine-environment-protection-law",
+  "title": "中华人民共和国海洋环境保护法",
+  "repealedBy": {
+    "title": "中华人民共和国生态环境法典",
+    "path": "/ecological-environment/ecological-environment-code/"
+  },
+  "versions": [
+    {
+      "id": "2023-revision",
+      "label": "2023年修订版",
+      "promulgatedOn": "2023-10-24",
+      "effectiveFrom": "2024-01-01",
+      "effectiveTo": "2026-08-15",
+      "entry": "versions/2024-01-01/README.md"
+    },
+    {
+      "id": "2026-repeal",
+      "label": "2026年废止提示",
+      "promulgatedOn": "2026-03-12",
+      "effectiveFrom": "2026-08-15",
+      "effectiveTo": null,
+      "entry": "README.md"
+    }
+  ]
+}
