@@ -134,6 +134,7 @@ def parse_file(path):
     if (
         rel_slash.startswith("category/")
         or rel_slash.startswith("references/")
+        or rel_slash.startswith("settings/")
         or rel_slash == "README.md"
     ):
         return

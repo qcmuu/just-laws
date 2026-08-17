@@ -55,54 +55,9 @@
           </div>
         </header>
 
-        <!-- Settings (BYOK) -->
+        <!-- Settings (BYOK) — same shared component as the /settings/ page -->
         <div v-if="showSettings" class="jl-chat__settings">
-          <p class="jl-chat__settings-intro">
-            填入任意 <strong>OpenAI 兼容</strong> 接口（如 DeepSeek、通义千问、智谱 GLM
-            等）。Key 仅保存在你本机浏览器、直接发往你选择的服务商，<strong>不会经过本站</strong>。
-          </p>
-          <label class="jl-chat__field">
-            <span>接口地址 Base URL</span>
-            <input
-              v-model.trim="cfg.baseUrl"
-              type="text"
-              placeholder="https://api.deepseek.com/v1"
-            />
-          </label>
-          <label class="jl-chat__field">
-            <span>API Key</span>
-            <input
-              v-model.trim="cfg.apiKey"
-              type="password"
-              autocomplete="off"
-              placeholder="sk-..."
-            />
-          </label>
-          <label class="jl-chat__field">
-            <span>模型 Model</span>
-            <input v-model.trim="cfg.model" type="text" placeholder="deepseek-chat" />
-          </label>
-          <div class="jl-chat__settings-row">
-            <details class="jl-chat__presets">
-              <summary>常用预设</summary>
-              <button
-                v-for="p in presets"
-                :key="p.name"
-                type="button"
-                class="jl-chat__chip"
-                @click="applyPreset(p)"
-              >
-                {{ p.name }}
-              </button>
-            </details>
-            <button class="jl-chat__send" type="button" @click="saveSettings">
-              保存
-            </button>
-          </div>
-          <p class="jl-chat__note">
-            注：OpenAI 官方端点（api.openai.com）不允许浏览器直连，会被 CORS 拦截；
-            请使用国产兼容服务、自建网关或 Azure OpenAI。
-          </p>
+          <LawModelSettings variant="panel" />
         </div>
 
         <!-- Chat -->
@@ -114,7 +69,8 @@
           <div ref="bodyEl" class="jl-chat__body">
             <div v-if="!answer && !sources.length && !error" class="jl-chat__examples">
               <p v-if="!configured" class="jl-chat__hint">
-                先到右上角 ⚙ 设置里填入你的模型 API，即可开始提问。
+                先在 ⚙ 设置里填入你的模型 API（也可前往
+                <a class="jl-chat__hint-link" :href="settingsPageUrl">设置页</a> 配置），即可开始提问。
               </p>
               <template v-else>
                 <p class="jl-chat__hint">试着问我：</p>
@@ -185,6 +141,9 @@
 <script>
 import { withBase } from "@vuepress/client";
 
+import LawModelSettings from "./LawModelSettings.vue";
+import { SETTINGS_EVENT, loadCfg } from "./chat-settings";
+
 // markdown-it and minisearch are heavy and only needed once the user actually
 // opens the chat. They are dynamically imported on demand (see loadMarkdown /
 // ensureIndex) so they are split into separate chunks and never block the
@@ -203,90 +162,7 @@ const REQUEST_TIMEOUT_MS = 90000; // streamed completions can run a while
 const TOP_K = 6; // number of 法条 fed to the model
 const MAX_CHUNK_CHARS = 600; // cap each 法条's length in the prompt
 
-const LS = {
-  base: "jl_chat_base_url",
-  key: "jl_chat_api_key",
-  model: "jl_chat_model",
-  wrap: "jl_chat_wrap_jwk",
-};
-
 const MAX_QUESTION_CHARS = 4000;
-
-function bytesToB64(bytes) {
-  const u8 = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
-  let s = "";
-  for (let i = 0; i < u8.length; i++) s += String.fromCharCode(u8[i]);
-  return btoa(s);
-}
-
-function b64ToBytes(b64) {
-  const s = atob(b64);
-  const u8 = new Uint8Array(s.length);
-  for (let i = 0; i < s.length; i++) u8[i] = s.charCodeAt(i);
-  return u8;
-}
-
-async function getWrapKey() {
-  const raw = localStorage.getItem(LS.wrap);
-  if (raw) {
-    try {
-      const jwk = JSON.parse(raw);
-      return await crypto.subtle.importKey(
-        "jwk",
-        jwk,
-        { name: "AES-GCM" },
-        true,
-        ["encrypt", "decrypt"]
-      );
-    } catch (e) {
-      /* regenerate below */
-    }
-  }
-  const key = await crypto.subtle.generateKey(
-    { name: "AES-GCM", length: 256 },
-    true,
-    ["encrypt", "decrypt"]
-  );
-  const jwk = await crypto.subtle.exportKey("jwk", key);
-  localStorage.setItem(LS.wrap, JSON.stringify(jwk));
-  return key;
-}
-
-async function encryptSecret(plain) {
-  if (!plain) return "";
-  if (!globalThis.crypto || !crypto.subtle) return plain;
-  const key = await getWrapKey();
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const buf = await crypto.subtle.encrypt(
-    { name: "AES-GCM", iv },
-    key,
-    new TextEncoder().encode(plain)
-  );
-  return "enc:v1:" + bytesToB64(iv) + "." + bytesToB64(new Uint8Array(buf));
-}
-
-async function decryptSecret(stored) {
-  if (!stored) return "";
-  if (!stored.startsWith("enc:v1:")) return stored;
-  const payload = stored.slice("enc:v1:".length);
-  const dot = payload.indexOf(".");
-  if (dot < 0) return "";
-  const key = await getWrapKey();
-  const iv = b64ToBytes(payload.slice(0, dot));
-  const data = b64ToBytes(payload.slice(dot + 1));
-  const buf = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data);
-  return new TextDecoder().decode(buf);
-}
-
-const PRESETS = [
-  { name: "DeepSeek", baseUrl: "https://api.deepseek.com/v1", model: "deepseek-chat" },
-  {
-    name: "通义千问",
-    baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    model: "qwen-plus",
-  },
-  { name: "智谱 GLM", baseUrl: "https://open.bigmodel.cn/api/paas/v4", model: "glm-4-flash" },
-];
 
 // Tokenizer for Chinese legal text: emit lowercased ASCII word runs as-is, and
 // for CJK runs emit unigrams + bigrams. Used for BOTH indexing and querying so
@@ -330,6 +206,7 @@ function resolveEnabled() {
 
 export default {
   name: "LawChatWidget",
+  components: { LawModelSettings },
   data() {
     return {
       enabled: resolveEnabled(),
@@ -344,7 +221,6 @@ export default {
       indexState: "idle", // idle | loading | ready | error
       mdReady: false, // markdown-it loaded (lazy)
       cfg: { baseUrl: "", apiKey: "", model: "" },
-      presets: PRESETS,
       examples: [
         "租房到期房东不退押金怎么办？",
         "公司拖欠工资可以怎么维权？",
@@ -363,19 +239,28 @@ export default {
     configured() {
       return !!(this.cfg.baseUrl && this.cfg.apiKey && this.cfg.model);
     },
+    settingsPageUrl() {
+      return withBase("/settings/");
+    },
   },
   async created() {
     if (typeof window === "undefined") return;
-    try {
-      this.cfg.baseUrl = localStorage.getItem(LS.base) || "";
-      this.cfg.model = localStorage.getItem(LS.model) || "";
-      const stored = localStorage.getItem(LS.key) || "";
-      this.cfg.apiKey = stored ? await decryptSecret(stored) : "";
-      if (stored && !stored.startsWith("enc:v1:") && this.cfg.apiKey) {
-        await this.persistSettings();
+    this.cfg = { ...this.cfg, ...(await loadCfg()) };
+    // Stay in sync when settings are saved elsewhere (the /settings/ page or
+    // this panel — both dispatch SETTINGS_EVENT after persisting).
+    this._onSettingsSaved = async () => {
+      try {
+        this.cfg = { ...this.cfg, ...(await loadCfg()) };
+      } catch (e) {
+        /* keep previous cfg */
       }
-    } catch (e) {
-      this.cfg.apiKey = "";
+      if (this.configured && this.showSettings) this.showSettings = false;
+    };
+    window.addEventListener(SETTINGS_EVENT, this._onSettingsSaved);
+  },
+  beforeUnmount() {
+    if (typeof window !== "undefined" && this._onSettingsSaved) {
+      window.removeEventListener(SETTINGS_EVENT, this._onSettingsSaved);
     }
   },
   methods: {
@@ -403,25 +288,6 @@ export default {
       } catch (e) {
         /* fall back to escaped plain text in renderedAnswer */
       }
-    },
-    async persistSettings() {
-      try {
-        localStorage.setItem(LS.base, this.cfg.baseUrl);
-        localStorage.setItem(LS.model, this.cfg.model);
-        const enc = await encryptSecret(this.cfg.apiKey);
-        if (enc) localStorage.setItem(LS.key, enc);
-        else localStorage.removeItem(LS.key);
-      } catch (e) {
-        /* ignore */
-      }
-    },
-    async saveSettings() {
-      await this.persistSettings();
-      if (this.configured) this.showSettings = false;
-    },
-    applyPreset(p) {
-      this.cfg.baseUrl = p.baseUrl;
-      if (!this.cfg.model) this.cfg.model = p.model;
     },
     snippet(t) {
       const s = String(t || "").replace(/\s+/g, " ");
@@ -725,49 +591,6 @@ export default {
   font-size: 13px;
   color: #333;
 }
-.jl-chat__settings-intro {
-  margin: 0 0 12px;
-  color: #555;
-  line-height: 1.5;
-}
-.jl-chat__field {
-  display: block;
-  margin-bottom: 10px;
-}
-.jl-chat__field > span {
-  display: block;
-  font-size: 12px;
-  color: #666;
-  margin-bottom: 4px;
-}
-.jl-chat__field input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 8px 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 13px;
-  background: #fff;
-  color: #1a1a1a;
-}
-.jl-chat__settings-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 6px;
-}
-.jl-chat__presets summary {
-  cursor: pointer;
-  color: var(--jl-brand);
-  font-size: 12px;
-}
-.jl-chat__note {
-  margin-top: 12px;
-  font-size: 11px;
-  color: #999;
-  line-height: 1.5;
-}
 .jl-chat__disclaimer {
   background: #fff6f5;
   border-bottom: 1px solid #ffd9d4;
@@ -785,6 +608,10 @@ export default {
   font-size: 13px;
   color: #666;
   margin: 0 0 8px;
+  line-height: 1.6;
+}
+.jl-chat__hint-link {
+  color: var(--jl-brand);
 }
 .jl-chat__chip {
   display: inline-block;

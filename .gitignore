@@ -17,6 +17,7 @@ convert_*.py
 format_*.py
 process_*.py
 batch_*.py
+_tmp_*.py
 
 # 单测临时目录
 docs/.chunker-test-tmp/

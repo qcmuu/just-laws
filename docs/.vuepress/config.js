@@ -137,6 +137,10 @@ module.exports = {
         text: "案例与文献",
         link: "/references/",
       },
+      {
+        text: "AI 设置",
+        link: "/settings/",
+      },
     ],
     sidebar: {
       "/category/": [

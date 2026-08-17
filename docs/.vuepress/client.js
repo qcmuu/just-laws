@@ -2,6 +2,8 @@
 import { defineAsyncComponent } from "vue";
 import { defineClientConfig } from "@vuepress/client";
 
+import LawModelSettings from "./components/LawModelSettings.vue";
+
 // Load the floating "AI 法律问答" widget asynchronously so its code (and its
 // heavy deps) is split into a separate chunk and never blocks the initial page
 // render/hydration — important on slow networks (e.g. GitHub Pages in China).
@@ -53,7 +55,10 @@ function scheduleArticleScroll() {
 export default defineClientConfig({
   // Render the floating "AI 法律问答" widget at the app root on every page.
   rootComponents: [LawChatWidget],
-  enhance({ router }) {
+  enhance({ app, router }) {
+    // Global registration so markdown pages (docs/settings/README.md) can use
+    // the shared BYOK settings form: <LawModelSettings variant="page" />.
+    app.component("LawModelSettings", LawModelSettings);
     router.afterEach((to) => {
       if (typeof _hmt != "undefined") {
         if (to.path) {

@@ -9,6 +9,9 @@ actions:
   - text: 典型案例与文献
     link: /references/
     type: secondary
+  - text: 配置 AI 问答
+    link: /settings/
+    type: secondary
 features:
   - title: 简洁至上
     details: 采用文档化风格呈现 167+ 部中华人民共和国现行法律，结构清晰、界面整洁，提供优雅纯净的阅读体验。
