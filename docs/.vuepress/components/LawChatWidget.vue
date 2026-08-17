@@ -559,7 +559,7 @@ export default {
 
 <style scoped>
 .jl-chat {
-  --jl-brand: #de2910;
+  --jl-brand: #b13a2e;
 }
 .jl-chat__fab {
   position: fixed;
@@ -577,10 +577,13 @@ export default {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(222, 41, 16, 0.4);
+  box-shadow: 0 6px 20px rgba(177, 58, 46, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .jl-chat__fab:hover {
   filter: brightness(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(177, 58, 46, 0.42);
 }
 .jl-chat__fab-icon {
   font-size: 18px;
@@ -596,10 +599,10 @@ export default {
   max-width: calc(100vw - 32px);
   height: 560px;
   max-height: calc(100vh - 40px);
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 14px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  background: #fdfbf6;
+  border: 1px solid #e6dfcf;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(59, 44, 24, 0.18);
   overflow: hidden;
 }
 .jl-chat__header {
@@ -816,9 +819,12 @@ export default {
 </style>
 
 <style>
+html.dark .jl-chat {
+  --jl-brand: #d4614c;
+}
 html.dark .jl-chat__panel {
-  background: #161616;
-  border-color: #333;
+  background: #1e1a15;
+  border-color: #342d23;
 }
 html.dark .jl-chat__settings,
 html.dark .jl-chat__settings-intro,
