@@ -166,7 +166,7 @@ cd just-laws
 # 2. 安装 Node.js 依赖
 npm install
 
-# 3. 本地启动开发服务器（自动生成 1.3万+ 法条语料并启动 HMR）
+# 3. 本地启动开发服务器（自动生成 2.4万+ 法条语料并启动 HMR）
 npm run docs:dev
 ```
 启动后访问 `http://localhost:8080` 即可浏览文库与使用 AI 问答浮窗。
@@ -188,7 +188,7 @@ JustLaws AI 创新性地采用**客户端纯静态检索增强生成（Client-Si
 [ 用户提问 ] 
      │
      ▼
-[ MiniSearch 本地召回 ] ──( 毫秒级检索 13,426 条法条 )──► [ Top-K 相关法条上下文 ]
+[ MiniSearch 本地召回 ] ──( 毫秒级检索 24,455 条法条 )──► [ Top-K 相关法条上下文 ]
                                                                      │
                                                                      ▼
 [ 流式打字机响应 ] ◄──( 端对端通信，无中间服务器 )─── [ 用户大模型 API (DeepSeek/Qwen/GLM) ]
@@ -234,18 +234,19 @@ just-laws/
 │   ├── references/                 # 279 篇司法判例与学术文献导航页
 │   ├── category/                   # 法律类别索引页
 │   ├── constitution/               # 宪法及修正案
-│   ├── constitutional-relevance/   # 宪法相关法（54部）
+│   ├── constitutional-relevance/   # 宪法相关法（56部）
 │   ├── civil-and-commercial/       # 民法商法（25部）
-│   ├── administrative/             # 行政法（52部）
-│   ├── economic/                   # 经济法（16部）
-│   ├── social/                     # 社会法（5部）
-│   ├── criminal-law/               # 刑法及修正案（4部）
-│   └── procedural/                 # 诉讼与非诉讼程序法（10部）
+│   ├── administrative/             # 行政法（96部）
+│   ├── economic/                   # 经济法（90部）
+│   ├── social/                     # 社会法（32部）
+│   ├── criminal-law/               # 刑法及修正案（5部）
+│   ├── procedural/                 # 诉讼与非诉讼程序法（10部）
+│   └── ecological-environment/     # 生态环境法典（1部）
 │
 ├── references/                     # 本地结构化司法判例与文献知识库（8大专题）
 ├── rag-poc/                        # 企业级后端 RAG 混合检索 PoC 服务 (FastAPI+pgvector)
 ├── harvest_legal_references.py     # Exa API 多 Key 并发检索与归档管道
-├── LAWS_PROGRESS.md                # 308 部现行法律收录进度与全景表
+├── LAWS_PROGRESS.md                # 311 部现行法律收录进度与全景表
 ├── CLAUDE.md                       # AI 助手与开发规范指南
 ├── README.md                       # 项目主文档
 └── package.json                    # 工程配置与脚本定义

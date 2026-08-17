@@ -27,11 +27,13 @@ LAW_DOC_FOLDERS = [
     "docs/ecological-environment",
 ]
 
-def run_cmd(cmd, cwd=ROOT_DIR):
+def run_cmd(cmd, cwd=ROOT_DIR, check=True):
     print(f"-> {cmd}")
     res = subprocess.run(cmd, shell=True, cwd=cwd, text=True, capture_output=True)
     if res.returncode != 0:
         print(f"Error: {res.stderr.strip()}")
+        if check:
+            sys.exit(res.returncode)
     else:
         if res.stdout.strip():
             print(res.stdout.strip())

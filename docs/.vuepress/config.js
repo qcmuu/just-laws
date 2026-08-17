@@ -11,7 +11,7 @@ module.exports = {
   // JUSTLAWS_BASE=/just-laws/ at build time. Must start and end with "/".
   base: process.env.JUSTLAWS_BASE || "/",
 
-  // Disable route-chunk prefetching. With 160+ laws the entry chunk
+  // Disable route-chunk prefetching. With 300+ laws the entry chunk
   // dynamic-imports hundreds of page chunks, so VuePress would otherwise emit
   // 400+ `<link rel="prefetch">` tags that fire on first paint. On a slow /
   // unstable connection (e.g. GitHub Pages from mainland China) this request
