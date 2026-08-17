@@ -3,6 +3,7 @@ import { defineAsyncComponent } from "vue";
 import { defineClientConfig } from "@vuepress/client";
 
 import LawModelSettings from "./components/LawModelSettings.vue";
+import ReferenceIndex from "./components/ReferenceIndex.vue";
 
 // Load the floating "AI 法律问答" widget asynchronously so its code (and its
 // heavy deps) is split into a separate chunk and never blocks the initial page
@@ -59,6 +60,7 @@ export default defineClientConfig({
     // Global registration so markdown pages (docs/settings/README.md) can use
     // the shared BYOK settings form: <LawModelSettings variant="page" />.
     app.component("LawModelSettings", LawModelSettings);
+    app.component("ReferenceIndex", ReferenceIndex);
     router.afterEach((to) => {
       if (typeof _hmt != "undefined") {
         if (to.path) {
