@@ -18,7 +18,7 @@ features:
     details: 精选 279 篇真实司法判例文书、最高法指导性案例及权威法学学术文献，全量落地归档。
 ---
 
-<div class="footer">MIT Licensed | <a class="icp" href="https://beian.miit.gov.cn/#/Integrated/index" target="blank">浙ICP备2020040461号-2</a> | ©2022-2026 <a class="imcao" href="https://www.imcao.cn" target="blank">ImCaO</a></div>
+<div class="footer">MIT Licensed | ©2026 <a class="author" href="https://github.com/qcmuu" target="_blank" rel="noopener noreferrer">qcmuu</a></div>
 
 <style>
 .footer {
@@ -28,7 +28,7 @@ features:
   color: var(--c-text-lighter);
   transition: border-color var(--t-color);
 }
-.icp, .imcao {
+.author {
   font-weight: inherit;
   color: var(--c-text-lighter) !important;
 }
