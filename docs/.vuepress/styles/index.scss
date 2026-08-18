@@ -579,6 +579,10 @@ html.dark .home::before {
     right: max(2rem, calc(50% - 30rem));
     transform: translateY(-58%);
     writing-mode: vertical-rl;
+    /* nowrap keeps the whole motto on ONE vertical line: the · and spaces
+       around it are soft wrap points and in vertical-rl the browser breaks
+       them into additional columns ("为凭" ends up on a second line). */
+    white-space: nowrap;
     letter-spacing: 0.55em;
     font-family: var(--font-family-serif);
     font-size: 0.85rem;
