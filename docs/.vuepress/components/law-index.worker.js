@@ -94,6 +94,7 @@ async function buildIndex(docs) {
     post({
       type: "progress",
       percent: Math.min(98, Math.round(((i + INDEX_CHUNK_DOCS) / total) * 100)),
+      fromCache,
     });
     await yieldToUI();
   }
@@ -103,11 +104,12 @@ async function buildIndex(docs) {
 // ---- Init: cached corpus if fresh, otherwise download + parse + cache ----
 
 let mini = null;
+let fromCache = false; // set in init(); echoed on every progress message
 
 async function init(corpusUrl, cachedVersion) {
   let data = null;
   let version = 0;
-  let fromCache = false;
+  fromCache = false;
 
   // 1) Try the shared IndexedDB cache (same store as the main-thread path).
   if (cachedVersion != null) {
@@ -120,15 +122,17 @@ async function init(corpusUrl, cachedVersion) {
   if (data) {
     fromCache = true;
     version = cachedVersion;
-    post({ type: "progress", percent: 40 });
+    // fromCache rides along so the main thread can switch the status line to
+    // the "已从本地缓存读取" variant right away, not only after `ready`.
+    post({ type: "progress", percent: 40, fromCache: true });
   } else {
     // 2) Network fetch + persist for next time (best-effort).
-    post({ type: "progress", percent: 5 });
+    post({ type: "progress", percent: 5, fromCache: false });
     const resp = await fetch(corpusUrl);
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     data = await resp.json();
     version = data.version || 0;
-    post({ type: "progress", percent: 25 });
+    post({ type: "progress", percent: 25, fromCache: false });
     if (version != null) {
       await setCachedCorpus(version, data); // never throws (best-effort)
     }

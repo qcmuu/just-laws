@@ -430,6 +430,12 @@ export default {
           const msg = e.data || {};
           if (msg.type === "progress") {
             this.indexProgress = msg.percent || 0;
+            // fromCache arrives with the first progress message, so the status
+            // line shows the right variant during the whole build, not just
+            // after `ready`.
+            if (typeof msg.fromCache === "boolean") {
+              this.indexFromCache = msg.fromCache;
+            }
           } else if (msg.type === "ready") {
             // Persist the version pointer the worker discovered, so future
             // visits can hit the IndexedDB cache without a network fetch.
