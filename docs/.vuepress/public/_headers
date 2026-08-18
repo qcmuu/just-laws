@@ -1,0 +1,35 @@
+# Cache & security headers for Cloudflare Pages / Netlify.
+#
+# GitHub Pages ignores this file (its own caching is fixed at 10 minutes) —
+# this file kicks in automatically when the same `docs/.vuepress/dist` output
+# is deployed to Cloudflare Pages or Netlify, both of which honor `_headers`
+# at the site root. It turns the "every visit re-downloads everything" problem
+# (the main cause of the site feeling slow) into proper long-lived caching.
+#
+# Order matters: more specific paths first, `/*` fallback last.
+# For Vercel, port these rules to a `vercel.json` "headers" array instead.
+
+# Hashed assets never change -> safe to cache forever (immutable).
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Corpus is versioned internally ({"version": 2}) and re-fetched by the client
+# when the version pointer changes, so a 7-day cache is safe and avoids the
+# 2.6 MB gzip re-download on repeat visits.
+/law-corpus.json
+  Cache-Control: public, max-age=604800
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+
+# Entry HTML: no-store so edits/deploys propagate instantly.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+/404.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Defaults: security headers on everything.
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

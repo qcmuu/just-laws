@@ -7,6 +7,9 @@ dist
 docs/.vuepress/public/law-corpus.json
 docs/.vuepress/public/sitemap.xml
 
+# Playwright MCP 本地会话日志（不纳入版本库）
+.playwright-mcp/
+
 # Python 临时文件
 __pycache__/
 *.pyc

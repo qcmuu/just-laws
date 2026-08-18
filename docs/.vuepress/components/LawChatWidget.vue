@@ -4,8 +4,14 @@
 
   Fully client-side, no backend (BYOK = bring your own key):
   - Lazy-loads /law-corpus.json (article-level law chunks) on first open.
-  - Builds a lexical index in the browser (MiniSearch + a CJK bi-gram tokenizer)
-    and retrieves the top-k 法条 for the question.
+  - Builds the lexical index in a Web Worker (MiniSearch + a CJK bi-gram
+    tokenizer) so the ~15 s of CPU never blocks the main thread; the parsed
+    corpus is cached in IndexedDB (see law-corpus-cache.js) so repeat opens
+    skip the multi-MB re-download that GitHub Pages' 10-minute Cache-Control
+    forces. Searches also run inside the worker.
+  - If Web Workers are unavailable (very old browsers / restrictive CSP), the
+    widget transparently falls back to building the index on the main thread
+    with the same chunked yields as before.
   - Sends the retrieved 法条 + question to a user-supplied OpenAI-compatible
     chat endpoint and streams the answer. The API key is stored only in the
     user's browser (localStorage) and sent directly to their chosen provider —
@@ -69,7 +75,12 @@
           <div ref="bodyEl" class="jl-chat__body">
             <div v-if="indexState === 'loading'" class="jl-chat__status">
               <span class="jl-chat__status-dot"></span>
-              正在构建法条索引 {{ indexProgress }}%…（一次约十几秒，仅本页首次，期间页面可正常浏览）
+              <template v-if="indexFromCache">
+                已从本地缓存读取法条，正在后台构建索引 {{ indexProgress }}%…（页面可正常浏览）
+              </template>
+              <template v-else>
+                正在下载法条语料并在后台构建索引 {{ indexProgress }}%…（仅首次较慢，页面可正常浏览）
+              </template>
             </div>
             <div v-if="!answer && !sources.length && !error" class="jl-chat__examples">
               <p v-if="!configured" class="jl-chat__hint">
@@ -162,6 +173,7 @@ import { withBase } from "@vuepress/client";
 
 import LawModelSettings from "./LawModelSettings.vue";
 import { SETTINGS_EVENT, loadCfg } from "./chat-settings";
+import { getCachedCorpus, setCachedCorpus } from "./law-corpus-cache.js";
 
 // markdown-it and minisearch are heavy and only needed once the user actually
 // opens the chat. They are dynamically imported on demand (see loadMarkdown /
@@ -257,6 +269,7 @@ export default {
       loading: false,
       indexState: "idle", // idle | loading | ready | error
       indexProgress: 0, // % while indexState === "loading"
+      indexFromCache: false, // true when corpus came from IndexedDB (no network)
       mdReady: false, // markdown-it loaded (lazy)
       cfg: { baseUrl: "", apiKey: "", model: "" },
       examples: [
@@ -283,6 +296,11 @@ export default {
   },
   async created() {
     if (typeof window === "undefined") return;
+    // Non-reactive worker plumbing (kept off Vue's reactive proxy — a proxied
+    // Worker breaks postMessage's `this` binding).
+    this._worker = null;
+    this._searchSeq = 0;
+    this._searchWaiters = new Map();
     this.cfg = { ...this.cfg, ...(await loadCfg()) };
     // Stay in sync when settings are saved elsewhere (the /settings/ page or
     // this panel — both dispatch SETTINGS_EVENT after persisting).
@@ -299,6 +317,10 @@ export default {
   beforeUnmount() {
     if (typeof window !== "undefined" && this._onSettingsSaved) {
       window.removeEventListener(SETTINGS_EVENT, this._onSettingsSaved);
+    }
+    if (this._worker) {
+      this._worker.terminate();
+      this._worker = null;
     }
   },
   methods: {
@@ -359,53 +381,224 @@ export default {
       if (this._indexPromise) return this._indexPromise;
       this.indexState = "loading";
       this.indexProgress = 0;
+      // Prefer the Web Worker: the ~15 s CPU index build (and every search)
+      // runs off the main thread, so the page never janks while the corpus
+      // loads. If workers are unavailable (very old browsers / strict CSP) or
+      // the worker errors out, fall back to the in-page path below.
       this._indexPromise = (async () => {
         try {
-          // withBase prepends the site base (e.g. /just-laws/ on a GitHub Pages
-          // project site), so the corpus resolves both at root and under a subpath.
-          const [{ default: MiniSearchCls }, resp] = await Promise.all([
-            MiniSearch ? Promise.resolve({ default: MiniSearch }) : import("minisearch"),
-            fetch(withBase("/law-corpus.json")),
-          ]);
-          MiniSearch = MiniSearchCls;
-          if (!resp.ok) throw new Error("HTTP " + resp.status);
-          const data = await resp.json();
-          const mini = new MiniSearch({
-            fields: ["t", "n", "c"],
-            storeFields: ["n", "a", "c", "u", "t"],
-            tokenize: cjkTokenize,
-            searchOptions: {
-              tokenize: cjkTokenize,
-              boost: { n: 3, c: 1.5 },
-              combineWith: "OR",
-            },
-          });
-          // Chunked build with yields: the page stays interactive (no
-          // "unresponsive" dialog) and indexProgress ticks up as feedback.
-          const total = data.docs.length;
-          for (let i = 0; i < total; i += INDEX_CHUNK_DOCS) {
-            mini.addAll(data.docs.slice(i, i + INDEX_CHUNK_DOCS));
-            this.indexProgress = Math.min(
-              100,
-              Math.round(((i + INDEX_CHUNK_DOCS) / total) * 100)
-            );
-            await yieldToUI();
+          if (typeof Worker !== "undefined" && (await this._tryIndexViaWorker())) {
+            this.indexState = "ready";
+            this.indexProgress = 100;
+            return;
           }
-          this._mini = mini;
-          this.indexState = "ready";
+          await this._indexOnMainThread();
         } catch (e) {
+          this._teardownWorker();
+          throw e;
+        }
+      })()
+        .catch((e) => {
           this.indexState = "error";
           this._indexPromise = null;
           this.error = "法条索引加载失败，请刷新页面重试。";
           throw e;
-        }
-      })();
+        });
       return this._indexPromise;
     },
+    // Worker path. Returns true once the worker reports `ready`. Any failure
+    // (constructor throw, error message, crash) tears the worker down and
+    // returns false so the caller falls back to the main-thread path.
+    // The worker is imported with Vite's `?worker` suffix (instead of
+    // `new Worker(new URL(...))`), which VuePress' SSR build rejects; `?worker`
+    // yields a constructor and the code is still split into its own chunk.
+    async _tryIndexViaWorker() {
+      let worker;
+      try {
+        const workerMod = await import("./law-index.worker.js?worker");
+        const LawIndexWorker = workerMod.default || workerMod;
+        worker = new LawIndexWorker();
+      } catch (e) {
+        return false;
+      }
+      this._worker = worker;
+      // Persistent listener for search results (retrieve() waits on these).
+      worker.addEventListener("message", this._onWorkerMessage);
+      // One-shot listener for the init sequence, removed on settle.
+      const initOk = new Promise((resolve, reject) => {
+        const onMsg = (e) => {
+          const msg = e.data || {};
+          if (msg.type === "progress") {
+            this.indexProgress = msg.percent || 0;
+          } else if (msg.type === "ready") {
+            // Persist the version pointer the worker discovered, so future
+            // visits can hit the IndexedDB cache without a network fetch.
+            if (msg.version != null) this._writeCachedVersion(msg.version);
+            this.indexFromCache = !!msg.fromCache;
+            cleanup();
+            resolve();
+          } else if (msg.type === "error") {
+            cleanup();
+            reject(new Error(msg.message || "worker error"));
+          }
+        };
+        const onErr = () => {
+          cleanup();
+          reject(new Error("worker error"));
+        };
+        const cleanup = () => {
+          worker.removeEventListener("message", onMsg);
+          worker.removeEventListener("error", onErr);
+        };
+        worker.addEventListener("message", onMsg);
+        worker.addEventListener("error", onErr);
+        worker.postMessage({
+          type: "init",
+          corpusUrl: withBase("/law-corpus.json"),
+          cachedVersion: this._readCachedVersion(),
+        });
+      });
+      try {
+        await initOk;
+        return true;
+      } catch (e) {
+        this._teardownWorker();
+        return false;
+      }
+    },
+    // Routes worker replies for pending searches (see retrieve()).
+    _onWorkerMessage(e) {
+      const msg = e.data || {};
+      if (msg.type === "results" && msg.requestId != null) {
+        const resolve = this._searchWaiters.get(msg.requestId);
+        if (resolve) {
+          this._searchWaiters.delete(msg.requestId);
+          resolve(msg.hits || []);
+        }
+      } else if (msg.type === "error" && msg.requestId != null) {
+        const resolve = this._searchWaiters.get(msg.requestId);
+        if (resolve) {
+          this._searchWaiters.delete(msg.requestId);
+          resolve([]);
+        }
+      }
+    },
+    _teardownWorker() {
+      if (this._worker) {
+        this._worker.removeEventListener("message", this._onWorkerMessage);
+        try {
+          this._worker.terminate();
+        } catch (e) {
+          /* ignore */
+        }
+        this._worker = null;
+      }
+    },
+    // Main-thread fallback: the pre-worker path (IndexedDB cache -> fetch ->
+    // chunked MiniSearch build with yields). Kept so the widget works even
+    // where Web Workers are unavailable.
+    async _indexOnMainThread() {
+      const MiniSearchCls = MiniSearch || (await import("minisearch")).default;
+      MiniSearch = MiniSearchCls;
+
+      // Resolve the corpus: try the IndexedDB cache first (keyed by the
+      // corpus `version`), then fall back to a network fetch and persist
+      // the result. On a cache hit the 2.6MB gzip download is skipped
+      // entirely — the biggest win on a slow link. The cache is best-effort
+      // and versioned, so a stale corpus never loads after a rebuild.
+      let data = null;
+      try {
+        const lastVer = this._readCachedVersion();
+        if (lastVer != null) {
+          const cached = await getCachedCorpus(lastVer);
+          if (cached) {
+            data = cached;
+            this.indexFromCache = true;
+          }
+        }
+      } catch (e) {
+        /* cache miss -> fall through to network */
+      }
+
+      if (!data) {
+        const resp = await fetch(withBase("/law-corpus.json"));
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
+        data = await resp.json();
+        // Persist for next time (best-effort). The version field gates the
+        // cache key, so an updated corpus with a new version replaces the
+        // old entry automatically (see setCachedCorpus pruning).
+        if (data && data.version != null) {
+          this._writeCachedVersion(data.version);
+          setCachedCorpus(data.version, data).catch(() => {});
+        }
+      }
+
+      const mini = new MiniSearch({
+        fields: ["t", "n", "c"],
+        storeFields: ["n", "a", "c", "u", "t"],
+        tokenize: cjkTokenize,
+        searchOptions: {
+          tokenize: cjkTokenize,
+          boost: { n: 3, c: 1.5 },
+          combineWith: "OR",
+        },
+      });
+      // Chunked build with yields: the page stays interactive (no
+      // "unresponsive" dialog) and indexProgress ticks up as feedback.
+      const total = data.docs.length;
+      for (let i = 0; i < total; i += INDEX_CHUNK_DOCS) {
+        mini.addAll(data.docs.slice(i, i + INDEX_CHUNK_DOCS));
+        this.indexProgress = Math.min(
+          100,
+          Math.round(((i + INDEX_CHUNK_DOCS) / total) * 100)
+        );
+        await yieldToUI();
+      }
+      this._mini = mini;
+      this.indexState = "ready";
+    },
+    // localStorage pointer to the last cached corpus version. Cheaper than
+    // scanning IndexedDB keys on every open; the authoritative check is still
+    // the version field inside the cached entry.
+    _readCachedVersion() {
+      try {
+        const v = localStorage.getItem("jl_corpus_version");
+        return v == null ? null : Number(v);
+      } catch (e) {
+        return null;
+      }
+    },
+    _writeCachedVersion(v) {
+      try {
+        localStorage.setItem("jl_corpus_version", String(v));
+      } catch (e) {
+        /* ignore */
+      }
+    },
+    // Search the index. With a worker present the query is posted there and
+    // the hits arrive back via _onWorkerMessage; otherwise we fall back to the
+    // in-page MiniSearch built by _indexOnMainThread.
     retrieve(q) {
-      if (!this._mini) return [];
+      if (this._worker) {
+        const requestId = ++this._searchSeq;
+        return new Promise((resolve) => {
+          this._searchWaiters.set(requestId, resolve);
+          try {
+            this._worker.postMessage({
+              type: "search",
+              query: q,
+              topK: TOP_K,
+              requestId,
+            });
+          } catch (e) {
+            this._searchWaiters.delete(requestId);
+            resolve([]);
+          }
+        });
+      }
+      if (!this._mini) return Promise.resolve([]);
       const hits = this._mini.search(q, { combineWith: "OR" });
-      return hits.slice(0, TOP_K);
+      return Promise.resolve(hits.slice(0, TOP_K));
     },
     buildMessages(q, ctx) {
       const blocks = ctx
@@ -447,7 +640,7 @@ export default {
         this.loading = false;
         return;
       }
-      const ctx = this.retrieve(q);
+      const ctx = await this.retrieve(q);
       this.sources = ctx;
       this.scrollDown();
 

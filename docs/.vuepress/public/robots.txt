@@ -1,0 +1,9 @@
+# JustLaws AI — allow all crawlers, point at the generated sitemap.
+#
+# The sitemap URL below matches the current GitHub Pages deployment. If the
+# site moves to a custom domain (or a different user/org pages URL), update
+# the Sitemap line to the new absolute URL.
+User-agent: *
+Allow: /
+
+Sitemap: https://qcmuu.github.io/just-laws/sitemap.xml
