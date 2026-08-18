@@ -1065,6 +1065,61 @@ html.dark .jl-ref__fold > summary:hover {
 }
 
 /* ============================================================
+   内容区表格：移动端自适应
+   VuePress 默认 `.theme-default-content table` 覆盖了通用
+   table{display:block;overflow-x:auto}，导致设置页等含长表格的
+   页面在窄屏被撑破（实测 751px > 390px 视口）。窄屏下改为
+   允许单元格换行 + 长 URL 断行，表格自适应视口宽度（无需横向
+   滚动，完整可见）。
+   ============================================================ */
+
+@media (max-width: 959px) {
+  .theme-default-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* 不强制 nowrap：长链接会撑破视口（实测 989px 内容 -> 393px
+       文档宽）。允许换行后表格自适应，链接用 break-all 断行。 */
+    white-space: normal;
+  }
+  .theme-default-content td,
+  .theme-default-content th {
+    white-space: normal;
+    word-break: break-word;
+  }
+  .theme-default-content td a,
+  .theme-default-content th a {
+    word-break: break-all;
+  }
+}
+
+/* ============================================================
+   导航栏平板折叠：默认主题在 ≤719px 才显示汉堡按钮，本项目导航
+   项多，在 720-959px 平板宽度下完整菜单溢出视口（实测 768px 时
+   navbar 内容伸到 1289px）。将折叠断点提前到 959px，与侧栏
+   平板断点（--sidebar-width-mobile）一致。
+   ============================================================ */
+
+@media (max-width: 959px) {
+  .navbar .can-hide {
+    display: none;
+  }
+  .navbar > .toggle-sidebar-button {
+    display: block;
+  }
+  .navbar {
+    padding-left: 4rem;
+  }
+  .navbar .site-name {
+    width: calc(100vw - 9.4rem);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+/* ============================================================
    动效可关闭：尊重系统减少动态偏好
    ============================================================ */
 

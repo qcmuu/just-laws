@@ -9,6 +9,7 @@ docs/.vuepress/public/sitemap.xml
 
 # Playwright MCP 本地会话日志（不纳入版本库）
 .playwright-mcp/
+.audit/
 
 # Python 临时文件
 __pycache__/
