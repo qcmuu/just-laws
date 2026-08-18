@@ -694,11 +694,17 @@ html.dark .home .hero h1::before {
 }
 
 /* —— 特性卡：壹貳叁编号 + 文武线顶边 —— */
+/* 用 Grid 接管布局：默认主题的 flex(flex-basis:30% + space-between)
+   会把 3 张卡排成"2+1"错乱（第 3 张被挤到下一行）。 */
 .home .features {
   position: relative;
   z-index: 1;
   margin: 1.5rem auto 0;
   padding: 0 1.5rem 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.4rem 1.5rem;
+  align-items: stretch;
 }
 
 .home .feature {
@@ -708,6 +714,9 @@ html.dark .home .hero h1::before {
   border-radius: 10px;
   padding: 1.7rem 1.6rem 1.5rem;
   box-shadow: var(--jl-shadow-sm);
+  /* 覆盖默认主题的 max-width:30%（flex 时代残留）：Grid 布局下
+     卡片应撑满所在列，否则只占列宽一半。 */
+  max-width: 100%;
   transition: transform 0.25s ease, box-shadow 0.25s ease,
     border-color 0.25s ease;
 }
@@ -906,6 +915,9 @@ html.dark .jl-catalog__item:hover {
   .jl-catalog__grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .home .features {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 @media (max-width: 560px) {
   .jl-catalog__grid {
@@ -916,6 +928,9 @@ html.dark .jl-catalog__item:hover {
   }
   .jl-stats {
     gap: 1rem;
+  }
+  .home .features {
+    grid-template-columns: 1fr;
   }
 }
 
