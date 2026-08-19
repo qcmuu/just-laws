@@ -207,9 +207,11 @@ function safeHttpUrl(u){
 }
 function renderSources(sources){
   srcEl.replaceChildren();
-  const h=document.createElement('h4');
-  h.textContent='参考来源（'+(sources||[]).length+' 条法条，点击核对原文）';
-  srcEl.appendChild(h);
+  const box=document.createElement('details');
+  const h=document.createElement('summary');
+  h.textContent='参考来源（'+(sources||[]).length+' 条法条，展开核对原文）';
+  box.appendChild(h);
+  srcEl.appendChild(box);
   (sources||[]).forEach(s=>{
     const d=document.createElement('div');d.className='src';
     const a=document.createElement('a');
@@ -221,7 +223,7 @@ function renderSources(sources){
     const ctx=document.createElement('div');ctx.className='ctx';
     ctx.textContent=s.context||'';
     d.appendChild(a);d.appendChild(badge);d.appendChild(ctx);
-    srcEl.appendChild(d);
+    box.appendChild(d);
   });
 }
 sendBtn.onclick=ask;qEl.addEventListener('keydown',e=>{if(e.key==='Enter')ask();});

@@ -8,7 +8,7 @@
     "build:corpus": "node docs/.vuepress/scripts/build-law-corpus.mjs",
     "docs:dev": "node docs/.vuepress/scripts/build-law-corpus.mjs && vuepress dev docs",
     "docs:build": "node docs/.vuepress/scripts/build-law-corpus.mjs && vuepress build docs",
-    "test": "node --test docs/.vuepress/scripts/build-law-corpus.test.mjs && python -m unittest discover -s rag-poc/tests -p test_*.py"
+    "test": "node --test docs/.vuepress/scripts/build-law-corpus.test.mjs docs/.vuepress/scripts/law-retrieve.test.mjs && python -m unittest discover -s rag-poc/tests -p test_*.py"
   },
   "devDependencies": {
     "@vuepress/plugin-search": "^2.0.0-beta.48",

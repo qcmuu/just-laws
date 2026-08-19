@@ -813,11 +813,21 @@ html.dark .home .feature h2::before {
   color: var(--c-text-lighter);
 }
 
-/* —— 首页内容区（数据带 / 部门法目录 / 页脚）—— */
-.home .theme-default-content {
+/* —— 首页内容区（数据带 / 部门法目录 / 页脚）——
+   必须与 .home .features 同宽、同左右内边距。
+   否则会被正文栏 --content-width:760px 锁窄，整块贴左，
+   三列目录对不齐上方三张特性卡。 */
+.home .theme-default-content,
+.home .theme-default-content:not(.custom) {
   position: relative;
   z-index: 1;
-  max-width: var(--content-width, 760px);
+  max-width: none;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  box-sizing: border-box;
 }
 
 /* 数据带 */
@@ -984,6 +994,94 @@ html.dark .jl-catalog__item:hover {
 
 .references-index .theme-default-content:not(.custom) {
   max-width: 980px;
+}
+
+.jl-ref-mast {
+  margin: 0 0 1.6rem;
+  padding: 1.35rem 1.5rem 1.2rem;
+  border: 1px solid var(--c-border);
+  border-top: 4px double var(--c-border-dark);
+  border-radius: 10px;
+  background: var(--c-bg-light);
+}
+
+.jl-ref-mast__body {
+  margin: 0 0 1.15rem;
+  font-size: 0.98rem;
+  line-height: 1.9;
+  color: var(--c-text-light);
+}
+
+.jl-ref-mast__body a {
+  font-weight: 600;
+}
+
+.jl-ref-mast__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--c-border);
+  padding-top: 1.05rem;
+}
+
+.jl-ref-mast__item {
+  text-align: center;
+  padding: 0 0.6rem;
+}
+
+.jl-ref-mast__item + .jl-ref-mast__item {
+  border-left: 1px solid var(--c-border);
+}
+
+.jl-ref-mast__num {
+  display: block;
+  font-family: var(--font-family-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--c-brand);
+  font-variant-numeric: tabular-nums;
+}
+
+.jl-ref-mast__item--date .jl-ref-mast__num {
+  font-size: 1.18rem;
+  letter-spacing: 0.02em;
+  padding-top: 0.22rem;
+}
+
+.jl-ref-mast__label {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  color: var(--c-text-lighter);
+}
+
+.jl-ref-hint {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--c-text-lighter);
+}
+
+@media (max-width: 560px) {
+  .jl-ref-mast {
+    padding: 1.15rem 1.1rem 1rem;
+  }
+
+  .jl-ref-mast__stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .jl-ref-mast__item + .jl-ref-mast__item {
+    border-left: 0;
+    border-top: 1px solid var(--c-border);
+    padding-top: 0.75rem;
+  }
+
+  .jl-ref-mast__num {
+    font-size: 1.35rem;
+  }
 }
 
 .jl-ref {
@@ -1155,6 +1253,91 @@ html.dark .jl-ref__fold > summary:hover {
 /* ============================================================
    动效可关闭：尊重系统减少动态偏好
    ============================================================ */
+
+/* 设置页：技术方案 */
+.jl-arch {
+  margin: 1.2rem 0 2rem;
+  padding: 1.35rem 1.5rem 1.2rem;
+  border: 1px solid var(--c-border);
+  border-top: 4px double var(--c-border-dark);
+  border-radius: 10px;
+  background: var(--c-bg-light);
+}
+
+.jl-arch__steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.25rem;
+}
+
+.jl-arch__steps li {
+  display: grid;
+  grid-template-columns: 1.7rem minmax(0, 1fr);
+  column-gap: 0.7rem;
+  align-items: start;
+}
+
+.jl-arch__steps li:nth-child(1)::before { content: "一"; }
+.jl-arch__steps li:nth-child(2)::before { content: "二"; }
+.jl-arch__steps li:nth-child(3)::before { content: "三"; }
+.jl-arch__steps li:nth-child(4)::before { content: "四"; }
+
+.jl-arch__steps li::before {
+  grid-row: 1 / span 2;
+  font-family: var(--font-family-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.7rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  text-align: center;
+  color: var(--c-brand);
+  border: 1px solid rgba(177, 58, 46, 0.4);
+  border-radius: 4px;
+  background: rgba(177, 58, 46, 0.05);
+}
+
+html.dark .jl-arch__steps li::before {
+  border-color: rgba(212, 97, 76, 0.5);
+  background: rgba(212, 97, 76, 0.08);
+}
+
+.jl-arch__steps strong,
+.jl-arch__steps span {
+  grid-column: 2;
+}
+
+.jl-arch__steps strong {
+  font-family: var(--font-family-serif);
+  font-size: 0.98rem;
+  letter-spacing: 0.05em;
+  color: var(--c-text);
+}
+
+.jl-arch__steps span {
+  margin-top: 0.2rem;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--c-text-lighter);
+}
+
+@media (max-width: 720px) {
+  .jl-arch__steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+.jl-arch__note {
+  margin: 1.1rem 0 0;
+  padding-top: 0.95rem;
+  border-top: 1px solid var(--c-border);
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: var(--c-text-lighter);
+}
 
 @media (prefers-reduced-motion: reduce) {
   .home .hero .figure,

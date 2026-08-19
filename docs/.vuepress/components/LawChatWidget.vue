@@ -57,6 +57,16 @@
           </div>
           <div class="jl-chat__actions">
             <button
+              v-if="turns.length && !showSettings"
+              class="jl-chat__icon"
+              type="button"
+              aria-label="开启新对话"
+              title="开启新对话"
+              @click="newChat"
+            >
+              ＋
+            </button>
+            <button
               class="jl-chat__icon"
               type="button"
               :aria-label="showSettings ? '返回问答' : '设置模型'"
@@ -159,8 +169,10 @@
                   {{ turn.error }}
                 </div>
 
-                <div v-if="turn.sources.length" class="jl-chat__sources">
-                  <h4>参考来源（{{ turn.sources.length }} 条法条，点击核对原文）</h4>
+                <!-- Collapsed by default so the streamed answer stays
+                     primary; expand to check the original articles. -->
+                <details v-if="turn.sources.length" class="jl-chat__sources">
+                  <summary>参考来源（{{ turn.sources.length }} 条法条，展开核对原文）</summary>
                   <a
                     v-for="(s, i) in turn.sources"
                     :key="i"
@@ -175,7 +187,7 @@
                     <span v-if="s.c" class="jl-chat__badge">{{ s.c }}</span>
                     <span class="jl-chat__src-ctx">{{ snippet(s.t) }}</span>
                   </a>
-                </div>
+                </details>
 
                 <div v-if="!turn.streaming && turn.text" class="jl-chat__turn-actions">
                   <button
@@ -232,6 +244,7 @@ import {
   describeHttpError,
   CORS_HINT,
 } from "./chat-settings";
+import { cjkTokenize, searchLaws } from "./law-retrieve.js";
 import { getCachedCorpus, setCachedCorpus } from "./law-corpus-cache.js";
 
 // markdown-it and minisearch are heavy and only needed once the user actually
@@ -270,30 +283,10 @@ const HISTORY_MAX_TURNS = 3;
 const HISTORY_MAX_CHARS = 4000;
 
 // A follow-up this short ("那诉讼时效呢？") has no retrieval terms of its
-// own — its query is merged with the previous user question.
+// own — its query is merged with the previous user question. Stop-unigram
+// dropping and colloquial→legal expansion happen in law-retrieve.js
+// (worker-side searchLaws) on the merged string.
 const FOLLOWUP_MERGE_MAX_CHARS = 12;
-
-// Interrogative / politeness filler stripped from the RETRIEVAL query only
-// (the model still sees the original question). Longest-first at use time.
-const QUERY_FILLERS = [
-  "怎么办", "怎么处理", "怎么解决", "怎么维权", "该怎么办", "怎么做", "怎么样",
-  "怎么回事", "什么情况", "如何处理", "如何解决", "如何维权",
-  "我想问一下", "我想请教", "请教一下", "想问一下", "想问下", "麻烦问下", "请问",
-  "可以吗", "行吗", "对吗", "是吗", "能不能", "会不会", "是不是", "有没有",
-  "为什么", "可以", "应该", "必须", "怎么", "什么", "如何", "哪些", "哪个",
-  "求助", "谢谢", "吗", "呢", "啊", "呀", "嘛", "哦", "我", "的", "了",
-].sort((a, b) => b.length - a.length);
-
-function cleanQuery(q) {
-  const raw = String(q || "").trim();
-  if (!raw) return raw;
-  let s = raw.replace(/[\s？?！!。，,、；;：:"'“”‘’（）()【】\[\]·…]+/g, "");
-  for (const w of QUERY_FILLERS) {
-    if (s.includes(w)) s = s.split(w).join("¦");
-  }
-  const parts = s.split("¦").filter(Boolean);
-  return parts.length ? parts.join("") : raw;
-}
 
 // Truncate a 法条 on a sentence boundary when one exists in the back half,
 // so the model never receives half a sentence.
@@ -361,27 +354,11 @@ function yieldToUI() {
   });
 }
 
-// Tokenizer for Chinese legal text: emit lowercased ASCII word runs as-is, and
-// for CJK runs emit unigrams + bigrams. Used for BOTH indexing and querying so
-// lexical recall works without word segmentation or any model download.
-function cjkTokenize(str) {
-  if (!str) return [];
-  const tokens = [];
-  const re = /[\u4e00-\u9fff]+|[a-zA-Z0-9]+/g;
-  let m;
-  while ((m = re.exec(str)) !== null) {
-    const run = m[0];
-    if (/[a-zA-Z0-9]/.test(run[0])) {
-      tokens.push(run.toLowerCase());
-    } else {
-      for (let i = 0; i < run.length; i++) {
-        tokens.push(run[i]);
-        if (i + 1 < run.length) tokens.push(run[i] + run[i + 1]);
-      }
-    }
-  }
-  return tokens;
-}
+// Tokenizer for Chinese legal text (imported from law-retrieve.js so the
+// widget and the worker share one implementation): lowercased ASCII word
+// runs as-is, CJK runs emit unigrams + bigrams. Used for BOTH indexing and
+// querying so lexical recall works without word segmentation or any model
+// download.
 
 function resolveEnabled() {
   if (
@@ -487,6 +464,23 @@ export default {
     }
   },
   methods: {
+    // 开启新对话：clear the transcript and abort any in-flight request.
+    // The orphaned turn detaches from the array, so its late mutations (the
+    // stream's finally block) can't resurface. The corpus index stays warm.
+    newChat() {
+      this._stopReason = "user"; // suppress the abort error on the orphan
+      if (this._activeController) {
+        try {
+          this._activeController.abort();
+        } catch (e) {
+          /* ignore */
+        }
+      }
+      this.turns = [];
+      this.question = "";
+      this.loading = false;
+      this.showSettings = false;
+    },
     openPanel() {
       this.open = true;
       // Opening from the FAB always lands on chat for configured users —
@@ -785,22 +779,18 @@ export default {
         });
       }
       if (!this._mini) return Promise.resolve([]);
-      const hits = this._mini.search(q, { combineWith: "OR" });
-      return Promise.resolve(hits.slice(0, TOP_K));
+      return Promise.resolve(searchLaws(this._mini, q, TOP_K));
     },
-    // Retrieval terms for a question: cleaned of interrogative filler, and —
-    // for a short follow-up — merged with the previous user question so
-    // "那诉讼时效呢？" still retrieves the topic it refers to.
+    // Retrieval terms for a question: a short follow-up inherits the previous
+    // question's terms; stop-unigram filtering and colloquial→legal expansion
+    // are applied by law-retrieve.js inside searchLaws (worker or fallback).
     buildRetrievalQuery(q, currentUserTurn) {
-      let base = q;
-      if (q.length <= FOLLOWUP_MERGE_MAX_CHARS) {
-        const prev = this.turns.filter(
-          (t) => t.role === "user" && t !== currentUserTurn,
-        );
-        const last = prev[prev.length - 1];
-        if (last && last.text) base = last.text + "，" + q;
-      }
-      return cleanQuery(base);
+      if (q.length > FOLLOWUP_MERGE_MAX_CHARS) return q;
+      const prev = this.turns.filter(
+        (t) => t.role === "user" && t !== currentUserTurn,
+      );
+      const last = prev[prev.length - 1];
+      return last && last.text ? last.text + "，" + q : q;
     },
     buildMessages(q, ctx, history) {
       const blocks = ctx
@@ -1396,11 +1386,17 @@ export default {
   border-top: 1px dashed #eee;
   padding-top: 10px;
 }
-.jl-chat__sources h4 {
+.jl-chat__sources > summary {
   font-size: 12px;
   color: #888;
   margin: 0 0 8px;
   font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.jl-chat__sources > summary::-webkit-details-marker {
+  display: none;
 }
 .jl-chat__src {
   display: block;
@@ -1515,7 +1511,7 @@ html.dark .jl-chat__hint,
 html.dark .jl-chat__status,
 html.dark .jl-chat__src-ctx,
 html.dark .jl-chat__badge,
-html.dark .jl-chat__sources h4,
+html.dark .jl-chat__sources > summary,
 html.dark .jl-chat__note {
   color: #b5b5b5;
 }
