@@ -6,6 +6,9 @@
 
   Saving persists to localStorage (AES-GCM obfuscated key, see chat-settings.js)
   and dispatches the jl-chat-settings-saved event so every open UI re-reads it.
+
+  A "测试连接" button fires a 1-token chat request at the configured endpoint
+  so users can verify Key / model / CORS *before* asking a real question.
 -->
 <template>
   <div class="jl-model-settings" :class="{ 'jl-model-settings--page': variant === 'page' }">
@@ -38,12 +41,23 @@
     </label>
     <label class="jl-chat__field">
       <span>API Key</span>
-      <input
-        v-model.trim="form.apiKey"
-        type="password"
-        autocomplete="off"
-        placeholder="sk-...（仅存本机浏览器）"
-      />
+      <div class="jl-model-settings__keyrow">
+        <input
+          v-model.trim="form.apiKey"
+          :type="showKey ? 'text' : 'password'"
+          autocomplete="off"
+          placeholder="sk-...（仅存本机浏览器）"
+        />
+        <button
+          class="jl-model-settings__eye"
+          type="button"
+          :aria-label="showKey ? '隐藏 API Key' : '显示 API Key'"
+          :title="showKey ? '隐藏' : '显示'"
+          @click="showKey = !showKey"
+        >
+          {{ showKey ? "🙈" : "👁" }}
+        </button>
+      </div>
     </label>
     <label class="jl-chat__field">
       <span>模型 Model</span>
@@ -63,28 +77,60 @@
           {{ p.name }}{{ p.corsBlocked ? " ⚠️" : "" }}
         </button>
       </div>
-      <button class="jl-chat__send" type="button" :disabled="saving" @click="save">
-        {{ savedFlash ? "已保存 ✓" : "保存" }}
-      </button>
+      <div class="jl-model-settings__btns">
+        <button
+          class="jl-chat__send jl-chat__send--ghost"
+          type="button"
+          :disabled="testing"
+          @click="test"
+        >
+          {{ testing ? "测试中…" : "测试连接" }}
+        </button>
+        <button class="jl-chat__send" type="button" :disabled="saving" @click="save">
+          {{ savedFlash ? "已保存 ✓" : "保存" }}
+        </button>
+      </div>
     </div>
     <div v-else class="jl-chat__settings-row">
       <details class="jl-chat__presets">
         <summary>常用预设</summary>
-        <button
-          v-for="p in presets"
-          :key="p.id"
-          type="button"
-          class="jl-chat__chip"
-          @click="applyPreset(p)"
-        >
-          {{ p.name }}
-        </button>
+        <div class="jl-model-settings__presets">
+          <button
+            v-for="p in presets"
+            :key="p.id"
+            type="button"
+            class="jl-chat__chip"
+            @click="applyPreset(p)"
+          >
+            {{ p.name }}
+          </button>
+        </div>
       </details>
-      <button class="jl-chat__send" type="button" :disabled="saving" @click="save">
-        {{ savedFlash ? "已保存 ✓" : "保存" }}
-      </button>
+      <div class="jl-model-settings__btns">
+        <button
+          class="jl-chat__send jl-chat__send--ghost"
+          type="button"
+          :disabled="testing"
+          @click="test"
+        >
+          {{ testing ? "测试中…" : "测试连接" }}
+        </button>
+        <button class="jl-chat__send" type="button" :disabled="saving" @click="save">
+          {{ savedFlash ? "已保存 ✓" : "保存" }}
+        </button>
+      </div>
     </div>
 
+    <p
+      v-if="testResult"
+      class="jl-model-settings__test"
+      :class="{
+        'jl-model-settings__test--ok': testOk,
+        'jl-model-settings__test--pending': testing,
+      }"
+    >
+      {{ testResult }}
+    </p>
     <p v-if="saveError" class="jl-model-settings__error">{{ saveError }}</p>
     <p class="jl-chat__note">
       注：OpenAI 官方端点（api.openai.com）和商汤 SenseNova 官方接口不允许浏览器直连，会被 CORS 拦截；请使用其他预设、兼容服务或自建网关。
@@ -100,6 +146,8 @@ import {
   loadCfg,
   notifySettingsSaved,
   saveCfg,
+  describeHttpError,
+  CORS_HINT,
 } from "./chat-settings";
 
 export default {
@@ -114,6 +162,10 @@ export default {
       saving: false,
       savedFlash: false,
       saveError: "",
+      showKey: false,
+      testing: false,
+      testResult: "",
+      testOk: false,
       cfg: { baseUrl: "", apiKey: "", model: "" },
     };
   },
@@ -166,6 +218,63 @@ export default {
         this.saving = false;
       }
     },
+    // Fire a minimal (1-token) chat request at the form's endpoint so users
+    // can verify Key / model / CORS without asking a real question. Uses the
+    // unsaved form values — test first, save after it works.
+    async test() {
+      const base = (this.form.baseUrl || "").trim();
+      const key = (this.form.apiKey || "").trim();
+      const model = (this.form.model || "").trim();
+      if (!base || !key || !model) {
+        this.testOk = false;
+        this.testing = false;
+        this.testResult = "请先填写 Base URL、API Key 和模型名，再测试连接。";
+        return;
+      }
+      this.testing = true;
+      this.testOk = false;
+      this.testResult = "正在测试连接…";
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000);
+      try {
+        const resp = await fetch(base.replace(/\/$/, "") + "/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + key,
+          },
+          body: JSON.stringify({
+            model,
+            messages: [{ role: "user", content: "你好" }],
+            max_tokens: 1,
+            stream: false,
+          }),
+          signal: controller.signal,
+        });
+        if (resp.ok) {
+          this.testOk = true;
+          this.testResult =
+            "✓ 连接成功：" + model + " @ " + base.replace(/^https?:\/\//, "");
+        } else {
+          let detail = "";
+          try {
+            detail = (await resp.text()).slice(0, 160);
+          } catch (e) {
+            /* ignore */
+          }
+          this.testResult = "✗ " + describeHttpError(resp.status, detail);
+        }
+      } catch (e) {
+        if (e && e.name === "AbortError") {
+          this.testResult = "✗ 连接超时（15 秒无响应），请检查地址或网络。";
+        } else {
+          this.testResult = "✗ " + CORS_HINT;
+        }
+      } finally {
+        clearTimeout(timer);
+        this.testing = false;
+      }
+    },
   },
 };
 </script>
@@ -200,11 +309,29 @@ export default {
   background: #fff;
   color: #1a1a1a;
 }
+.jl-model-settings__keyrow {
+  display: flex;
+  gap: 6px;
+}
+.jl-model-settings__keyrow input {
+  flex: 1;
+}
+.jl-model-settings__eye {
+  flex-shrink: 0;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 8px;
+  padding: 0 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #666;
+}
 .jl-chat__settings-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
   margin-top: 6px;
 }
 .jl-chat__presets summary {
@@ -228,6 +355,11 @@ export default {
   border-color: var(--jl-brand, #de2910);
   color: var(--jl-brand, #de2910);
 }
+.jl-model-settings__btns {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
 .jl-chat__send {
   padding: 9px 16px;
   border: 0;
@@ -238,10 +370,16 @@ export default {
   font-weight: 600;
   cursor: pointer;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 .jl-chat__send:disabled {
   opacity: 0.7;
   cursor: default;
+}
+.jl-chat__send--ghost {
+  background: transparent;
+  color: var(--jl-brand, #de2910);
+  border: 1px solid var(--jl-brand, #de2910);
 }
 .jl-chat__note {
   margin-top: 12px;
@@ -267,6 +405,19 @@ export default {
   font-size: 12px;
   color: #a8331f;
 }
+.jl-model-settings__test {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #a8331f;
+  word-break: break-word;
+}
+.jl-model-settings__test--ok {
+  color: #1a7f37;
+}
+.jl-model-settings__test--pending {
+  color: #888;
+}
 
 /* Page variant: render as a card on the /settings/ page. */
 .jl-model-settings--page {
@@ -290,5 +441,16 @@ html.dark .jl-model-settings__status {
 }
 html.dark .jl-model-settings__status--ok {
   color: #7ee2a8;
+}
+html.dark .jl-model-settings__test--ok {
+  color: #7ee2a8;
+}
+html.dark .jl-model-settings__test--pending {
+  color: #888;
+}
+html.dark .jl-model-settings__eye {
+  background: #1f1f1f;
+  border-color: #444;
+  color: #bbb;
 }
 </style>

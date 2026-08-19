@@ -153,6 +153,35 @@ export function notifySettingsSaved() {
   }
 }
 
+// ---- Shared error copy (chat widget ask path + settings panel test button) ----
+
+// fetch() rejecting with TypeError before any HTTP response is almost always
+// a CORS block or an unreachable host. The two known-bad providers are named
+// so users stop burning time on keys that were never the problem.
+export const CORS_HINT =
+  "无法连接该接口（可能被 CORS 拦截或网络不可达）。注意：OpenAI 官方端点和商汤 SenseNova（token.sensenova.cn）都不允许浏览器直连，" +
+  "请改用 DeepSeek、通义千问、智谱等支持跨域的兼容服务或自建网关，并确认 Base URL 正确。";
+
+// Map the handful of HTTP statuses providers actually return to actionable
+// Chinese copy, keeping the response snippet for diagnosis.
+export function describeHttpError(status, detail) {
+  const d = detail ? "（" + detail + "）" : "";
+  if (status === 401) return "API Key 无效或未授权（HTTP 401），请检查 Key" + d;
+  if (status === 402)
+    return "账户余额不足（HTTP 402），请到服务商控制台充值" + d;
+  if (status === 403)
+    return (
+      "无访问权限（HTTP 403）：Key 可能被禁用、无该模型权限或受地区限制" + d
+    );
+  if (status === 404)
+    return "接口地址或模型名不存在（HTTP 404），请检查 Base URL 与模型名" + d;
+  if (status === 429)
+    return "请求过于频繁或额度受限（HTTP 429），请稍后重试" + d;
+  if (status >= 500)
+    return "模型服务端错误（HTTP " + status + "），请稍后重试" + d;
+  return "HTTP " + status + d;
+}
+
 // Pre-fill shown to users who have not configured anything yet: honor a
 // ?provider=<id> URL param (e.g. shared deep links), otherwise the default
 // preset (DeepSeek). Never overwrites an existing configuration.

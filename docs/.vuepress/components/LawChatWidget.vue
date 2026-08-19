@@ -3,20 +3,29 @@
   Floating "AI 法律问答" chat widget for the Just Laws VuePress site.
 
   Fully client-side, no backend (BYOK = bring your own key):
+  - Multi-turn chat: the transcript (user bubble + assistant answer + per-turn
+    citations) lives in `turns`; the last few exchanges are folded back into
+    the prompt so follow-up questions keep their context.
   - Lazy-loads /law-corpus.json (article-level law chunks) on first open.
   - Builds the lexical index in a Web Worker (MiniSearch + a CJK bi-gram
     tokenizer) so the ~15 s of CPU never blocks the main thread; the parsed
     corpus is cached in IndexedDB (see law-corpus-cache.js) so repeat opens
     skip the multi-MB re-download that GitHub Pages' 10-minute Cache-Control
-    forces. Searches also run inside the worker.
+    forces. Searches also run inside the worker. Retrieval queries are cleaned
+    of interrogative filler (怎么办/吗/…) so the bigrams fed to the index are
+    the topic terms; short follow-ups inherit the previous question's terms.
   - If Web Workers are unavailable (very old browsers / restrictive CSP), the
     widget transparently falls back to building the index on the main thread
     with the same chunked yields as before.
   - Sends the retrieved 法条 + question to a user-supplied OpenAI-compatible
-    chat endpoint and streams the answer. The API key is stored only in the
-    user's browser (localStorage) and sent directly to their chosen provider —
-    it never touches our servers.
-  - Renders citations as clickable deep-links back into the law text.
+    chat endpoint and streams the answer. Streamed markdown is re-rendered on
+    a ~120 ms throttle (not per token); a 30 s first-byte watchdog and a 60 s
+    inter-chunk idle watchdog replace the old flat 90 s cap, so long reasoning
+    models are never cut off mid-answer. A 停止 button aborts on demand.
+  - Renders citations as clickable deep-links back into the law text — both
+    the per-turn source cards and 《法》第X条 mentions inside the answer body.
+  - The API key is stored only in the user's browser (localStorage) and sent
+    directly to their chosen provider — it never touches our servers.
 -->
 <template>
   <ClientOnly>
@@ -34,7 +43,13 @@
       </button>
 
       <!-- Panel -->
-      <section v-if="open" class="jl-chat__panel" aria-label="AI 法律问答">
+      <section
+        v-if="open"
+        class="jl-chat__panel"
+        role="dialog"
+        aria-modal="false"
+        aria-label="AI 法律问答"
+      >
         <header class="jl-chat__header">
           <div>
             <strong>AI 法律问答</strong>
@@ -72,7 +87,7 @@
             ⚠️ 本工具基于已收录法条 + 你选择的大模型自动整理，仅供参考、不构成法律意见。重大事项请咨询执业律师。
           </div>
 
-          <div ref="bodyEl" class="jl-chat__body">
+          <div ref="bodyEl" class="jl-chat__body" role="log">
             <div v-if="indexState === 'loading'" class="jl-chat__status">
               <span class="jl-chat__status-dot"></span>
               <template v-if="indexFromCache">
@@ -82,7 +97,9 @@
                 正在下载法条语料并在后台构建索引 {{ indexProgress }}%…（仅首次较慢，页面可正常浏览）
               </template>
             </div>
-            <div v-if="!answer && !sources.length && !error" class="jl-chat__examples">
+            <div v-if="indexError" class="jl-chat__error">{{ indexError }}</div>
+
+            <div v-if="!turns.length" class="jl-chat__examples">
               <p v-if="!configured" class="jl-chat__hint">
                 先在 ⚙ 设置里填入你的模型 API（也可前往
                 <a class="jl-chat__hint-link" :href="settingsPageUrl">设置页</a> 配置），即可开始提问。
@@ -101,47 +118,75 @@
               </template>
             </div>
 
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-if="answer" class="jl-chat__answer" v-html="renderedAnswer"></div>
-
-            <details v-if="reasoning" class="jl-chat__think">
-              <summary>模型思考过程</summary>
-              <pre>{{ reasoning }}</pre>
-            </details>
-
-            <div v-if="error" class="jl-chat__error">{{ error }}</div>
-
-            <!-- Reasoning models stream long "thinking" deltas before any
-                 answer content; without this line the panel looks frozen.
-                 Hidden while the corpus index is still building — that step
-                 shows its own progress line above. -->
             <div
-              v-if="loading && !answer && !error && indexState !== 'loading'"
-              class="jl-chat__status"
+              v-for="turn in turns"
+              :key="turn.id"
+              class="jl-chat__turn"
+              :class="turn.role === 'user' ? 'jl-chat__turn--user' : 'jl-chat__turn--bot'"
             >
-              <span class="jl-chat__status-dot"></span>
-              <template v-if="reasoning"
-                >模型思考中…（已输出 {{ reasoning.length }} 字推理，正式回答随后显示）</template
-              >
-              <template v-else>正在检索法条并等待模型响应…</template>
-            </div>
+              <div v-if="turn.role === 'user'" class="jl-chat__bubble">
+                {{ turn.text }}
+              </div>
+              <template v-else>
+                <details v-if="turn.reasoning" class="jl-chat__think">
+                  <summary>模型思考过程</summary>
+                  <pre>{{ turn.reasoning }}</pre>
+                </details>
 
-            <div v-if="sources.length" class="jl-chat__sources">
-              <h4>参考来源（{{ sources.length }} 条法条，点击核对原文）</h4>
-              <a
-                v-for="(s, i) in sources"
-                :key="i"
-                class="jl-chat__src"
-                :href="srcUrl(s.u)"
-                target="_blank"
-                rel="noopener"
-              >
-                <span class="jl-chat__src-title"
-                  >《{{ s.n }}》{{ s.a }}</span
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <div
+                  v-if="turn.html"
+                  class="jl-chat__answer"
+                  v-html="turn.html"
+                ></div>
+
+                <!-- Reasoning models stream long "thinking" deltas before any
+                     answer content; without this line the turn looks frozen.
+                     Hidden while the corpus index is still building — that
+                     step shows its own progress line above. -->
+                <div
+                  v-if="turn.streaming && !turn.text && !turn.error && indexState !== 'loading'"
+                  class="jl-chat__status"
                 >
-                <span v-if="s.c" class="jl-chat__badge">{{ s.c }}</span>
-                <span class="jl-chat__src-ctx">{{ snippet(s.t) }}</span>
-              </a>
+                  <span class="jl-chat__status-dot"></span>
+                  <template v-if="turn.reasoning"
+                    >模型思考中…（已输出 {{ turn.reasoning.length }} 字推理，正式回答随后显示）</template
+                  >
+                  <template v-else>正在检索法条并等待模型响应…</template>
+                </div>
+
+                <div v-if="turn.error" class="jl-chat__error">
+                  {{ turn.error }}
+                </div>
+
+                <div v-if="turn.sources.length" class="jl-chat__sources">
+                  <h4>参考来源（{{ turn.sources.length }} 条法条，点击核对原文）</h4>
+                  <a
+                    v-for="(s, i) in turn.sources"
+                    :key="i"
+                    class="jl-chat__src"
+                    :href="srcUrl(s.u)"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <span class="jl-chat__src-title"
+                      >《{{ s.n }}》{{ s.a }}</span
+                    >
+                    <span v-if="s.c" class="jl-chat__badge">{{ s.c }}</span>
+                    <span class="jl-chat__src-ctx">{{ snippet(s.t) }}</span>
+                  </a>
+                </div>
+
+                <div v-if="!turn.streaming && turn.text" class="jl-chat__turn-actions">
+                  <button
+                    class="jl-chat__mini"
+                    type="button"
+                    @click="copyTurn(turn)"
+                  >
+                    {{ turn.copied ? "已复制 ✓" : "复制答案" }}
+                  </button>
+                </div>
+              </template>
             </div>
           </div>
 
@@ -151,15 +196,24 @@
               class="jl-chat__input"
               type="text"
               maxlength="4000"
-              :disabled="loading"
               :placeholder="configured ? '用一句话描述你的法律问题…' : '请先在 ⚙ 设置里填入模型 API'"
+              enterkeyhint="send"
             />
             <button
+              v-if="loading"
+              class="jl-chat__send jl-chat__send--stop"
+              type="button"
+              @click="stop"
+            >
+              停止
+            </button>
+            <button
+              v-else
               class="jl-chat__send"
               type="submit"
-              :disabled="loading || !configured"
+              :disabled="!configured"
             >
-              {{ loading ? "…" : "提问" }}
+              提问
             </button>
           </form>
         </template>
@@ -172,7 +226,12 @@
 import { withBase } from "@vuepress/client";
 
 import LawModelSettings from "./LawModelSettings.vue";
-import { SETTINGS_EVENT, loadCfg } from "./chat-settings";
+import {
+  SETTINGS_EVENT,
+  loadCfg,
+  describeHttpError,
+  CORS_HINT,
+} from "./chat-settings";
 import { getCachedCorpus, setCachedCorpus } from "./law-corpus-cache.js";
 
 // markdown-it and minisearch are heavy and only needed once the user actually
@@ -180,7 +239,7 @@ import { getCachedCorpus, setCachedCorpus } from "./law-corpus-cache.js";
 // ensureIndex) so they are split into separate chunks and never block the
 // initial page load — important on slow networks (e.g. GitHub Pages in China).
 let md = null; // markdown-it instance, lazily created
-let MiniSearch = null; // minisearch class, lazily imported
+let MiniSearch = null; // minisearch class, lazily imported (main-thread fallback)
 
 function escapeHtml(s) {
   return String(s)
@@ -189,11 +248,100 @@ function escapeHtml(s) {
     .replace(/>/g, "&gt;");
 }
 
-const REQUEST_TIMEOUT_MS = 90000; // streamed completions can run a while
 const TOP_K = 6; // number of 法条 fed to the model
 const MAX_CHUNK_CHARS = 600; // cap each 法条's length in the prompt
 
 const MAX_QUESTION_CHARS = 4000;
+
+// Watchdogs for the streamed completion: a first-byte cap (covers DNS/TLS/
+// CORS stalls + a server that never starts) and an inter-chunk idle cap. The
+// total stream length is NOT capped — reasoning models legitimately run for
+// minutes while chunks keep arriving.
+const TTFB_TIMEOUT_MS = 30000;
+const IDLE_TIMEOUT_MS = 60000;
+
+// Re-render the streamed markdown at most this often. Per-token md.render()
+// makes total work quadratic in answer length and janks low-end phones.
+const RENDER_INTERVAL_MS = 120;
+
+// Multi-turn: fold the last N exchanges (and at most this many chars) back
+// into the prompt so follow-ups keep their context without token bloat.
+const HISTORY_MAX_TURNS = 3;
+const HISTORY_MAX_CHARS = 4000;
+
+// A follow-up this short ("那诉讼时效呢？") has no retrieval terms of its
+// own — its query is merged with the previous user question.
+const FOLLOWUP_MERGE_MAX_CHARS = 12;
+
+// Interrogative / politeness filler stripped from the RETRIEVAL query only
+// (the model still sees the original question). Longest-first at use time.
+const QUERY_FILLERS = [
+  "怎么办", "怎么处理", "怎么解决", "怎么维权", "该怎么办", "怎么做", "怎么样",
+  "怎么回事", "什么情况", "如何处理", "如何解决", "如何维权",
+  "我想问一下", "我想请教", "请教一下", "想问一下", "想问下", "麻烦问下", "请问",
+  "可以吗", "行吗", "对吗", "是吗", "能不能", "会不会", "是不是", "有没有",
+  "为什么", "可以", "应该", "必须", "怎么", "什么", "如何", "哪些", "哪个",
+  "求助", "谢谢", "吗", "呢", "啊", "呀", "嘛", "哦", "我", "的", "了",
+].sort((a, b) => b.length - a.length);
+
+function cleanQuery(q) {
+  const raw = String(q || "").trim();
+  if (!raw) return raw;
+  let s = raw.replace(/[\s？?！!。，,、；;：:"'“”‘’（）()【】\[\]·…]+/g, "");
+  for (const w of QUERY_FILLERS) {
+    if (s.includes(w)) s = s.split(w).join("¦");
+  }
+  const parts = s.split("¦").filter(Boolean);
+  return parts.length ? parts.join("") : raw;
+}
+
+// Truncate a 法条 on a sentence boundary when one exists in the back half,
+// so the model never receives half a sentence.
+function clampChunk(t, max) {
+  const s = String(t || "");
+  if (s.length <= max) return s;
+  const cut = s.slice(0, max);
+  let stop = -1;
+  for (const mark of ["。", "；", "！", "？", "："]) {
+    const p = cut.lastIndexOf(mark);
+    if (p > stop) stop = p;
+  }
+  return (stop >= Math.floor(max / 2) ? cut.slice(0, stop + 1) : cut) + "…";
+}
+
+// ---- Citation matching: 《法名》第X条 in the answer -> deep link ----
+
+const CITE_RE =
+  /《([^《》]{2,40})》\s*(第[0-9〇零一二三四五六七八九十百千万]+条(?:之[0-9〇零一二三四五六七八九十百千]+)?)/g;
+
+function cnToArabic(s) {
+  if (/^\d+$/.test(s)) return Number(s);
+  const digits = { 零: 0, 〇: 0, 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 };
+  const units = { 十: 10, 百: 100, 千: 1000, 万: 10000 };
+  let total = 0;
+  let section = 0;
+  let current = 0;
+  for (const ch of s) {
+    if (ch in digits) current = digits[ch];
+    else if (ch in units) {
+      const u = units[ch];
+      if (u === 10000) {
+        section = (section + current) * u;
+        total += section;
+        section = 0;
+      } else {
+        section += (current || 1) * u;
+      }
+      current = 0;
+    } else return null;
+  }
+  return total + section + current;
+}
+
+function articleNumber(a) {
+  const m = /第([0-9〇零一二三四五六七八九十百千万]+)条/.exec(String(a || ""));
+  return m ? cnToArabic(m[1]) : null;
+}
 
 // Indexing 24k+ 法条 with the bigram tokenizer takes ~15s of CPU on a fast
 // machine — long enough for browsers to pop the "page unresponsive" dialog if
@@ -243,7 +391,7 @@ function resolveEnabled() {
     return (
       window.__JUSTLAWS_RAG_ENABLED__ !== false &&
       !["false", "0", "off", "no"].includes(
-        String(window.__JUSTLAWS_RAG_ENABLED__).toLowerCase()
+        String(window.__JUSTLAWS_RAG_ENABLED__).toLowerCase(),
       )
     );
   }
@@ -262,15 +410,12 @@ export default {
       open: false,
       showSettings: false,
       question: "",
-      answer: "",
-      reasoning: "",
-      sources: [],
-      error: "",
+      turns: [], // transcript: {id, role, text} | {id, role, text, html, reasoning, sources, error, streaming, copied}
       loading: false,
       indexState: "idle", // idle | loading | ready | error
       indexProgress: 0, // % while indexState === "loading"
       indexFromCache: false, // true when corpus came from IndexedDB (no network)
-      mdReady: false, // markdown-it loaded (lazy)
+      indexError: "",
       cfg: { baseUrl: "", apiKey: "", model: "" },
       examples: [
         "租房到期房东不退押金怎么办？",
@@ -281,12 +426,6 @@ export default {
     };
   },
   computed: {
-    renderedAnswer() {
-      if (!this.answer) return "";
-      // mdReady is referenced so the computed re-runs once markdown-it loads.
-      if (this.mdReady && md) return md.render(this.answer);
-      return escapeHtml(this.answer).replace(/\n/g, "<br>");
-    },
     configured() {
       return !!(this.cfg.baseUrl && this.cfg.apiKey && this.cfg.model);
     },
@@ -294,13 +433,28 @@ export default {
       return withBase("/settings/");
     },
   },
+  watch: {
+    // Esc closes the panel (removed again on close / unmount).
+    open(v) {
+      if (typeof window === "undefined" || !this._onKeydown) return;
+      if (v) window.addEventListener("keydown", this._onKeydown);
+      else window.removeEventListener("keydown", this._onKeydown);
+    },
+  },
   async created() {
     if (typeof window === "undefined") return;
-    // Non-reactive worker plumbing (kept off Vue's reactive proxy — a proxied
+    // Non-reactive plumbing (kept off Vue's reactive proxy — a proxied
     // Worker breaks postMessage's `this` binding).
     this._worker = null;
     this._searchSeq = 0;
     this._searchWaiters = new Map();
+    this._turnSeq = 0;
+    this._renderTimer = null;
+    this._activeController = null;
+    this._stopReason = ""; // "" | "user" | "ttfb" | "idle"
+    this._onKeydown = (e) => {
+      if (e.key === "Escape") this.open = false;
+    };
     this.cfg = { ...this.cfg, ...(await loadCfg()) };
     // Stay in sync when settings are saved elsewhere (the /settings/ page or
     // this panel — both dispatch SETTINGS_EVENT after persisting).
@@ -315,8 +469,17 @@ export default {
     window.addEventListener(SETTINGS_EVENT, this._onSettingsSaved);
   },
   beforeUnmount() {
-    if (typeof window !== "undefined" && this._onSettingsSaved) {
-      window.removeEventListener(SETTINGS_EVENT, this._onSettingsSaved);
+    if (typeof window !== "undefined") {
+      if (this._onSettingsSaved) {
+        window.removeEventListener(SETTINGS_EVENT, this._onSettingsSaved);
+      }
+      if (this._onKeydown) {
+        window.removeEventListener("keydown", this._onKeydown);
+      }
+    }
+    if (this._renderTimer) {
+      clearTimeout(this._renderTimer);
+      this._renderTimer = null;
     }
     if (this._worker) {
       this._worker.terminate();
@@ -326,17 +489,16 @@ export default {
   methods: {
     openPanel() {
       this.open = true;
-      if (!this.configured) this.showSettings = true;
+      // Opening from the FAB always lands on chat for configured users —
+      // showSettings may be left over from a previous panel session.
+      this.showSettings = !this.configured;
       // Warm up the heavy chunks (corpus index + markdown renderer) as soon as
       // the panel opens, in parallel, so the first question feels responsive.
       this.ensureIndex();
       this.loadMarkdown();
     },
     async loadMarkdown() {
-      if (md) {
-        this.mdReady = true;
-        return;
-      }
+      if (md) return;
       try {
         const mod = await import("markdown-it");
         const MarkdownIt = mod.default || mod;
@@ -344,9 +506,23 @@ export default {
         // default link validator strips javascript:/data: URLs, so rendering the
         // answer with v-html is safe against injection from the LLM response.
         md = new MarkdownIt({ html: false, linkify: true, breaks: true });
-        this.mdReady = true;
+        // Open rendered links in a new tab so a click never navigates the
+        // whole SPA away from the law page the reader is on.
+        const orig = md.renderer.rules.link_open;
+        md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+          const token = tokens[idx];
+          let i = token.attrIndex("target");
+          if (i < 0) token.attrPush(["target", "_blank"]);
+          else token.attrs[i][1] = "_blank";
+          i = token.attrIndex("rel");
+          if (i < 0) token.attrPush(["rel", "noopener noreferrer"]);
+          else token.attrs[i][1] = "noopener noreferrer";
+          return orig
+            ? orig(tokens, idx, options, env, self)
+            : self.renderToken(tokens, idx, options);
+        };
       } catch (e) {
-        /* fall back to escaped plain text in renderedAnswer */
+        /* fall back to escaped plain text in renderTurn */
       }
     },
     snippet(t) {
@@ -371,16 +547,22 @@ export default {
       const resolved = withBase(path);
       return hash ? resolved + "#" + hash : resolved;
     },
-    scrollDown() {
+    // Stick to the bottom while streaming — but only when the reader is
+    // already near the bottom, so scrolling up to re-read is never yanked.
+    scrollDown(force) {
       this.$nextTick(() => {
         const el = this.$refs.bodyEl;
-        if (el) el.scrollTop = el.scrollHeight;
+        if (!el) return;
+        const nearBottom =
+          force || el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+        if (nearBottom) el.scrollTop = el.scrollHeight;
       });
     },
     async ensureIndex() {
       if (this._indexPromise) return this._indexPromise;
       this.indexState = "loading";
       this.indexProgress = 0;
+      this.indexError = "";
       // Prefer the Web Worker: the ~15 s CPU index build (and every search)
       // runs off the main thread, so the page never janks while the corpus
       // loads. If workers are unavailable (very old browsers / strict CSP) or
@@ -401,7 +583,7 @@ export default {
         .catch((e) => {
           this.indexState = "error";
           this._indexPromise = null;
-          this.error = "法条索引加载失败，请刷新页面重试。";
+          this.indexError = "法条索引加载失败，请刷新页面重试。";
           throw e;
         });
       return this._indexPromise;
@@ -539,7 +721,7 @@ export default {
         }
       }
 
-      const mini = new MiniSearch({
+      const mini = new MiniSearchCls({
         fields: ["t", "n", "c"],
         storeFields: ["n", "a", "c", "u", "t"],
         tokenize: cjkTokenize,
@@ -556,7 +738,7 @@ export default {
         mini.addAll(data.docs.slice(i, i + INDEX_CHUNK_DOCS));
         this.indexProgress = Math.min(
           100,
-          Math.round(((i + INDEX_CHUNK_DOCS) / total) * 100)
+          Math.round(((i + INDEX_CHUNK_DOCS) / total) * 100),
         );
         await yieldToUI();
       }
@@ -606,24 +788,211 @@ export default {
       const hits = this._mini.search(q, { combineWith: "OR" });
       return Promise.resolve(hits.slice(0, TOP_K));
     },
-    buildMessages(q, ctx) {
+    // Retrieval terms for a question: cleaned of interrogative filler, and —
+    // for a short follow-up — merged with the previous user question so
+    // "那诉讼时效呢？" still retrieves the topic it refers to.
+    buildRetrievalQuery(q, currentUserTurn) {
+      let base = q;
+      if (q.length <= FOLLOWUP_MERGE_MAX_CHARS) {
+        const prev = this.turns.filter(
+          (t) => t.role === "user" && t !== currentUserTurn,
+        );
+        const last = prev[prev.length - 1];
+        if (last && last.text) base = last.text + "，" + q;
+      }
+      return cleanQuery(base);
+    },
+    buildMessages(q, ctx, history) {
       const blocks = ctx
         .map((c) => {
-          const t = c.t.length > MAX_CHUNK_CHARS ? c.t.slice(0, MAX_CHUNK_CHARS) + "…" : c.t;
+          const t = clampChunk(c.t, MAX_CHUNK_CHARS);
           return `《${c.n}》${c.c ? "（" + c.c + "）" : ""}\n${t}`;
         })
         .join("\n\n");
       const system =
-        "你是严谨的中国法律检索助手。只依据【可参考法条】中的内容回答用户问题，" +
-        "并在回答中明确引用法律名称与条号（如《中华人民共和国民法典》第X条）。" +
+        "你是严谨的中国法律检索助手。这是一段多轮对话，请结合此前问答的上下文理解用户当前的问题。" +
+        "只依据【可参考法条】中的内容回答，并在回答中明确引用法律名称与条号（如《中华人民共和国民法典》第X条）。" +
         "如果提供的法条不足以回答，请直接说明「现有法条不足以回答」，不要编造法条或条号。" +
         "回答用简体中文，条理清晰，必要时分点。最后提示重大事项应咨询执业律师。";
       const user =
         `用户问题：${q}\n\n【可参考法条】\n${blocks || "（未检索到相关法条）"}`;
-      return [
-        { role: "system", content: system },
-        { role: "user", content: user },
-      ];
+
+      const msgs = [{ role: "system", content: system }];
+      // Fold recent exchanges back in, newest-first under the char budget.
+      let budget = HISTORY_MAX_CHARS;
+      const prior = [];
+      for (
+        let i = history.length - 1;
+        i >= 0 && prior.length < HISTORY_MAX_TURNS * 2;
+        i--
+      ) {
+        const t = history[i];
+        if (!t.text || t.error) continue;
+        if (t.text.length > budget) break;
+        budget -= t.text.length;
+        prior.unshift({
+          role: t.role === "user" ? "user" : "assistant",
+          content: t.text,
+        });
+      }
+      msgs.push(...prior);
+      msgs.push({ role: "user", content: user });
+      return msgs;
+    },
+    // ---- Streamed-answer rendering (throttled) ----
+
+    applyDelta(turn, thinking, content) {
+      if (thinking) turn.reasoning += thinking;
+      if (content) turn.text += content;
+      if (this._renderTimer) return; // a render is already scheduled
+      if (!turn.html && turn.text) {
+        // First visible token — paint at once, throttle everything after.
+        this.renderTurn(turn);
+        this.scrollDown();
+        return;
+      }
+      this._renderTimer = setTimeout(() => {
+        this._renderTimer = null;
+        this.renderTurn(turn);
+        this.scrollDown();
+      }, RENDER_INTERVAL_MS);
+    },
+    renderTurn(turn) {
+      if (!turn || !turn.text) {
+        if (turn) turn.html = "";
+        return;
+      }
+      const html = md
+        ? md.render(turn.text)
+        : escapeHtml(turn.text).replace(/\n/g, "<br>");
+      turn.html = this.linkifyCitations(html, turn.sources);
+    },
+    // Wrap 《法名》第X条 mentions that match one of this turn's retrieved
+    // sources in deep links to the law page. DOM-based (text nodes only), so
+    // it can never corrupt the markdown-generated markup.
+    linkifyCitations(html, sources) {
+      if (!sources || !sources.length || !html.includes("《")) return html;
+      if (typeof DOMParser === "undefined") return html;
+      let doc;
+      try {
+        doc = new DOMParser().parseFromString(html, "text/html");
+      } catch (e) {
+        return html;
+      }
+      const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+      const jobs = [];
+      let node;
+      while ((node = walker.nextNode())) {
+        const parent = node.parentElement;
+        if (parent && parent.closest("a, pre, code")) continue;
+        const text = node.nodeValue || "";
+        if (!text.includes("《")) continue;
+        CITE_RE.lastIndex = 0;
+        let m;
+        while ((m = CITE_RE.exec(text)) !== null) {
+          const hit = this.matchSource(sources, m[1], m[2]);
+          if (hit) {
+            jobs.push({
+              node,
+              start: m.index,
+              end: m.index + m[0].length,
+              url: this.srcUrl(hit.u),
+              label: m[0].replace(/\s+/g, ""),
+            });
+          }
+        }
+      }
+      if (!jobs.length) return html;
+      // Replace per node from the end so earlier offsets stay valid.
+      const byNode = new Map();
+      for (const j of jobs) {
+        if (!byNode.has(j.node)) byNode.set(j.node, []);
+        byNode.get(j.node).push(j);
+      }
+      for (const list of byNode.values()) {
+        list.sort((a, b) => b.start - a.start);
+        for (const j of list) {
+          const a = doc.createElement("a");
+          a.href = j.url;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.className = "jl-chat__cite";
+          a.textContent = j.label;
+          const range = doc.createRange();
+          range.setStart(j.node, j.start);
+          range.setEnd(j.node, j.end);
+          range.deleteContents();
+          range.insertNode(a);
+        }
+      }
+      return doc.body.innerHTML;
+    },
+    // Cited "民法典" matches source "中华人民共和国民法典"; article numbers
+    // are normalized across 中文/阿拉伯 numerals.
+    matchSource(sources, citedName, citedArticle) {
+      const bare = String(citedName || "").trim().replace(/^中华人民共和国/, "");
+      if (!bare) return null;
+      const want = articleNumber(citedArticle);
+      return (
+        sources.find((s) => {
+          const sBare = String(s.n || "").replace(/^中华人民共和国/, "");
+          if (!sBare) return false;
+          if (!(sBare.includes(bare) || bare.includes(sBare))) return false;
+          const got = articleNumber(s.a);
+          return want == null || got == null || got === want;
+        }) || null
+      );
+    },
+    async copyTurn(turn) {
+      let text = turn.text || "";
+      if (turn.sources && turn.sources.length) {
+        text +=
+          "\n\n参考来源：\n" +
+          turn.sources
+            .map(
+              (s) =>
+                "· 《" + s.n + "》" + s.a + (s.c ? "（" + s.c + "）" : ""),
+            )
+            .join("\n");
+      }
+      if (!text.trim()) return;
+      let ok = false;
+      try {
+        await navigator.clipboard.writeText(text);
+        ok = true;
+      } catch (e) {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+        } catch (e2) {
+          ok = false;
+        }
+      }
+      if (ok) {
+        turn.copied = true;
+        setTimeout(() => {
+          turn.copied = false;
+        }, 1500);
+      }
+    },
+    stop() {
+      if (!this.loading) return;
+      this._stopReason = "user";
+      if (this._activeController) {
+        try {
+          this._activeController.abort();
+        } catch (e) {
+          /* ignore */
+        }
+      }
+      // No controller yet (index still building / retrieving) — ask() checks
+      // _stopReason between phases and bails out.
     },
     async ask(preset) {
       const q = (preset || this.question).trim().slice(0, MAX_QUESTION_CHARS);
@@ -632,28 +1001,66 @@ export default {
         this.showSettings = true;
         return;
       }
-      this.question = q;
+      this.question = "";
       this.loading = true;
-      this.answer = "";
-      this.reasoning = "";
-      this.sources = [];
-      this.error = "";
+      this._stopReason = "";
+
+      let userTurn = { id: ++this._turnSeq, role: "user", text: q };
+      let turn = {
+        id: ++this._turnSeq,
+        role: "assistant",
+        text: "",
+        html: "",
+        reasoning: "",
+        sources: [],
+        error: "",
+        streaming: true,
+        copied: false,
+      };
+      this.turns.push(userTurn, turn);
+      // Vue stores the raw objects; re-read through the reactive array so the
+      // streaming mutations below (text/html/reasoning/copied) re-render.
+      userTurn = this.turns[this.turns.length - 2];
+      turn = this.turns[this.turns.length - 1];
+      this.scrollDown(true);
+
+      const bailIfStopped = () => {
+        if (this._stopReason !== "user") return false;
+        turn.error = turn.text ? "" : "已停止生成。";
+        turn.streaming = false;
+        this.loading = false;
+        return true;
+      };
 
       this.loadMarkdown();
       try {
         await this.ensureIndex();
       } catch (e) {
+        turn.streaming = false;
         this.loading = false;
-        return;
+        return; // indexError already shown at panel level
       }
-      const ctx = await this.retrieve(q);
-      this.sources = ctx;
+      if (bailIfStopped()) return;
+
+      const ctx = await this.retrieve(this.buildRetrievalQuery(q, userTurn));
+      if (bailIfStopped()) return;
+      turn.sources = ctx;
       this.scrollDown();
 
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+      this._activeController = controller;
+      let timer = null;
+      const arm = (ms, reason) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          this._stopReason = reason;
+          controller.abort();
+        }, ms);
+      };
+
       try {
         const url = this.cfg.baseUrl.replace(/\/$/, "") + "/chat/completions";
+        arm(TTFB_TIMEOUT_MS, "ttfb");
         const resp = await fetch(url, {
           method: "POST",
           headers: {
@@ -662,7 +1069,7 @@ export default {
           },
           body: JSON.stringify({
             model: this.cfg.model,
-            messages: this.buildMessages(q, ctx),
+            messages: this.buildMessages(q, ctx, this.turns.slice(0, -2)),
             temperature: 0.2,
             stream: true,
           }),
@@ -671,13 +1078,14 @@ export default {
         if (!resp.ok) {
           let detail = "";
           try {
-            detail = (await resp.text()).slice(0, 300);
+            detail = (await resp.text()).slice(0, 160);
           } catch (e) {
             /* ignore */
           }
-          throw new Error("HTTP " + resp.status + (detail ? "：" + detail : ""));
+          throw new Error(describeHttpError(resp.status, detail));
         }
         if (!resp.body) throw new Error("无响应流");
+        arm(IDLE_TIMEOUT_MS, "idle");
         const reader = resp.body.getReader();
         const dec = new TextDecoder();
         let buf = "";
@@ -687,6 +1095,7 @@ export default {
           while (!streamFinished) {
             const { value, done } = await reader.read();
             if (done) break;
+            arm(IDLE_TIMEOUT_MS, "idle"); // data flowing — only guard gaps
             buf += dec.decode(value, { stream: true });
             let idx;
             while ((idx = buf.indexOf("\n")) >= 0) {
@@ -714,41 +1123,53 @@ export default {
                 const thinking =
                   deltaObj.reasoning_content || deltaObj.reasoning || "";
                 const delta = deltaObj.content || deltaObj.text || "";
-                if (thinking) this.reasoning += thinking;
-                if (delta) {
-                  this.answer += delta;
-                  this.scrollDown();
-                } else if (thinking) {
-                  this.scrollDown();
-                }
+                if (thinking || delta) this.applyDelta(turn, thinking, delta);
               }
             }
           }
         } finally {
           reader.releaseLock();
         }
-        if (!this.answer) {
-          if (this.reasoning) {
-            this.answer = this.reasoning;
-            this.reasoning = "";
-          } else {
-            this.error = "模型未返回内容，请检查模型名称或额度。";
+        if (!turn.text) {
+          if (turn.reasoning) {
+            turn.text = turn.reasoning;
+            turn.reasoning = "";
+          } else if (!turn.error) {
+            turn.error = "模型未返回内容，请检查模型名称或额度。";
           }
         }
       } catch (e) {
         if (e && e.name === "AbortError") {
-          this.error = "回答超时，请稍后重试或换个问法。";
+          if (this._stopReason === "user") {
+            // User pressed 停止 — keep whatever already arrived.
+            if (!turn.text) turn.error = "已停止生成。";
+          } else if (this._stopReason === "ttfb") {
+            turn.error =
+              "等待模型响应超时（" +
+              Math.round(TTFB_TIMEOUT_MS / 1000) +
+              " 秒内没有任何数据），请稍后重试或换一个模型。";
+          } else {
+            turn.error =
+              "回答中断（" +
+              Math.round(IDLE_TIMEOUT_MS / 1000) +
+              " 秒没有新内容），已生成的部分已保留，可重新提问。";
+          }
         } else if (e && e.name === "TypeError") {
           // fetch threw before any HTTP response -> almost always CORS/network.
-          this.error =
-            "无法连接该接口（可能被 CORS 拦截或网络不可达）。注意：OpenAI 官方端点和商汤 SenseNova（token.sensenova.cn）都不允许浏览器直连，" +
-            "请改用 DeepSeek、通义千问、智谱等支持跨域的兼容服务或自建网关；并确认 Base URL 正确。";
+          turn.error = CORS_HINT;
         } else {
-          this.error = "调用失败：" + (e && e.message ? e.message : String(e));
+          turn.error = "调用失败：" + (e && e.message ? e.message : String(e));
         }
       } finally {
         clearTimeout(timer);
+        if (this._renderTimer) {
+          clearTimeout(this._renderTimer);
+          this._renderTimer = null;
+        }
+        this.renderTurn(turn);
+        turn.streaming = false;
         this.loading = false;
+        this._activeController = null;
         this.scrollDown();
       }
     },
@@ -804,6 +1225,19 @@ export default {
   border-radius: 16px;
   box-shadow: 0 24px 60px rgba(59, 44, 24, 0.18);
   overflow: hidden;
+}
+/* Phones: near-fullscreen sheet instead of the small corner panel. */
+@media (max-width: 479.98px) {
+  .jl-chat__panel {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: none;
+  }
 }
 .jl-chat__header {
   display: flex;
@@ -880,6 +1314,24 @@ export default {
   border-color: var(--jl-brand);
   color: var(--jl-brand);
 }
+.jl-chat__turn {
+  margin-bottom: 14px;
+}
+.jl-chat__turn--user {
+  display: flex;
+  justify-content: flex-end;
+}
+.jl-chat__bubble {
+  max-width: 85%;
+  padding: 8px 12px;
+  background: rgba(177, 58, 46, 0.08);
+  border: 1px solid rgba(177, 58, 46, 0.22);
+  border-radius: 12px 12px 2px 12px;
+  color: #7a2d23;
+  font-size: 13px;
+  line-height: 1.6;
+  word-break: break-word;
+}
 .jl-chat__answer {
   font-size: 14px;
   line-height: 1.7;
@@ -888,6 +1340,22 @@ export default {
 }
 .jl-chat__answer :deep(p) {
   margin: 0 0 10px;
+}
+.jl-chat__turn-actions {
+  margin-top: 8px;
+}
+.jl-chat__mini {
+  border: 1px solid #e2dac9;
+  background: transparent;
+  color: #8a8273;
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.jl-chat__mini:hover {
+  border-color: var(--jl-brand);
+  color: var(--jl-brand);
 }
 .jl-chat__error {
   font-size: 13px;
@@ -994,10 +1462,14 @@ export default {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
 }
 .jl-chat__send:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.jl-chat__send--stop {
+  background: #6f6a5e;
 }
 .jl-chat__think {
   margin: 10px 0 12px;
@@ -1072,5 +1544,29 @@ html.dark .jl-chat__sources {
 html.dark .jl-chat__think,
 html.dark .jl-chat__think pre {
   color: #aaa;
+}
+html.dark .jl-chat__bubble {
+  background: rgba(212, 97, 76, 0.14);
+  border-color: rgba(212, 97, 76, 0.32);
+  color: #eac4bc;
+}
+html.dark .jl-chat__mini {
+  border-color: #4a443a;
+  color: #b0a898;
+}
+html.dark .jl-chat__send--stop {
+  background: #5a544a;
+}
+
+/* v-html content is not covered by scoped styles, so the in-answer citation
+   link lives here (global). */
+.jl-chat__cite {
+  color: var(--jl-brand, #b13a2e);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dashed var(--jl-brand, #b13a2e);
+}
+.jl-chat__cite:hover {
+  border-bottom-style: solid;
 }
 </style>

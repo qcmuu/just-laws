@@ -11,6 +11,10 @@ description: 配置浏览器端大模型接口（BYOK），启用全站 AI 法�
 <LawModelSettings variant="page" />
 </ClientOnly>
 
+::: tip
+填好后建议先点「**测试连接**」：浏览器会向该接口发一个 1 token 的最小请求，立刻验证 Key、模型名和跨域是否可用（绿色 ✓ 表示通过），确认无误再点「保存」。
+:::
+
 ## 如何获取 API Key
 
 | 服务商 | 控制台 | 接口地址（点击预设自动填入） | 模型示例 |
