@@ -174,6 +174,7 @@ import { withBase } from "@vuepress/client";
 import LawModelSettings from "./LawModelSettings.vue";
 import { SETTINGS_EVENT, loadCfg } from "./chat-settings";
 import { getCachedCorpus, setCachedCorpus } from "./law-corpus-cache.js";
+import { cjkTokenize, searchLaws } from "./law-retrieve.js";
 
 // markdown-it and minisearch are heavy and only needed once the user actually
 // opens the chat. They are dynamically imported on demand (see loadMarkdown /
@@ -211,28 +212,6 @@ function yieldToUI() {
       setTimeout(resolve, 0);
     }
   });
-}
-
-// Tokenizer for Chinese legal text: emit lowercased ASCII word runs as-is, and
-// for CJK runs emit unigrams + bigrams. Used for BOTH indexing and querying so
-// lexical recall works without word segmentation or any model download.
-function cjkTokenize(str) {
-  if (!str) return [];
-  const tokens = [];
-  const re = /[\u4e00-\u9fff]+|[a-zA-Z0-9]+/g;
-  let m;
-  while ((m = re.exec(str)) !== null) {
-    const run = m[0];
-    if (/[a-zA-Z0-9]/.test(run[0])) {
-      tokens.push(run.toLowerCase());
-    } else {
-      for (let i = 0; i < run.length; i++) {
-        tokens.push(run[i]);
-        if (i + 1 < run.length) tokens.push(run[i] + run[i + 1]);
-      }
-    }
-  }
-  return tokens;
 }
 
 function resolveEnabled() {
@@ -603,8 +582,7 @@ export default {
         });
       }
       if (!this._mini) return Promise.resolve([]);
-      const hits = this._mini.search(q, { combineWith: "OR" });
-      return Promise.resolve(hits.slice(0, TOP_K));
+      return Promise.resolve(searchLaws(this._mini, q, TOP_K));
     },
     buildMessages(q, ctx) {
       const blocks = ctx
@@ -616,7 +594,8 @@ export default {
       const system =
         "你是严谨的中国法律检索助手。只依据【可参考法条】中的内容回答用户问题，" +
         "并在回答中明确引用法律名称与条号（如《中华人民共和国民法典》第X条）。" +
-        "如果提供的法条不足以回答，请直接说明「现有法条不足以回答」，不要编造法条或条号。" +
+        "如果检索到的法条与问题明显不是同一程序或领域，不要硬套，直接说明未能检索到对应条文，" +
+        "可以点出通常应查找哪一类程序法，但不要编造条号或法条内容。" +
         "回答用简体中文，条理清晰，必要时分点。最后提示重大事项应咨询执业律师。";
       const user =
         `用户问题：${q}\n\n【可参考法条】\n${blocks || "（未检索到相关法条）"}`;

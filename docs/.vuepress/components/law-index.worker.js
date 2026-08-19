@@ -27,6 +27,7 @@
 
 import MiniSearch from "minisearch";
 import { getCachedCorpus, setCachedCorpus } from "./law-corpus-cache.js";
+import { cjkTokenize, searchLaws } from "./law-retrieve.js";
 
 // Index in 300-doc batches and yield between batches so progress messages
 // actually reach the main thread (the worker thread has no UI to block, but
@@ -43,28 +44,6 @@ function yieldToUI() {
       setTimeout(resolve, 0);
     }
   });
-}
-
-// Tokenizer for Chinese legal text: lowercased ASCII word runs as-is; CJK
-// runs emit unigrams + bigrams. Used for BOTH indexing and querying so lexical
-// recall works without word segmentation. Must match LawChatWidget.vue.
-function cjkTokenize(str) {
-  if (!str) return [];
-  const tokens = [];
-  const re = /[\u4e00-\u9fff]+|[a-zA-Z0-9]+/g;
-  let m;
-  while ((m = re.exec(str)) !== null) {
-    const run = m[0];
-    if (/[a-zA-Z0-9]/.test(run[0])) {
-      tokens.push(run.toLowerCase());
-    } else {
-      for (let i = 0; i < run.length; i++) {
-        tokens.push(run[i]);
-        if (i + 1 < run.length) tokens.push(run[i] + run[i + 1]);
-      }
-    }
-  }
-  return tokens;
 }
 
 function post(msg) {
@@ -157,7 +136,7 @@ self.onmessage = async (e) => {
         return;
       }
       const topK = msg.topK || 6;
-      const hits = mini.search(msg.query, { combineWith: "OR" }).slice(0, topK);
+      const hits = searchLaws(mini, msg.query, topK);
       post({ type: "results", requestId: msg.requestId, hits });
     }
   } catch (err) {
