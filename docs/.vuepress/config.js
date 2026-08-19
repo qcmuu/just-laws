@@ -185,6 +185,7 @@ module.exports = {
         {
           text: "类别",
           children: [
+            { text: "宪法", link: "/constitution/" },
             "/category/constitutional-relevance",
             "/category/civil-and-commercial",
             "/category/administrative",

@@ -193,6 +193,33 @@ summary:focus-visible {
   text-decoration: none;
 }
 
+/* 中等宽度（720–1560px）压缩：默认主题 ≤719px 才折叠导航，而本站 12 个
+   一级入口 + GitHub + 深色开关 + 搜索框在 1280–1440 上会溢出视口右缘
+   （实测搜索框右缘被挤出 200px/41px）。此区间收紧间距、缩窄搜索框并
+   隐藏 GitHub 项（移动端侧边栏内仍有入口）。 */
+@media (max-width: 1560px) and (min-width: 720px) {
+  .navbar-items .navbar-item {
+    margin-left: 0.8rem;
+  }
+  .navbar-items a {
+    font-size: 0.85rem;
+  }
+  .navbar .site-name {
+    font-size: 1.05rem;
+  }
+  .navbar-items .navbar-item:has(> a.external-link) {
+    display: none;
+  }
+  .search-box input {
+    width: 7rem;
+  }
+}
+
+/* 搜索建议下拉永远不出视口右缘（搜索框贴近右缘时的保险） */
+.search-box .suggestions {
+  max-width: calc(100vw - 1.5rem);
+}
+
 /* 下拉菜单：纸卡质感 */
 .navbar-dropdown-wrapper .navbar-dropdown {
   background: var(--c-bg);
@@ -559,7 +586,7 @@ html.dark div[class*="language-"] {
   user-select: none;
 }
 html.dark .home::before {
-  opacity: 0.045;
+  opacity: 0.03;
 }
 
 .home .hero {
@@ -1055,6 +1082,12 @@ html.dark .jl-ref__fold > summary:hover {
 
 .jl-ref__kind,
 .jl-ref__len {
+  white-space: nowrap;
+}
+
+/* 「原始来源」列：表头与链接都不折行 */
+.jl-ref__scroll th:last-child,
+.jl-ref__scroll td:last-child {
   white-space: nowrap;
 }
 

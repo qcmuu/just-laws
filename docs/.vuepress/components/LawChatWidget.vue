@@ -763,7 +763,8 @@ export default {
 .jl-chat__fab {
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  /* 抬高到「上一页/下一页」分页行之上，避免遮挡正文页脚导航 */
+  bottom: 76px;
   z-index: 1000;
   display: flex;
   align-items: center;

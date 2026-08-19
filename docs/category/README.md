@@ -4,6 +4,8 @@ next: /category/constitutional-relevance
 
 # 类别
 
+[宪法](../constitution/)
+
 [宪法相关法](./constitutional-relevance)
 
 [民商法](./civil-and-commercial)
