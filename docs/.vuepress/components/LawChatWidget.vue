@@ -126,8 +126,8 @@
               <template v-else>正在检索法条并等待模型响应…</template>
             </div>
 
-            <div v-if="sources.length" class="jl-chat__sources">
-              <h4>参考来源（{{ sources.length }} 条法条，点击核对原文）</h4>
+            <details v-if="sources.length" class="jl-chat__sources">
+              <summary>参考来源（{{ sources.length }} 条法条，展开核对原文）</summary>
               <a
                 v-for="(s, i) in sources"
                 :key="i"
@@ -142,7 +142,7 @@
                 <span v-if="s.c" class="jl-chat__badge">{{ s.c }}</span>
                 <span class="jl-chat__src-ctx">{{ snippet(s.t) }}</span>
               </a>
-            </div>
+            </details>
           </div>
 
           <form class="jl-chat__inputbar" @submit.prevent="ask()">
@@ -928,11 +928,27 @@ export default {
   border-top: 1px dashed #eee;
   padding-top: 10px;
 }
-.jl-chat__sources h4 {
+.jl-chat__sources > summary {
   font-size: 12px;
   color: #888;
-  margin: 0 0 8px;
+  margin: 0;
   font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.jl-chat__sources > summary::-webkit-details-marker {
+  display: none;
+}
+.jl-chat__sources > summary::before {
+  content: "▸ ";
+  color: var(--jl-brand);
+}
+.jl-chat__sources[open] > summary {
+  margin-bottom: 8px;
+}
+.jl-chat__sources[open] > summary::before {
+  content: "▾ ";
 }
 .jl-chat__src {
   display: block;
@@ -1043,7 +1059,7 @@ html.dark .jl-chat__hint,
 html.dark .jl-chat__status,
 html.dark .jl-chat__src-ctx,
 html.dark .jl-chat__badge,
-html.dark .jl-chat__sources h4,
+html.dark .jl-chat__sources > summary,
 html.dark .jl-chat__note {
   color: #b5b5b5;
 }
