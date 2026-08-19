@@ -1254,6 +1254,81 @@ html.dark .jl-ref__fold > summary:hover {
    动效可关闭：尊重系统减少动态偏好
    ============================================================ */
 
+/* 设置页：技术方案 */
+.jl-arch {
+  margin: 1.2rem 0 2rem;
+  padding: 1.35rem 1.5rem 1.2rem;
+  border: 1px solid var(--c-border);
+  border-top: 4px double var(--c-border-dark);
+  border-radius: 10px;
+  background: var(--c-bg-light);
+}
+
+.jl-arch__steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.95rem;
+}
+
+.jl-arch__steps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.7rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: start;
+}
+
+.jl-arch__steps li:nth-child(1)::before { content: "一"; }
+.jl-arch__steps li:nth-child(2)::before { content: "二"; }
+.jl-arch__steps li:nth-child(3)::before { content: "三"; }
+.jl-arch__steps li:nth-child(4)::before { content: "四"; }
+
+.jl-arch__steps li::before {
+  font-family: var(--font-family-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.7rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  text-align: center;
+  color: var(--c-brand);
+  border: 1px solid rgba(177, 58, 46, 0.4);
+  border-radius: 4px;
+  background: rgba(177, 58, 46, 0.05);
+}
+
+html.dark .jl-arch__steps li::before {
+  border-color: rgba(212, 97, 76, 0.5);
+  background: rgba(212, 97, 76, 0.08);
+}
+
+.jl-arch__steps strong {
+  display: block;
+  font-family: var(--font-family-serif);
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: var(--c-text);
+}
+
+.jl-arch__steps span {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--c-text-lighter);
+}
+
+.jl-arch__note {
+  margin: 1.1rem 0 0;
+  padding-top: 0.95rem;
+  border-top: 1px solid var(--c-border);
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: var(--c-text-lighter);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home .hero .figure,
   .home .hero h1,
