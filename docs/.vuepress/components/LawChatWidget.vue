@@ -44,6 +44,15 @@
             <button
               class="jl-chat__icon"
               type="button"
+              aria-label="开启新对话"
+              title="开启新对话"
+              @click="newChat"
+            >
+              ＋
+            </button>
+            <button
+              class="jl-chat__icon"
+              type="button"
               :aria-label="showSettings ? '返回问答' : '设置模型'"
               :title="showSettings ? '返回问答' : '设置模型'"
               @click="showSettings = !showSettings"
@@ -280,6 +289,8 @@ export default {
     this._worker = null;
     this._searchSeq = 0;
     this._searchWaiters = new Map();
+    this._askAbort = null;
+    this._ignoreAbort = false;
     this.cfg = { ...this.cfg, ...(await loadCfg()) };
     // Stay in sync when settings are saved elsewhere (the /settings/ page or
     // this panel — both dispatch SETTINGS_EVENT after persisting).
@@ -303,6 +314,24 @@ export default {
     }
   },
   methods: {
+    newChat() {
+      this._ignoreAbort = true;
+      if (this._askAbort) {
+        try {
+          this._askAbort.abort();
+        } catch (e) {
+          /* ignore */
+        }
+        this._askAbort = null;
+      }
+      this.question = "";
+      this.answer = "";
+      this.reasoning = "";
+      this.sources = [];
+      this.error = "";
+      this.loading = false;
+      this.showSettings = false;
+    },
     openPanel() {
       this.open = true;
       if (!this.configured) this.showSettings = true;
@@ -630,6 +659,8 @@ export default {
       this.scrollDown();
 
       const controller = new AbortController();
+      this._askAbort = controller;
+      this._ignoreAbort = false;
       const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
       try {
         const url = this.cfg.baseUrl.replace(/\/$/, "") + "/chat/completions";
@@ -716,6 +747,7 @@ export default {
         }
       } catch (e) {
         if (e && e.name === "AbortError") {
+          if (this._ignoreAbort) return;
           this.error = "回答超时，请稍后重试或换个问法。";
         } else if (e && e.name === "TypeError") {
           // fetch threw before any HTTP response -> almost always CORS/network.
@@ -727,6 +759,7 @@ export default {
         }
       } finally {
         clearTimeout(timer);
+        if (this._askAbort === controller) this._askAbort = null;
         this.loading = false;
         this.scrollDown();
       }
