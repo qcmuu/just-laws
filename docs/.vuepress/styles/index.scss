@@ -1269,14 +1269,14 @@ html.dark .jl-ref__fold > summary:hover {
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 0.95rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.25rem;
 }
 
 .jl-arch__steps li {
-  position: relative;
   display: grid;
   grid-template-columns: 1.7rem minmax(0, 1fr);
-  column-gap: 0.75rem;
+  column-gap: 0.7rem;
   align-items: start;
 }
 
@@ -1286,6 +1286,7 @@ html.dark .jl-ref__fold > summary:hover {
 .jl-arch__steps li:nth-child(4)::before { content: "四"; }
 
 .jl-arch__steps li::before {
+  grid-row: 1 / span 2;
   font-family: var(--font-family-serif);
   font-size: 0.82rem;
   font-weight: 700;
@@ -1304,20 +1305,29 @@ html.dark .jl-arch__steps li::before {
   background: rgba(212, 97, 76, 0.08);
 }
 
+.jl-arch__steps strong,
+.jl-arch__steps span {
+  grid-column: 2;
+}
+
 .jl-arch__steps strong {
-  display: block;
   font-family: var(--font-family-serif);
-  font-size: 1rem;
-  letter-spacing: 0.06em;
+  font-size: 0.98rem;
+  letter-spacing: 0.05em;
   color: var(--c-text);
 }
 
 .jl-arch__steps span {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 0.9rem;
-  line-height: 1.75;
+  margin-top: 0.2rem;
+  font-size: 0.86rem;
+  line-height: 1.6;
   color: var(--c-text-lighter);
+}
+
+@media (max-width: 720px) {
+  .jl-arch__steps {
+    grid-template-columns: 1fr;
+  }
 }
 
 .jl-arch__note {
