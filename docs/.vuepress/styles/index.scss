@@ -813,11 +813,21 @@ html.dark .home .feature h2::before {
   color: var(--c-text-lighter);
 }
 
-/* —— 首页内容区（数据带 / 部门法目录 / 页脚）—— */
-.home .theme-default-content {
+/* —— 首页内容区（数据带 / 部门法目录 / 页脚）——
+   必须与 .home .features 同宽、同左右内边距。
+   否则会被正文栏 --content-width:760px 锁窄，整块贴左，
+   三列目录对不齐上方三张特性卡。 */
+.home .theme-default-content,
+.home .theme-default-content:not(.custom) {
   position: relative;
   z-index: 1;
-  max-width: var(--content-width, 760px);
+  max-width: none;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  box-sizing: border-box;
 }
 
 /* 数据带 */
