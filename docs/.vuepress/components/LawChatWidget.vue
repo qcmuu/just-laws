@@ -172,7 +172,10 @@
                 <!-- Collapsed by default so the streamed answer stays
                      primary; expand to check the original articles. -->
                 <details v-if="turn.sources.length" class="jl-chat__sources">
-                  <summary>参考来源（{{ turn.sources.length }} 条法条，展开核对原文）</summary>
+                  <summary>
+                    <span class="jl-chat__disclosure" aria-hidden="true">▸</span>
+                    参考来源（{{ turn.sources.length }} 条法条，展开核对原文）
+                  </summary>
                   <a
                     v-for="(s, i) in turn.sources"
                     :key="i"
@@ -245,6 +248,10 @@ import {
   CORS_HINT,
 } from "./chat-settings";
 import { cjkTokenize, searchLaws } from "./law-retrieve.js";
+import {
+  createRequestGeneration,
+  applyIfCurrent,
+} from "./law-chat-request.js";
 import { getCachedCorpus, setCachedCorpus } from "./law-corpus-cache.js";
 
 // markdown-it and minisearch are heavy and only needed once the user actually
@@ -419,6 +426,7 @@ export default {
     },
   },
   async created() {
+    this._requestGate = createRequestGeneration();
     if (typeof window === "undefined") return;
     // Non-reactive plumbing (kept off Vue's reactive proxy — a proxied
     // Worker breaks postMessage's `this` binding).
@@ -446,6 +454,15 @@ export default {
     window.addEventListener(SETTINGS_EVENT, this._onSettingsSaved);
   },
   beforeUnmount() {
+    if (this._requestGate) this._requestGate.next();
+    if (this._activeController) {
+      try {
+        this._activeController.abort();
+      } catch (e) {
+        /* ignore */
+      }
+      this._activeController = null;
+    }
     if (typeof window !== "undefined") {
       if (this._onSettingsSaved) {
         window.removeEventListener(SETTINGS_EVENT, this._onSettingsSaved);
@@ -464,17 +481,18 @@ export default {
     }
   },
   methods: {
-    // 开启新对话：clear the transcript and abort any in-flight request.
-    // The orphaned turn detaches from the array, so its late mutations (the
-    // stream's finally block) can't resurface. The corpus index stays warm.
+    // 开启新对话：invalidate the in-flight generation so its finally/timer
+    // cannot clear loading or null the next request's AbortController.
     newChat() {
-      this._stopReason = "user"; // suppress the abort error on the orphan
+      this._requestGate.next();
+      this._stopReason = "user";
       if (this._activeController) {
         try {
           this._activeController.abort();
         } catch (e) {
           /* ignore */
         }
+        this._activeController = null;
       }
       this.turns = [];
       this.question = "";
@@ -991,6 +1009,7 @@ export default {
         this.showSettings = true;
         return;
       }
+      const reqId = this._requestGate.next();
       this.question = "";
       this.loading = true;
       this._stopReason = "";
@@ -1014,10 +1033,25 @@ export default {
       turn = this.turns[this.turns.length - 1];
       this.scrollDown(true);
 
-      const bailIfStopped = () => {
-        if (this._stopReason !== "user") return false;
-        turn.error = turn.text ? "" : "已停止生成。";
+      const isLive = () => this._requestGate.isLive(reqId);
+      const releaseUi = () =>
+        applyIfCurrent(this._requestGate, reqId, () => {
+          this.loading = false;
+          this._activeController = null;
+        });
+      const finishTurn = (stoppedMsg) => {
         turn.streaming = false;
+        if (stoppedMsg && !turn.text && !turn.error) turn.error = stoppedMsg;
+        this.renderTurn(turn);
+      };
+
+      const bailIfStopped = () => {
+        if (!isLive()) {
+          finishTurn("已停止生成。");
+          return true;
+        }
+        if (this._stopReason !== "user") return false;
+        finishTurn("已停止生成。");
         this.loading = false;
         return true;
       };
@@ -1026,8 +1060,8 @@ export default {
       try {
         await this.ensureIndex();
       } catch (e) {
-        turn.streaming = false;
-        this.loading = false;
+        finishTurn();
+        releaseUi();
         return; // indexError already shown at panel level
       }
       if (bailIfStopped()) return;
@@ -1038,11 +1072,17 @@ export default {
       this.scrollDown();
 
       const controller = new AbortController();
+      if (!isLive()) {
+        controller.abort();
+        finishTurn("已停止生成。");
+        return;
+      }
       this._activeController = controller;
       let timer = null;
       const arm = (ms, reason) => {
         clearTimeout(timer);
         timer = setTimeout(() => {
+          if (!isLive()) return;
           this._stopReason = reason;
           controller.abort();
         }, ms);
@@ -1085,6 +1125,12 @@ export default {
           while (!streamFinished) {
             const { value, done } = await reader.read();
             if (done) break;
+            if (!isLive()) {
+              try {
+                await reader.cancel();
+              } catch (_) {}
+              break;
+            }
             arm(IDLE_TIMEOUT_MS, "idle"); // data flowing — only guard gaps
             buf += dec.decode(value, { stream: true });
             let idx;
@@ -1113,7 +1159,9 @@ export default {
                 const thinking =
                   deltaObj.reasoning_content || deltaObj.reasoning || "";
                 const delta = deltaObj.content || deltaObj.text || "";
-                if (thinking || delta) this.applyDelta(turn, thinking, delta);
+                if ((thinking || delta) && isLive()) {
+                  this.applyDelta(turn, thinking, delta);
+                }
               }
             }
           }
@@ -1129,7 +1177,9 @@ export default {
           }
         }
       } catch (e) {
-        if (e && e.name === "AbortError") {
+        if (!isLive()) {
+          finishTurn("已停止生成。");
+        } else if (e && e.name === "AbortError") {
           if (this._stopReason === "user") {
             // User pressed 停止 — keep whatever already arrived.
             if (!turn.text) turn.error = "已停止生成。";
@@ -1152,15 +1202,15 @@ export default {
         }
       } finally {
         clearTimeout(timer);
-        if (this._renderTimer) {
-          clearTimeout(this._renderTimer);
-          this._renderTimer = null;
-        }
+        applyIfCurrent(this._requestGate, reqId, () => {
+          if (this._renderTimer) {
+            clearTimeout(this._renderTimer);
+            this._renderTimer = null;
+          }
+        });
         this.renderTurn(turn);
         turn.streaming = false;
-        this.loading = false;
-        this._activeController = null;
-        this.scrollDown();
+        if (releaseUi()) this.scrollDown();
       }
     },
   },
@@ -1387,6 +1437,9 @@ export default {
   padding-top: 10px;
 }
 .jl-chat__sources > summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
   color: #888;
   margin: 0 0 8px;
@@ -1397,6 +1450,16 @@ export default {
 }
 .jl-chat__sources > summary::-webkit-details-marker {
   display: none;
+}
+.jl-chat__disclosure {
+  flex-shrink: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+.jl-chat__sources[open] .jl-chat__disclosure {
+  transform: rotate(90deg);
 }
 .jl-chat__src {
   display: block;

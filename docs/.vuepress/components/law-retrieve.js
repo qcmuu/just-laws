@@ -1,7 +1,7 @@
 // Query-side retrieval helpers for the in-browser MiniSearch index.
 // Index tokenizer stays unigram+bigram. Queries drop stop unigrams and expand
-// colloquial phrasing so "案子审完后原告还要做什么" can reach 民事诉讼法/执行条文
-// instead of OR-matching 审/后/要 across 种子法、陪审员法.
+// by topic + combination intent (not lone 原告/怎么办) so colloquial questions
+// reach the matching 法典 instead of OR-matching 强制执行 into 行政强制法.
 
 export function cjkTokenize(str) {
   if (!str) return [];
@@ -33,26 +33,58 @@ export function queryTokenize(str) {
   });
 }
 
-const EXPANDERS = [
+// Topic → legal terms only. Role words (原告/被告) and question mood
+// (怎么办) are not intents: injecting 强制执行 here lets 行政强制法
+// dominate MiniSearch OR ranking on every everyday question.
+const DOMAIN_EXPANDERS = [
   { test: /案子|官司/, add: "案件" },
-  { test: /审完|审结|判完|判下来|打完/, add: "判决 生效 审结" },
-  { test: /原告|胜诉|赢了/, add: "申请执行 强制执行 履行 民事诉讼法" },
-  { test: /被告|败诉|输了/, add: "履行 被执行人 民事诉讼法" },
-  { test: /还要做什么|怎么办|下一步|之后怎么办/, add: "申请执行 执行程序 履行义务" },
-  { test: /执行/, add: "强制执行 申请执行 民事诉讼法" },
+  { test: /审完|审结|判完|判下来|打完/, add: "判决 生效" },
   { test: /上诉/, add: "上诉期 第二审 民事诉讼法" },
-  { test: /离婚/, add: "民法典 婚姻家庭 离婚" },
-  { test: /劳动|开除|辞退|加班|工伤/, add: "劳动合同法 劳动争议" },
+  { test: /离婚/, add: "民法典 婚姻家庭" },
+  { test: /劳动|开除|辞退|加班|工伤|工资/, add: "劳动合同法 劳动争议" },
   { test: /合同违约|合同/, add: "民法典 合同编" },
+  { test: /租房|房租|房东|租客|押金|租金/, add: "房屋租赁 出租人 承租人 民法典" },
+  { test: /欠钱|借钱|诉讼时效/, add: "诉讼时效 民法典" },
 ];
+
+const POST_JUDGMENT = /审完|审结|判完|判下来|判决生效|打完/;
+const NEXT_STEP = /还要做什么|下一步|之后怎么办|然后呢/;
+const EXPLICIT_EXECUTION = /申请执行|强制执行|拒不执行/;
+const LOST_CASE = /败诉|输了/;
+const WON_CASE = /胜诉|赢了/;
+const NONPERFORMANCE = /不(履行|执行|给|还)|赖账/;
+
+// Combination-intent only. A lone 原告/怎么办 must not expand to 执行.
+export function executionIntentTerms(text) {
+  if (LOST_CASE.test(text) && !EXPLICIT_EXECUTION.test(text)) return "";
+  if (EXPLICIT_EXECUTION.test(text)) return "申请执行 民事诉讼法";
+  if (WON_CASE.test(text) && NONPERFORMANCE.test(text)) {
+    return "申请执行 民事诉讼法";
+  }
+  if (POST_JUDGMENT.test(text) && NEXT_STEP.test(text)) {
+    return "申请执行 民事诉讼法";
+  }
+  return "";
+}
+
+export function appealIntentTerms(text) {
+  if (LOST_CASE.test(text) && !EXPLICIT_EXECUTION.test(text)) {
+    return "上诉 第二审 民事诉讼法";
+  }
+  return "";
+}
 
 export function expandLegalQuery(q) {
   const text = String(q || "").trim();
   if (!text) return "";
   const extra = [];
-  for (const rule of EXPANDERS) {
+  for (const rule of DOMAIN_EXPANDERS) {
     if (rule.test.test(text)) extra.push(rule.add);
   }
+  const execution = executionIntentTerms(text);
+  if (execution) extra.push(execution);
+  const appeal = appealIntentTerms(text);
+  if (appeal) extra.push(appeal);
   return extra.length ? `${text} ${extra.join(" ")}` : text;
 }
 
