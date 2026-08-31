@@ -7,6 +7,10 @@
     citations) lives in `turns`; the last few exchanges are folded back into
     the prompt so follow-up questions keep their context.
   - Lazy-loads /law-corpus.json (article-level law chunks) on first open.
+  - Repeat visitors (localStorage corpus-version pointer => IndexedDB cache
+    hit, no download) pre-build the index during idle time right after mount,
+    so opening the chat usually finds it ready instead of a ~10 s progress
+    line before the first question.
   - Builds the lexical index in a Web Worker (MiniSearch + a CJK bi-gram
     tokenizer) so the ~15 s of CPU never blocks the main thread; the parsed
     corpus is cached in IndexedDB (see law-corpus-cache.js) so repeat opens
@@ -18,10 +22,13 @@
     widget transparently falls back to building the index on the main thread
     with the same chunked yields as before.
   - Sends the retrieved 法条 + question to a user-supplied OpenAI-compatible
-    chat endpoint and streams the answer. Streamed markdown is re-rendered on
-    a ~120 ms throttle (not per token); a 30 s first-byte watchdog and a 60 s
-    inter-chunk idle watchdog replace the old flat 90 s cap, so long reasoning
-    models are never cut off mid-answer. A 停止 button aborts on demand.
+    chat endpoint and streams the answer. Streamed deltas are buffered in
+    non-reactive fields and flushed into the reactive turn on a ~120 ms
+    throttle, so neither Vue re-renders nor markdown re-parses run per token;
+    citation deep-links are built once when the stream ends. A 30 s first-byte
+    watchdog and a 60 s inter-chunk idle watchdog replace the old flat 90 s
+    cap, so long reasoning models are never cut off mid-answer. A 停止 button
+    aborts on demand.
   - Renders citations as clickable deep-links back into the law text — both
     the per-turn source cards and 《法》第X条 mentions inside the answer body.
   - The API key is stored only in the user's browser (localStorage) and sent
@@ -104,7 +111,7 @@
                 已从本地缓存读取法条，正在后台构建索引 {{ indexProgress }}%…（页面可正常浏览）
               </template>
               <template v-else>
-                正在下载法条语料并在后台构建索引 {{ indexProgress }}%…（仅首次较慢，页面可正常浏览）
+                正在下载法条语料并构建索引 {{ indexProgress }}%…（每次进入页面都需重建，期间可正常浏览）
               </template>
             </div>
             <div v-if="indexError" class="jl-chat__error">{{ indexError }}</div>
@@ -435,6 +442,13 @@ export default {
     this._searchWaiters = new Map();
     this._turnSeq = 0;
     this._renderTimer = null;
+    // Streaming delta buffers (non-reactive): per-SSE-chunk mutation of the
+    // reactive turn.text/turn.reasoning re-renders the whole widget per chunk
+    // (~33/s) — quadruple the intended RENDER_INTERVAL_MS throttle. Deltas
+    // accumulate here and only reach the reactive turn on flush.
+    this._bufTurn = null; // turn currently owning the buffers
+    this._bufText = "";
+    this._bufReasoning = "";
     this._activeController = null;
     this._stopReason = ""; // "" | "user" | "ttfb" | "idle"
     this._onKeydown = (e) => {
@@ -452,6 +466,18 @@ export default {
       if (this.configured && this.showSettings) this.showSettings = false;
     };
     window.addEventListener(SETTINGS_EVENT, this._onSettingsSaved);
+  },
+  mounted() {
+    // Pre-warm for repeat visitors: the localStorage version pointer is only
+    // written after a successful panel open, so anyone who has it also has
+    // the corpus in IndexedDB — pre-building costs no network download.
+    // Started immediately (not on idle): the build runs inside the worker, so
+    // it never blocks hydration, and every second of head start is a second
+    // the user does not wait before their first question. First-time visitors
+    // stay on the lazy path (no unprompted 2.6 MB download).
+    if (this._readCachedVersion() == null) return;
+    this.ensureIndex();
+    this.loadMarkdown();
   },
   beforeUnmount() {
     if (this._requestGate) this._requestGate.next();
@@ -850,20 +876,36 @@ export default {
     // ---- Streamed-answer rendering (throttled) ----
 
     applyDelta(turn, thinking, content) {
-      if (thinking) turn.reasoning += thinking;
-      if (content) turn.text += content;
+      if (thinking) this._bufReasoning += thinking;
+      if (content) this._bufText += content;
       if (this._renderTimer) return; // a render is already scheduled
-      if (!turn.html && turn.text) {
-        // First visible token — paint at once, throttle everything after.
+      if (!turn.html && (turn.text || this._bufText)) {
+        // First visible token — flush + paint at once, throttle after.
+        this.flushDeltas();
         this.renderTurn(turn);
         this.scrollDown();
         return;
       }
       this._renderTimer = setTimeout(() => {
         this._renderTimer = null;
+        this.flushDeltas();
         this.renderTurn(turn);
         this.scrollDown();
       }, RENDER_INTERVAL_MS);
+    },
+    // Copy buffered deltas into the owning (reactive) turn. Owner-guarded so
+    // a stopped request's finally can never flush its tail into a newer one.
+    flushDeltas() {
+      const t = this._bufTurn;
+      if (!t) return;
+      if (this._bufReasoning) {
+        t.reasoning += this._bufReasoning;
+        this._bufReasoning = "";
+      }
+      if (this._bufText) {
+        t.text += this._bufText;
+        this._bufText = "";
+      }
     },
     renderTurn(turn) {
       if (!turn || !turn.text) {
@@ -873,7 +915,12 @@ export default {
       const html = md
         ? md.render(turn.text)
         : escapeHtml(turn.text).replace(/\n/g, "<br>");
-      turn.html = this.linkifyCitations(html, turn.sources);
+      // Citation deep-links are only built on final renders: the DOMParser +
+      // text-node walk scales with answer length and its output is transient
+      // while tokens still stream in.
+      turn.html = turn.streaming
+        ? html
+        : this.linkifyCitations(html, turn.sources);
     },
     // Wrap 《法名》第X条 mentions that match one of this turn's retrieved
     // sources in deep links to the law page. DOM-based (text nodes only), so
@@ -1013,6 +1060,14 @@ export default {
       this.question = "";
       this.loading = true;
       this._stopReason = "";
+      // Take over the delta buffers: flush any tail still buffered for the
+      // previous request into its own turn, then drop a stale render timer so
+      // this request's first schedule is not swallowed.
+      this.flushDeltas();
+      if (this._renderTimer) {
+        clearTimeout(this._renderTimer);
+        this._renderTimer = null;
+      }
 
       let userTurn = { id: ++this._turnSeq, role: "user", text: q };
       let turn = {
@@ -1031,6 +1086,9 @@ export default {
       // streaming mutations below (text/html/reasoning/copied) re-render.
       userTurn = this.turns[this.turns.length - 2];
       turn = this.turns[this.turns.length - 1];
+      this._bufTurn = turn;
+      this._bufText = "";
+      this._bufReasoning = "";
       this.scrollDown(true);
 
       const isLive = () => this._requestGate.isLive(reqId);
@@ -1040,6 +1098,7 @@ export default {
           this._activeController = null;
         });
       const finishTurn = (stoppedMsg) => {
+        this.flushDeltas();
         turn.streaming = false;
         if (stoppedMsg && !turn.text && !turn.error) turn.error = stoppedMsg;
         this.renderTurn(turn);
@@ -1168,6 +1227,7 @@ export default {
         } finally {
           reader.releaseLock();
         }
+        this.flushDeltas();
         if (!turn.text) {
           if (turn.reasoning) {
             turn.text = turn.reasoning;
@@ -1182,6 +1242,7 @@ export default {
         } else if (e && e.name === "AbortError") {
           if (this._stopReason === "user") {
             // User pressed 停止 — keep whatever already arrived.
+            this.flushDeltas();
             if (!turn.text) turn.error = "已停止生成。";
           } else if (this._stopReason === "ttfb") {
             turn.error =
@@ -1208,8 +1269,11 @@ export default {
             this._renderTimer = null;
           }
         });
-        this.renderTurn(turn);
+        this.flushDeltas();
+        // streaming=false must precede the final render: renderTurn only
+        // builds citation deep-links for non-streaming turns.
         turn.streaming = false;
+        this.renderTurn(turn);
         if (releaseUi()) this.scrollDown();
       }
     },
