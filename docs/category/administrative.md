@@ -1,105 +1,60 @@
+---
+pageClass: jl-category-index
+---
+
 # 行政法
 
-[义务教育法](../administrative/compulsory-education-law)
-
-[野生动物保护法](../administrative/protection-of-wildlife)
-
-[传染病防治法](../administrative/prevention-and-treatment-of-infections-diseases)
-
-[环境保护法](../administrative/environment-protection)
-
-[人民警察警衔条例](../administrative/people-s-police-rank-regulations)
-
-[人民警察法](../administrative/people-s-police-law)
-
-[体育法](../administrative/sports-law)
-
-[行政处罚法](../administrative/administrative-penalty)
-
-[促进科技成果转化法](../administrative/promotion-of-transformation-of-scientific-and-technological-achievements-law)
-
-[人民防空法](../administrative/civil-air-defense-law)
-
-[人口与计划生育法](../administrative/population-and-family-planning-law)
-
-[治安管理处罚法](../administrative/penalties-for-administration-of-public-security)
-
-[突发事件应对法](../administrative/emergency-response-law)
-
-[人民武装警察法](../administrative/people-s-armed-police-law)
-
-[中医药法](../administrative/traditional-chinese-medicine-law)
-
-[公共图书馆法](../administrative/public-library-law/)
-
-[学位法](../administrative/academic-degrees-law/)
-
-[学前教育法](../administrative/preschool-education-law/)
-
-[献血法](../administrative/blood-donation-law/)
-
-[护照法](../administrative/passport-law/)
-
-[公证法](../administrative/notarization-law/)
-
-[居民身份证法](../administrative/resident-identity-card-law/)
-
-[国防教育法](../administrative/national-defense-education-law/)
-
-[公共文化服务保障法](../administrative/public-cultural-services-guarantee-law/)
-
-[反食品浪费法](../administrative/anti-food-waste-law/)
-
-[海关关衔条例](../administrative/customs-rank-regulations/)
-
-[消防救援衔条例](../administrative/fire-rescue-rank-regulations/)
-
-[密码法](../administrative/cryptography-law/)
-
-[海警法](../administrative/coast-guard-law/)
-
-[社区矫正法](../administrative/community-corrections-law/)
-
-[医师法](../administrative/physicians-law/)
-
-[保守国家秘密法](../administrative/state-secrets-law/)
-
-[国境卫生检疫法](../administrative/frontier-health-and-quarantine-law/)
-
-[疫苗管理法](../administrative/vaccine-administration-law/)
-
-[律师法](../administrative/lawyers-law/)
-
-[禁毒法](../administrative/anti-drug-law/)
-
-[核安全法](../administrative/nuclear-safety-law/)
-
-[教育法](../administrative/education-law/)
-
-[职业教育法](../administrative/vocational-education-law/)
-
-[电影产业促进法](../administrative/film-industry-promotion-law/)
-
-[教师法](../administrative/teachers-law/)
-
-[高等教育法](../administrative/higher-education-law/)
-
-[行政复议法](../administrative/administrative-reconsideration-law/)
-
-[消防法](../administrative/fire-services-law/)
-
-[道路交通安全法](../administrative/road-traffic-safety-law/)
-
-[食品安全法](../administrative/food-safety-law/)
-
-[枪支管理法](../administrative/gun-control-law/)
-
-[公务员法](../administrative/civil-service-law/)
-
-[出境入境管理法](../administrative/exit-entry-administration-law/)
-
-[行政许可法](../administrative/administrative-licensing-law/)
-
-[行政强制法](../administrative/administrative-compulsion-law/)
-
-[民办教育促进法](../administrative/private-education-promotion-law/)
+<div class="jl-law-index">
+  <a class="jl-law-index__item" href="../administrative/compulsory-education-law"><span class="jl-law-index__name">义务教育法</span></a>
+  <a class="jl-law-index__item" href="../administrative/protection-of-wildlife"><span class="jl-law-index__name">野生动物保护法</span></a>
+  <a class="jl-law-index__item" href="../administrative/prevention-and-treatment-of-infections-diseases"><span class="jl-law-index__name">传染病防治法</span></a>
+  <a class="jl-law-index__item" href="../administrative/environment-protection"><span class="jl-law-index__name">环境保护法</span></a>
+  <a class="jl-law-index__item" href="../administrative/people-s-police-rank-regulations"><span class="jl-law-index__name">人民警察警衔条例</span></a>
+  <a class="jl-law-index__item" href="../administrative/people-s-police-law"><span class="jl-law-index__name">人民警察法</span></a>
+  <a class="jl-law-index__item" href="../administrative/sports-law"><span class="jl-law-index__name">体育法</span></a>
+  <a class="jl-law-index__item" href="../administrative/administrative-penalty"><span class="jl-law-index__name">行政处罚法</span></a>
+  <a class="jl-law-index__item" href="../administrative/promotion-of-transformation-of-scientific-and-technological-achievements-law"><span class="jl-law-index__name">促进科技成果转化法</span></a>
+  <a class="jl-law-index__item" href="../administrative/civil-air-defense-law"><span class="jl-law-index__name">人民防空法</span></a>
+  <a class="jl-law-index__item" href="../administrative/population-and-family-planning-law"><span class="jl-law-index__name">人口与计划生育法</span></a>
+  <a class="jl-law-index__item" href="../administrative/penalties-for-administration-of-public-security"><span class="jl-law-index__name">治安管理处罚法</span></a>
+  <a class="jl-law-index__item" href="../administrative/emergency-response-law"><span class="jl-law-index__name">突发事件应对法</span></a>
+  <a class="jl-law-index__item" href="../administrative/people-s-armed-police-law"><span class="jl-law-index__name">人民武装警察法</span></a>
+  <a class="jl-law-index__item" href="../administrative/traditional-chinese-medicine-law"><span class="jl-law-index__name">中医药法</span></a>
+  <a class="jl-law-index__item" href="../administrative/public-library-law/"><span class="jl-law-index__name">公共图书馆法</span></a>
+  <a class="jl-law-index__item" href="../administrative/academic-degrees-law/"><span class="jl-law-index__name">学位法</span></a>
+  <a class="jl-law-index__item" href="../administrative/preschool-education-law/"><span class="jl-law-index__name">学前教育法</span></a>
+  <a class="jl-law-index__item" href="../administrative/blood-donation-law/"><span class="jl-law-index__name">献血法</span></a>
+  <a class="jl-law-index__item" href="../administrative/passport-law/"><span class="jl-law-index__name">护照法</span></a>
+  <a class="jl-law-index__item" href="../administrative/notarization-law/"><span class="jl-law-index__name">公证法</span></a>
+  <a class="jl-law-index__item" href="../administrative/resident-identity-card-law/"><span class="jl-law-index__name">居民身份证法</span></a>
+  <a class="jl-law-index__item" href="../administrative/national-defense-education-law/"><span class="jl-law-index__name">国防教育法</span></a>
+  <a class="jl-law-index__item" href="../administrative/public-cultural-services-guarantee-law/"><span class="jl-law-index__name">公共文化服务保障法</span></a>
+  <a class="jl-law-index__item" href="../administrative/anti-food-waste-law/"><span class="jl-law-index__name">反食品浪费法</span></a>
+  <a class="jl-law-index__item" href="../administrative/customs-rank-regulations/"><span class="jl-law-index__name">海关关衔条例</span></a>
+  <a class="jl-law-index__item" href="../administrative/fire-rescue-rank-regulations/"><span class="jl-law-index__name">消防救援衔条例</span></a>
+  <a class="jl-law-index__item" href="../administrative/cryptography-law/"><span class="jl-law-index__name">密码法</span></a>
+  <a class="jl-law-index__item" href="../administrative/coast-guard-law/"><span class="jl-law-index__name">海警法</span></a>
+  <a class="jl-law-index__item" href="../administrative/community-corrections-law/"><span class="jl-law-index__name">社区矫正法</span></a>
+  <a class="jl-law-index__item" href="../administrative/physicians-law/"><span class="jl-law-index__name">医师法</span></a>
+  <a class="jl-law-index__item" href="../administrative/state-secrets-law/"><span class="jl-law-index__name">保守国家秘密法</span></a>
+  <a class="jl-law-index__item" href="../administrative/frontier-health-and-quarantine-law/"><span class="jl-law-index__name">国境卫生检疫法</span></a>
+  <a class="jl-law-index__item" href="../administrative/vaccine-administration-law/"><span class="jl-law-index__name">疫苗管理法</span></a>
+  <a class="jl-law-index__item" href="../administrative/lawyers-law/"><span class="jl-law-index__name">律师法</span></a>
+  <a class="jl-law-index__item" href="../administrative/anti-drug-law/"><span class="jl-law-index__name">禁毒法</span></a>
+  <a class="jl-law-index__item" href="../administrative/nuclear-safety-law/"><span class="jl-law-index__name">核安全法</span></a>
+  <a class="jl-law-index__item" href="../administrative/education-law/"><span class="jl-law-index__name">教育法</span></a>
+  <a class="jl-law-index__item" href="../administrative/vocational-education-law/"><span class="jl-law-index__name">职业教育法</span></a>
+  <a class="jl-law-index__item" href="../administrative/film-industry-promotion-law/"><span class="jl-law-index__name">电影产业促进法</span></a>
+  <a class="jl-law-index__item" href="../administrative/teachers-law/"><span class="jl-law-index__name">教师法</span></a>
+  <a class="jl-law-index__item" href="../administrative/higher-education-law/"><span class="jl-law-index__name">高等教育法</span></a>
+  <a class="jl-law-index__item" href="../administrative/administrative-reconsideration-law/"><span class="jl-law-index__name">行政复议法</span></a>
+  <a class="jl-law-index__item" href="../administrative/fire-services-law/"><span class="jl-law-index__name">消防法</span></a>
+  <a class="jl-law-index__item" href="../administrative/road-traffic-safety-law/"><span class="jl-law-index__name">道路交通安全法</span></a>
+  <a class="jl-law-index__item" href="../administrative/food-safety-law/"><span class="jl-law-index__name">食品安全法</span></a>
+  <a class="jl-law-index__item" href="../administrative/gun-control-law/"><span class="jl-law-index__name">枪支管理法</span></a>
+  <a class="jl-law-index__item" href="../administrative/civil-service-law/"><span class="jl-law-index__name">公务员法</span></a>
+  <a class="jl-law-index__item" href="../administrative/exit-entry-administration-law/"><span class="jl-law-index__name">出境入境管理法</span></a>
+  <a class="jl-law-index__item" href="../administrative/administrative-licensing-law/"><span class="jl-law-index__name">行政许可法</span></a>
+  <a class="jl-law-index__item" href="../administrative/administrative-compulsion-law/"><span class="jl-law-index__name">行政强制法</span></a>
+  <a class="jl-law-index__item" href="../administrative/private-education-promotion-law/"><span class="jl-law-index__name">民办教育促进法</span></a>
+</div>
