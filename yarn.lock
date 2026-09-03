@@ -637,10 +637,10 @@ envinfo@^7.8.1:
   resolved "https://registry.npmmirror.com/envinfo/-/envinfo-7.8.1.tgz"
   integrity sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==
 
-esbuild-windows-64@0.14.46:
+esbuild-linux-64@0.14.46:
   version "0.14.46"
-  resolved "https://registry.npmmirror.com/esbuild-windows-64/-/esbuild-windows-64-0.14.46.tgz"
-  integrity sha512-Do2daaskfOjmCB7o3ygz6fD3K6SPjZLERiZLktzHz2oUCwsebKu/gmop0+j/XdrVIXC32wFzHzDS+9CTu9OShw==
+  resolved "https://registry.npmmirror.com/esbuild-linux-64/-/esbuild-linux-64-0.14.46.tgz"
+  integrity sha512-ECCRRZtX6l4ubeVhHhiVoK/uYAkvzNqfmR4gP4N/9H9RPu+b8YCcN4bQGp7xCuYIV6Xd41WpOMyO+xpcQvjtQQ==
 
 esbuild@^0.14.27, esbuild@^0.14.41:
   version "0.14.46"

@@ -13,14 +13,6 @@
       "promulgatedOn": "2021-12-24",
       "effectiveFrom": "2022-06-05",
       "effectiveTo": "2026-08-15",
-      "entry": "versions/2022-06-05/README.md"
-    },
-    {
-      "id": "2026-repeal",
-      "label": "2026年废止提示",
-      "promulgatedOn": "2026-03-12",
-      "effectiveFrom": "2026-08-15",
-      "effectiveTo": null,
       "entry": "README.md"
     }
   ]
