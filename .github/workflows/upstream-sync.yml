@@ -13,20 +13,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 20
           cache: npm
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
+
+      # sync_upstream.py ends by verifying the VuePress build, which needs the
+      # npm toolchain (vuepress binary). Without this step the verification
+      # always failed with "vuepress: not found" (exit 127) — after the laws
+      # were synced but before anything was committed, so the weekly sync
+      # never actually shipped.
+      - name: Install dependencies
+        run: npm install
 
       - name: Configure Git
         run: |

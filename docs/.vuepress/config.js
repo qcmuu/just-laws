@@ -42,6 +42,8 @@ module.exports = {
     __JUSTLAWS_RAG_ENABLED__: !["false", "0", "off", "no"].includes(
       String(process.env.JUSTLAWS_RAG_ENABLED || "true").toLowerCase()
     ),
+    // Site base path for client-side canonical URL construction (JSON-LD).
+    __JUSTLAWS_BASE__: siteBase,
   },
   head: [
     ["link", { rel: "icon", href: `${siteBase}images/logo.png` }],
@@ -74,8 +76,33 @@ module.exports = {
       },
     ],
     ["meta", { property: "og:url", content: siteUrl }],
-    ["meta", { property: "og:image", content: `${siteUrl}images/logo.png` }],
-    ["meta", { name: "twitter:card", content: "summary" }],
+    [
+      "meta",
+      { property: "og:image", content: `${siteUrl}images/social-card.png` },
+    ],
+    ["meta", { property: "og:image:width", content: "1200" }],
+    ["meta", { property: "og:image:height", content: "630" }],
+    ["meta", { name: "twitter:card", content: "summary_large_image" }],
+    [
+      "meta",
+      { name: "twitter:image", content: `${siteUrl}images/social-card.png` },
+    ],
+    // Static JSON-LD: WebSite entity (site-wide). Per-page WebPage +
+    // BreadcrumbList entities are injected client-side in client.js.
+    [
+      "script",
+      { type: "application/ld+json" },
+      JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Just Laws AI",
+        alternateName: "中国现行法律文库与 AI 智能法律问答",
+        url: siteUrl,
+        inLanguage: "zh-CN",
+        description:
+          "收录 300+ 部现行法律法规原文，浏览器内 AI 智能问答、法条精准溯源，支持 DeepSeek、通义千问等模型直连。",
+      }),
+    ],
     [
       "script",
       {},
