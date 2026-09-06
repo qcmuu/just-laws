@@ -282,9 +282,9 @@ html.dark .search-box input:focus {
   box-shadow: var(--jl-shadow-md);
   overflow: hidden;
 }
-.search-box .suggestion.focused {
+/* the plugin toggles class "focus" (not "focused") */
+.search-box .suggestion.focus {
   background: var(--c-bg-light);
-  color: var(--c-brand);
 }
 
 /* ============================================================
@@ -1609,4 +1609,126 @@ html.dark .jl-art-anchor {
     color: #000 !important;
     text-decoration: none !important;
   }
+}
+
+/* ============================================================
+   提示容器换色：去掉 VuePress 默认荧光绿，并入「法典编辑」色板
+   ============================================================ */
+
+:root {
+  --c-tip: #4a7c64;
+  --c-tip-bg: #edf2ec;
+  --c-tip-title: #38614c;
+  --c-tip-text: var(--c-text);
+  --c-tip-text-accent: #4a7c64;
+  --c-warning: #a06b22;
+  --c-warning-bg: #f6efdf;
+  --c-warning-title: #7d541b;
+  --c-warning-text: #6b4d16;
+  --c-danger: #b13a2e;
+  --c-danger-bg: #f7ebe8;
+  --c-danger-title: #93301f;
+  --c-danger-text: #753026;
+  --c-badge-tip: var(--c-tip);
+  --c-badge-warning: var(--c-warning);
+  --c-badge-danger: var(--c-danger);
+}
+
+html.dark {
+  --c-tip: #74ab8d;
+  --c-tip-bg: #1c2620;
+  --c-tip-title: #8fbfa4;
+  --c-tip-text: var(--c-text);
+  --c-tip-text-accent: #74ab8d;
+  --c-warning: #cfa055;
+  --c-warning-bg: #292313;
+  --c-warning-title: #d9b36e;
+  --c-warning-text: #c4b08a;
+  --c-danger: #d4614c;
+  --c-danger-bg: #2a1815;
+  --c-danger-title: #e08a7a;
+  --c-danger-text: #d8a79d;
+}
+
+/* ============================================================
+   翻页区：上一篇/下一篇卡片化
+   ============================================================ */
+
+.page-nav .inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.8rem;
+  border-top: 3px double var(--c-border-dark);
+}
+.page-nav .inner .prev,
+.page-nav .inner .next {
+  float: none;
+  width: auto;
+  flex: 1 1 15rem;
+  margin: 0;
+}
+.page-nav .inner a {
+  display: block;
+  padding: 0.7rem 1.05rem;
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  background: var(--c-bg);
+  color: var(--c-text-light) !important;
+  text-decoration: none !important;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  box-shadow: var(--jl-shadow-sm);
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.page-nav .inner a:hover {
+  color: var(--c-brand) !important;
+  border-color: rgba(177, 58, 46, 0.45);
+  transform: translateY(-2px);
+  box-shadow: var(--jl-shadow-md);
+}
+html.dark .page-nav .inner a:hover {
+  border-color: rgba(212, 97, 76, 0.5);
+}
+
+/* 页脚信息区更轻 */
+.page-meta {
+  color: var(--c-text-lightest);
+  font-size: 0.8rem;
+}
+.page-meta .edit-link a,
+.page-meta .last-updated a {
+  color: var(--c-text-lightest);
+}
+
+/* ============================================================
+   搜索下拉：条目排版（标题衬线、路径弱化）
+   ============================================================ */
+
+.search-box .suggestion a {
+  display: block;
+  padding: 0.55rem 0.95rem;
+  line-height: 1.55;
+}
+.search-box .suggestion .page-title {
+  font-family: var(--font-family-serif);
+  font-weight: 600;
+  font-size: 0.93rem;
+  color: var(--c-text);
+}
+.search-box .suggestion .page-header {
+  margin-left: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--c-text-lighter);
+}
+.search-box .suggestion.focus .page-title {
+  color: var(--c-brand);
+}
+
+/* 聊天面板标题衬线，与站内标题呼应 */
+.jl-chat__header strong {
+  font-family: var(--font-family-serif);
+  letter-spacing: 0.05em;
+  font-size: 15px;
 }

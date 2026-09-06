@@ -323,8 +323,9 @@ module.exports = {
     editLinkText: "在 GitHub 上编辑此页",
     lastUpdated: true,
     lastUpdatedText: "上次更新",
-    contributors: true,
-    contributorsText: "贡献者",
+    // Synced law pages carry upstream git authors; per the branding rule the
+    // site must not show third-party contributor names (e.g. ImCaO).
+    contributors: false,
     notFound: ["页面未找到"],
     backToHome: "回到主页",
     toggleColorMode: "切换夜间模式",
