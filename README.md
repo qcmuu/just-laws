@@ -154,14 +154,16 @@ flowchart TD
 ### 1. 环境准备
 - Node.js: `>= 18.0.0`
 - 包管理器: `npm` 或 `yarn`
+- GitHub CLI (`gh`) 或 Git
 - Python: `>= 3.10`（仅在需要运行 Exa 抓取脚本或后端 RAG PoC 时需要）
 
 ### 2. 安装与本地运行
 
 ```bash
 # 1. 克隆代码仓库
-git clone https://github.com/qcmuu/just-laws.git
+gh repo clone qcmuu/just-laws
 cd just-laws
+# 或使用 git: git clone https://github.com/qcmuu/just-laws.git
 
 # 2. 安装 Node.js 依赖
 npm install

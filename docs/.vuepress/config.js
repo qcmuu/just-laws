@@ -5,7 +5,7 @@ const siteBase = process.env.JUSTLAWS_BASE || "/";
 
 // Absolute site origin (+base) for SEO tags and the generated sitemap URLs.
 const siteUrl =
-  (process.env.JUSTLAWS_SITE_URL || "https://qcmuu.github.io").replace(
+  (process.env.JUSTLAWS_SITE_URL || "https://law.aisme.eu.cc").replace(
     /\/+$/,
     ""
   ) + (siteBase !== "/" ? siteBase : "/");

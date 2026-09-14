@@ -46,9 +46,9 @@ jobs:
       - name: Build documentation site
         run: npm run docs:build
         env:
-          # Project site lives under /just-laws/; build all asset/link URLs
-          # against that base. Override to / if using a root custom domain.
-          JUSTLAWS_BASE: /just-laws/
+          # Custom domain: law.aisme.eu.cc (served at root /)
+          JUSTLAWS_BASE: /
+          JUSTLAWS_SITE_URL: https://law.aisme.eu.cc/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
