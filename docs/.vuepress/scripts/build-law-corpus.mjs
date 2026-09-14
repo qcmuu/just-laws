@@ -23,7 +23,7 @@ const SITEMAP_FILE = path.resolve(__dirname, "..", "public", "sitemap.xml");
 
 // Absolute site origin (env override) + base, matching config.js's siteUrl.
 const SITE_URL =
-  (process.env.JUSTLAWS_SITE_URL || "https://qcmuu.github.io").replace(
+  (process.env.JUSTLAWS_SITE_URL || "https://law.aisme.eu.cc").replace(
     /\/+$/,
     ""
   ) + ((process.env.JUSTLAWS_BASE || "/") !== "/" ? process.env.JUSTLAWS_BASE : "/");

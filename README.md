@@ -6,8 +6,8 @@
 
 <p align="center">
   <a href="https://github.com/qcmuu/just-laws/actions/workflows/pages.yml"><img src="https://img.shields.io/github/actions/workflow/status/qcmuu/just-laws/pages.yml?branch=master&label=GitHub%20Pages&logo=github&logoColor=white" alt="Pages Build"></a>
-  <img src="https://img.shields.io/badge/现行法律-304%20部-blue?logo=bookstack&logoColor=white" alt="Laws Count">
-  <img src="https://img.shields.io/badge/有效法条-24%2C455%20条-brightgreen" alt="Articles Count">
+  <img src="https://img.shields.io/badge/现行法律-305%20部-blue?logo=bookstack&logoColor=white" alt="Laws Count">
+  <img src="https://img.shields.io/badge/有效法条-25%2C675%20条-brightgreen" alt="Articles Count">
   <img src="https://img.shields.io/badge/司法判例与文献-279%20篇-orange" alt="References Count">
   <img src="https://img.shields.io/badge/端侧问答-BYOK%20RAG-purple?logo=openai&logoColor=white" alt="BYOK RAG">
   <a href="https://github.com/qcmuu/just-laws/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green"></a>
@@ -41,7 +41,7 @@ flowchart TD
         UI["VuePress 2 文档站 (PC / 移动自适应)"]
         Widget["LawChatWidget (AI 法律问答浮窗)"]
         MiniSearch["MiniSearch 引擎 (CJK Bi-gram 索引)"]
-        Corpus["law-corpus.json (24,455 条有效法条)"]
+        Corpus["law-corpus.json (25,675 条有效法条)"]
         LLM["大模型 API (DeepSeek / Qwen / GLM / 本地模型)"]
         
         UI --> Widget
@@ -52,7 +52,7 @@ flowchart TD
     end
 
     subgraph Knowledge["知识资产与文献库 (Data Bank)"]
-        Laws["304 部现行法律 (全量国家现行法律全景)"]
+        Laws["305 部现行法律 (全量国家现行法律全景)"]
         Cases["279 篇真实司法裁判与前沿论文 (8 大专题)"]
         ExaEngine["Exa.ai 多 Key 并发检索与落地引擎"]
         UpstreamSync["上游法律条文自动同步引擎 (sync_upstream.py)"]
@@ -130,10 +130,10 @@ flowchart TD
 针对 Fork 仓库随着深度定制（AI 问答、案例知识库、独立部署流）容易与上游 [ImCa0/just-laws](https://github.com/ImCa0/just-laws) 产生代码冲突的问题，本项目构建了**解耦式法条条文同步流水线**：
 
 ```
-上游主仓 (ImCa0/just-laws) ───────► scripts/sync_upstream.py ───────► 本地 304+ 部现行法规库
+上游主仓 (ImCa0/just-laws) ───────► scripts/sync_upstream.py ───────► 本地 305+ 部现行法规库
    [ 跟踪最新修正案与条文 ]             [ 自动隔离配置文件与定制功能 ]              │
                                                                            ▼
-                                                                  重新提取 24,455 条法条
+                                                                  重新提取 25,675 条法条
                                                                            │
                                                                            ▼
                                                                 更新客户端 law-corpus.json
@@ -190,7 +190,7 @@ JustLaws AI 创新性地采用**客户端纯静态检索增强生成（Client-Si
 [ 用户提问 ] 
      │
      ▼
-[ MiniSearch 本地召回 ] ──( 毫秒级检索 24,455 条法条 )──► [ Top-K 相关法条上下文 ]
+[ MiniSearch 本地召回 ] ──( 毫秒级检索 25,675 条法条 )──► [ Top-K 相关法条上下文 ]
                                                                      │
                                                                      ▼
 [ 流式打字机响应 ] ◄──( 端对端通信，无中间服务器 )─── [ 用户大模型 API (DeepSeek/Qwen/GLM) ]

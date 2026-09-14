@@ -6,4 +6,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://qcmuu.github.io/just-laws/sitemap.xml
+Sitemap: https://law.aisme.eu.cc/sitemap.xml

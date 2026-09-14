@@ -53,6 +53,10 @@ def sync_statutory_laws():
         print(f"Syncing: {folder} ...")
         run_cmd(f"git checkout {UPSTREAM_REMOTE}/master -- {folder}")
 
+def rebuild_categories():
+    print("\n--- Rebuilding Category Index Cards ---")
+    run_cmd("python scripts/rebuild_categories.py")
+
 def rebuild_corpus_and_verify():
     print("\n--- Rebuilding Law Corpus JSON ---")
     run_cmd("node docs/.vuepress/scripts/build-law-corpus.mjs")
@@ -63,6 +67,7 @@ def main():
     print("=== JustLaws AI - Upstream Synchronization Tool ===")
     ensure_upstream_remote()
     sync_statutory_laws()
+    rebuild_categories()
     rebuild_corpus_and_verify()
     print("\n✅ Upstream sync and verification completed successfully!")
 
