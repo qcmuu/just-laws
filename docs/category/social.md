@@ -18,6 +18,7 @@ pageClass: jl-category-index
   <a class="jl-law-index__item" href="../social/labor-law/"><span class="jl-law-index__name">劳动法</span></a>
   <a class="jl-law-index__item" href="../social/legal-aid-law/"><span class="jl-law-index__name">法律援助法</span></a>
   <a class="jl-law-index__item" href="../social/maternal-and-infant-health-care-law/"><span class="jl-law-index__name">母婴保健法</span></a>
+  <a class="jl-law-index__item" href="../social/medical-security-law/"><span class="jl-law-index__name">医疗保障法</span></a>
   <a class="jl-law-index__item" href="../social/military-personnel-insurance-law/"><span class="jl-law-index__name">军人保险法</span></a>
   <a class="jl-law-index__item" href="../social/mine-safety-law/"><span class="jl-law-index__name">矿山安全法</span></a>
   <a class="jl-law-index__item" href="../social/occupational-disease-prevention-and-control-law/"><span class="jl-law-index__name">职业病防治法</span></a>
