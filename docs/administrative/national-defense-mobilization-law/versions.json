@@ -9,7 +9,7 @@
       "promulgatedOn": "2010-02-26",
       "effectiveFrom": "2010-07-01",
       "effectiveTo": "2026-10-01",
-      "entry": "README.md"
+      "entry": "versions/2010-07-01/README.md"
     },
     {
       "id": "2026-revision",
@@ -17,7 +17,7 @@
       "promulgatedOn": "2026-08-28",
       "effectiveFrom": "2026-10-01",
       "effectiveTo": null,
-      "entry": "versions/2026-10-01/README.md"
+      "entry": "README.md"
     }
   ]
 }
