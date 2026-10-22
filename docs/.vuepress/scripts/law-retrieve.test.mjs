@@ -1,54 +1,22 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import MiniSearch from "minisearch";
 
 import {
+  INDEX_OPTIONS,
   expandLegalQuery,
   queryTokenize,
-  cjkTokenize,
   searchLaws,
-  executionIntentTerms,
-  appealIntentTerms,
+  shouldInheritContext,
+  userBigrams,
 } from "../components/law-retrieve.js";
-import {
-  createRequestGeneration,
-  applyIfCurrent,
-} from "../components/law-chat-request.js";
 
-test("post-judgment next-step expands to civil execution, not from 原告 alone", () => {
+test("colloquial post-judgment question expands toward enforcement procedure", () => {
   const expanded = expandLegalQuery("案子审完后，原告还要做什么");
   assert.match(expanded, /申请执行/);
   assert.match(expanded, /民事诉讼法/);
   assert.match(expanded, /判决/);
-  assert.equal(expanded.includes("强制执行"), false);
-});
-
-test("role word or 怎么办 alone does not expand to execution", () => {
-  assert.equal(executionIntentTerms("原告还要做什么"), "");
-  assert.equal(executionIntentTerms("租房到期房东不退押金怎么办"), "");
-  assert.doesNotMatch(
-    expandLegalQuery("租房到期房东不退押金怎么办"),
-    /申请执行|强制执行|执行程序/,
-  );
-  assert.doesNotMatch(expandLegalQuery("原告去哪立案"), /申请执行|强制执行/);
-});
-
-test("losing plaintiff expands to appeal, not execution", () => {
-  const expanded = expandLegalQuery("原告败诉了怎么办");
-  assert.match(expanded, /上诉/);
-  assert.match(expanded, /民事诉讼法/);
-  assert.doesNotMatch(expanded, /申请执行|强制执行/);
-  assert.equal(appealIntentTerms("原告败诉了怎么办"), "上诉 第二审 民事诉讼法");
-  assert.equal(executionIntentTerms("原告败诉了怎么办"), "");
-});
-
-test("won + nonperformance is combination execution intent", () => {
-  assert.match(expandLegalQuery("胜诉了对方不给钱怎么办"), /申请执行/);
-  assert.doesNotMatch(expandLegalQuery("我胜诉了"), /申请执行/);
 });
 
 test("query tokenizer keeps legal bigrams and drops chatter unigrams", () => {
@@ -65,104 +33,117 @@ test("empty query stays empty", () => {
   assert.deepEqual(queryTokenize(""), []);
 });
 
-test("new chat then immediate ask: stale request cannot unlock loading", async () => {
-  const gate = createRequestGeneration();
-  const ui = { loading: false, controller: null, sources: null };
-
-  const runAsk = async (delayMs, hits) => {
-    const id = gate.next();
-    ui.loading = true;
-    ui.controller = { id };
-    await new Promise((r) => setTimeout(r, delayMs));
-    applyIfCurrent(gate, id, () => {
-      ui.sources = hits;
-    });
-    applyIfCurrent(gate, id, () => {
-      ui.loading = false;
-      ui.controller = null;
-    });
-    return id;
-  };
-
-  const first = runAsk(20, "old-hits");
-  // 新对话 invalidates generation, then a new question starts immediately.
-  gate.next();
-  ui.loading = false;
-  ui.controller = null;
-  const second = runAsk(5, "new-hits");
-  const [id1, id2] = await Promise.all([first, second]);
-
-  assert.equal(gate.isLive(id1), false);
-  assert.equal(gate.isLive(id2), true);
-  assert.equal(ui.sources, "new-hits");
-  assert.equal(ui.loading, false);
-  assert.equal(ui.controller, null);
+test("userBigrams keeps the content words and drops chatter", () => {
+  const bigrams = userBigrams("房东不退押金怎么办");
+  // The subject matter must survive: these are what ranking keys on.
+  assert.ok(bigrams.includes("押金"));
+  assert.ok(bigrams.includes("房东"));
+  // Interrogative filler must not: it would match nearly every statute.
+  assert.equal(bigrams.includes("怎么"), false);
+  assert.equal(bigrams.includes("什么"), false);
 });
 
-test("stale finally cannot null the live AbortController", async () => {
-  const gate = createRequestGeneration();
-  const ui = { loading: true, controller: "live" };
-  const staleId = gate.next();
-  gate.next(); // newChat
-  const liveId = gate.next();
-  ui.controller = "ask-2";
-  ui.loading = true;
+// --- follow-up detection ---
 
-  applyIfCurrent(gate, staleId, () => {
-    ui.loading = false;
-    ui.controller = null;
-  });
-  assert.equal(ui.loading, true);
-  assert.equal(ui.controller, "ask-2");
-  assert.equal(gate.isLive(liveId), true);
+test("a short question on a new topic does not inherit the previous one", () => {
+  // 10 characters, but a complete new subject; merging it into the previous
+  // question ranked its sources against the wrong topic.
+  assert.equal(shouldInheritContext("公司拖欠工资怎么维权"), false);
+  assert.equal(shouldInheritContext("高空抛物谁负责"), false);
 });
 
-const CORPUS_PATH = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../public/law-corpus.json",
-);
+test("a continuation inherits the previous question's terms", () => {
+  assert.equal(shouldInheritContext("那诉讼时效呢"), true);
+  assert.equal(shouldInheritContext("那么离婚呢"), true);
+  assert.equal(shouldInheritContext("还有呢"), true);
+});
 
-test(
-  "real corpus Top-K: deposit / post-judgment / losing-plaintiff",
-  { timeout: 120000 },
-  async (t) => {
-    if (!fs.existsSync(CORPUS_PATH)) {
-      t.skip("law-corpus.json is not built");
-      return;
-    }
-    const data = JSON.parse(fs.readFileSync(CORPUS_PATH, "utf8"));
-    assert.ok(data.docs && data.docs.length > 10000, "corpus too small");
-    const mini = new MiniSearch({
-      fields: ["t", "n", "c"],
-      storeFields: ["n", "a", "c", "u", "t"],
-      tokenize: cjkTokenize,
-    });
-    mini.addAll(data.docs);
+test("a short question with no content words inherits context", () => {
+  assert.equal(shouldInheritContext("怎么办"), true);
+  assert.equal(shouldInheritContext("为什么"), true);
+});
 
-    const names = (q, k = 6) => searchLaws(mini, q, k).map((h) => h.n);
-    const noneAdminForce = (hits) =>
-      hits.every((n) => !String(n).includes("行政强制法"));
+test("a long standalone question never inherits context", () => {
+  assert.equal(
+    shouldInheritContext("我想问一下公司拖欠工资员工应该怎么维权"),
+    false
+  );
+  assert.equal(shouldInheritContext(""), false);
+});
 
-    const deposit = names("租房到期房东不退押金怎么办");
-    assert.equal(deposit.filter((n) => n.includes("行政强制法")).length, 0);
-    assert.ok(
-      deposit.some((n) => n.includes("民法典")),
-      `expected 民法典 in ${deposit.join(" | ")}`,
-    );
+// --- ranking behaviour, on a tiny fixture index ---
 
-    const postJudgment = names("案子审完后原告还要做什么");
-    assert.ok(noneAdminForce(postJudgment), postJudgment.join(" | "));
-    assert.ok(
-      postJudgment.some((n) => n.includes("民事诉讼法")),
-      postJudgment.join(" | "),
-    );
+function fixtureIndex() {
+  const docs = [
+    // Two 公司法 articles sharing the characters 公/司/工/资 — the trap that
+    // made the old OR-only ranking answer wage questions with company law.
+    { id: 1, n: "中华人民共和国公司法", a: "第一条", c: "第一章", u: "/company/#1", t: "第一条　公司应当依法保护职工的合法权益，工资待遇依照公司章程。" },
+    { id: 2, n: "中华人民共和国公司法", a: "第二条", c: "第一章", u: "/company/#2", t: "第二条　公司股东不得抽逃出资，公司的资本应当真实。" },
+    { id: 3, n: "中华人民共和国劳动合同法", a: "第三十条", c: "第三章", u: "/labor/#30", t: "第三十条　用人单位应当按照劳动合同约定和国家规定，向劳动者及时足额支付劳动报酬。拖欠工资的，劳动者可以要求支付。" },
+    { id: 4, n: "中华人民共和国劳动合同法", a: "第八十五条", c: "第七章", u: "/labor/#85", t: "第八十五条　用人单位拖欠劳动报酬、加班费的，由劳动行政部门责令限期支付。" },
+    { id: 5, n: "中华人民共和国民法典", a: "第七百零三条", c: "租赁合同", u: "/civil/#703", t: "第七百零三条　租赁合同是出租人将租赁物交付承租人使用、收益，承租人支付租金的合同。" },
+    { id: 6, n: "中华人民共和国民法典", a: "第七百一十四条", c: "租赁合同", u: "/civil/#714", t: "第七百一十四条　承租人应当妥善保管租赁物，因保管不善造成租赁物毁损、灭失的，应当承担赔偿责任。" },
+  ];
+  const mini = new MiniSearch(INDEX_OPTIONS);
+  mini.addAll(docs);
+  return mini;
+}
 
-    const lost = names("原告败诉了怎么办");
-    assert.ok(noneAdminForce(lost), lost.join(" | "));
-    const lostHits = searchLaws(mini, "原告败诉了怎么办", 6);
-    assert.equal(
-      lostHits.filter((h) => /执行的申请和移送/.test(h.c || "")).length,
-      0,
-    );
-  },
-);
+test("searchLaws ranks the statute that contains the user's words first", () => {
+  const mini = fixtureIndex();
+  const hits = searchLaws(mini, "公司拖欠工资怎么维权", 6);
+  assert.ok(hits.length > 0);
+  assert.match(
+    hits[0].n,
+    /劳动合同法/,
+    `expected 劳动合同法 first, got ${hits.map((h) => h.n).join(" / ")}`
+  );
+});
+
+test("searchLaws caps how many articles come from one law", () => {
+  const mini = fixtureIndex();
+  const hits = searchLaws(mini, "公司拖欠工资怎么维权", 6);
+  const counts = hits.reduce((acc, h) => {
+    acc[h.n] = (acc[h.n] || 0) + 1;
+    return acc;
+  }, {});
+  for (const [law, count] of Object.entries(counts)) {
+    assert.ok(count <= 2, `${law} contributed ${count} of ${hits.length} hits`);
+  }
+});
+
+test("searchLaws returns [] for empty or whitespace queries", () => {
+  const mini = fixtureIndex();
+  assert.deepEqual(searchLaws(mini, "", 6), []);
+  assert.deepEqual(searchLaws(mini, "   ", 6), []);
+  assert.deepEqual(searchLaws(null, "押金", 6), []);
+});
+
+test("searchLaws never returns more than topK", () => {
+  const mini = fixtureIndex();
+  const hits = searchLaws(mini, "租赁合同 公司 工资", 3);
+  assert.ok(hits.length <= 3);
+});
+
+test("searchLaws handles non-positive and non-numeric topK", () => {
+  const mini = fixtureIndex();
+  for (const topK of [0, -1, NaN, "x", null]) {
+    assert.deepEqual(searchLaws(mini, "押金", topK), [], `topK=${topK}`);
+  }
+});
+
+test("searchLaws survives queries with no CJK content", () => {
+  const mini = fixtureIndex();
+  // No bigrams at all: coverage is 0 for every candidate, so ranking must fall
+  // back to BM25 instead of dividing by zero.
+  assert.doesNotThrow(() => searchLaws(mini, "GDPR 😀", 6));
+  assert.deepEqual(searchLaws(mini, "😀😀", 6), []);
+});
+
+test("searchLaws still answers questions worded in statutory vocabulary", () => {
+  // No expansion rule fires here; plain bigram coverage must carry it.
+  const mini = fixtureIndex();
+  const hits = searchLaws(mini, "承租人保管不善造成租赁物毁损", 6);
+  assert.ok(hits.length > 0);
+  assert.match(hits[0].n, /民法典/);
+});

@@ -17,7 +17,7 @@
   persist the pointer for next time.
 
   Message protocol (main thread <-> worker):
-    -> { type: "init", corpusUrl, cachedVersion }
+    -> { type: "init", corpusUrl, versionUrl, cachedVersion }
     <- { type: "progress", percent }          during load / parse / index build
     <- { type: "ready", version, fromCache }  index built; searches allowed
     -> { type: "search", query, topK, requestId }
@@ -26,8 +26,12 @@
 */
 
 import MiniSearch from "minisearch";
-import { getCachedCorpus, setCachedCorpus } from "./law-corpus-cache.js";
-import { cjkTokenize, searchLaws } from "./law-retrieve.js";
+import {
+  fetchCorpusVersion,
+  getCachedCorpus,
+  setCachedCorpus,
+} from "./law-corpus-cache.js";
+import { INDEX_OPTIONS, searchLaws } from "./law-retrieve.js";
 
 // Index in 300-doc batches and yield between batches so progress messages
 // actually reach the main thread (the worker thread has no UI to block, but
@@ -52,21 +56,9 @@ function post(msg) {
 
 // ---- Index construction ----
 
-const FIELDS = ["t", "n", "c"];
-const STORE_FIELDS = ["n", "a", "c", "u", "t"];
-const SEARCH_OPTIONS = {
-  tokenize: cjkTokenize,
-  boost: { n: 3, c: 1.5 },
-  combineWith: "OR",
-};
-
 async function buildIndex(docs) {
-  const mini = new MiniSearch({
-    fields: FIELDS,
-    storeFields: STORE_FIELDS,
-    tokenize: cjkTokenize,
-    searchOptions: SEARCH_OPTIONS,
-  });
+  // Shared with the main-thread fallback so the two indexes cannot drift.
+  const mini = new MiniSearch(INDEX_OPTIONS);
   const total = docs.length;
   for (let i = 0; i < total; i += INDEX_CHUNK_DOCS) {
     mini.addAll(docs.slice(i, i + INDEX_CHUNK_DOCS));
@@ -85,17 +77,24 @@ async function buildIndex(docs) {
 let mini = null;
 let fromCache = false; // set in init(); echoed on every progress message
 
-async function init(corpusUrl, cachedVersion) {
+async function init(corpusUrl, cachedVersion, versionUrl) {
   let data = null;
   let version = 0;
   fromCache = false;
 
-  // 1) Try the shared IndexedDB cache (same store as the main-thread path).
+  // 1) Try the shared IndexedDB cache (same store as the main-thread path),
+  //    but only reuse it when the server still publishes that version. The
+  //    probe file is a few bytes; skipping it would keep repealed law text
+  //    answerable for up to the cache TTL.
   if (cachedVersion != null) {
-    try {
-      data = await getCachedCorpus(cachedVersion);
-    } catch {
-      data = null;
+    const latest = await fetchCorpusVersion(versionUrl);
+    const verified = latest != null && latest === cachedVersion;
+    if (latest == null || verified) {
+      try {
+        data = await getCachedCorpus(cachedVersion, { verified });
+      } catch {
+        data = null;
+      }
     }
   }
   if (data) {
@@ -125,7 +124,7 @@ self.onmessage = async (e) => {
   const msg = e.data || {};
   try {
     if (msg.type === "init") {
-      await init(msg.corpusUrl, msg.cachedVersion);
+      await init(msg.corpusUrl, msg.cachedVersion, msg.versionUrl);
     } else if (msg.type === "search") {
       if (!mini) {
         post({

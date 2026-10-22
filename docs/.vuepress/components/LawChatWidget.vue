@@ -254,12 +254,20 @@ import {
   describeHttpError,
   CORS_HINT,
 } from "./chat-settings";
-import { cjkTokenize, searchLaws } from "./law-retrieve.js";
+import {
+  INDEX_OPTIONS,
+  searchLaws,
+  shouldInheritContext,
+} from "./law-retrieve.js";
 import {
   createRequestGeneration,
   applyIfCurrent,
 } from "./law-chat-request.js";
-import { getCachedCorpus, setCachedCorpus } from "./law-corpus-cache.js";
+import {
+  fetchCorpusVersion,
+  getCachedCorpus,
+  setCachedCorpus,
+} from "./law-corpus-cache.js";
 
 // markdown-it and minisearch are heavy and only needed once the user actually
 // opens the chat. They are dynamically imported on demand (see loadMarkdown /
@@ -295,12 +303,6 @@ const RENDER_INTERVAL_MS = 120;
 // into the prompt so follow-ups keep their context without token bloat.
 const HISTORY_MAX_TURNS = 3;
 const HISTORY_MAX_CHARS = 4000;
-
-// A follow-up this short ("那诉讼时效呢？") has no retrieval terms of its
-// own — its query is merged with the previous user question. Stop-unigram
-// dropping and colloquial→legal expansion happen in law-retrieve.js
-// (worker-side searchLaws) on the merged string.
-const FOLLOWUP_MERGE_MAX_CHARS = 12;
 
 // Truncate a 法条 on a sentence boundary when one exists in the back half,
 // so the model never receives half a sentence.
@@ -681,6 +683,7 @@ export default {
         worker.postMessage({
           type: "init",
           corpusUrl: withBase("/law-corpus.json"),
+          versionUrl: withBase("/law-corpus-version.json"),
           cachedVersion: this._readCachedVersion(),
         });
       });
@@ -729,17 +732,27 @@ export default {
 
       // Resolve the corpus: try the IndexedDB cache first (keyed by the
       // corpus `version`), then fall back to a network fetch and persist
-      // the result. On a cache hit the 2.6MB gzip download is skipped
-      // entirely — the biggest win on a slow link. The cache is best-effort
-      // and versioned, so a stale corpus never loads after a rebuild.
+      // the result. On a cache hit the multi-MB gzip download is skipped
+      // entirely — the biggest win on a slow link.
+      // The cached copy is only reused when the server still publishes that
+      // version (a few-byte probe), so an amendment or repeal reaches existing
+      // visitors immediately instead of after the cache TTL.
       let data = null;
       try {
         const lastVer = this._readCachedVersion();
         if (lastVer != null) {
-          const cached = await getCachedCorpus(lastVer);
-          if (cached) {
-            data = cached;
-            this.indexFromCache = true;
+          const latest = await fetchCorpusVersion(
+            withBase("/law-corpus-version.json")
+          );
+          const verified = latest != null && latest === lastVer;
+          if (latest == null || verified) {
+            // Unverified (probe unreachable) entries expire after 1 day
+            // instead of 7, so stale law text cannot persist indefinitely.
+            const cached = await getCachedCorpus(lastVer, { verified });
+            if (cached) {
+              data = cached;
+              this.indexFromCache = true;
+            }
           }
         }
       } catch (e) {
@@ -759,16 +772,7 @@ export default {
         }
       }
 
-      const mini = new MiniSearchCls({
-        fields: ["t", "n", "c"],
-        storeFields: ["n", "a", "c", "u", "t"],
-        tokenize: cjkTokenize,
-        searchOptions: {
-          tokenize: cjkTokenize,
-          boost: { n: 3, c: 1.5 },
-          combineWith: "OR",
-        },
-      });
+      const mini = new MiniSearchCls(INDEX_OPTIONS);
       // Chunked build with yields: the page stays interactive (no
       // "unresponsive" dialog) and indexProgress ticks up as feedback.
       const total = data.docs.length;
@@ -825,11 +829,15 @@ export default {
       if (!this._mini) return Promise.resolve([]);
       return Promise.resolve(searchLaws(this._mini, q, TOP_K));
     },
-    // Retrieval terms for a question: a short follow-up inherits the previous
-    // question's terms; stop-unigram filtering and colloquial→legal expansion
-    // are applied by law-retrieve.js inside searchLaws (worker or fallback).
+    // Retrieval terms for a question. A follow-up only inherits the previous
+    // question when it carries no retrievable words of its own ("那诉讼时效
+    // 呢？"): merging on length alone pulled an unrelated short question
+    // ("公司拖欠工资怎么维权", 10 chars) into the previous topic, so its
+    // sources were ranked against the wrong subject.
+    // Stop-unigram filtering and colloquial→legal expansion are applied by
+    // law-retrieve.js inside searchLaws (worker or fallback).
     buildRetrievalQuery(q, currentUserTurn) {
-      if (q.length > FOLLOWUP_MERGE_MAX_CHARS) return q;
+      if (!shouldInheritContext(q)) return q;
       const prev = this.turns.filter(
         (t) => t.role === "user" && t !== currentUserTurn,
       );
