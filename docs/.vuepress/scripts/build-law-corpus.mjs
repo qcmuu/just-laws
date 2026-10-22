@@ -409,7 +409,36 @@ function main() {
     `[build-law-corpus] ${docs.length} 法条 / ${laws.size} 部法律 -> ` +
       `${path.relative(process.cwd(), OUT_FILE)} (${(bytes / 1048576).toFixed(2)} MB, version ${version})`
   );
+  updateHomeStats(laws.size, docs.length);
   buildSitemap();
+}
+
+// Keep the numbers on the home page in step with the corpus. They were
+// hand-maintained before and drifted every time an upstream sync added laws,
+// which is a wrong claim on the most visible page of a legal reference site.
+function updateHomeStats(lawCount, articleCount) {
+  const file = path.resolve(DOCS_DIR, "README.md");
+  if (!fs.existsSync(file)) return;
+  const src = fs.readFileSync(file, "utf8");
+  const n = (v) => v.toLocaleString("en-US");
+  const next = src
+    .replace(
+      /<!-- corpus-stats -->[^<]*<!-- \/corpus-stats -->/,
+      `<!-- corpus-stats -->${lawCount} 部现行法律法规全文收录，共 ${n(articleCount)} 条条文<!-- /corpus-stats -->`
+    )
+    .replace(
+      /<!-- corpus-stats:start -->[\s\S]*?<!-- corpus-stats:end -->/,
+      `<!-- corpus-stats:start -->\n` +
+        `  <div class="jl-stat"><span class="jl-stat__num">${lawCount}</span><span class="jl-stat__label">部现行法律</span></div>\n` +
+        `  <div class="jl-stat"><span class="jl-stat__num">${n(articleCount)}</span><span class="jl-stat__label">条法条全文</span></div>\n` +
+        `  <!-- corpus-stats:end -->`
+    );
+  if (next !== src) {
+    fs.writeFileSync(file, next);
+    console.log(
+      `[build-law-corpus] home stats -> ${lawCount} 部 / ${n(articleCount)} 条`
+    );
+  }
 }
 
 function isDirectRun() {

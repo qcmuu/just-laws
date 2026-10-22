@@ -1,5 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import {
   ARTICLE_RE,
   PLAIN_ARTICLE_RE,
@@ -187,6 +189,17 @@ test("contentVersion does not collide across field boundaries", () => {
   const x = { n: "甲", a: "乙", u: "/u/", t: "丙" };
   const y = { n: "甲乙", a: "", u: "/u/", t: "丙" };
   assert.notEqual(contentVersion([x]), contentVersion([y]));
+});
+
+test("home page stat markers are present so the build can keep them true", () => {
+  // updateHomeStats() rewrites the text between these markers; without them
+  // the counts silently drift every time an upstream sync adds laws.
+  const readme = fs.readFileSync(
+    path.resolve(import.meta.dirname, "..", "..", "README.md"),
+    "utf8"
+  );
+  assert.match(readme, /<!-- corpus-stats -->[^<]+<!-- \/corpus-stats -->/);
+  assert.match(readme, /<!-- corpus-stats:start -->[\s\S]*?<!-- corpus-stats:end -->/);
 });
 
 test("versionStatus keeps ordinary law files", () => {
