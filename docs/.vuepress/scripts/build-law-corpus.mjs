@@ -61,6 +61,19 @@ function firstH1(file) {
 }
 
 function resolveLawName(file, fileH1) {
+  // A 修正案 is a separate statute: its articles must be cited as
+  // 《X修正案》第N条, not as articles of the amended law. Files such as
+  // constitution/05-amendment.md have the bare H1 "修正案", so fall back to
+  // the containing law's name + "修正案". (Annexes with H1 "附则" are part of
+  // the law itself and keep the plain law name.)
+  if ((fileH1 || "").trim() === "修正案") {
+    const base = baseLawName(file, null);
+    if (base) return base + "修正案";
+  }
+  return baseLawName(file, fileH1);
+}
+
+function baseLawName(file, fileH1) {
   if (isLawName(fileH1)) return fileH1;
   const readme = path.join(path.dirname(file), "README.md");
   if (path.resolve(readme) !== path.resolve(file)) {
@@ -92,6 +105,11 @@ function* walk(dir) {
   }
 }
 
+// <law>/versions/<date>/README.md holds a superseded snapshot of the same law.
+function isHistoricalVersionPage(relSlash) {
+  return /(^|\/)versions\//.test(relSlash);
+}
+
 function* parseFile(file) {
   const rel = path.relative(DOCS_DIR, file);
   const relSlash = rel.split(path.sep).join("/");
@@ -99,6 +117,11 @@ function* parseFile(file) {
     relSlash.startsWith("category/") ||
     relSlash.startsWith("references/") ||
     relSlash.startsWith("settings/") ||
+    // Historical snapshots under <law>/versions/<date>/ are superseded text.
+    // The site search already skips them (config.js isSearchable); feeding
+    // them to the model would return 《法》第N条 quotes that contradict the
+    // current article with the same number.
+    isHistoricalVersionPage(relSlash) ||
     rel === "README.md"
   )
     return;
@@ -173,7 +196,15 @@ function* parseFile(file) {
   if (out) yield out;
 }
 
-export { ARTICLE_RE, HEADING_RE, classifyHeading, isLawName, pageUrl };
+export {
+  ARTICLE_RE,
+  HEADING_RE,
+  classifyHeading,
+  isHistoricalVersionPage,
+  isLawName,
+  pageUrl,
+  resolveLawName,
+};
 
 function encodeLocPath(pagePath) {
   // Percent-encode each path segment (spaces / CJK) for valid sitemap <loc>.
@@ -187,6 +218,9 @@ function buildSitemap() {
   const urls = [];
   for (const file of walk(DOCS_DIR)) {
     const rel = path.relative(DOCS_DIR, file);
+    // 404.md is the not-found page, not a canonical destination — listing it
+    // invites crawlers to index an error template.
+    if (rel.split(path.sep).join("/") === "404.md") continue;
     urls.push(encodeLocPath(pageUrl(rel)));
   }
   const xml =
@@ -210,14 +244,28 @@ function buildSitemap() {
 
 function main() {
   const docs = [];
+  // The same 法条 can appear in two files (e.g. criminal-law/00-supplementary.md
+  // and 03-supplementary.md carry an identical 第四百五十二条; a few law pages
+  // exist twice under different slugs). Retrieval is OR-scored and takes the
+  // Top-K, so an identical duplicate burns a slot and the model is told the
+  // same article twice. Keep the first occurrence.
+  const seen = new Set();
   for (const file of walk(DOCS_DIR)) {
     for (const chunk of parseFile(file)) {
+      const key = `${chunk.n}\u0000${chunk.a}\u0000${chunk.t}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
       chunk.id = docs.length;
       docs.push(chunk);
     }
   }
   fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });
-  fs.writeFileSync(OUT_FILE, JSON.stringify({ version: 2, docs }));
+  // Bump when chunk content/attribution changes meaningfully: the client
+  // caches the parsed corpus in IndexedDB keyed by this value, so returning
+  // visitors would otherwise keep serving the old text for up to 7 days.
+  // v3: exclude historical /versions/ snapshots, dedupe identical 法条, and
+  // attribute split 修正案 files to 《X修正案》.
+  fs.writeFileSync(OUT_FILE, JSON.stringify({ version: 3, docs }));
   const laws = new Set(docs.map((d) => d.n));
   const bytes = fs.statSync(OUT_FILE).size;
   console.log(

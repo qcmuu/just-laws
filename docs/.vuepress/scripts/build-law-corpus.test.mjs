@@ -1,10 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   ARTICLE_RE,
   classifyHeading,
+  isHistoricalVersionPage,
   isLawName,
   pageUrl,
+  resolveLawName,
 } from "./build-law-corpus.mjs";
 
 test("ARTICLE_RE captures 条号 and remainder", () => {
@@ -42,4 +46,59 @@ test("isLawName rejects structural headings", () => {
   assert.equal(isLawName("第一编　总则"), false);
   assert.equal(isLawName("中华人民共和国民法典"), true);
   assert.equal(isLawName("全国人民代表大会常务委员会关于…的决定"), true);
+});
+
+// Historical snapshots are superseded text: including them makes retrieval
+// return 《法》第N条 from an obsolete version alongside the current article.
+test("historical version pages are excluded from the corpus", () => {
+  assert.equal(
+    isHistoricalVersionPage(
+      "administrative/prisons-law/versions/2026-11-01/README.md"
+    ),
+    true
+  );
+  assert.equal(
+    isHistoricalVersionPage("administrative/prisons-law/README.md"),
+    false
+  );
+  // A directory that merely contains "versions" in its name is not a snapshot.
+  assert.equal(
+    isHistoricalVersionPage("economic/law-versions-report/README.md"),
+    false
+  );
+});
+
+// A split law file titled only "修正案" is a separate statute; its articles must
+// be attributed to 《X修正案》, not to the amended code.
+test("resolveLawName attributes a 修正案 part to the amendment", () => {
+  const docsDir = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "..",
+    ".."
+  );
+  const file = path.join(docsDir, "constitution", "05-amendment.md");
+  assert.equal(resolveLawName(file, "修正案"), "中华人民共和国宪法修正案");
+
+  const criminal = path.join(
+    docsDir,
+    "criminal-law",
+    "criminal-law",
+    "04-amendment.md"
+  );
+  assert.equal(resolveLawName(criminal, "修正案"), "中华人民共和国刑法修正案");
+});
+
+test("resolveLawName keeps the law name for an 附则 appendix", () => {
+  const docsDir = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "..",
+    ".."
+  );
+  const file = path.join(
+    docsDir,
+    "criminal-law",
+    "criminal-law",
+    "00-supplementary.md"
+  );
+  assert.equal(resolveLawName(file, "附则"), "中华人民共和国刑法");
 });
