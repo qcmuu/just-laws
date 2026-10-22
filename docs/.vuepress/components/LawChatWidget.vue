@@ -287,6 +287,10 @@ const MAX_QUESTION_CHARS = 4000;
 const TTFB_TIMEOUT_MS = 30000;
 const IDLE_TIMEOUT_MS = 60000;
 
+// A worker search over the built index takes milliseconds; a silent worker is
+// a dead worker. Without this cap retrieve() never settles and the turn hangs.
+const SEARCH_TIMEOUT_MS = 15000;
+
 // Re-render the streamed markdown at most this often. Per-token md.render()
 // makes total work quadratic in answer length and janks low-end phones.
 const RENDER_INTERVAL_MS = 120;
@@ -476,7 +480,10 @@ export default {
     // the user does not wait before their first question. First-time visitors
     // stay on the lazy path (no unprompted 2.6 MB download).
     if (this._readCachedVersion() == null) return;
-    this.ensureIndex();
+    // Pre-warming is best-effort: ensureIndex() rejects on failure (the panel
+    // shows the error later), and an unhandled rejection here would surface as
+    // a console error on every repeat visit with a broken/corrupt cache.
+    this.ensureIndex().catch(() => {});
     this.loadMarkdown();
   },
   beforeUnmount() {
@@ -532,7 +539,9 @@ export default {
       this.showSettings = !this.configured;
       // Warm up the heavy chunks (corpus index + markdown renderer) as soon as
       // the panel opens, in parallel, so the first question feels responsive.
-      this.ensureIndex();
+      // ask() awaits the same promise, so a failure is reported there; swallow
+      // it here to avoid an unhandled rejection.
+      this.ensureIndex().catch(() => {});
       this.loadMarkdown();
     },
     async loadMarkdown() {
@@ -808,7 +817,21 @@ export default {
       if (this._worker) {
         const requestId = ++this._searchSeq;
         return new Promise((resolve) => {
-          this._searchWaiters.set(requestId, resolve);
+          // After `ready` the worker's error listener is gone, so a worker that
+          // dies mid-search would never answer and ask() would sit on
+          // "正在检索法条…" forever. Searches on a built index take ms, so a
+          // timeout here means the worker is gone: degrade to no context
+          // (the model then says 法条不足) instead of hanging the turn.
+          const settle = (hits) => {
+            clearTimeout(timer);
+            resolve(hits);
+          };
+          const timer = setTimeout(() => {
+            if (!this._searchWaiters.has(requestId)) return;
+            this._searchWaiters.delete(requestId);
+            resolve([]);
+          }, SEARCH_TIMEOUT_MS);
+          this._searchWaiters.set(requestId, settle);
           try {
             this._worker.postMessage({
               type: "search",
@@ -818,7 +841,7 @@ export default {
             });
           } catch (e) {
             this._searchWaiters.delete(requestId);
-            resolve([]);
+            settle([]);
           }
         });
       }
