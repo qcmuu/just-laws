@@ -21,10 +21,10 @@ description: 配置浏览器端大模型接口（BYOK），启用全站 AI 法�
 | :--- | :--- | :--- | :--- |
 | DeepSeek | [platform.deepseek.com](https://platform.deepseek.com/) | `https://api.deepseek.com/v1` | `deepseek-chat` |
 | 通义千问 | [bailian.console.aliyun.com](https://bailian.console.aliyun.com/) | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen-plus` |
-| 智谱 GLM | [open.bigmodel.cn](https://open.bigmodel.cn/) | `https://open.bigmodel.cn/api/paas/v4` | `glm-4-flash`（免费） |
+| 智谱 GLM ⚠️ | [open.bigmodel.cn](https://open.bigmodel.cn/) | `https://open.bigmodel.cn/api/paas/v4` | `glm-4-flash` |
 | 商汤 SenseNova ⚠️ | [console.sensecore.cn](https://console.sensecore.cn/) | `https://token.sensenova.cn/v1` | `sensenova-6.7-flash-lite` |
 
-- 智谱 GLM 的 `glm-4-flash` 免费，适合个人用户试用；DeepSeek 注册即送额度。
+- DeepSeek 注册即送额度，通义千问有免费额度，两家均可直接在网页端使用。
 - ⚠️ **商汤 SenseNova 的官方接口不允许浏览器跨域直连（CORS），在本站网页端无法使用**；如需使用商汤模型，请通过自建网关（one-api、vLLM 等）转发，再填入网关地址。
 - 也可填写任意 **OpenAI 兼容**的自建网关地址（vLLM、one-api 等）。
 
@@ -36,7 +36,7 @@ description: 配置浏览器端大模型接口（BYOK），启用全站 AI 法�
 | :--- | :--- |
 | [DeepSeek](?provider=deepseek) | `?provider=deepseek` |
 | [通义千问](?provider=qwen) | `?provider=qwen` |
-| [智谱 GLM](?provider=zhipu) | `?provider=zhipu` |
+| [智谱 GLM](?provider=zhipu)（网页端不可用，见上） | `?provider=zhipu` |
 | [商汤 SenseNova](?provider=sensenova)（网页端不可用，见上） | `?provider=sensenova` |
 | [本地 Ollama](?provider=ollama) | `?provider=ollama` |
 
@@ -58,7 +58,7 @@ description: 配置浏览器端大模型接口（BYOK），启用全站 AI 法�
   <ol class="jl-arch__steps">
     <li>
       <strong>法条入库</strong>
-      <span>构建时按「一条一卡」切分现行法律，生成约 2.4 万条可检索语料，随静态站一起发布。</span>
+      <span>构建时按「一条一卡」切分现行法律，生成约 2.3 万条可检索语料，随静态站一起发布。已废止和尚未生效的版本会被排除。</span>
     </li>
     <li>
       <strong>本机索引</strong>
@@ -79,7 +79,7 @@ description: 配置浏览器端大模型接口（BYOK），启用全站 AI 法�
 ## 常见问题
 
 **Q：提示「无法连接该接口（可能被 CORS 拦截）」？**
-OpenAI 官方端点（api.openai.com）、商汤 SenseNova（token.sensenova.cn）等不允许浏览器直连。请改用上表预设（DeepSeek / 通义 / 智谱均支持浏览器跨域调用）、其他兼容服务，或自建网关。
+OpenAI 官方端点（api.openai.com）、智谱 GLM（open.bigmodel.cn）、商汤 SenseNova（token.sensenova.cn）等不允许浏览器直连。请改用上表中可用的预设（DeepSeek / 通义千问均支持浏览器跨域调用）、其他兼容服务，或自建网关。
 
 **Q：为什么商汤 SenseNova 不能用？我 Key 明明是有效的？**
 商汤接口服务器对浏览器跨域预检请求（OPTIONS）返回 404，浏览器会直接拦截后续请求——这与你的 Key 无关（在服务器端、curl 或本地工具里同一 Key 可以正常调用）。本站是无后端的纯静态站，无法替你转发，因此网页端用不了商汤官方接口；需要的话请自建网关转发。

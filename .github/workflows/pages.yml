@@ -50,6 +50,11 @@ jobs:
           JUSTLAWS_BASE: /
           JUSTLAWS_SITE_URL: https://law.aisme.eu.cc/
 
+      - name: Check internal links
+        # Navbar/sidebar/link targets are not validated by VuePress; this fails
+        # the build on any internal href with no matching output file.
+        run: npm run test:links
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

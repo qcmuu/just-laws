@@ -17,8 +17,8 @@
       <strong>你本机浏览器</strong>（AES-GCM 加密存储）、提问时直连你选择的服务商，<strong>不会经过本站</strong>。
     </p>
     <p v-else class="jl-chat__settings-intro">
-      填入任意 <strong>OpenAI 兼容</strong> 接口（如 DeepSeek、通义千问、智谱
-      GLM 等）。Key 仅保存在你本机浏览器、直接发往你选择的服务商，<strong>不会经过本站</strong>。
+      填入任意 <strong>OpenAI 兼容</strong> 接口（推荐 DeepSeek、通义千问）。
+      Key 仅保存在你本机浏览器、直接发往你选择的服务商，<strong>不会经过本站</strong>。
     </p>
 
     <p v-if="variant === 'page' && configured" class="jl-model-settings__status jl-model-settings__status--ok">
@@ -32,7 +32,7 @@
          BEFORE the user burns time getting a key and wondering why chat hangs. -->
     <p v-if="blockedPreset" class="jl-model-settings__error" role="alert">
       ⚠️ {{ blockedPreset.name }} 的接口（{{ blockedPreset.baseUrl.replace(/^https?:\/\//, "") }}）不允许浏览器跨域直连（CORS），在本站网页端提问会失败。请改用
-      DeepSeek / 通义千问 / 智谱 GLM；确需使用商汤模型，请通过自建网关（one-api 等）转发后再填入网关地址。
+      DeepSeek 或通义千问；确需使用该模型，请通过自建网关（one-api、vLLM 等）转发后再填入网关地址。
     </p>
 
     <label class="jl-chat__field">

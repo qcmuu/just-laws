@@ -136,7 +136,7 @@ module.exports = {
           { text: "全国人民代表大会组织法", link: "/constitutional-relevance/npc-organization-law/" },
           { text: "民族区域自治法", link: "/constitutional-relevance/law-on-regional-national-autonomy/" },
           { text: "香港特别行政区基本法", link: "/constitutional-relevance/hong-kong-special-administrative-region-basic-law/" },
-          { text: "查看全部 55 部宪法相关法", link: "/category/constitutional-relevance" },
+          { text: "查看全部 55 部宪法相关法", link: "/category/constitutional-relevance.html" },
         ],
       },
       {
@@ -154,7 +154,7 @@ module.exports = {
           { text: "行政处罚法", link: "/administrative/administrative-penalty/" },
           { text: "治安管理处罚法", link: "/administrative/penalties-for-administration-of-public-security/" },
           { text: "义务教育法", link: "/administrative/compulsory-education-law/" },
-          { text: "查看全部 96 部行政法", link: "/category/administrative" },
+          { text: "查看全部 96 部行政法", link: "/category/administrative.html" },
         ],
       },
       {
@@ -163,7 +163,7 @@ module.exports = {
           { text: "个人所得税法", link: "/economic/individual-income-tax-law/" },
           { text: "中国人民银行法", link: "/economic/peoples-bank-of-china-law/" },
           { text: "个人信息保护法", link: "/economic/personal-information-protection-law/" },
-          { text: "查看全部 90 部经济法", link: "/category/economic" },
+          { text: "查看全部 89 部经济法", link: "/category/economic.html" },
         ],
       },
       {
@@ -213,14 +213,14 @@ module.exports = {
           text: "类别",
           children: [
             { text: "宪法", link: "/constitution/" },
-            "/category/constitutional-relevance",
-            "/category/civil-and-commercial",
-            "/category/administrative",
-            "/category/economic",
-            "/category/social",
-            "/category/criminal-law",
-            "/category/procedural",
-            "/category/ecological-environment",
+            "/category/constitutional-relevance.html",
+            "/category/civil-and-commercial.html",
+            "/category/administrative.html",
+            "/category/economic.html",
+            "/category/social.html",
+            "/category/criminal-law.html",
+            "/category/procedural.html",
+            "/category/ecological-environment.html",
           ]
         }
       ],

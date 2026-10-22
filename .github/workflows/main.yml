@@ -32,6 +32,11 @@ jobs:
       - name: Build documentation site
         run: npm run docs:build
 
+      - name: Check internal links
+        # Navbar/sidebar/link targets are not validated by VuePress; this fails
+        # the build on any internal href with no matching output file.
+        run: npm run test:links
+
       # Deployment to GitHub Pages is handled by pages.yml (Settings → Pages →
       # Source: GitHub Actions). The previous SSH/rsync deploy to a self-hosted
       # nginx server was removed once that server became unavailable; restore

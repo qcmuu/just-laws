@@ -8,21 +8,25 @@
 // but the network round-trip — the part that feels frozen on a bad connection
 // — is gone.
 //
-// Freshness: the corpus `version` only bumps when its schema changes, so a
-// content-only re-build would otherwise serve stale law text forever. Each
-// cached entry therefore also records a savedAt timestamp and is treated as a
-// miss after CACHE_TTL_MS (7 days; law texts are updated rarely), which bounds
-// staleness and still covers the common "browse again soon" case.
+// Freshness: the corpus `version` is a hash of its content (see
+// build-law-corpus.mjs), so it changes whenever a law is amended, repealed, or
+// re-parsed. To notice that without re-downloading ~12 MB, the site publishes
+// a tiny `law-corpus-version.json` next to the corpus; callers compare it with
+// the cached version before deciding to hit the network. A cache entry older
+// than CACHE_TTL_MS (7 days) is dropped regardless, so a site that stops
+// publishing the probe file cannot pin stale law text forever.
 //
 // IndexedDB stores structured clones of the parsed object (no serialization
-// overhead). We keep the raw response text too so a cache hit can skip even
-// JSON.parse on the fast path is NOT done — we store the parsed object and
-// read it back directly.
+// overhead) — we store the parsed object and read it back directly.
 
 const DB_NAME = "jl-law-corpus";
 const STORE = "corpus";
 const DB_VERSION = 1;
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+// When the version probe cannot be reached (offline, 404, blocked), a cached
+// corpus this old is not trusted: that is the only remaining guard against
+// serving repealed law text indefinitely if the probe file ever goes missing.
+const UNVERIFIED_TTL_MS = 24 * 60 * 60 * 1000; // 1 day
 
 function openDB() {
   return new Promise((resolve, reject) => {
@@ -61,16 +65,36 @@ function txPut(db, key, value) {
   });
 }
 
+// Ask the server which corpus version is current. The file is a few bytes, so
+// this is cheap enough to run on every open; on any failure we return null and
+// the caller falls back to its cache.
+export async function fetchCorpusVersion(versionUrl) {
+  try {
+    const resp = await fetch(versionUrl, { cache: "no-cache" });
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    return typeof data.version === "number" ? data.version : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 // Read the cached corpus for a given version. Returns null on miss / error /
 // expiry (callers fall back to a network fetch). Never throws — caching is a
 // best-effort optimization, not a correctness path.
-export async function getCachedCorpus(version) {
+//
+// `verified` says whether the caller managed to confirm this version is still
+// the one the server publishes. Unverified entries expire much sooner, so a
+// broken/missing probe file cannot keep repealed text alive for a week.
+export async function getCachedCorpus(version, { verified = true } = {}) {
   try {
     const db = await openDB();
     const entry = await txGet(db, version);
     db.close();
     if (!entry || entry.version !== version) return null;
-    if (Date.now() - (entry.savedAt || 0) > CACHE_TTL_MS) return null;
+    const age = Date.now() - (entry.savedAt || 0);
+    const ttl = verified ? CACHE_TTL_MS : UNVERIFIED_TTL_MS;
+    if (age > ttl) return null;
     return entry.corpus;
   } catch (e) {
     return null;

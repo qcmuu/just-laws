@@ -16,7 +16,13 @@ export const SETTINGS_EVENT = "jl-chat-settings-saved";
 // `id` is the ?provider= URL-param value (e.g. /settings/?provider=deepseek).
 // The first entry is what unconfigured users see pre-filled by default — it
 // MUST be a provider whose API allows cross-origin browser calls (verified
-// 2026-08-17: DeepSeek / 通义 / 智谱 preflight OK; SenseNova does not).
+// Verified in a real browser 2026-10-21 by POSTing with an invalid key:
+//   DeepSeek -> 401, 通义 -> 401  (request completed, so CORS passed)
+//   智谱 GLM -> TypeError: Failed to fetch for every POST variant (only a
+//               simple GET completes), i.e. its preflight fails
+//   SenseNova -> TypeError: Failed to fetch
+// A preset that cannot work from a browser is worse than none: the user buys
+// a key, pastes it, and gets an unhelpful failure.
 export const PRESETS = [
   {
     id: "deepseek",
@@ -35,6 +41,9 @@ export const PRESETS = [
     name: "智谱 GLM",
     baseUrl: "https://open.bigmodel.cn/api/paas/v4",
     model: "glm-4-flash",
+    // Browser preflight fails (see above), so this preset only works behind a
+    // self-hosted gateway. Keep it listed for those users, flagged in the UI.
+    corsBlocked: true,
   },
   {
     id: "sensenova",
@@ -156,11 +165,12 @@ export function notifySettingsSaved() {
 // ---- Shared error copy (chat widget ask path + settings panel test button) ----
 
 // fetch() rejecting with TypeError before any HTTP response is almost always
-// a CORS block or an unreachable host. The two known-bad providers are named
-// so users stop burning time on keys that were never the problem.
+// a CORS block or an unreachable host. The known-bad providers are named so
+// users stop burning time on keys that were never the problem.
 export const CORS_HINT =
-  "无法连接该接口（可能被 CORS 拦截或网络不可达）。注意：OpenAI 官方端点和商汤 SenseNova（token.sensenova.cn）都不允许浏览器直连，" +
-  "请改用 DeepSeek、通义千问、智谱等支持跨域的兼容服务或自建网关，并确认 Base URL 正确。";
+  "无法连接该接口（可能被 CORS 拦截或网络不可达）。注意：OpenAI 官方端点、智谱 GLM（open.bigmodel.cn）" +
+  "和商汤 SenseNova（token.sensenova.cn）都不允许浏览器直连，" +
+  "请改用 DeepSeek 或通义千问，或通过自建网关转发，并确认 Base URL 正确。";
 
 // Map the handful of HTTP statuses providers actually return to actionable
 // Chinese copy, keeping the response snippet for diagnosis.

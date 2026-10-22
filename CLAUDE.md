@@ -64,15 +64,31 @@ npm run docs:dev
 
 # 3. 生产静态站点构建
 npm run docs:build
+
+# 4. 检查构建产物中的站内死链（需先 docs:build）
+npm run test:links
+
+# 5. 全量校验：单测 + 构建 + 死链检查
+npm run test:all
+
+# 6. 检索质量评测（dev/hold/test 三套问句，需先 build:corpus）
+npm run eval:retrieval
 ```
 
 ## 核心功能与实现规范
 
 ### 1. 客户端 AI 法律问答 (LawChatWidget.vue)
 - 位于 `docs/.vuepress/components/LawChatWidget.vue`。
-- **语料格式**：由 `docs/.vuepress/scripts/build-law-corpus.mjs` 从全量法律 Markdown 中解析出约 13,000+ 条以“条”为单位的法条 JSON（字段：`n` 法律名、`a` 条号、`c` 章节、`u` 相对 URL、`t` 正文）。
-- **客户端检索**：动态导入 `minisearch`，使用 CJK 双字切分（bi-gram）索引进行本地 BM25 检索。
-- **BYOK 调用**：直连用户配置的 OpenAI 兼容接口（如 DeepSeek、通义千问等），支持 SSE 流式接收与 Markdown 渲染，附带原文跳转深链接。
+- **语料格式**：由 `docs/.vuepress/scripts/build-law-corpus.mjs` 从全量法律 Markdown 中解析出约 2.3 万条以“条”为单位的法条 JSON（字段：`n` 法律名、`a` 条号、`c` 章节、`u` 相对 URL、`t` 正文）。
+- **仅收现行法**：构建时读取各法律目录下的 `versions.json`，排除已废止（`repealedBy`）与尚未生效（`effectiveFrom` 在未来）的版本。日期按 `Asia/Shanghai` 计算。改这段逻辑后必须跑 `npm test`。
+- **条号解析**：支持两种格式——`**第X条**　正文`，以及刑法分则的无粗体 `第X条之N　正文`（修正案新增罪名）。后者若漏解析，会把这些条文并入前一条，导致罪名不可检索。
+- **缓存版本**：语料 `version` 是内容哈希，任何法条改动都会使客户端 IndexedDB 缓存失效；同时生成几字节的 `law-corpus-version.json` 供客户端探测，无需重新下载整包语料即可发现更新。
+- **客户端检索**：动态导入 `minisearch`。先按（含口语扩展的）查询召回候选，再按「用户原问句双字覆盖率」重排，BM25 仅用于同覆盖率时的排序；每部法律最多 2 条，避免单部法律占满上下文。
+- **追问合并**：仅当问句以「那/那么/还有…」开头，或短且无实词时才继承上一问的检索词。仅按长度判断会把新话题（如 10 字的「公司拖欠工资怎么维权」）误并进上一问。
+- **检索评测**：`npm run eval:retrieval` 跑三套问句（dev/hold/test）。改排序或扩展词后必须看 hold/test，不要只看 dev——dev 是调参集，只看它会过拟合。
+- **BYOK 调用**：直连用户配置的 OpenAI 兼容接口，支持 SSE 流式接收与 Markdown 渲染，附带原文跳转深链接。
+  - 浏览器实测可直连：DeepSeek、通义千问。
+  - 浏览器实测**不可**直连（CORS 预检失败）：智谱 GLM（open.bigmodel.cn）、商汤 SenseNova。预设中标记 `corsBlocked` 并在 UI 告警；新增预设必须先用真实浏览器发一次 POST 验证。
 
 ### 2. 法律目录组织规则
 
