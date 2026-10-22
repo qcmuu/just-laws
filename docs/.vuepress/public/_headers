@@ -13,11 +13,16 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Corpus is versioned internally ({"version": 2}) and re-fetched by the client
-# when the version pointer changes, so a 7-day cache is safe and avoids the
-# 2.6 MB gzip re-download on repeat visits.
+# Corpus is versioned internally ({"version": <hash of the content>}); the
+# client compares the tiny probe file below before reusing its cached copy, so
+# a long cache here never pins stale law text.
 /law-corpus.json
   Cache-Control: public, max-age=604800
+
+# Version probe: must always be revalidated, otherwise clients keep reading a
+# stale version number and never notice an amended or repealed law.
+/law-corpus-version.json
+  Cache-Control: no-store
 
 /sitemap.xml
   Cache-Control: public, max-age=86400
