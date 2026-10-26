@@ -43,6 +43,7 @@ pageClass: jl-category-index
   <a class="jl-law-index__item" href="../economic/export-control-law/"><span class="jl-law-index__name">出口管制法</span></a>
   <a class="jl-law-index__item" href="../economic/farmland-occupation-tax-law/"><span class="jl-law-index__name">耕地占用税法</span></a>
   <a class="jl-law-index__item" href="../economic/fifth-npc-standing-committee-resolution-approving-guangdong-special-economic-zone-regulations/"><span class="jl-law-index__name">第五届全国人民代表大会常务委员会关于批准《广东省经济特区条例》的决议</span></a>
+  <a class="jl-law-index__item" href="../economic/fisheries-law/"><span class="jl-law-index__name">渔业法</span></a>
   <a class="jl-law-index__item" href="../economic/fishery-law/"><span class="jl-law-index__name">渔业法</span></a>
   <a class="jl-law-index__item" href="../economic/flood-control-law/"><span class="jl-law-index__name">防洪法</span></a>
   <a class="jl-law-index__item" href="../economic/food-security-guarantee-law/"><span class="jl-law-index__name">粮食安全保障法</span></a>

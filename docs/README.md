@@ -13,7 +13,7 @@ actions:
     type: secondary
 features:
   - title: 法典文库
-    details: <!-- corpus-stats -->295 部现行法律法规全文收录，共 23,489 条条文<!-- /corpus-stats -->，结构化分编分章呈现，移动端同样适于阅读。
+    details: <!-- corpus-stats -->295 部现行法律法规全文收录，共 23,706 条条文<!-- /corpus-stats -->，结构化分编分章呈现，移动端同样适于阅读。
   - title: AI 智能问答
     details: 纯静态 BYOK 架构，法条检索在浏览器内完成，毫秒级响应；解答逐条溯源至法律原文，不依赖任何后端。
   - title: 案例与文献
@@ -23,7 +23,7 @@ features:
 <div class="jl-stats">
   <!-- corpus-stats:start -->
   <div class="jl-stat"><span class="jl-stat__num">295</span><span class="jl-stat__label">部现行法律</span></div>
-  <div class="jl-stat"><span class="jl-stat__num">23,489</span><span class="jl-stat__label">条法条全文</span></div>
+  <div class="jl-stat"><span class="jl-stat__num">23,706</span><span class="jl-stat__label">条法条全文</span></div>
   <!-- corpus-stats:end -->
   <div class="jl-stat"><span class="jl-stat__num">279</span><span class="jl-stat__label">篇案例文献</span></div>
   <div class="jl-stat"><span class="jl-stat__num">9</span><span class="jl-stat__label">大门类分类</span></div>

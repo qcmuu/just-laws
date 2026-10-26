@@ -13,6 +13,7 @@ pageClass: jl-category-index
   <a class="jl-law-index__item" href="../social/employment-promotion-law/"><span class="jl-law-index__name">就业促进法</span></a>
   <a class="jl-law-index__item" href="../social/family-education-promotion-law/"><span class="jl-law-index__name">家庭教育促进法</span></a>
   <a class="jl-law-index__item" href="../social/fifth-npc-standing-committee-resolution-approving-state-council-provisions-on-employees-home-leave-benefits/"><span class="jl-law-index__name">第五届全国人民代表大会常务委员会关于批准《国务院关于职工探亲待遇的规定》的决议</span></a>
+  <a class="jl-law-index__item" href="../social/hazardous-chemicals-safety-law/"><span class="jl-law-index__name">危险化学品安全法</span></a>
   <a class="jl-law-index__item" href="../social/labor-contracts-law/"><span class="jl-law-index__name">劳动合同法</span></a>
   <a class="jl-law-index__item" href="../social/labor-law/"><span class="jl-law-index__name">劳动法</span></a>
   <a class="jl-law-index__item" href="../social/legal-aid-law/"><span class="jl-law-index__name">法律援助法</span></a>
